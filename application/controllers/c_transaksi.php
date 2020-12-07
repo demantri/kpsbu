@@ -21,9 +21,24 @@ class c_transaksi extends CI_controller{
     $cek_kualitas = $this->db->get('cek_kualitas')->result();
     $data['cek'] = $cek_kualitas;
     $data['error'] = "Pembelian hari ini sudah selesai!";
-      $data['result'] = $this->db->get('pembelian_bb')->result_array();
+    $data['result'] = $this->db->get('pembelian_bb')->result_array();
         $this->template->load('template', 'pemb/view', $data);
       // var_dump($cek1);
+   }
+
+   // index pemb. aset
+   public function pembelian_aset()
+   {
+     # code...
+    $pembelian_aset = $this->db->get('pembelian_aset');
+    $data['pembelian_aset'] = $pembelian_aset;
+    $this->template->load('template', 'pembelian_aset/index');
+   }
+
+   public function form_pembelian_aset()
+   {
+     # code...
+    $this->template->load('template', 'pembelian_aset/form');
    }
 
    public function isi_edit_pemb($id){

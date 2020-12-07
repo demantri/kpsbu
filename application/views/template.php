@@ -35,18 +35,30 @@
       <link href="<?php echo base_url();?>assets/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css" rel="stylesheet">
       <link href="<?php echo base_url();?>assets/vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css" rel="stylesheet">
 
-    <!-- bootstrap-daterangepicker -->
-    <link href="<?php echo base_url();?>assets/vendors/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
-    <!-- bootstrap-datetimepicker -->
-    <link href="<?php echo base_url();?>assets/vendors/bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css" rel="stylesheet">
-    <!-- Ion.RangeSlider -->
-    <link href="<?php echo base_url();?>assets/vendors/normalize-css/normalize.css" rel="stylesheet">
-    <link href="<?php echo base_url();?>assets/vendors/ion.rangeSlider/css/ion.rangeSlider.css" rel="stylesheet">
-    <link href="<?php echo base_url();?>assets/vendors/ion.rangeSlider/css/ion.rangeSlider.skinFlat.css" rel="stylesheet">
-    <!-- Bootstrap Colorpicker -->
-    <link href="<?php echo base_url();?>assets/vendors/mjolnic-bootstrap-colorpicker/dist/css/bootstrap-colorpicker.min.css" rel="stylesheet">
+      <!-- bootstrap-daterangepicker -->
+      <link href="<?php echo base_url();?>assets/vendors/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
+      <!-- bootstrap-datetimepicker -->
+      <link href="<?php echo base_url();?>assets/vendors/bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css" rel="stylesheet">
+      <!-- Ion.RangeSlider -->
+      <link href="<?php echo base_url();?>assets/vendors/normalize-css/normalize.css" rel="stylesheet">
+      <link href="<?php echo base_url();?>assets/vendors/ion.rangeSlider/css/ion.rangeSlider.css" rel="stylesheet">
+      <link href="<?php echo base_url();?>assets/vendors/ion.rangeSlider/css/ion.rangeSlider.skinFlat.css" rel="stylesheet">
+      <!-- Bootstrap Colorpicker -->
+      <link href="<?php echo base_url();?>assets/vendors/mjolnic-bootstrap-colorpicker/dist/css/bootstrap-colorpicker.min.css" rel="stylesheet">
 
-    <link href="<?php echo base_url();?>assets/vendors/cropper/dist/cropper.min.css" rel="stylesheet">
+      <link href="<?php echo base_url();?>assets/vendors/cropper/dist/cropper.min.css" rel="stylesheet">
+
+
+      <script src="<?php echo base_url();?>assets/vendors/jquery/dist/jquery.min.js"></script>
+      <!-- <script src="<?php echo base_url();?>assets/vendors/bootstrap/dist/js/bootstrap.min.js"></script> -->
+      <!-- <script src="<?php echo base_url();?>assets/build/js/custom.min.js"></script> -->
+
+
+      <!-- <script src="https://code.jquery.com/jquery-3.5.1.js"></script> -->
+      <!-- <script src="https://code.jquery.com/jquery-2.2.4.js"></script> -->
+
+
+
    </head>
    <body class="nav-md" >
       <div class="container body" style="position: relative;">
@@ -371,6 +383,8 @@
          </footer> -->
       </div>
       </div>
+
+      <!-- js -->
       <!-- jQuery -->
       <script src="<?php echo base_url();?>assets/vendors/jquery/dist/jquery.min.js"></script>
       <!-- Bootstrap -->
@@ -409,7 +423,7 @@
       <script src="<?php echo base_url();?>assets/vendors/moment/min/moment.min.js"></script>
       <script src="<?php echo base_url();?>assets/vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
         <!-- bootstrap-datetimepicker -->    
-    <script src="<?php echo base_url();?>assets/vendors/bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
+      <script src="<?php echo base_url();?>assets/vendors/bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
       <!-- Datatables -->
       <script src="<?php echo base_url();?>assets/vendors/datatables-net/js/jquery.dataTables.min.js"></script>
       <script src="<?php echo base_url();?>assets/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
@@ -429,44 +443,13 @@
       <!-- Custom Theme Scripts -->
       <script src="<?php echo base_url();?>assets/build/js/custom.min.js"></script>
 
+      <!-- <script type="text/javascript">
+          $(document).ready(function () {
+            $("#no_nota").click(function () {
+              alert("holaaa")
+            });
+          });
+        </script> -->
+
    </body>
-   <script>
-      $(document).ready(function(){
-             setTimeout(function(){
-               $('#myModal').modal('show');
-             }, 500);
-           });
-         // angka 3000 dibawah ini artinya pesan akan hilang dalam 3 detik setelah muncul
-         setTimeout(function(){
-           $('#myModal').modal('hide');
-         }, 10000);
-      //$('#myModal').modal('show');
-   </script>
-   
-<script>
-//   var someDate = new Date();
-// var numberOfDaysToAdd = 6;
-// someDate.setDate(someDate.getDate() + numberOfDaysToAdd); 
-
-
-
-   var date = new Date();
-    var selectedDate;
-    // var tambahtgl = 2;
-     // date.setDate(date.getDate() + tambahtgl);
-    $('#myDatepicker2').datetimepicker({
-      minDate: date,
-        format: 'YYYY-MM-DD'
-    });
- </script>
-
-  <script src="jquery.min.js"></script>
-    <script>
-      $(document).ready(function () {
-        $('#tester').keyup(function () {
-          // setiap karakter yang diketik akan langsung dihapus   
-          this.value = this.value.replace(/[^1-9.]/g, '');
-        });
-      });
-    </script>
 </html>

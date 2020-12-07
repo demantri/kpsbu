@@ -19,6 +19,17 @@ class m_transaksi extends CI_Model {
 		return 	$this->db->delete($table);
 	}
 
-	
-	
+	function get_aset($id_supplier) {
+		$this->db->where('id_supplier', $id_supplier);
+  		$this->db->order_by('aset', 'ASC');
+
+  		$query = $this->db->get("aset");
+  		// print_r($query);exit;
+  		$output = '<option value="">Pilih aset</option>';
+  		foreach($query->result() as $row)
+  		{
+   			$output .= '<option value="'.$row->id.'">'.$row->aset.'</option>';
+  		}
+  		return $output;
+	}
 }

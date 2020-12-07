@@ -9,8 +9,9 @@ class c_transaksi extends CI_controller{
   //   }
       function __construct(){
         parent:: __construct();
-         date_default_timezone_set('Asia/Jakarta');
-       if(empty($this->session->userdata('level'))){
+        $this->load->model("m_transaksi", "model");
+        date_default_timezone_set('Asia/Jakarta');
+        if(empty($this->session->userdata('level'))){
             redirect('c_login/home');
         }
     }
@@ -35,10 +36,46 @@ class c_transaksi extends CI_controller{
     $this->template->load('template', 'pembelian_aset/index');
    }
 
+    function aset(){
+      if($this->input->post('id_supplier'))
+      {
+       echo $this->model->get_aset($this->input->post('id_supplier'));
+      }
+    }
+
    public function form_pembelian_aset()
    {
      # code...
-    $this->template->load('template', 'pembelian_aset/form');
+    // kode pembelian
+    $query1   = "SELECT  MAX(RIGHT(id_pembelian,3)) as kode FROM pembelian_aset";
+    $abc      = $this->db->query($query1);
+    $id_pembelian = "";
+    if ($abc->num_rows() > 0) {
+       foreach ($abc->result() as $k) {
+          $tmp = ((int) $k->kode) + 1;
+          $kd  = sprintf("%02s", $tmp);
+       }
+    } else {
+       $kd = "001";
+    }
+    $datenow = date('Ymd');
+    // print_r($datenow);exit;
+    $id_pembelian   = "PMBAST".$datenow."" . $kd;
+    $data['id'] = $id_pembelian;
+
+    $supplier = $this->supplier_dropdown();
+    $data['supplier'] = $supplier;
+    $this->template->load('template', 'pembelian_aset/form', $data);
+   }
+
+   private function supplier_dropdown()
+   {
+     # code...
+    $sql = $this->db->select('*')
+    ->from('supplier_aset')
+    ->get()
+    ->result();
+    return $sql;
    }
 
    public function isi_edit_pemb($id){

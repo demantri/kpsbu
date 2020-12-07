@@ -65,7 +65,36 @@ class c_transaksi extends CI_controller{
 
     $supplier = $this->supplier_dropdown();
     $data['supplier'] = $supplier;
+
+    // detail
+    // $data['detail'] = $this->model->get_detail($id_pembelian);
+
     $this->template->load('template', 'pembelian_aset/form', $data);
+   }
+
+   public function tambahPembelianAset()
+   {
+    $id_pembelian = $this->input->post("id");
+    $no_nota = $this->input->post("no_nota");
+    $tgl_nota = $this->input->post("tgl_pembelian");
+    $tgl_input = $this->input->post("tgl_input");
+    $biaya = str_replace(".", "", $this->input->post("biaya"));
+    $harga_aset = str_replace(".", "", $this->input->post("harga_aset"));
+    $status = $this->input->post("");
+    $id_supplier = $this->input->post("id_supplier");
+    $id_aset = $this->input->post("id_aset");
+
+    $total = $biaya + $harga_aset;
+
+    $data = array (
+      "id_pembelian" => $id_pembelian,
+      "no_nota" => $no_nota,
+      "tgl_nota" => $tgl_nota,
+      "id_supplier" => $id_supplier,
+      "total" => $total,
+      "status" => "Dalam Proses",
+      "tgl_input" => $tgl_input
+    );
    }
 
    private function supplier_dropdown()

@@ -33,17 +33,16 @@ class m_transaksi extends CI_Model {
   		return $output;
 	}
 
-	// public function get_detail($id_pembelian)
-	// {
-	// 	# code...
-	// 	$this->db->select('a.jumlah, a.subtotal, b.nama_bhn, b.harga, nama_jenis_bahan, d.kd_pemasok, nama_pemasok');
- //    	$this->db->from('detail_pembelian_aset a');
- //    	$this->db->join('bhn_baku b', 'a.kd_bhn_baku = b.kd_bhn_baku');
- //    	$this->db->join('jenis_bahan c', 'a.id_jenis_bahan = c.id_jenis_bahan');
- //    	$this->db->join('pemasok d', 'a.kd_pemasok = d.kd_pemasok');
-	// 	$this->db->where('a.no_pembelian', $kd);
-	// 	return $this->db->get()->result();
-	// }
+	public function get_detail($id_pembelian)
+	{
+		# code...
+		$this->db->select('*');
+    	$this->db->from('detail_pembelian');
+    	$this->db->join('aset', 'aset.id = detail_pembelian.id_aset');
+    	$this->db->join('supplier_aset', 'supplier_aset.id = aset.id_supplier');
+		$this->db->where('id_pembelian', $id_pembelian);
+		return $this->db->get()->result();
+	}
 
 	public function simpanDetail(){
     	//Ambil Harga dari Tabel Bhn Baku
@@ -78,5 +77,14 @@ class m_transaksi extends CI_Model {
 				));
 			$this->db->update('detail_pembelian');
 		}
+	}
+
+	public function detail_view()
+	{
+		# code...
+		$this->db->select("*");
+		$this->db->join("detail_pembelian", "detail_pembelian.id_pembelian = pembelian_aset.id_pembelian");
+		$sql = $this->db->get("pembelian_aset");
+		return $sql->result();
 	}
 }

@@ -21,76 +21,109 @@
 
 						<label class="col-sm-1">No Nota</label>	
 						<div class="col-sm-3">
-					  		<input type = "text" name = "no_nota" id="no_nota" class = "form-control" autocomplete="off">
+					  		<input type = "text" name = "no_nota" id="no_nota" class = "form-control" autocomplete="off" value="<?= $no_nota?>" readonly>
 						</div>
 
 						<label class="col-sm-2">Tanggal Pembelian</label>	
 						<div class="col-sm-2">
-					  		<input type = "date" name = "tgl_pembelian" class = "form-control">
+					  		<input type = "date" name = "tgl_pembelian" class = "form-control" id="tgl_pembelian">
 						</div>
 					</div>
 					<hr>
 
+					<div id="form-data">
+						<div class="form-group row">
+						  	<label class="col-sm-1">Supplier</label>	
+							<div class="col-sm-11">
+								<select name="id_supplier" id="supplier" class="form-control">
+									<option value="">Pilih supplier</option>
+									<?php foreach ($supplier as $data) { ?>
+										<option value="<?= $data->id?>"><?= $data->nama_supplier?></option>
+									<?php } ?> 
+								</select>
+							</div>
+						</div>
+
+						<div class="form-group row">
+						  	<label class="col-sm-1">Aset</label>	
+							<div class="col-sm-11">
+						  		<select name="id_aset" class="form-control" id="aset">
+						  			<option value="">Pilih aset</option>
+						  		</select>
+							</div>
+						</div>
+
+						<div class="form-group row">
+						  	<label class="col-sm-1">Harga Aset</label>	
+							<div class="col-sm-11">
+						  		<input type = "text" name = "harga_aset" class = "form-control" id="harga_aset" autocomplete="off" placeholder="Harga aset">
+							</div>
+						</div>
+
+						<div class="form-group row">
+						  	<label class="col-sm-1">Biaya</label>	
+							<div class="col-sm-10">
+						  		<input type = "text" name = "biaya" class = "form-control" id="biaya" autocomplete="off" placeholder="Biaya">
+							</div>
+							<div class="col-sm-1">
+						  		<input type = "submit" value="Tambah" class="btn btn-primary btn-tambah" id="btn-tambah" style="width: 100%">
+							</div>
+						</div>
+					</div>
+				</form>
+				<hr>
+					<h5>Detail Pembelian Aset</h5>
+					
+					<table class="table table-bordered">
+						<thead>
+							<tr>
+								<th class="text-center" style="width: 5%">No</th>
+								<th class="text-center" style="width: 15%">Supplier</th>
+								<th class="text-center" style="width: 25%">Aset</th>
+								<th class="text-center" style="width: 18%">Harga Aset</th>
+								<th class="text-center" style="width: 18%">Biaya</th>
+								<th class="text-center">Total</th>
+							</tr>
+						</thead>
+						<tbody>
+							<?php 
+							$no = 1;
+							foreach ($detail as $r) { ?>
+							<tr>
+								<td><?= $no++ ?></td>
+								<td><?= $r->nama_supplier?></td>
+								<td><?= $r->id.''.$r->aset?></td>
+								<td><?= format_rp($r->nominal)?></td>
+								<td><?= format_rp($r->biaya)?></td>
+								<td><?= format_rp($r->subtotal)?></td>
+							</tr>
+							<?php } ?>
+						</tbody>
+						<tfoot>
+							<tr>
+								<th colspan="5">Subtotal</th>
+								<th colspan="1"><?= format_rp($total) ?></th>
+							</tr>
+						</tfoot>
+						
+					</table>
+					<input readonly type = "hidden" class = "form-control" value = "<?php echo $total;?>">
 					<?php $tgl_input = date('Y-m-d');?>
 					<input type="hidden" name="tgl_input" value="<?= $tgl_input?>">
-
-					<div class="form-group row">
-					  	<label class="col-sm-1">Supplier</label>	
-						<div class="col-sm-11">
-							<select name="id_supplier" id="supplier" class="form-control">
-								<option value="">Pilih supplier</option>
-								<?php foreach ($supplier as $data) { ?>
-									<option value="<?= $data->id?>"><?= $data->nama_supplier?></option>
-								<?php } ?> 
-							</select>
-						</div>
-					</div>
-
-					<div class="form-group row">
-					  	<label class="col-sm-1">Aset</label>	
-						<div class="col-sm-11">
-					  		<select name="id_aset" class="form-control" id="aset">
-					  			<option value="">Pilih aset</option>
-					  		</select>
-						</div>
-					</div>
-
-					<div class="form-group row">
-					  	<label class="col-sm-1">Harga Aset</label>	
-						<div class="col-sm-11">
-					  		<input type = "text" name = "harga_aset" class = "form-control" id="harga_aset" autocomplete="off" placeholder="Harga aset">
-						</div>
-					</div>
-
-					<div class="form-group row">
-					  	<label class="col-sm-1">Biaya</label>	
-						<div class="col-sm-10">
-					  		<input type = "text" name = "biaya" class = "form-control" id="biaya" autocomplete="off" placeholder="Biaya">
-						</div>
-						<div class="col-sm-1">
-					  		<input type = "submit" value="Tambah" class="btn btn-primary btn-tambah" style="width: 100%">
-						</div>
-
-					</div>
-
-					<hr>
-					<h5>Detail Pembelian Aset</h5>
-					<table class="table table-bordered">
-						<tr>
-							<th class="text-center" style="width: 5%">No</th>
-							<th class="text-center" style="width: 15%">Supplier</th>
-							<th class="text-center" style="width: 25%">Aset</th>
-							<th class="text-center" style="width: 18%">Harga Aset</th>
-							<th class="text-center" style="width: 18%">Biaya</th>
-							<th class="text-center">Total</th>
-						</tr>
-					</table>
-					
 					
 					<hr>
-					<!-- <input type="submit" class="btn btn-default btn-success" value="Simpan"> -->
+					<?php if ($cek == NULL) { ?>
+					<a href = "#" class="btn btn-danger" role="button">Selesai</a>
+
 					<a href = "<?php echo site_url()."/c_transaksi/pembelian_aset"?>" type="button" class="btn btn-default">Kembali</a>
-				</form>
+
+
+					<?php } else { ?>
+  					
+  					<a href = "<?php echo site_url()."/c_transaksi/selesai/$id/$total"?>" class="btn btn-success" role="button">Selesai</a>
+
+					<a href = "<?php echo site_url()."/c_transaksi/pembelian_aset"?>" type="button" class="btn btn-default">Kembali</a>
+					<?php } ?>
 			</body>
 		</div>
 	</div>
@@ -115,8 +148,38 @@
 				    }
 			   	});
             }
-
         });
+
+		// $("#supplier").prop("disabled", true);
+  //      	$("#aset").prop("disabled", true);
+  //      	$("#harga_aset").prop("readonly", true);
+  //      	$("#biaya").prop("readonly", true);
+  //      	$("#btn-tambah").prop("disabled", true);
+
+  //       $("#no_nota").on("click", function () {
+  //       	$("#tgl_pembelian").on("change" , function () {
+  //       		var value = this.value;
+  //       	// console.log(value)
+	 //        	var valNota = $("#no_nota").val();
+	 //        	var valTgl = $("#tgl_pembelian").val();
+
+	 //        	console.log(valNota)
+
+	 //        	if (valNota.length !== 0) {
+	 //        		$("#supplier").prop("disabled", false);
+	 //       			$("#aset").prop("disabled", false);
+	 //       			$("#harga_aset").prop("readonly", false);
+	 //       			$("#biaya").prop("readonly", false);
+	 //       			$("#btn-tambah").prop("disabled", false);
+	 //        	} else {
+	 //        		$("#supplier").prop("disabled", true);
+		// 	       	$("#aset").prop("disabled", true);
+		// 	       	$("#harga_aset").prop("readonly", true);
+		// 	       	$("#biaya").prop("readonly", true);
+		// 	       	$("#btn-tambah").prop("disabled", true);
+	 //        	}
+  //       	})
+  //       })
 	});
 </script>
 <?php $this->load->view("pembelian_aset/script")?>

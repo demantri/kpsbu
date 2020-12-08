@@ -19,12 +19,23 @@
 					<th>Tanggal Pembelian</th>
 					<th>Total</th>
 					<th>Status</th>
-					<th>Aksi</th>
+					<!-- <th>Aksi</th> -->
 				</tr>
 			</thead>
-			<?php $no = 1;?>
 			<tbody>
-				
+				<?php 
+				$no = 1;
+				foreach ($detail as $data) { ?>
+					<tr>
+						<td><?= $no++ ?></td>
+						<td><?= $data->id_pembelian ?></td>
+						<td><?= $data->no_nota ?></td>
+						<td><?= $data->tgl_nota ?></td>
+						<td><?= $data->total ?></td>
+						<td><?= $data->status ?></td>
+						<!-- <td>coming soon</td> -->
+					</tr>
+				<?php } ?>
 			</tbody>
 		</table>
 

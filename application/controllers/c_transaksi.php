@@ -9,7 +9,10 @@ class c_transaksi extends CI_controller{
   //   }
       function __construct(){
         parent:: __construct();
-        $this->load->model("m_transaksi", "model");
+        $this->load->model( array (
+          "m_transaksi" => "model",
+          "m_keuangan" => "m_keuangan"
+        ));
         date_default_timezone_set('Asia/Jakarta');
         if(empty($this->session->userdata('level'))){
             redirect('c_login/home');
@@ -27,6 +30,36 @@ class c_transaksi extends CI_controller{
       // var_dump($cek1);
    }
 
+   public function pinjaman()
+   {
+    $this->template->load('template', 'pinjaman/index');
+   }
+
+   public function form_pinjaman()
+   {
+     # code...
+    $query1   = "SELECT  MAX(RIGHT(kode_pinjaman,3)) as kode FROM pinjaman";
+    $abc      = $this->db->query($query1);
+    $no_trans = "";
+    if ($abc->num_rows() > 0) {
+       foreach ($abc->result() as $k) {
+          $tmp = ((int) $k->kode) + 1;
+          $kd  = sprintf("%03s", $tmp);
+       }
+    } else {
+       $kd = "001";
+    }
+    $datenow = date("Ymd");
+    $no_trans   = "SP".$datenow.$kd;
+    $data['id'] = $no_trans;
+
+    
+
+    $data['anggota'] = $this->model->anggota_pinjaman_dropdown();
+    // print_r($data['anggota']);exit;
+    $this->template->load('template', 'pinjaman/form', $data);
+   }
+
    // index pemb. aset
    public function pembelian_aset()
    {
@@ -34,8 +67,8 @@ class c_transaksi extends CI_controller{
     $pembelian_aset = $this->db->get('pembelian_aset');
     $data['pembelian_aset'] = $pembelian_aset;
 
-    $detail =$this->model->detail_view();
-    // print_r($detail);exit;
+    // $detail =$this->model->detail_view();
+    $detail =$this->db->get("pembelian_aset")->result();
     $data['detail'] = $detail;
 
     $this->template->load('template', 'pembelian_aset/index', $data);
@@ -51,7 +84,6 @@ class c_transaksi extends CI_controller{
    public function form_pembelian_aset()
    {
      # code...
-
     // kode pembelian
     $this->db->where('status', 'dalam proses');
     $query = $this->db->get('pembelian_aset');
@@ -89,7 +121,6 @@ class c_transaksi extends CI_controller{
       $input = array(
         'id_pembelian' => $id_pembelian,
         'no_nota' => $no_nota,
-        // 'tgl_nota' => '0000-00-00',
         'total' => 0,
         'status' => 'dalam proses'
       );
@@ -106,7 +137,7 @@ class c_transaksi extends CI_controller{
 
     // detail
     $data['detail'] = $this->model->get_detail($id_pembelian);
-
+    // print_r($data['detail']);exit;
     // cek nmr transaksi 
     $this->db->where("id_pembelian", $id_pembelian);
     $data['cek'] = $this->db->get("detail_pembelian")->result();
@@ -114,6 +145,10 @@ class c_transaksi extends CI_controller{
 
     $querytotal = "SELECT SUM(subtotal) as total FROM detail_pembelian WHERE id_pembelian = '$id_pembelian'";
     $data['total'] = $this->db->query($querytotal)->row()->total;
+
+    // ambil nilai sisa
+    $ns = "SELECT SUM(nilai_sisa) as total_sisa FROM detail_pembelian WHERE id_pembelian = '$id_pembelian' ";
+    $data['nilai_sisa'] = $this->db->query($ns)->row()->total_sisa;
 
     $this->template->load('template', 'pembelian_aset/form', $data);
    }
@@ -126,11 +161,13 @@ class c_transaksi extends CI_controller{
     $tgl_input = $this->input->post("tgl_input");
     $biaya = str_replace(".", "", $this->input->post("biaya"));
     $harga_aset = str_replace(".", "", $this->input->post("harga_aset"));
+    $nilai_sisa = str_replace(".", "", $this->input->post("nilai_residu"));
     $status = $this->input->post("");
     $id_supplier = $this->input->post("id_supplier");
     $id_aset = $this->input->post("id_aset");
 
     $total = $biaya + $harga_aset;  
+    // print_r($total);exit;
 
     $this->db->where("id_pembelian", $id_pembelian);
     $cek = $this->db->get("pembelian_aset")->row();
@@ -156,10 +193,9 @@ class c_transaksi extends CI_controller{
       "id_supplier" => $id_supplier,
       "nominal" => $harga_aset,
       "biaya" => $biaya,
+      "nilai_sisa" => $nilai_sisa,
       "subtotal" => $total,
-      "nilai_sisa" => $total,
       "sisa_umur" => $umur,
-      "cek_tahun" => 0000,
       "sisa_umur_aset" => $umur,
       "tgl_nota" => $tgl_nota
       );
@@ -176,12 +212,12 @@ class c_transaksi extends CI_controller{
       "nominal" => $harga_aset,
       "biaya" => $biaya,
       "subtotal" => $total,
-      "nilai_sisa" => $total,
+      "nilai_sisa" => $nilai_sisa,
       "sisa_umur" => $umur,
-      "cek_tahun" => 0000,
       "sisa_umur_aset" => $umur,
       "tgl_nota" => $tgl_nota
       );
+      // print_r($data_detail);exit;
       $this->db->insert('detail_pembelian', $data_detail);
     }
     redirect('c_transaksi/form_pembelian_aset');
@@ -3543,5 +3579,132 @@ group by no_bbp";
       redirect('c_transaksi/lihat_pembyv');
    } 
 
+    public function penyusutan()
+    {
+      # code...
+      $penyusutan = $this->db->get("penyusutan")->result();
+      $data['penyusutan'] = $penyusutan;
+      $this->template->load('template', 'penyusutan/index', $data);
+    }
 
- }//end
+    public function form_penyusutan()
+    {
+      $aset = $this->model->detail_penyusutan();
+      $data['aset'] = $aset;
+      
+      $this->template->load('template', 'penyusutan/form', $data);
+    }
+
+    public function disusutkan()
+    {
+      # code...
+      $this->form_detail_penyusutan();
+    }
+
+    public function form_detail_penyusutan()
+    {
+      # code...
+      # code...
+      $query1 = "SELECT  MAX(RIGHT(id_penyusutan,3)) as kode FROM penyusutan";
+      $abc = $this->db->query($query1);
+      $no_trans = "";
+      if($abc->num_rows()>0){
+        foreach($abc->result() as $k){
+            $tmp = ((int)$k->kode)+1;
+            $kd = sprintf("%03s", $tmp);
+          }
+        }else{
+          $kd = "001";
+        }
+      $datenow = date("Ymd");
+      $no_trans = "PNY".$datenow."".$kd;
+
+      $last_code_pny = $kd -1;
+      
+      $data['id_penyusutan'] = $no_trans;
+
+
+      $id = $this->input->post('id');
+      $data['id'] = $id; 
+      $this->db->select("detail_pembelian.id, aset, sisa_umur, umur_aset, subtotal, sisa_umur_aset, nilai_sisa");
+      $this->db->from("detail_pembelian");
+      $this->db->join("aset", "aset.id = detail_pembelian.id_aset");
+      // $this->db->join("penyusutan", "aset.id = penyusutan.id_aset");
+      $this->db->where("detail_pembelian.id", $id);
+
+      $detail_peny = $this->db->get()->row();
+      $data['detail_peny'] = $detail_peny;
+      // $data['aset'] = $this->model->detail_penyusutan();
+      // print_r($data['detail_peny']);exit;
+      $bulan = date('F Y');
+      // ambil nilai 
+      $hp = $detail_peny->subtotal;
+
+      $umur_aset = $detail_peny->sisa_umur;
+      $nilai_sisa = $detail_peny->nilai_sisa;
+
+      $nilai_penyusutan = ( ($hp) - $nilai_sisa )  / ($umur_aset)  ;
+      // print_r($detail_peny);exit;
+      $data['nilai_penyusutan'] = $nilai_penyusutan;
+      $data['month_now'] =$bulan;
+
+      // $this->db->select("log_penyusutan.*, detail_pembelian.id as id_detail_pembelian, subtotal");
+      // $this->db->from("log_penyusutan");
+      // $this->db->join("detail_pembelian", "log_penyusutan.id_detail = detail_pembelian.id");
+      // // $this->db->where("id_penyusutan", $no_trans);
+
+      // $log_penyusutan_kosong = $this->db->get()->row();
+
+      $query = "SELECT * FROM log_penyusutan WHERE id_detail = '$id' ORDER BY id_penyusutan DESC
+      ";
+      // print_r($detail_peny);exit;
+      $log_penyusutan_kosong = $this->db->query($query)->row();
+      $data['log_penyusutan_kosong'] = $log_penyusutan_kosong;
+      $this->template->load('template', 'penyusutan/form_detail_pny', $data);
+    }
+
+    public function tambah_peny()
+    {
+      # code...
+      $id = $this->input->post("id");
+      $id_penyusutan = $this->input->post("id_penyusutan");
+      $tgl_input = $this->input->post("tgl_input");
+      $bulan_penyusutan = $this->input->post("bln_peny");
+      // convert
+      $total_penyusutan = str_replace("Rp.", "", $this->input->post("nilai_penyusutan"));
+      $tp_fix = str_replace(".", "", $total_penyusutan);
+
+      // nilai akhir
+      $nilai_akhir = str_replace('Rp.', '', $this->input->post("nilai_akhir"));
+      // convert nilai akhir
+      $na_fix = str_replace("." , "", $nilai_akhir);
+
+
+      $data_penyusutan = array ( 
+        "id_penyusutan" => $id_penyusutan,
+        "tgl_input" => $tgl_input,
+        "bulan_penyusutan" => $bulan_penyusutan,
+        "total_penyusutan" => $tp_fix,
+      );
+      $this->db->insert("penyusutan", $data_penyusutan);
+
+      $data_log = array ( 
+        "id_penyusutan" => $id_penyusutan,
+        "id_detail" => $id,
+        "nilai_akhir" => $na_fix
+      );
+      $this->db->insert("log_penyusutan", $data_log);
+      // print_r($data_log);exit;
+
+      // set pengurangan umur per bulan
+      $this->db->set("sisa_umur", "(sisa_umur) - 1", FALSE);
+      $this->db->set("cek_bulan_peny", date("Y-m"));
+      $this->db->where("id", $id);
+      $this->db->update("detail_pembelian");
+
+      // jurnal
+      $this->m_keuangan->GenerateJurnal('1122',$id,'d',$tp_fix);
+      $this->m_keuangan->GenerateJurnal('1120',$id,'k',$tp_fix);
+      redirect('c_transaksi/penyusutan');
+    }
+}//end

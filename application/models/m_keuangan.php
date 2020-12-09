@@ -5,14 +5,13 @@ class m_keuangan extends CI_model
 	{
 		date_default_timezone_set("Asia/Bangkok");
 		$jurnal = array(
-			'no_coa' => $no_akun,
 			'id_jurnal' => $no_transaksi,
 			'tgl_jurnal' => date('Y-m-d'),
+			'no_coa' => $no_akun,
 			'posisi_dr_cr' => $posisi_dr_cr,
 			'nominal' => $nominal,
 			);
 			$this->db->insert('jurnal',$jurnal);
-			
 	}
 	
 	//pagination

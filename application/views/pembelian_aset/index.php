@@ -30,8 +30,8 @@
 						<td><?= $no++ ?></td>
 						<td><?= $data->id_pembelian ?></td>
 						<td><?= $data->no_nota ?></td>
-						<td><?= $data->tgl_nota ?></td>
-						<td><?= $data->total ?></td>
+						<td><?= $data->tgl_input ?></td>
+						<td><?= format_rp($data->total) ?></td>
 						<td><?= $data->status ?></td>
 						<!-- <td>coming soon</td> -->
 					</tr>

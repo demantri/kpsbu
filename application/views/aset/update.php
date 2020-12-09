@@ -29,6 +29,17 @@
 					  <input type = "number" name = "umur_aset" class = "form-control" min="0" value="<?= $data['umur_aset'] ?>">
 					  <?php echo form_error('umur_aset'); ?>
 					</div>
+
+					<div class="form-group">
+					  <label>Supplier Aset</label>
+					  <select name="supplier" class="form-control" id="supplier">
+					  	<option value="">Pilih supplier</option>
+					  	<?php foreach ($supplier as $d) { ?>
+					  	<option value="<?= $d->id?>" <?php if ($d->id == $data['id_supplier']) : ?>selected="selected"<?php endif ?>><?= $d->nama_supplier?></option>
+					  	<?php } ?>
+					  </select>
+					  <?php echo form_error('supplier'); ?>
+					</div>	
 					
 					
 					<hr>

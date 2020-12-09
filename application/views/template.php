@@ -181,7 +181,7 @@
 
                                  <li><a href="<?php echo site_url();?>c_transaksi/lihat_pemb">Pembelian Bahan Baku</a></li>
                                  <li><a href="<?php echo site_url();?>c_transaksi/pembelian_aset">Pembelian Aset</a></li>
-                                 <li><a href="<?php echo site_url();?>c_transaksi/lihat_pemb">Penyusutan</a></li>
+                                 <li><a href="<?php echo site_url();?>c_transaksi/penyusutan">Penyusutan</a></li>
                                  <li><a href="<?php echo site_url();?>c_transaksi/lihat_pemb">Revaluasi</a></li>
                                  <li><a href="<?php echo site_url();?>c_transaksi/lihat_ck">Cek Kualitas</a></li>
                                  <li><a href="<?php echo site_url();?>c_transaksi/lihat_produksi_ke1">Produksi ke IPS</a></li>
@@ -196,7 +196,7 @@
                                  <!-- <li><a href="<?php echo site_url();?>c_transaksi/simpanan_pokok">Simpanan Pokok</a></li> -->
                                  <!-- <li><a href="<?php echo site_url();?>c_transaksi/simpanan_masuka">Simpanan Masuka</a></li> -->
                                  <li><a href="<?php echo site_url();?>c_transaksi/simpanan_hr">Simpanan Hari Raya</a></li>
-                                 <li><a href="<?php echo site_url();?>c_transaksi/simpan_pinjam">Simpan Pinjam</a></li>
+                                 <li><a href="<?php echo site_url();?>c_transaksi/pinjaman">Pinjaman</a></li>
                                    <?php
                                     elseif( $this->session->userdata('level')=="produksi1"):
                                      ?>

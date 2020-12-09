@@ -24,14 +24,20 @@
 					  		<input type = "text" name = "no_nota" id="no_nota" class = "form-control" autocomplete="off" value="<?= $no_nota?>" readonly>
 						</div>
 
-						<label class="col-sm-2">Tanggal Pembelian</label>	
-						<div class="col-sm-2">
-					  		<input type = "date" name = "tgl_pembelian" class = "form-control" id="tgl_pembelian">
-						</div>
+						
 					</div>
 					<hr>
 
 					<div id="form-data">
+						
+						<div class="form-group row">
+						  	<label class="col-sm-1">Tanggal Beli</label>	
+							<div class="col-sm-2">
+						  		<input type = "date" name = "tgl_pembelian" class = "form-control" id="tgl_pembelian">
+							</div>
+						</div>
+
+
 						<div class="form-group row">
 						  	<label class="col-sm-1">Supplier</label>	
 							<div class="col-sm-11">
@@ -55,8 +61,13 @@
 
 						<div class="form-group row">
 						  	<label class="col-sm-1">Harga Aset</label>	
-							<div class="col-sm-11">
+							<div class="col-sm-5">
 						  		<input type = "text" name = "harga_aset" class = "form-control" id="harga_aset" autocomplete="off" placeholder="Harga aset">
+							</div>
+
+							<label class="col-sm-1">Nilai Residu</label>	
+							<div class="col-sm-5">
+						  		<input type = "text" name = "nilai_residu" class = "form-control" id="nilai_residu" autocomplete="off" placeholder="Nilai residu">
 							</div>
 						</div>
 
@@ -79,10 +90,11 @@
 							<tr>
 								<th class="text-center" style="width: 5%">No</th>
 								<th class="text-center" style="width: 15%">Supplier</th>
-								<th class="text-center" style="width: 25%">Aset</th>
-								<th class="text-center" style="width: 18%">Harga Aset</th>
-								<th class="text-center" style="width: 18%">Biaya</th>
-								<th class="text-center">Total</th>
+								<th class="text-center" style="width: 20%">Aset</th>
+								<th class="text-center" style="width: 15%">Harga Aset</th>
+								<th class="text-center" style="width: 15%">Biaya</th>
+								<th class="text-center" style="width: 15%">Nilai residu</th>
+								<th class="text-center">Total perolehan aset</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -95,19 +107,21 @@
 								<td><?= $r->id.''.$r->aset?></td>
 								<td><?= format_rp($r->nominal)?></td>
 								<td><?= format_rp($r->biaya)?></td>
+								<td><?= format_rp($r->nilai_sisa)?></td>
 								<td><?= format_rp($r->subtotal)?></td>
 							</tr>
 							<?php } ?>
 						</tbody>
 						<tfoot>
 							<tr>
-								<th colspan="5">Subtotal</th>
+								<th colspan="6">Subtotal</th>
 								<th colspan="1"><?= format_rp($total) ?></th>
 							</tr>
 						</tfoot>
 						
 					</table>
 					<input readonly type = "hidden" class = "form-control" value = "<?php echo $total;?>">
+					<!-- <input readonly type = "text" class = "form-control" value = "<?php echo $nilai_sisa;?>"> -->
 					<?php $tgl_input = date('Y-m-d');?>
 					<input type="hidden" name="tgl_input" value="<?= $tgl_input?>">
 					
@@ -150,36 +164,39 @@
             }
         });
 
-		// $("#supplier").prop("disabled", true);
-  //      	$("#aset").prop("disabled", true);
-  //      	$("#harga_aset").prop("readonly", true);
-  //      	$("#biaya").prop("readonly", true);
-  //      	$("#btn-tambah").prop("disabled", true);
+		$("#supplier").prop("disabled", true);
+       	$("#aset").prop("disabled", true);
+       	$("#harga_aset").prop("readonly", true);
+       	$("#nilai_residu").prop("readonly", true);
+       	$("#biaya").prop("readonly", true);
+       	$("#btn-tambah").prop("disabled", true);
 
-  //       $("#no_nota").on("click", function () {
-  //       	$("#tgl_pembelian").on("change" , function () {
-  //       		var value = this.value;
-  //       	// console.log(value)
-	 //        	var valNota = $("#no_nota").val();
-	 //        	var valTgl = $("#tgl_pembelian").val();
+        // $("#no_nota").on("click", function () {
+        	$("#tgl_pembelian").on("change" , function () {
+        		var value = this.value;
+        	// console.log(value)
+	        	var valNota = $("#no_nota").val();
+	        	var valTgl = $("#tgl_pembelian").val();
 
-	 //        	console.log(valNota)
+	        	console.log(valTgl)
 
-	 //        	if (valNota.length !== 0) {
-	 //        		$("#supplier").prop("disabled", false);
-	 //       			$("#aset").prop("disabled", false);
-	 //       			$("#harga_aset").prop("readonly", false);
-	 //       			$("#biaya").prop("readonly", false);
-	 //       			$("#btn-tambah").prop("disabled", false);
-	 //        	} else {
-	 //        		$("#supplier").prop("disabled", true);
-		// 	       	$("#aset").prop("disabled", true);
-		// 	       	$("#harga_aset").prop("readonly", true);
-		// 	       	$("#biaya").prop("readonly", true);
-		// 	       	$("#btn-tambah").prop("disabled", true);
-	 //        	}
-  //       	})
-  //       })
+	        	if (valTgl.length !== 0) {
+	        		$("#supplier").prop("disabled", false);
+	       			$("#aset").prop("disabled", false);
+	       			$("#harga_aset").prop("readonly", false);
+	       			$("#nilai_residu").prop("readonly", false);
+	       			$("#biaya").prop("readonly", false);
+	       			$("#btn-tambah").prop("disabled", false);
+	        	} else {
+	        		$("#supplier").prop("disabled", true);
+			       	$("#aset").prop("disabled", true);
+			       	$("#harga_aset").prop("readonly", true);
+			       	$("#nilai_residu").prop("readonly", true);
+			       	$("#biaya").prop("readonly", true);
+			       	$("#btn-tambah").prop("disabled", true);
+	        	}
+        	})
+        // })
 	});
 </script>
 <?php $this->load->view("pembelian_aset/script")?>

@@ -25,11 +25,21 @@
 					</div>
 
 					<div class="form-group">
-					  <label>Umur Aset</label>
+					  <label>Umur Aset (*per Bulan)</label>
 					  <input type = "number" name = "umur_aset" class = "form-control" min="0">
 					  <?php echo form_error('umur_aset'); ?>
 					</div>
-					
+
+					<div class="form-group">
+					  <label>Supplier Aset</label>
+					  <select name="supplier" class="form-control" id="supplier">
+					  	<option value="">Pilih supplier</option>
+					  	<?php foreach ($supplier as $d) { ?>
+					  	<option value="<?= $d->id?>"><?= $d->nama_supplier?></option>
+					  	<?php } ?>
+					  </select>
+					  <?php echo form_error('umur_aset'); ?>
+					</div>					
 					
 					<hr>
 					<input type="submit" class="btn btn-default btn-primary" value="Simpan">

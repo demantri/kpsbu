@@ -2076,7 +2076,9 @@ class c_masterdata extends CI_controller{
       $no_trans   = "AS-" . $kd;
 
       $data['id'] = $no_trans;
-      // print_r($data['id']);exit;
+      $data['supplier'] = $this->db->get('supplier_aset')->result();
+
+      // print_r($data['supplier']);exit;
       $this->template->load('template', 'aset/form', $data);
    }
 
@@ -2090,10 +2092,6 @@ class c_masterdata extends CI_controller{
                'rules' => 'required',
                'errors' => array(
                   'required' => '%s tidak boleh kosong!'
-                  // 'min_length' => '%s minimal 3 huruf!',
-                  // 'max_length' => '%s maksimal 30 huruf!',
-                  // 'customAlpha' => '%s hanya boleh berupa huruf!',
-                  // 'is_unique' => '%s sudah ada di database!'
                )
             ),
             array(
@@ -2119,7 +2117,8 @@ class c_masterdata extends CI_controller{
             $data = array(
                'id' => $this->input->post('id_aset'),
                'aset' => $this->input->post('aset'),
-               'umur_aset' => $this->input->post('umur_aset')
+               'umur_aset' => $this->input->post('umur_aset'),
+               'id_supplier' => $this->input->post('supplier')
             );
             // print_r($data);exit;
             $this->db->insert('aset', $data);
@@ -2131,6 +2130,7 @@ class c_masterdata extends CI_controller{
    {
       $x['data'] = $this->M_masterdata->edit_data('aset', "id = '$id'")->row_array();
       // print_r($x['data']);exit;
+      $x['supplier'] = $this->db->get("supplier_aset")->result();
       $this->template->load('template', 'aset/update', $x); 
    }
 
@@ -2143,10 +2143,6 @@ class c_masterdata extends CI_controller{
             'rules' => 'required',
             'errors' => array(
                'required' => '%s tidak boleh kosong!'
-               // 'min_length' => '%s minimal 3 huruf!',
-               // 'max_length' => '%s maksimal 30 huruf!',
-               // 'customAlpha' => '%s hanya boleh berupa huruf!',
-               // 'is_unique' => '%s sudah ada di database!'
             )
          ),
          array(
@@ -2156,9 +2152,6 @@ class c_masterdata extends CI_controller{
             'errors' => array(
                'required' => '%s tidak boleh kosong!',
                'is_natural_no_zero' => '%s minimal 1 tahun!'
-               // 'max_length' => '%s maksimal 30 huruf!',
-               // 'customAlpha' => '%s hanya boleh berupa huruf!',
-               // 'is_unique' => '%s sudah ada di database!'
             )
          ),
       );

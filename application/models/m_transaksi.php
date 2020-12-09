@@ -87,4 +87,35 @@ class m_transaksi extends CI_Model {
 		$sql = $this->db->get("pembelian_aset");
 		return $sql->result();
 	}
+
+	public function detail_penyusutan() {
+		$this->db->select("detail_pembelian.*, aset.id as kd_aset, aset, umur_aset, sisa_umur");
+		$this->db->join("aset", "aset.id = detail_pembelian.id_aset");
+		// $this->db->join("penyusutan", "aset.id = penyusutan.id_aset");
+		$this->db->where("sisa_umur !=", "0");
+		$this->db->where("cek_bulan_peny !=", date("Y-m") );
+
+		$sql = $this->db->get("detail_pembelian");
+		return $sql->result();
+	}
+
+	public function anggota_pinjaman_dropdown() {
+		// $this->db->select("detail_pembelian.*, aset.id as kd_aset, aset, umur_aset, sisa_umur");
+		// $this->db->join("aset", "aset.id = detail_pembelian.id_aset");
+		// // $this->db->join("penyusutan", "aset.id = penyusutan.id_aset");
+		// $this->db->where("sisa_umur !=", "0");
+		// $this->db->where("cek_bulan_peny !=", date("Y-m") );
+
+		// $sql = $this->db->get("detail_pembelian");
+
+
+		$this->db->select("peternak.no_peternak, nama_peternak, COUNT(no_trans) as total_trans");
+	    // $this->db->from("peternak");
+	    $this->db->join("detail_pembelian_bb", "peternak.no_peternak = detail_pembelian_bb.no_peternak");
+	    $this->db->where("no_trans >=" , "8");
+	    $this->db->group_by("peternak.no_peternak");
+	    $sql = $this->db->get("peternak");
+
+		return $sql->result();
+	}
 }

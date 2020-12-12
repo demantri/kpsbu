@@ -100,15 +100,6 @@ class m_transaksi extends CI_Model {
 	}
 
 	public function anggota_pinjaman_dropdown() {
-		// $this->db->select("detail_pembelian.*, aset.id as kd_aset, aset, umur_aset, sisa_umur");
-		// $this->db->join("aset", "aset.id = detail_pembelian.id_aset");
-		// // $this->db->join("penyusutan", "aset.id = penyusutan.id_aset");
-		// $this->db->where("sisa_umur !=", "0");
-		// $this->db->where("cek_bulan_peny !=", date("Y-m") );
-
-		// $sql = $this->db->get("detail_pembelian");
-
-
 		$this->db->select("peternak.no_peternak, nama_peternak, COUNT(no_trans) as total_trans");
 	    // $this->db->from("peternak");
 	    $this->db->join("detail_pembelian_bb", "peternak.no_peternak = detail_pembelian_bb.no_peternak");
@@ -117,5 +108,36 @@ class m_transaksi extends CI_Model {
 	    $sql = $this->db->get("peternak");
 
 		return $sql->result();
+	}
+
+	function get_jumlah($id_peternak){ 
+        $query = "SELECT SUM(jumlah) as total_jumlah, SUM(subtotal) as total_trans_susu
+        FROM pembelian_bb
+	    JOIN detail_pembelian_bb ON (pembelian_bb.no_trans = detail_pembelian_bb.no_trans)
+        WHERE tgl_trans BETWEEN (NOW() - INTERVAL 14 DAY) AND NOW() AND no_peternak = '$id_peternak'";
+		return $this->db->query($query);
+    }
+
+    function id_otomatis($value='')
+	{
+	    # code...
+	    $this->db->select('RIGHT(pembayaran_susu.kode_pembayaran,  4) as kode', FALSE);
+	    $this->db->order_by('kode_pembayaran','DESC');    
+	    $this->db->limit(1);    
+	    $query = $this->db->get('pembayaran_susu');//cek dulu apakah ada sudah ada kode di tabel.    
+	    if($query->num_rows() <> 0){      
+	     //jika kode ternyata sudah ada.      
+	        $data = $query->row();      
+	        $kode = intval($data->kode) + 1;    
+	    }
+	    else {      
+	     //jika kode belum ada      
+	        $kode = 1;    
+	    }
+
+	    $datenow = date('dmY');
+	    $kodemax = str_pad($kode, 4, "0", STR_PAD_LEFT); // angka 4 menunjukkan jumlah digit angka 0
+	    $kodejadi = "PMBS-".$datenow.''.$kodemax;    // hasilnya tgl sekarang + kode dst.
+	    return $kodejadi;
 	}
 }

@@ -1,12 +1,6 @@
    <?php
 class c_transaksi extends CI_controller{
 
-	 // function __construct(){
-  //       parent:: __construct();
-  //      if(empty($this->session->userdata('level'))){
-  //           redirect('c_login/home');
-  //       }
-  //   }
       function __construct(){
         parent:: __construct();
         $this->load->model( array (
@@ -3707,4 +3701,94 @@ group by no_bbp";
       $this->m_keuangan->GenerateJurnal('1120',$id,'k',$tp_fix);
       redirect('c_transaksi/penyusutan');
     }
+
+    public function kartu_simpanan_susu()
+    {
+      # code...
+      $this->template->load("template", "kartu_simpanan_susu/index");
+    }
+
+    public function pembayaran_susu()
+    {
+      # code...
+      $this->db->select("pembayaran_susu.kode_pembayaran, tgl_transaksi, log_pembayaran_susu.*, peternak.nama_peternak");
+      $this->db->join("log_pembayaran_susu", "pembayaran_susu.kode_pembayaran = log_pembayaran_susu.id_pembayaran");
+      $this->db->join("peternak", "peternak.no_peternak = log_pembayaran_susu.id_anggota");
+      $this->db->order_by("tgl_transaksi", "DESC");
+
+      $pembayaran_susu = $this->db->get("pembayaran_susu")->result();
+      $data['pembayaran_susu'] = $pembayaran_susu;
+
+      // print_r($pembayaran_susu);exit;
+
+      $this->template->load("template", "pembayaran_susu/index", $data);
+    }
+
+    public function form_pembayaran_susu()
+    {
+      # code...
+      $data['kode_pembayaran'] = $this->model->id_otomatis();
+      $data['anggota'] = $this->db->get("peternak")->result_array();
+      // print_r($data['anggota']);exit;
+
+      $this->db->where("simpanan =", "Manasuka");
+      $data['manasuka'] = $this->db->get("simpanan")->row()->biaya;
+      // print_r($data['manasuka']);exit;
+      $this->template->load("template", "pembayaran_susu/form", $data);
+    }
+
+    public function j_lt()
+    {
+      # code...
+      $id_peternak = $this->input->post("id_peternak", TRUE);
+      // print_r($id);exit;
+      $data = $this->model->get_jumlah($id_peternak)->result();
+        // print_r($data);exit;
+      echo json_encode($data);
+    }
+
+    public function bayar_susu()
+    {
+      # code...
+      $config = array(
+        array(
+          'field' => 'kode_pembayaran',
+          'label' => 'Kode pembayaran',
+          'rules' => 'is_unique[pembayaran_susu.kode_pembayaran]',
+          'errors' => array(
+          'required' => '%s sudah tersimpan di database.'
+        )
+      ),
+    );
+
+    $this->form_validation->set_error_delimiters('<div class="alert alert-danger"><li>', '</li></div>');
+
+    $this->form_validation->set_rules($config);
+    
+    if ($this->form_validation->run() == FALSE) {
+      $this->pembayaran_susu();
+    } else {
+
+      $data_log = array (
+        "id_pembayaran" => $this->input->post("kode_pembayaran"),
+        "id_anggota" => $this->input->post("id_peternak"),
+        "jumlah_liter_susu" => $this->input->post("jumlah_liter"),
+        "simpanan_masuka" => $this->input->post("manasuka"),
+        "simpanan_wajib" => $this->input->post("jumlah_pembayaran"),
+        "jumlah_harga_susu" => $this->input->post("jumlah_harga_susu"),
+        "subtotal" => $this->input->post("total_trans_susu"),
+        // "tgl_transaksi" => date("Y-m-d"),
+      );
+      // print_r($data_log);exit;
+      $this->db->insert("log_pembayaran_susu", $data_log);
+
+      $pembayaran_susu = array (
+        "kode_pembayaran" => $this->input->post("kode_pembayaran"),
+        "total_bayar" => $this->input->post("total_trans_susu"),
+        "tgl_transaksi" => date("Y-m-d"),
+      );
+      $this->db->insert("pembayaran_susu", $pembayaran_susu);
+    }
+    redirect("c_transaksi/pembayaran_susu");
+  }
 }//end

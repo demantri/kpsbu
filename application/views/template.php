@@ -191,10 +191,9 @@
                                  <li><a href="<?php echo site_url();?>c_transaksi/lihat_produksi_ke2">Produksi Olahan</a></li>
                                  <li><a href="<?php echo site_url();?>c_transaksi/lihat_penjs">Penjualan IPS</a></li>
                                  <li><a href="<?php echo site_url();?>c_transaksi/lihat_penjt">Penjualan Toko</a></li>
+                                 <li><a href="<?php echo site_url();?>c_transaksi/pembayaran_susu">Pembayaran Susu</a></li>
                                  <li><a href="<?php echo site_url();?>c_transaksi/lihat_pemby">Pembayaran Beban Tetap</a></li>
                                  <li><a href="<?php echo site_url();?>c_transaksi/lihat_pembyv">Pembayaran Beban Variabel</a></li>
-                                 <!-- <li><a href="<?php echo site_url();?>c_transaksi/simpanan_pokok">Simpanan Pokok</a></li> -->
-                                 <!-- <li><a href="<?php echo site_url();?>c_transaksi/simpanan_masuka">Simpanan Masuka</a></li> -->
                                  <li><a href="<?php echo site_url();?>c_transaksi/simpanan_hr">Simpanan Hari Raya</a></li>
                                  <li><a href="<?php echo site_url();?>c_transaksi/pinjaman">Pinjaman</a></li>
                                    <?php
@@ -248,8 +247,11 @@
                                   <?php 
                            if( $this->session->userdata('level')=="keuangan" OR $this->session->userdata('level')=="admin"):
                             ?>
-                                  <li><a href="<?php echo site_url();?>c_keuangan/view_jurnal">Jurnal</a></li>
+                                    <li><a href="<?php echo site_url();?>c_keuangan/view_jurnal">Jurnal</a></li>
                                     <li><a href="<?php echo site_url();?>c_keuangan/view_bukubesar">Buku Besar</a></li>
+                                    <li><a href="<?php echo site_url();?>c_keuangan/view_bukubesar">Kartu Simpanan Wajib</a></li>
+                                    <li><a href="<?php echo site_url();?>c_keuangan/view_bukubesar">Kartu Simpanan Manasuka</a></li>
+                                    <li><a href="<?php echo site_url();?>c_keuangan/kartu_simpanan_susu">Kartu Simpanan Susu</a></li>
                                     <li><a href="<?php echo site_url();?>c_keuangan/lap_pemb">Laporan Pembelian Bahan Baku</a></li>
                                     <li><a href="<?php echo site_url();?>c_keuangan/lap_pembp">Laporan Pembelian Bahan Penolong</a></li>
                                     <li><a href="<?php echo site_url();?>c_keuangan/lap_pemby">Laporan Pembayaran Beban</a></li>

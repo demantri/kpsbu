@@ -13,7 +13,7 @@
 			<body>
 				<form method = "POST" action = "<?php echo site_url('c_transaksi/bayar_susu');?>">
 					
-					<input type="text" name="kode_pembayaran" value="<?= $kode_pembayaran ?>">
+					<input type="hidden" name="kode_pembayaran" value="<?= $kode_pembayaran ?>">
 
 					<div class="form-group row">
 						<label class="col-sm-1">Anggota</label>	
@@ -60,10 +60,11 @@
 					  		<input type="text" name="total_trans_susu" id="total_trans_susu" class="form-control" readonly="">
 						</div>
 					</div>
+					<div id="notif"></div>
 
-					<input type="submit" name="" value="Bayar" class="btn btn-success" id="btn-simpan">
-
-
+					<?php if ($cek_hari) { ?>
+						<input type="submit" name="" value="Bayar" class="btn btn-success" id="btn-simpan">
+					<?php } ?>
 					<hr>
 				</form>
 			</body>
@@ -128,6 +129,60 @@
 	                        	}
 	                    }
 	                    console.log(manasuka)
+	                }
+	            });
+	            return false;
+			})
+
+			$("#id_peternak").change(function () {
+				var id_peternak = $("#id_peternak").val()
+				// console.log(id);
+				var notif = '';
+				$.ajax({
+	                url : "<?php echo site_url('c_transaksi/sum_pembelian');?>",
+	                method : "POST",
+	                data : {id_peternak: id_peternak},
+	                async : true,
+	                dataType : 'json',
+	                success: function(data){
+	     				var id_anggota = data.id_anggota;
+	     				var tgl_transaksi = data.tgl_transaksi;
+	     				var next_trans = data.next_trans;
+
+	     				var today = new Date();
+	     				var dd = today.getDate();
+						var mm = today.getMonth()+1; 
+						var yyyy = today.getFullYear();
+						if(dd<10) 
+						{
+						    dd='0'+dd;
+						} 
+
+						if(mm<10) 
+						{
+						    mm='0'+mm;
+						}
+						var hari_ini = yyyy+'-'+mm+'-'+dd;
+
+	     				$("#notif").hide();
+
+	     				if (hari_ini !== next_trans) {
+	     					$("#btn-simpan").prop("disabled", true);
+
+	     					// show notif
+	     					$("#notif").show();
+	     					var notif = 'Silahkan lakukan transaksi berikutnya pada : <strong>'+next_trans+'<strong>';
+	     					$("#notif").html(notif)
+	     				} else {
+	     					$("#btn-simpan").prop("disabled", false);
+
+	     					// show notif
+	     					$("#notif").hide();
+	     					var notif = 'Silahkan lakukan transaksi berikutnya pada' +" "+next_trans
+	     					$("#notif").html(notif)
+	     				}
+
+	                    console.log(hari_ini)
 	                }
 	            });
 	            return false;

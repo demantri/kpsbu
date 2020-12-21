@@ -9,25 +9,18 @@ class c_keuangan extends CI_Controller
             redirect('c_login/home');
         }
     }
-	public function view_jurnal(){	   
-		// if(!empty($this->session->userdata('level'))){
-   
+    
+	public function view_jurnal(){
 		if(isset($_POST['tgl_awal'], $_POST['tgl_akhir'])){
-			
-		$data['awal'] = $_POST['tgl_awal'];
-		$data['akhir'] = $_POST['tgl_akhir'];
-		$data['jurnal'] = $this->M_keuangan->GetDataJurnal();
-		$this->template->load('template','jurnal', $data);
-	}else{
-		$data['jurnal'] = $this->M_keuangan->GetDataJurnal();
-		$this->template->load('template','jurnal', $data);
-		
-	// }
-	// 	 }else{
- //      redirect('c_login/home');
- //    }
+			$data['awal'] = $_POST['tgl_awal'];
+			$data['akhir'] = $_POST['tgl_akhir'];
+			$data['jurnal'] = $this->M_keuangan->GetDataJurnal();
+			$this->template->load('template','jurnal', $data);
+		}else{
+			$data['jurnal'] = $this->M_keuangan->GetDataJurnal();
+			$this->template->load('template','jurnal', $data);
+		}
 	}
-}
 
 	public function jurnal_pdf_all(){
 		$data['jurnal'] = $this->M_keuangan->getdatajurnalall();

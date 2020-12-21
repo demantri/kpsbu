@@ -251,7 +251,7 @@
                                     <li><a href="<?php echo site_url();?>c_keuangan/view_bukubesar">Buku Besar</a></li>
                                     <li><a href="<?php echo site_url();?>c_keuangan/view_bukubesar">Kartu Simpanan Wajib</a></li>
                                     <li><a href="<?php echo site_url();?>c_keuangan/view_bukubesar">Kartu Simpanan Manasuka</a></li>
-                                    <li><a href="<?php echo site_url();?>c_keuangan/kartu_simpanan_susu">Kartu Simpanan Susu</a></li>
+                                    <li><a href="<?php echo site_url();?>simpanan/kartu_simpanan_susu">Kartu Simpanan Susu</a></li>
                                     <li><a href="<?php echo site_url();?>c_keuangan/lap_pemb">Laporan Pembelian Bahan Baku</a></li>
                                     <li><a href="<?php echo site_url();?>c_keuangan/lap_pembp">Laporan Pembelian Bahan Penolong</a></li>
                                     <li><a href="<?php echo site_url();?>c_keuangan/lap_pemby">Laporan Pembayaran Beban</a></li>

@@ -25,7 +25,7 @@
 				foreach ($pembayaran_susu as $data) { ?>
 					<tr>
 						<td><?= $no++ ?></td>
-						<td><?= date("F Y", strtotime($data->tgl_transaksi)) ?></td>
+						<td><?= date("d F Y", strtotime($data->tgl_transaksi)) ?></td>
 						<td><?= $data->id_anggota ?> - <?= $data->nama_peternak ?></td>
 						<td><?= format_rp($data->subtotal) ?></td>
 						<td>

@@ -3728,8 +3728,17 @@ group by no_bbp";
     {
       # code...
       $data['kode_pembayaran'] = $this->model->id_otomatis();
-      $data['anggota'] = $this->db->get("peternak")->result_array();
       // print_r($data['anggota']);exit;
+      // $this->db->select("tgl_transaksi + INTERVAL 1 DAY tgl_transaksi");
+      // $this->db->join("log_pembayaran_susu", "log_pembayaran_susu.id_anggota = peternak.no_peternak");
+      // $this->db->join("pembayaran_susu", "log_pembayaran_susu.id_pembayaran = pembayaran_susu.kode_pembayaran");
+      
+      $model = $this->model->get14day();
+      $data['cek_hari'] = $model;
+      // $tanggal = $this->db->get("peternak")->row()->tgl_transaksi;
+      // $this->db->where("")
+      $data['anggota'] = $this->db->get("peternak")->result_array();
+      // print_r($model);exit; 
 
       $this->db->where("simpanan =", "Manasuka");
       $data['manasuka'] = $this->db->get("simpanan")->row()->biaya;
@@ -3744,6 +3753,14 @@ group by no_bbp";
       // print_r($id);exit;
       $data = $this->model->get_jumlah($id_peternak)->result();
         // print_r($data);exit;
+      echo json_encode($data);
+    }
+
+    public function sum_pembelian()
+    {
+      # code...
+      $id_peternak = $this->input->post("id_peternak", TRUE);
+      $data = $this->model->getJumlah($id_peternak)->row();
       echo json_encode($data);
     }
 

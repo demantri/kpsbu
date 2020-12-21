@@ -10,31 +10,20 @@
   	 <div class="x_content">
   	 	<div class="row">
   	 		<div class="col-sm-7">
-  	 	<form method="post" action="<?php echo site_url().'/c_keuangan/view_jurnal' ?> " class="form-inline">
-		<label>Tanggal Awal :</label>
-		<input type = "date" name="tgl_awal" class = "form-control" required="">
-		<label>Tanggal Akhir :</label>
-		<input type = "date" name="tgl_akhir" class = "form-control" required="">&nbsp&nbsp
-	<input type="submit" value="filter" class="btn btn-info">
-	</form>
-</div>
-<!-- <div class="col-sm-5">
-	<?php if(isset($awal, $akhir)):?>
-	<a href="<?php echo site_url()."/c_keuangan/jurnal_pdf_filter/$awal/$akhir"?>"  target="_blank" rel="nofollow" class="btn btn-success" role="button">Print</a>
-	<a href="<?php echo site_url()."/c_keuangan/jurnal_excel_filter/$awal/$akhir"?>" target="_blank" rel="nofollow"  class="btn btn-success" role="button">Excel</a>
-<?php endif ?>
-	<a href="<?php echo site_url()."/c_keuangan/jurnal_pdf_all"?>"  target="_blank" rel="nofollow" class="btn btn-success" role="button">Print ALL</a>
-	
+  	 			<form method="post" action="<?php echo site_url().'/c_keuangan/view_jurnal' ?> " class="form-inline">
 
-	<a href="<?php echo site_url()."/c_keuangan/jurnal_excel_all"?>" target="_blank" rel="nofollow"  class="btn btn-success" role="button">Excel ALL</a>
-	<?php if(isset($awal, $akhir)):?>
-	<a href="<?php echo site_url()."/c_keuangan/view_jurnal"?>" class="btn btn-dark" role="button">Kembali</a>
-	<?php endif ?>
+				<label>Tanggal Awal :</label>
+				<input type = "date" name="tgl_awal" class = "form-control" required="">
 
-</div> -->
+				<label>Tanggal Akhir :</label>
+				<input type = "date" name="tgl_akhir" class = "form-control" required="">&nbsp&nbsp
+
+				<input type="submit" value="filter" class="btn btn-info">
+				</form>
+			</div>
 <hr>
 
-</div>
+		</div>
 
 <p>
   	 <center><b>

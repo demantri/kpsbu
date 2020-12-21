@@ -118,6 +118,31 @@ class m_transaksi extends CI_Model {
 		return $this->db->query($query);
     }
 
+    public function getJumlah($id_peternak)
+    {
+    	# code...
+    	$query = "
+    	SELECT id_anggota, tgl_transaksi, tgl_transaksi + INTERVAL 14 DAY as next_trans
+		FROM peternak
+		JOIN log_pembayaran_susu ON log_pembayaran_susu.id_anggota = peternak.no_peternak
+		JOIN pembayaran_susu ON pembayaran_susu.kode_pembayaran = log_pembayaran_susu.id_pembayaran
+        WHERE no_peternak = '$id_peternak'
+        ORDER BY tgl_transaksi DESC
+        ";
+		return $this->db->query($query);
+    }
+
+    function get14day()
+    {
+    	# code...
+    	$sql = "
+	    SELECT tgl_transaksi + INTERVAL 14 DAY as tgl_transaksi
+	    FROM peternak 
+	    JOIN log_pembayaran_susu ON log_pembayaran_susu.id_anggota = peternak.no_peternak
+	    JOIN pembayaran_susu ON log_pembayaran_susu.id_pembayaran = pembayaran_susu.kode_pembayaran";
+	    return $this->db->query($sql)->row()->tgl_transaksi;
+    }
+
     function id_otomatis($value='')
 	{
 	    # code...

@@ -43,7 +43,7 @@
 
 			<div class="form-group">
 			  <label>Deposit</label>
-			  <input type = "text" name = "deposit" class = "form-control" value="<?= $simpanan[0]->biaya ?>" readonly>
+			  <input type = "text" name = "deposit" class = "form-control" value="<?= $simpanan?>" readonly>
 			  <?php echo form_error('deposit'); ?>
 			
 			</div>

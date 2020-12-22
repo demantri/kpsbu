@@ -132,6 +132,35 @@ class m_transaksi extends CI_Model {
 		return $this->db->query($query);
     }
 
+    public function getSyarat($id_peternak)
+    {
+    	# code...
+    	$sql = "
+    	SELECT total, no_peternak
+		FROM 
+			(
+				SELECT no_peternak, count(no_trans) as total
+			    FROM detail_pembelian_bb
+			    GROUP BY no_peternak
+			) detail_pembelian_bb
+		WHERE no_peternak = '$id_peternak' AND total > 1
+    	";
+    	return $this->db->query($sql);
+
+    }
+
+    public function getIndex()
+    {
+    	# code...
+    	$sql = "
+    	SELECT kode_pinjaman, id_anggota, tanggal_pinjaman, nominal, status, nama_peternak
+		FROM log_pinjaman
+		JOIN peternak ON peternak.no_peternak = log_pinjaman.id_anggota
+		ORDER BY tanggal_pinjaman DESC
+    	";
+    	return $this->db->query($sql);
+     }
+
     function get14day()
     {
     	# code...
@@ -140,7 +169,7 @@ class m_transaksi extends CI_Model {
 	    FROM peternak 
 	    JOIN log_pembayaran_susu ON log_pembayaran_susu.id_anggota = peternak.no_peternak
 	    JOIN pembayaran_susu ON log_pembayaran_susu.id_pembayaran = pembayaran_susu.kode_pembayaran";
-	    return $this->db->query($sql)->row()->tgl_transaksi;
+	    return $this->db->query($sql)->row()->tgl_transaksi ?? 0;
     }
 
     function id_otomatis($value='')

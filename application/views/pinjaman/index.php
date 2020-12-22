@@ -4,7 +4,7 @@
 	<body>
 		<div class="x_panel">
  	<div class="x_title">
-    	<h3 class="panel-title"><b>Daftar peminjam</b></h3>
+    	<h3 class="panel-title"><b>Daftar Pinjaman</b></h3>
   	</div>
   	
   	<div class="x_content">
@@ -14,13 +14,30 @@
 		 	<thead>
 				<tr class="headings">
 					<th style="width: 2px;">No</th>
-					<th>Nama Peminjam</th>
-					<th>Simpanan</th>
-					<th>Biaya</th>
-					<th>Aksi</th>
+					<th>Nama Anggota</th>
+					<th>Tanggal Pinjaman</th>
+					<th>Nominal</th>
+					<th>Status</th>
 				</tr>
 			</thead>
-			<?php $no = 1;?>
+			<?php
+			$no = 1;
+			$status = "";
+			foreach ($index as $data) { ?>
+				<tr>
+					<td><?= $no++ ?></td>
+					<td><?= $data->nama_peternak ?></td>
+					<td><?= $data->tanggal_pinjaman ?></td>
+					<td><?= format_rp($data->nominal) ?></td>
+					<td>
+						<?php if ($data->status != "0") { 
+							echo "Belum lunas"; 
+						} else {
+							echo "Lunas";
+						} ?>
+					</td>
+				</tr>
+			<?php } ?>
 			<tbody>
 			</tbody>
 		</table>

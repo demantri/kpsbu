@@ -28,9 +28,12 @@
 			<hr>
 		</div>
 		<hr>
+		<center>
+			<h3>Kartu simpanan susu</h3>
+		</center>
 
-	<p>ID Anggota : <?= $anggota->no_peternak?> </p>
-	<p>Nama Anggota :  </p>
+	<!-- <p>ID Anggota : <?= $anggota ? $anggota : $anggota  ?> </p>
+	<p>Nama Anggota :  </p> -->
 	<hr>
 	<table id="datatable" class="table table-striped table-bordered table-hover jambo_table">
 		<thead>
@@ -45,7 +48,9 @@
 			</tr>
 		</thead>
 		<tbody>
-			<?php $no = 1; 
+			<!-- $total = 0; -->
+			<?php 
+			$no = 1; 
 			foreach ($detail as $data) { ?>
 			<tr>
 				<td><?= $no++ ?></td>
@@ -53,14 +58,21 @@
 				<td><?= $data->tgl_trans ?></td>
 				<td><?= $data->nama_peternak ?></td>
 				<td><?= $data->jumlah ?></td>
-				<td><?= $data->harga ?></td>
-				<td><?= $data->subtotal ?></td>
+				<td align='right'><?= format_rp($data->harga) ?></td>
+				<td align='right'><?= format_rp($data->subtotal) ?></td>
 			</tr>
+				<!-- <td><?= $total += $data->subtotal ?></td> -->
 			<?php } ?>
+			<!-- $total += $data->subtotal; -->
 		</tbody>
 		<tr>
-			<td colspan="6" align='center'>Subtotal</td>
-			<td align='center'>Subtotal</td>
+			<td colspan="6" align='left'>Subtotal</td>
+			<?php if (empty($total)) {
+				$total = 0;
+			} else {
+				$total = $total ;
+			} ?>
+			<td align='right'><?= format_rp($total) ?></td>
 		</tr>
 	
 	</table>

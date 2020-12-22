@@ -26,7 +26,8 @@ class c_transaksi extends CI_controller{
 
    public function pinjaman()
    {
-    $this->template->load('template', 'pinjaman/index');
+    $data['index'] = $this->model->getIndex()->result();
+    $this->template->load('template', 'pinjaman/index', $data);
    }
 
    public function form_pinjaman()
@@ -49,9 +50,51 @@ class c_transaksi extends CI_controller{
 
     
 
-    $data['anggota'] = $this->model->anggota_pinjaman_dropdown();
+    // $data['anggota'] = $this->model->anggota_pinjaman_dropdown();
+    $data['anggota'] = $this->db->get("peternak")->result();
     // print_r($data['anggota']);exit;
     $this->template->load('template', 'pinjaman/form', $data);
+   }
+
+    function syarat()
+   {
+     # code...
+      $id_peternak = $this->input->post("id_peternak", TRUE);
+      $data = $this->model->getSyarat($id_peternak)->row();
+      echo json_encode($data);
+   }
+
+   public function simpan_pinjaman()
+   {
+     # code...
+    $data = array (
+      'kode_pinjaman' => $this->input->post("kode_simpanan"),
+      'id_anggota' => $this->input->post("peternak"),
+      'tanggal_pinjaman' => date("Y-m-d"),
+      'nominal' => $this->input->post("biaya"),
+    );
+    $this->db->insert("log_pinjaman", $data);
+
+    // jurnal
+    $debit = array (
+      "id_jurnal" => $this->input->post("kode_simpanan"),
+      "tgl_jurnal" => date("Y-m-d"),
+      "no_coa" => 3789,
+      "posisi_dr_cr" => "d",
+      "nominal" => $this->input->post("biaya"),
+    );
+    $this->db->insert("jurnal", $debit);
+
+    $kredit = array (
+      "id_jurnal" => $this->input->post("kode_simpanan"),
+      "tgl_jurnal" => date("Y-m-d"),
+      "no_coa" => 1111,
+      "posisi_dr_cr" => "k",
+      "nominal" => $this->input->post("biaya"),
+    );
+    $this->db->insert("jurnal", $kredit);
+
+    redirect("c_transaksi/pinjaman");
    }
 
    // index pemb. aset
@@ -214,6 +257,13 @@ class c_transaksi extends CI_controller{
       // print_r($data_detail);exit;
       $this->db->insert('detail_pembelian', $data_detail);
     }
+
+    // ambil nama aset 
+    // $this->db->where("id", $id_aset);
+    // $cek_nama_aset = $this->db->get("aset")->result();
+    // print_r($cek_nama_aset);exit;
+    
+
     redirect('c_transaksi/form_pembelian_aset');
    }
 
@@ -3805,6 +3855,44 @@ group by no_bbp";
         "tgl_transaksi" => date("Y-m-d"),
       );
       $this->db->insert("pembayaran_susu", $pembayaran_susu);
+
+      // jurnal
+      $pbb = array (
+        "id_jurnal" => $this->input->post("kode_pembayaran"),
+        "tgl_jurnal" => date("Y-m-d"),
+        "no_coa" => 1112,
+        "posisi_dr_cr" => "d",
+        "nominal" => $this->input->post("jumlah_harga_susu"),
+      );
+      $this->db->insert("jurnal", $pbb);
+
+      $kas = array (
+        "id_jurnal" => $this->input->post("kode_pembayaran"),
+        "tgl_jurnal" => date("Y-m-d"),
+        "no_coa" => 1111,
+        "posisi_dr_cr" => "k",
+        "nominal" => $this->input->post("total_trans_susu"),
+      );
+      $this->db->insert("jurnal", $kas);
+
+      $simpanan_wajib = array (
+        "id_jurnal" => $this->input->post("kode_pembayaran"),
+        "tgl_jurnal" => date("Y-m-d"),
+        "no_coa" => 3786,
+        "posisi_dr_cr" => "k",
+        "nominal" => $this->input->post("jumlah_pembayaran"),
+      );
+      $this->db->insert("jurnal", $simpanan_wajib);
+
+      $simpanan_masuka = array (
+        "id_jurnal" => $this->input->post("kode_pembayaran"),
+        "tgl_jurnal" => date("Y-m-d"),
+        "no_coa" => 3787,
+        "posisi_dr_cr" => "k",
+        "nominal" => $this->input->post("manasuka"),
+      );
+      $this->db->insert("jurnal", $simpanan_masuka);
+
     }
     redirect("c_transaksi/pembayaran_susu");
   }

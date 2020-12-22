@@ -667,8 +667,11 @@ class c_masterdata extends CI_controller{
          $no_trans   = "PTRNK_" . $kd;
          $data['id'] = $no_trans;
 
-         $simpanan_wajib = $this->M_masterdata->simpanan_wajib()->result();
+         // $this->db->select("biaya");
+         $this->db->where("kode_simpanan =", "JS-001");
+         $simpanan_wajib = $this->db->get("simpanan")->row()->biaya;
          // $this->db->query($simpanan_wajib);
+         // print_r($simpanan_wajib);exit;
 
          $data['simpanan'] = $simpanan_wajib;
          // print_r($simpanan_wajib);exit;
@@ -724,6 +727,25 @@ class c_masterdata extends CI_controller{
             );
             // print_r($data);exit;
             $this->db->insert('peternak', $data);
+
+            // jurnal
+            $debit = array (
+              "id_jurnal" => "DP".$_POST['no_peternak'],
+              "tgl_jurnal" => date("Y-m-d"),
+              "no_coa" => 1111,
+              "posisi_dr_cr" => "d",
+              "nominal" => $_POST['deposit'],
+            );
+            $this->db->insert("jurnal", $debit);
+
+            $kredit = array (
+              "id_jurnal" => "DP".$_POST['no_peternak'],
+              "tgl_jurnal" => date("Y-m-d"),
+              "no_coa" => 3788,
+              "posisi_dr_cr" => "k",
+              "nominal" => $_POST['deposit'],
+            );
+            $this->db->insert("jurnal", $kredit);
             redirect('c_masterdata/lihat_peternak');
          }
    }

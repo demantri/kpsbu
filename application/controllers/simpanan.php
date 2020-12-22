@@ -34,7 +34,8 @@ class simpanan extends ci_controller
 			$data = array (
 				'id_peternak' => is_null($id_peternak),
 				'detail' => $this->simpanan->getDetails($id_peternak)->result(),
-				'peternak' => $this->db->get("peternak")->result()
+				'peternak' => $this->db->get("peternak")->result(),
+				'total' => 0,
 			);
 			$this->template->load("template", "laporan_simpanan/kartu_simpanan_susu", $data);
 

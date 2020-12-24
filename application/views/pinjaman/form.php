@@ -34,11 +34,13 @@
 				  <input type = "number" min="0" name ="biaya" class = "form-control" id="biaya" placeholder="Isi pinjaman">
 				  <?php echo form_error('biaya'); ?>
 				</div>
+
+				<div id="info"></div>
 				
 				<hr>
 				<button type="submit" id="btn-simpan" class="btn btn-default btn-primary">Simpan</button>
 
-				<a href = "<?php echo site_url()."/c_masterdata/simpanan"?>" type="button" class="btn btn-default">Kembali</a>
+				<a href = "<?php echo site_url()."/c_transaksi/pinjaman"?>" type="button" class="btn btn-default">Kembali</a>
 			</form>
 		</body>
 	</div>
@@ -51,6 +53,8 @@
 	$("#anggota").change(function () {
 
 		var id_peternak = $("#anggota").val()
+		var info = '';
+
 		$.ajax({
             url : "<?php echo site_url('c_transaksi/syarat');?>",
             method : "POST",
@@ -58,19 +62,87 @@
             async : true,
             dataType : 'json',
             success: function(data){
-
+            	$("#info").hide();
             	// var anggota = data.no_peternak;
             	// var total_setor = data.total_setor;
             	if (data == null) {
+            		// kalo semisal belum memenuhi target. pembelian total selama 8bln
+            		$("#info").show();
+            		var info = 'Anda masih belum bisa melakukan pinjaman. <strong>Masih kurang target selama 8 bulan terakhir</strong>'
+            		$("#info").html(info);
+
             		$("#biaya").prop("readonly", true);
             		$("#btn-simpan").prop("disabled", true);
             	} else {
-            		$("#biaya").prop("readonly", false);
-            		$("#btn-simpan").prop("disabled", false);
+            		var status = data.status;
+            		if (status == 1) {
+            			$("#info").show();
+	            		var info = 'Anda belum melakukan pelunasan. <strong>Silahkan melakukan pelunasan!</strong>'
+	            		$("#info").html(info);
+
+            			$("#biaya").prop("readonly", true);
+	            		$("#btn-simpan").prop("disabled", true);
+            		} else {
+						$("#biaya").prop("readonly", false);
+	            		$("#btn-simpan").prop("disabled", false);
+            		}
             	}
             	console.log(data)
             }
         });
         return false;
 	});
+
+	// $("#anggota").change(function () {
+
+	// 	var id_peternak = $("#anggota").val()
+	// 	var info = "";
+
+	// 	$.ajax({
+ //            url : "<?php echo site_url('c_transaksi/cek_utang');?>",
+ //            method : "POST",
+ //            data : {id_peternak: id_peternak},
+ //            async : true,
+ //            dataType : 'json',
+ //            success: function(data){
+ //            	$("#info").hide();
+
+ //            	// if (data != null) {
+ //            	// 	$("#biaya").prop("readonly", true);
+
+ //            	// 	var status = data.status;
+ //            	// 	if (status != 0) {
+
+ //            	// 		// $("#info").show();
+ //            	// 		// var info = 'Anda belum melakukan pelunasan. <strong>Silahkan melakukan pelunasan!</strong>';
+
+ //            	// 		// $("#info").html(info);
+
+ //            	// 		$("#biaya").prop("readonly", true);
+
+ //            	// 	// console.log(status)
+ //            	// 	} else {
+ //            	// 		$("#biaya").prop("readonly", false);
+ //            	// 	}
+ //            	// }
+ //            	if (data == null) {
+ //            		$("#biaya").prop("readonly", true);
+ //            		$("#btn-simpan").prop("disabled", true);
+ //            	} else {
+ //            		var status = data.status;
+ //            		if (status == 1) {
+ //            			$("#biaya").prop("readonly", true);
+ //            			$("#btn-simpan").prop("disabled", true);
+
+ //            		} else {
+	//             		$("#biaya").prop("readonly", false);
+	//             		$("#btn-simpan").prop("disabled", false);
+ //            		}
+
+ //            	}
+ //            	// console.log(data.status)
+ //            }
+ //        });
+ //        return false;
+	// });
 </script>

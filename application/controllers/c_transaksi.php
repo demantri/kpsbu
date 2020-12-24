@@ -64,6 +64,12 @@ class c_transaksi extends CI_controller{
       echo json_encode($data);
    }
 
+   function cek_utang() {
+    $id_anggota = $this->input->post("id_peternak", TRUE);
+    $data = $this->model->UtangPinjamanByMember($id_anggota)->row();
+    echo json_encode($data);
+   }
+
    public function simpan_pinjaman()
    {
      # code...
@@ -75,6 +81,9 @@ class c_transaksi extends CI_controller{
     );
     $this->db->insert("log_pinjaman", $data);
 
+    $this->db->set("pinjaman =", $this->input->post("biaya"));
+    $this->db->where("no_peternak", $this->input->post("peternak"));
+    $this->db->update("peternak");
     // jurnal
     $debit = array (
       "id_jurnal" => $this->input->post("kode_simpanan"),
@@ -257,11 +266,6 @@ class c_transaksi extends CI_controller{
       // print_r($data_detail);exit;
       $this->db->insert('detail_pembelian', $data_detail);
     }
-
-    // ambil nama aset 
-    // $this->db->where("id", $id_aset);
-    // $cek_nama_aset = $this->db->get("aset")->result();
-    // print_r($cek_nama_aset);exit;
     
 
     redirect('c_transaksi/form_pembelian_aset');
@@ -274,6 +278,31 @@ class c_transaksi extends CI_controller{
     $this->db->set('status', 'selesai');
     $this->db->set('total', $total);
     $this->db->update('pembelian_aset');
+
+
+    $this->db->select("aset");
+    $this->db->join("detail_pembelian", "detail_pembelian.id_aset = aset.id");
+    $this->db->where("detail_pembelian.id_pembelian", $id); 
+    $nama_aset = $this->db->get("aset")->result();
+
+    // jurnal
+    $pemb_aset = array (
+      'id_jurnal' => $id,
+      'tgl_jurnal' => date("Y-m-d") ,
+      'no_coa' => 5000,
+      'posisi_dr_cr' => "d",
+      'nominal' => $total,
+    );
+    $this->db->insert("jurnal", $pemb_aset);
+
+    $pemb_aset_kredit = array (
+      'id_jurnal' => $id,
+      'tgl_jurnal' => date("Y-m-d") ,
+      'no_coa' => 1111,
+      'posisi_dr_cr' => "k",
+      'nominal' => $total,
+    );
+    $this->db->insert("jurnal", $pemb_aset_kredit);
 
     redirect("c_transaksi/pembelian_aset");
    }
@@ -3778,21 +3807,19 @@ group by no_bbp";
     {
       # code...
       $data['kode_pembayaran'] = $this->model->id_otomatis();
-      // print_r($data['anggota']);exit;
-      // $this->db->select("tgl_transaksi + INTERVAL 1 DAY tgl_transaksi");
-      // $this->db->join("log_pembayaran_susu", "log_pembayaran_susu.id_anggota = peternak.no_peternak");
-      // $this->db->join("pembayaran_susu", "log_pembayaran_susu.id_pembayaran = pembayaran_susu.kode_pembayaran");
       
       $model = $this->model->get14day();
       $data['cek_hari'] = $model;
       // $tanggal = $this->db->get("peternak")->row()->tgl_transaksi;
       // $this->db->where("")
       $data['anggota'] = $this->db->get("peternak")->result_array();
-      // print_r($model);exit; 
+      // print_r($model);exit;
+
+
 
       $this->db->where("simpanan =", "Manasuka");
       $data['manasuka'] = $this->db->get("simpanan")->row()->biaya;
-      // print_r($data['manasuka']);exit;
+
       $this->template->load("template", "pembayaran_susu/form", $data);
     }
 
@@ -3811,6 +3838,19 @@ group by no_bbp";
       # code...
       $id_peternak = $this->input->post("id_peternak", TRUE);
       $data = $this->model->getJumlah($id_peternak)->row();
+      echo json_encode($data);
+    }
+
+    public function getPinjaman()
+    {
+      # code...
+      $id_peternak = $this->input->post("id_peternak", TRUE);
+
+      $this->db->select("nominal");
+      $this->db->where("id_anggota", $id_peternak);
+      $this->db->order_by("kode_pinjaman", "DESC");
+      $data = $this->db->get("log_pinjaman")->row();
+
       echo json_encode($data);
     }
 
@@ -3836,6 +3876,9 @@ group by no_bbp";
       $this->pembayaran_susu();
     } else {
 
+      $pinjaman = $this->input->post("pinjaman");
+      $piutang = $this->input->post("piutang");
+
       $data_log = array (
         "id_pembayaran" => $this->input->post("kode_pembayaran"),
         "id_anggota" => $this->input->post("id_peternak"),
@@ -3843,6 +3886,8 @@ group by no_bbp";
         "simpanan_masuka" => $this->input->post("manasuka"),
         "simpanan_wajib" => $this->input->post("jumlah_pembayaran"),
         "jumlah_harga_susu" => $this->input->post("jumlah_harga_susu"),
+        "subtotal" => $this->input->post("total_trans_susu"),
+        "subtotal" => $this->input->post("total_trans_susu"),
         "subtotal" => $this->input->post("total_trans_susu"),
         // "tgl_transaksi" => date("Y-m-d"),
       );

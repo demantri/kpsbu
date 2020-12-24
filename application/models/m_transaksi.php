@@ -111,10 +111,11 @@ class m_transaksi extends CI_Model {
 	}
 
 	function get_jumlah($id_peternak){ 
-        $query = "SELECT SUM(jumlah) as total_jumlah, SUM(subtotal) as total_trans_susu
-        FROM pembelian_bb
-	    JOIN detail_pembelian_bb ON (pembelian_bb.no_trans = detail_pembelian_bb.no_trans)
-        WHERE tgl_trans BETWEEN (NOW() - INTERVAL 14 DAY) AND NOW() AND no_peternak = '$id_peternak'";
+        $query = "SELECT SUM(jumlah) as total_jumlah, SUM(subtotal) as total_trans_susu, pinjaman
+		FROM detail_pembelian_bb
+		JOIN pembelian_bb ON (pembelian_bb.no_trans = detail_pembelian_bb.no_trans)
+		JOIN peternak ON (peternak.no_peternak = detail_pembelian_bb.no_peternak)
+        WHERE tgl_trans BETWEEN (NOW() - INTERVAL 14 DAY) AND NOW() AND detail_pembelian_bb.no_peternak = '$id_peternak'";
 		return $this->db->query($query);
     }
 
@@ -136,17 +137,30 @@ class m_transaksi extends CI_Model {
     {
     	# code...
     	$sql = "
-    	SELECT total, no_peternak
-		FROM 
-			(
-				SELECT no_peternak, count(no_trans) as total
-			    FROM detail_pembelian_bb
-			    GROUP BY no_peternak
-			) detail_pembelian_bb
-		WHERE no_peternak = '$id_peternak' AND total > 1
+    	SELECT total, detail_pembelian_bb.no_peternak, nominal, status
+		FROM peternak
+				JOIN 
+					(
+						SELECT no_peternak, count(no_trans) as total
+					    FROM detail_pembelian_bb
+					    GROUP BY no_peternak
+					) detail_pembelian_bb ON peternak.no_peternak = detail_pembelian_bb.no_peternak
+		            JOIN log_pinjaman ON log_pinjaman.id_anggota = peternak.no_peternak
+				WHERE detail_pembelian_bb.no_peternak = '$id_peternak' AND total > 1
     	";
     	return $this->db->query($sql);
+    }
 
+    public function UtangPinjamanByMember($id_anggota)
+    {
+    	# code...
+    	$sql = "
+    	SELECT no_peternak, nama_peternak, nominal, status
+		FROM peternak
+		JOIN log_pinjaman ON log_pinjaman.id_anggota = peternak.no_peternak
+		WHERE no_peternak = '$id_anggota'
+    	";
+    	return $this->db->query($sql);
     }
 
     public function getIndex()

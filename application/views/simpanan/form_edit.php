@@ -11,27 +11,27 @@
   	 <div class="x_content">
   	 	
 	<body>
-		<form method = "POST" action = "<?php echo site_url('c_masterdata/saveSimpanan');?>">
+		<form method = "POST" action = "<?php echo site_url('c_masterdata/updateSimpanan');?>">
 
 			<div class="form-group">
 			  <label>Kode Simpanan</label>
-			  <input type = "text" name = "kode_simpanan" class = "form-control" value="<?php echo $id?>" readonly>
+			  <input type = "text" name = "kode_simpanan" class = "form-control" value="<?php echo $data->kode_simpanan?>" readonly>
 			</div>
 
 			<div class="form-group">
 			  <label>Simpanan</label>
-			  <input type = "text" name = "simpanan" class = "form-control">
+			  <input type = "text" name = "simpanan" class = "form-control" value="<?= $data->simpanan?>">
 			  <?php echo form_error('simpanan'); ?>
 			</div>
 
 			<div class="form-group">
 			  <label>Biaya</label>
-			  <input type = "text" name = "biaya" class = "form-control">
+			  <input type = "text" name = "biaya" class = "form-control" value="<?= $data->biaya?>">
 			  <?php echo form_error('biaya'); ?>
 			</div>
 			
 			<hr>
-			<button type="submit" class="btn btn-default btn-primary">Simpan</button>
+			<button type="submit" class="btn btn-default btn-success">Update</button>
 			<a href = "<?php echo site_url()."/c_masterdata/simpanan"?>" type="button" class="btn btn-default">Kembali</a>
 		</form>
 	</body>

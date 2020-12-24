@@ -2047,7 +2047,6 @@ class c_masterdata extends CI_controller{
    {
       # code...
       $data['simpanan'] = $this->db->get('simpanan')->result();
-      // print_r($data['simpanan']);exit;
       $this->template->load('template', 'simpanan/index', $data);
    }
 
@@ -2070,6 +2069,79 @@ class c_masterdata extends CI_controller{
       $data['id'] = $no_trans;
       // print_r($data['id']);exit;
       $this->template->load('template', 'simpanan/form_simpanan', $data);
+   }
+
+   public function saveSimpanan()
+   {
+      $data = array (
+         "kode_simpanan" => $this->input->post("kode_simpanan"),
+         "simpanan" => $this->input->post("simpanan"),
+         "biaya" => $this->input->post("biaya"),
+      );
+      $this->db->insert("simpanan", $data);
+      redirect("c_masterdata/simpanan");
+   }
+
+   public function editSimpanan($kode_simpanan)
+   {
+      $x['data'] = $this->M_masterdata->edit_data('simpanan', "kode_simpanan = '$kode_simpanan'")->row();
+      // print_r($x['data']);exit;
+      $x['supplier'] = $this->db->get("supplier_aset")->result();
+      $this->template->load('template', 'simpanan/form_edit', $x); 
+   }
+
+   public function updateSimpanan()
+   {
+      $config = array(
+         array(
+            'field' => 'simpanan',
+            'label' => 'Simpanan',
+            'rules' => 'required',
+            'errors' => array(
+               'required' => '%s tidak boleh kosong!'
+            )
+         ),
+         array(
+            'field' => 'biaya',
+            'label' => 'Biaya',
+            'rules' => 'required',
+            'errors' => array(
+               'required' => '%s tidak boleh kosong!'
+               // 'is_natural_no_zero' => '%s minimal 1 tahun!'
+            )
+         ),
+      );
+      $this->form_validation->set_error_delimiters('<div class="alert alert-danger"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>  ', '</div>');
+      $this->form_validation->set_rules($config);
+         
+      if ($this->form_validation->run() == FALSE) {
+         $id = $_POST['kode_simpanan'];
+         $this->editSimpanan($id);
+      } else {
+         $id   = $_POST['kode_simpanan'];
+         $simpanan = $_POST['simpanan'];
+         $biaya    = $_POST['biaya'];
+         
+         $data = array(
+            'kode_simpanan' => $id,
+            'simpanan' => $simpanan,
+            'biaya' => $biaya
+         );
+         // print_r($data);exit;
+         
+         $this->db->where('kode_simpanan', $id);
+         $this->M_masterdata->update_data('simpanan', $data);
+         redirect('c_masterdata/simpanan');
+         
+      }
+   }
+
+   public function hapusSimpanan($kode_simpanan)
+   {
+      # code...
+      $where = array("kode_simpanan" => $kode_simpanan);
+      $this->M_masterdata->hapus_data("simpanan" ,$where);
+      redirect("c_masterdata/simpanan");
    }
 
    public function aset()

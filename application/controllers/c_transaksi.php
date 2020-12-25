@@ -3698,7 +3698,7 @@ group by no_bbp";
 
       $id = $this->input->post('id');
       $data['id'] = $id; 
-      $this->db->select("detail_pembelian.id, aset, sisa_umur, umur_aset, subtotal, sisa_umur_aset, nilai_sisa");
+      $this->db->select("detail_pembelian.id, aset, sisa_umur, umur_aset, subtotal, sisa_umur_aset, nilai_sisa, jumlah");
       $this->db->from("detail_pembelian");
       $this->db->join("aset", "aset.id = detail_pembelian.id_aset");
       // $this->db->join("penyusutan", "aset.id = penyusutan.id_aset");
@@ -3706,19 +3706,26 @@ group by no_bbp";
 
       $detail_peny = $this->db->get()->row();
       $data['detail_peny'] = $detail_peny;
-      // $data['aset'] = $this->model->detail_penyusutan();
-      // print_r($data['detail_peny']);exit;
+      // print_r($detail_peny);exit;
+
+
       $bulan = date('F Y');
       // ambil nilai 
       $hp = $detail_peny->subtotal;
+      
+      // jumlah aset 
+      $jumlah = $detail_peny->jumlah;
+      // hp / jumlah
+      $harga_persatuan = $hp / $jumlah;
 
       $umur_aset = $detail_peny->sisa_umur;
       $nilai_sisa = $detail_peny->nilai_sisa;
 
-      $nilai_penyusutan = ( ($hp) - $nilai_sisa )  / ($umur_aset)  ;
-      // print_r($detail_peny);exit;
+      $nilai_penyusutan = ($harga_persatuan - $nilai_sisa) / $umur_aset ;
+      // print_r($nilai_penyusutan);exit;
+
       $data['nilai_penyusutan'] = $nilai_penyusutan;
-      $data['month_now'] =$bulan;
+      $data['month_now'] = $bulan;
 
       // $this->db->select("log_penyusutan.*, detail_pembelian.id as id_detail_pembelian, subtotal");
       // $this->db->from("log_penyusutan");
@@ -3731,6 +3738,7 @@ group by no_bbp";
       ";
       // print_r($detail_peny);exit;
       $log_penyusutan_kosong = $this->db->query($query)->row();
+      // print_r($log_penyusutan_kosong);exit;
       $data['log_penyusutan_kosong'] = $log_penyusutan_kosong;
       $this->template->load('template', 'penyusutan/form_detail_pny', $data);
     }

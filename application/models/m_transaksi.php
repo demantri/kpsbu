@@ -208,4 +208,19 @@ class m_transaksi extends CI_Model {
 	    $kodejadi = "PMBS-".$datenow.''.$kodemax;    // hasilnya tgl sekarang + kode dst.
 	    return $kodejadi;
 	}
+
+	public function next_datePayment($id_peternak)
+	{
+		# code...
+		$now = date("Y-m-d");
+
+		$sql = "
+		SELECT tgl_trans, tgl_trans + INTERVAL 14 DAY as nextPayment
+		FROM pembelian_bb
+		JOIN detail_pembelian_bb ON detail_pembelian_bb.no_trans = pembelian_bb.no_trans
+		WHERE detail_pembelian_bb.no_peternak = '$id_peternak'
+		ORDER BY `pembelian_bb`.`tgl_trans`  ASC
+		";
+		return $this->db->query($sql);
+	}
 }

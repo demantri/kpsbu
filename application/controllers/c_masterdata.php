@@ -2073,13 +2073,39 @@ class c_masterdata extends CI_controller{
 
    public function saveSimpanan()
    {
-      $data = array (
-         "kode_simpanan" => $this->input->post("kode_simpanan"),
-         "simpanan" => $this->input->post("simpanan"),
-         "biaya" => $this->input->post("biaya"),
+      $config = array(
+         array(
+            'field' => 'simpanan',
+            'label' => 'Simpanan',
+            'rules' => 'required',
+            'errors' => array(
+               'required' => '%s tidak boleh kosong!'
+            )
+         ),
+         array(
+            'field' => 'biaya',
+            'label' => 'Biaya',
+            'rules' => 'required',
+            'errors' => array(
+               'required' => '%s tidak boleh kosong!'
+               // 'is_natural_no_zero' => '%s minimal 1 tahun!'
+            )
+         ),
       );
-      $this->db->insert("simpanan", $data);
-      redirect("c_masterdata/simpanan");
+      $this->form_validation->set_error_delimiters('<div class="alert alert-danger"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>  ', '</div>');
+      $this->form_validation->set_rules($config);
+         
+      if ($this->form_validation->run() == FALSE) {
+         $this->form_simpanan();
+      } else {
+         $data = array (
+            "kode_simpanan" => $this->input->post("kode_simpanan"),
+            "simpanan" => $this->input->post("simpanan"),
+            "biaya" => $this->input->post("biaya"),
+         );
+         $this->db->insert("simpanan", $data);
+         redirect("c_masterdata/simpanan");
+      }
    }
 
    public function editSimpanan($kode_simpanan)

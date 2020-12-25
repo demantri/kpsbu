@@ -3815,12 +3815,24 @@ group by no_bbp";
       $data['anggota'] = $this->db->get("peternak")->result_array();
       // print_r($model);exit;
 
+      // $now = date("Y-m-d");
+
+      // $data['nextPayment'] = $this->model->next_datePayment();
+
 
 
       $this->db->where("simpanan =", "Manasuka");
       $data['manasuka'] = $this->db->get("simpanan")->row()->biaya;
 
       $this->template->load("template", "pembayaran_susu/form", $data);
+    }
+
+    public function next_datePayment()
+    {
+      # code...
+      $id_peternak = $this->input->post("id_peternak", TRUE);
+      $data = $this->model->next_datePayment($id_peternak)->row();
+      echo json_encode($data);
     }
 
     public function j_lt()

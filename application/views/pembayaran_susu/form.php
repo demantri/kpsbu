@@ -79,14 +79,7 @@
 					<div id="notif"></div>
 
 					<hr>
-					<?php if ($cek_hari) { ?>
-						<!-- <input type="submit" name="" value="Bayar" class="btn btn-warning" id="btn-simpan"> -->
-						<!-- <input type="" name="" value="asd"> -->
-						<input type="submit" name="" value="Bayar" class="btn btn-success" id="btn-simpan">
-					<?php } else { ?>
-						<!-- <input type="submit" name="" value="Bayar" class="btn btn-success" id="btn-simpan"> -->
-						<input type="submit" name="" value="Bayar" class="btn btn-success" id="btn-simpan">
-					<?php } ?>
+					<input type="submit" name="" value="Bayar" class="btn btn-success" id="btn-simpan">
 				</form>
 			</body>
 		</div>
@@ -184,101 +177,112 @@
 	            return false;
 			})
 
-			// $("#id_peternak").change(function () {
-			// 	var id_peternak = $("#id_peternak").val()
-			// 	// console.log(id);
-			// 	var notif = '';
-			// 	$.ajax({
-	  //               url : "<?php echo site_url('c_transaksi/sum_pembelian');?>",
-	  //               method : "POST",
-	  //               data : {id_peternak: id_peternak},
-	  //               async : true,
-	  //               dataType : 'json',
-	  //               success: function(data){
+			$("#id_peternak").change(function () {
+				var id_peternak = $("#id_peternak").val()
+				// console.log(id);
+				var notif = '';
+				$.ajax({
+	                url : "<?php echo site_url('c_transaksi/sum_pembelian');?>",
+	                method : "POST",
+	                data : {id_peternak: id_peternak},
+	                async : true,
+	                dataType : 'json',
+	                success: function(data){
 
-	  //    				var today = new Date();
-	  //    				var dd = today.getDate();
-			// 			var mm = today.getMonth()+1; 
-			// 			var yyyy = today.getFullYear();
-			// 			if(dd<10) 
-			// 			{
-			// 			    dd='0'+dd;
-			// 			} 
+	     				var today = new Date();
+	     				var dd = today.getDate();
+						var mm = today.getMonth()+1; 
+						var yyyy = today.getFullYear();
+						if(dd<10) 
+						{
+						    dd='0'+dd;
+						} 
 
-			// 			if(mm<10) 
-			// 			{
-			// 			    mm='0'+mm;
-			// 			}
-			// 			var hari_ini = yyyy+'-'+mm+'-'+dd;
+						if(mm<10) 
+						{
+						    mm='0'+mm;
+						}
+						var hari_ini = yyyy+'-'+mm+'-'+dd;
 
-	  //    				$("#notif").hide();
+	     				$("#notif").hide();
 
-	  //    				if (data == null) {
-	  //    					$("#notif").show();
-	  //    					var notif = 'Anggota belum menyetorkan susu selama 2 minggu terakhir!'
-	  //    					$("#notif").html(notif)
-	  //    				} else {
-	  //    					var id_anggota = data.id_peternak;
-		 //     				var tgl_transaksi = data.tgl_transaksi;
-		 //     				var next_trans = data.next_trans;
-	  //    					if (hari_ini !== next_trans) {
-		 //     					$("#btn-simpan").prop("disabled", true);
+	     				if (data == null) {
+	     					$("#notif").show();
+	     					var notif = 'Anggota belum menyetorkan susu selama 2 minggu terakhir!'
+	     					$("#notif").html(notif)
+	     				} else {
+	     					var id_anggota = data.id_peternak;
+		     				var tgl_transaksi = data.tgl_transaksi;
+		     				var next_trans = data.next_trans;
+	     					if (hari_ini !== next_trans) {
+		     					$("#btn-simpan").prop("disabled", true);
 
-		 //     					// show notif
-		 //     					$("#notif").show();
-		 //     					var notif = 'Silahkan lakukan transaksi berikutnya pada : <strong>'+next_trans+'<strong>';
-		 //     					$("#notif").html(notif)
-		 //     				} else {
-		 //     					$("#btn-simpan").prop("disabled", false);
+		     					// show notif
+		     					$("#notif").show();
+		     					var notif = 'Silahkan lakukan transaksi berikutnya pada : <strong>'+next_trans+'<strong>';
+		     					$("#notif").html(notif)
+		     				} else {
+		     					$("#btn-simpan").prop("disabled", false);
 
-		 //     					// show notif
-		 //     					$("#notif").hide();
-		 //     					var notif = 'Silahkan lakukan transaksi berikutnya pada' +" "+next_trans
-		 //     					$("#notif").html(notif)
-		 //     				}
-	  //    				}
+		     					// show notif
+		     					$("#notif").hide();
+		     					var notif = 'Silahkan lakukan transaksi berikutnya pada' +" "+next_trans
+		     					$("#notif").html(notif)
+		     				}
+	     				}
 
-	  //                   // console.log(data)
-	  //               }
-	  //           });
-	  //           return false;
-			// })
+	                    // console.log(data)
+	                }
+	            });
+	            return false;
+			})
 
-			// $("#id_peternak").change(function () {
-			// 	var id_peternak = $("#id_peternak").val()
-			// 	// console.log(id);
-			// 	var notif = '';
-			// 	$.ajax({
-	  //               url : "<?php echo site_url('c_transaksi/getPinjaman');?>",
-	  //               method : "POST",
-	  //               data : {id_peternak: id_peternak},
-	  //               async : true,
-	  //               dataType : 'json',
-	  //               success: function(data){
-	  //    				var total_bayar = $("#total_trans_susu").val()
+			$("#id_peternak").change(function () {
+				var id_peternak = $("#id_peternak").val()
+				// console.log(id);
+				var notif = '';
+				$.ajax({
+	                url : "<?php echo site_url('c_transaksi/next_datePayment');?>",
+	                method : "POST",
+	                data : {id_peternak: id_peternak},
+	                async : true,
+	                dataType : 'json',
+	                success: function(data){
+	     				var today = new Date();
+	     				var dd = today.getDate();
+						var mm = today.getMonth()+1; 
+						var yyyy = today.getFullYear();
+						if(dd<10) 
+						{
+						    dd='0'+dd;
+						} 
 
-	  //    				if (data == null) {
-			// 				$("#kalo_ngutang").show();
-	  //    					$("#pinjaman").val(0)
-	  //    					$("#piutang").val(0)
+						if(mm<10) 
+						{
+						    mm='0'+mm;
+						}
+						var hari_ini = yyyy+'-'+mm+'-'+dd;
+						// var hari_ini = '2021-01-07'
+
+						if (data == null) {
+		     				$("#btn-simpan").prop("disabled", true);
+						} else {
+							var next_trans = data.nextPayment;
+							// console.log(hari_ini)
+							if (hari_ini >= next_trans) {
+								// console.log("bisa transaksi")
+								// alert("bisa transaksi")
+		     					$("#btn-simpan").prop("disabled", false);
+							} else 
+								// alert("belum bisa transaksi")
+		     					$("#btn-simpan").prop("disabled", true);
+						}
 
 
-	  //    				} else {
-			// 				$("#kalo_ngutang").show();
-
-	  //    					var nominal = data.nominal
-	  //    					var pinjaman_anggota = data.nominal/5
-	  //    					var total_bayar = $("#total_trans_susu").val()
-
-	  //    					var kurang_bayar = pinjaman_anggota - total_bayar
-
-	  //    					$("#pinjaman").val(pinjaman_anggota)
-	  //    					$("#piutang").val(kurang_bayar)
-	  //    				}
-	  //                   console.log(total_bayar)
-	  //               }
-	  //           });
-	  //           return false;
-			// })
+	                    console.log(data)
+	                }
+	            });
+	            return false;
+			})
 		});
 	</script>

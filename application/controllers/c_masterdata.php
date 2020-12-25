@@ -2362,6 +2362,14 @@ class c_masterdata extends CI_controller{
       }
    }
 
+   public function hapusAset($id)
+   {
+      # code...
+      $where = array("id" => $id);
+      $this->M_masterdata->hapus_data("aset" ,$where);
+      redirect("c_masterdata/aset");
+   }
+
    public function supplier_aset()
    {
       # code...

@@ -15,7 +15,8 @@
 
 					<?php $tgl_input = date("Y-m-d"); ?>
 					<input type="hidden" name="tgl_input" value="<?= $tgl_input?>" >
-					<input type="hidden" name="id" value="<?= $detail_peny->id ?>">
+
+					<input type="text" name="id" value="<?= $detail_peny->id_detail_aset ?>">
 					
 					<div class="form-group row">
 						<label class="col-sm-1">ID Penyusutan</label>	
@@ -43,8 +44,8 @@
 						<div class="col-sm-3">
 
 					  		<?php if (empty($log_penyusutan_kosong)) { ?>
-					  		<?php $rumus = $detail_peny->subtotal/$detail_peny->jumlah ?>
-					  		<input type="text" class="form-control" name="harga_perolehan" value="<?= format_rp($rumus) ?> " readonly>
+					  		<!-- <?php $rumus = $detail_peny->subtotal/$detail_peny->jumlah ?> -->
+					  		<input type="text" class="form-control" name="harga_perolehan" value="<?= format_rp($detail_peny->subtotal) ?> " readonly>
 					  		<?php } else { ?>
 					  		<input type="text" class="form-control" name="harga_perolehan" value="<?= format_rp($log_penyusutan_kosong->nilai_akhir)?>" readonly>
 					  		<?php } ?>
@@ -72,10 +73,10 @@
 
 					  		<?php
 					  		if (empty($log_penyusutan_kosong)) { ?>
-					  			<?php $rumus = $detail_peny->subtotal/$detail_peny->jumlah ?>
-					  			<input type="hidden" name="nilai_akhir" value="<?= penyusutan($rumus - $nilai_penyusutan)?>" readonly>
+					  			<!-- <?php $rumus = $detail_peny->subtotal/$detail_peny->jumlah ?> -->
+					  			<input type="text" name="nilai_akhir" value="<?= penyusutan($detail_peny->subtotal - $nilai_penyusutan)?>" readonly>
 					  		<?php } else { ?>
-					  			<input type="hidden" name="nilai_akhir" value="<?= penyusutan($log_penyusutan_kosong->nilai_akhir - $nilai_penyusutan)?>" readonly>
+					  			<input type="text" name="nilai_akhir" value="<?= penyusutan($log_penyusutan_kosong->nilai_akhir - $nilai_penyusutan)?>" readonly>
 					  		<?php } ?>
 
 
@@ -89,5 +90,3 @@
 			</body>
 		</div>
 	</div>
-
-<!-- <?php $this->load->view("pembelian_aset/script")?>

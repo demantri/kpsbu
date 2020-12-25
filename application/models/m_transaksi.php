@@ -183,7 +183,7 @@ class m_transaksi extends CI_Model {
 	    FROM peternak 
 	    JOIN log_pembayaran_susu ON log_pembayaran_susu.id_anggota = peternak.no_peternak
 	    JOIN pembayaran_susu ON log_pembayaran_susu.id_pembayaran = pembayaran_susu.kode_pembayaran";
-	    return $this->db->query($sql)->row()->tgl_transaksi ?? 0;
+	    return $this->db->query($sql);
     }
 
     function id_otomatis($value='')

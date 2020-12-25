@@ -261,11 +261,15 @@
 						{
 						    mm='0'+mm;
 						}
-						var hari_ini = yyyy+'-'+mm+'-'+dd;
-						// var hari_ini = '2021-01-07'
-
+						// var hari_ini = yyyy+'-'+mm+'-'+dd;
+						$("#notif").hide();
+						var hari_ini = '2020-12-24'
 						if (data == null) {
+							// console.log("dede")
 		     				$("#btn-simpan").prop("disabled", true);
+		     				$("#notif").show();
+	     					var notif = 'Dede'
+	     					$("#notif").html(notif)
 						} else {
 							var next_trans = data.nextPayment;
 							if (hari_ini >= next_trans) {

@@ -129,8 +129,6 @@ class c_transaksi extends CI_controller{
 
    public function form_pembelian_aset()
    {
-     # code...
-    // kode pembelian
     $this->db->where('status', 'dalam proses');
     $query = $this->db->get('pembelian_aset');
     if($query->num_rows() == 0) {
@@ -178,6 +176,20 @@ class c_transaksi extends CI_controller{
     $data['id'] = $id_pembelian;
     $data['no_nota'] = $no_nota;
 
+    $query1 = "SELECT  MAX(RIGHT(id_detail_aset,3)) as id_detail FROM detail_pembelian";
+    $abc = $this->db->query($query1);
+    $id_detail = "";
+    if($abc->num_rows()>0){
+          foreach($abc->result() as $k){
+            $tmp = ((int)$k->id_detail)+1;
+            $kd = sprintf("%03s", $tmp);
+          }
+        }else{
+          $kd = "001";
+        }
+    $id_detail = "IDA-".$kd;
+    $data['id_detail'] = $id_detail;
+
     $supplier = $this->supplier_dropdown();
     $data['supplier'] = $supplier;
 
@@ -211,9 +223,11 @@ class c_transaksi extends CI_controller{
     $status = $this->input->post("");
     $id_supplier = $this->input->post("id_supplier");
     $id_aset = $this->input->post("id_aset");
-    $jumlah = $this->input->post("jumlah");
+    $id_detail_aset = $this->input->post("id_detail_aset");
+    // $jumlah = $this->input->post("jumlah");
 
-    $total = $biaya + ( $harga_aset * $jumlah);  
+    // $total = $biaya + ( $harga_aset * $jumlah);  
+    $total = $biaya + ( $harga_aset);  
     // print_r($total);exit;
     $this->db->where("id_pembelian", $id_pembelian);
     $cek = $this->db->get("pembelian_aset")->row();
@@ -242,7 +256,8 @@ class c_transaksi extends CI_controller{
         "sisa_umur" => $umur,
         "sisa_umur_aset" => $umur,
         "tgl_nota" => $tgl_nota,
-        "jumlah" => $jumlah,
+        "id_detail_aset" => $id_detail_aset,
+        // "jumlah" => $jumlah,
       );
       $this->db->insert('detail_pembelian', $data_detail);
     } else {
@@ -260,7 +275,8 @@ class c_transaksi extends CI_controller{
         "nilai_sisa" => $nilai_sisa,
         "sisa_umur" => $umur,
         "sisa_umur_aset" => $umur,
-        "jumlah" => $jumlah,
+        "id_detail_aset" => $id_detail_aset,
+        // "jumlah" => $jumlah,
       );
       // print_r($data_detail);exit;
       $this->db->insert('detail_pembelian', $data_detail);
@@ -3699,51 +3715,51 @@ group by no_bbp";
 
 
       $id = $this->input->post('id');
-      $data['id'] = $id; 
-      $this->db->select("detail_pembelian.id, aset, sisa_umur, umur_aset, subtotal, sisa_umur_aset, nilai_sisa, jumlah");
+      $data['id'] = $id;
+      // print_r($id);exit;
+
+      $this->db->select("detail_pembelian.id, aset, sisa_umur, umur_aset, subtotal, sisa_umur_aset, nilai_sisa, id_detail_aset");
       $this->db->from("detail_pembelian");
       $this->db->join("aset", "aset.id = detail_pembelian.id_aset");
-      // $this->db->join("penyusutan", "aset.id = penyusutan.id_aset");
-      $this->db->where("detail_pembelian.id", $id);
+      $this->db->where("detail_pembelian.id_detail_aset", $id);
 
       $detail_peny = $this->db->get()->row();
       $data['detail_peny'] = $detail_peny;
       // print_r($detail_peny);exit;
 
-
       $bulan = date('F Y');
       // ambil nilai 
       $hp = $detail_peny->subtotal;
+      $nilai_sisa = $detail_peny->nilai_sisa;
       
       // jumlah aset 
-      $jumlah = $detail_peny->jumlah;
+      // $jumlah = $detail_peny->jumlah;
+
       // hp / jumlah
-      $harga_persatuan = $hp / $jumlah;
+      $harga_persatuan = $hp;
 
-      $umur_aset = $detail_peny->sisa_umur;
-      $nilai_sisa = $detail_peny->nilai_sisa;
+      $umur_aset = $detail_peny->umur_aset;
 
-      $nilai_penyusutan = ($harga_persatuan - $nilai_sisa) / $umur_aset ;
+      $nilai_penyusutan = ($hp - $nilai_sisa) / $umur_aset ;
       // print_r($nilai_penyusutan);exit;
 
       $data['nilai_penyusutan'] = $nilai_penyusutan;
 
+      $this->db->where("id_detail", $id);
       $nilai_penyusutan_fix = $this->db->get("penyusutan")->row()->total_penyusutan ?? 0 ;
       $data['nilai_penyusutan_fix'] = $nilai_penyusutan_fix;
 
       $data['month_now'] = $bulan;
 
-      // $this->db->select("log_penyusutan.*, detail_pembelian.id as id_detail_pembelian, subtotal");
-      // $this->db->from("log_penyusutan");
-      // $this->db->join("detail_pembelian", "log_penyusutan.id_detail = detail_pembelian.id");
-      // // $this->db->where("id_penyusutan", $no_trans);
-
-      // $log_penyusutan_kosong = $this->db->get()->row();
-
-      $query = "SELECT * FROM log_penyusutan WHERE id_detail = '$id' ORDER BY id_penyusutan DESC
+      $query = "
+      SELECT * 
+      FROM log_penyusutan 
+      WHERE id_detail = '$id' 
+      ORDER BY id_penyusutan DESC
       ";
       $log_penyusutan_kosong = $this->db->query($query)->row();
       // print_r($log_penyusutan_kosong);exit;
+
       $data['log_penyusutan_kosong'] = $log_penyusutan_kosong;
       $this->template->load('template', 'penyusutan/form_detail_pny', $data);
     }
@@ -3770,6 +3786,7 @@ group by no_bbp";
         "tgl_input" => $tgl_input,
         "bulan_penyusutan" => $bulan_penyusutan,
         "total_penyusutan" => $tp_fix,
+        "id_detail" => $id,
       );
       $this->db->insert("penyusutan", $data_penyusutan);
 
@@ -3784,7 +3801,7 @@ group by no_bbp";
       // set pengurangan umur per bulan
       $this->db->set("sisa_umur", "(sisa_umur) - 1", FALSE);
       $this->db->set("cek_bulan_peny", date("Y-m"));
-      $this->db->where("id", $id);
+      $this->db->where("id_detail_aset", $id);
       $this->db->update("detail_pembelian");
 
       // jurnal
@@ -3820,10 +3837,11 @@ group by no_bbp";
       # code...
       $data['kode_pembayaran'] = $this->model->id_otomatis();
       
-      $model = $this->model->get14day();
-      $data['cek_hari'] = $model;
-      // $tanggal = $this->db->get("peternak")->row()->tgl_transaksi;
-      // $this->db->where("")
+      // $model = $this->model->get14day()->row()->tgl_transaksi ?? 0;
+      // $data['cek_hari'] = $model;
+      
+      // print_r($model);exit;
+
       $data['anggota'] = $this->db->get("peternak")->result_array();
       // print_r($model);exit;
 

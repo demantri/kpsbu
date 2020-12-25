@@ -16,11 +16,11 @@
 					<div class="form-group row">
 						<label class="col-sm-1">Pilih Aset</label>	
 						<div class="col-sm-3">
-					  		<select name="id" id="id" class="form-control">
+					  		<select name="id" id="id" class="form-control" required="">
 					  			<option value="">Pilih aset</option>
 					  			<?php
 					  			foreach ($aset as $data) { ?>
-					  			<option value="<?= $data->id?>"><?= $data->id_pembelian?> - <?= $data->aset?> - <?= ($data->sisa_umur) ?> Bulan </option>
+					  			<option value="<?= $data->id_detail_aset?>"><?= $data->id_detail_aset?> - <?= $data->aset?> - <?= ($data->sisa_umur) ?> Bulan </option>
 					  			<?php } ?>
 					  		</select>
 						</div>
@@ -31,5 +31,3 @@
 			</body>
 		</div>
 	</div>
-
-<!-- <?php $this->load->view("pembelian_aset/script")?> -->

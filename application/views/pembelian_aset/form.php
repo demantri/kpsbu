@@ -14,16 +14,20 @@
 				<form method = "POST" action = "<?php echo site_url('c_transaksi/tambahPembelianAset');?>">
 					
 					<div class="form-group row">
-						<label class="col-sm-1">ID Pembelian Aset</label>	
+						<label class="col-sm-1">ID Pembelian</label>	
 						<div class="col-sm-3">
 					  		<input type = "text" name = "id" class = "form-control" value="<?= $id ?>" readonly>
+						</div>
+
+						<label class="col-sm-1">ID Detail Aset</label>	
+						<div class="col-sm-3">
+					  		<input type = "text" name = "id_detail_aset" id="id_detail_aset" class = "form-control" autocomplete="off" value="<?= $id_detail?>" readonly>
 						</div>
 
 						<label class="col-sm-1">No Nota</label>	
 						<div class="col-sm-3">
 					  		<input type = "text" name = "no_nota" id="no_nota" class = "form-control" autocomplete="off" value="<?= $no_nota?>" readonly>
 						</div>
-
 						
 					</div>
 					<hr>
@@ -65,13 +69,13 @@
 						  		<input type = "text" name = "harga_aset" class = "form-control" id="harga_aset" autocomplete="off" placeholder="Harga aset">
 							</div>
 
-							<label class="col-sm-1">Jumlah</label>	
+							<!-- <label class="col-sm-1">Jumlah</label>	
 							<div class="col-sm-2">
 						  		<input type = "number" name = "jumlah" class = "form-control" id="jumlah" autocomplete="off" placeholder="Jumlah aset" min="1">
-							</div>
+							</div> -->
 
 							<label class="col-sm-1">Nilai Residu</label>	
-							<div class="col-sm-5">
+							<div class="col-sm-2">
 						  		<input type = "text" name = "nilai_residu" class = "form-control" id="nilai_residu" autocomplete="off" placeholder="Nilai residu">
 							</div>
 						</div>
@@ -93,13 +97,14 @@
 					<table class="table table-bordered">
 						<thead>
 							<tr>
-								<th class="text-center" style="width: 5%">No</th>
-								<th class="text-center" style="width: 15%">Supplier</th>
-								<th class="text-center" style="width: 20%">Aset</th>
-								<th class="text-center" style="width: 5%">Jumlah</th>
-								<th class="text-center" style="width: 15%">Harga Aset</th>
-								<th class="text-center" style="width: 15%">Biaya</th>
-								<th class="text-center" style="width: 10%">Nilai residu</th>
+								<th class="text-center">No</th>
+								<th class="text-center">Supplier</th>
+								<th class="text-center">ID Detail Aset</th>
+								<th class="text-center">Aset</th>
+								<!-- <th class="text-center" style="width: 5%">Jumlah</th> -->
+								<th class="text-center">Harga Aset</th>
+								<th class="text-center">Biaya</th>
+								<th class="text-center">Nilai residu</th>
 								<th class="text-center">Total perolehan aset</th>
 							</tr>
 						</thead>
@@ -110,8 +115,8 @@
 							<tr>
 								<td><?= $no++ ?></td>
 								<td><?= $r->nama_supplier?></td>
+								<td><?= $r->id_detail_aset ?></td>
 								<td><?= $r->id.' '.$r->aset?></td>
-								<td><?= $r->jumlah ?></td>
 								<td class="text-right"><?= format_rp($r->nominal)?></td>
 								<td class="text-right"><?= format_rp($r->biaya)?></td>
 								<td class="text-right"><?= format_rp($r->nilai_sisa)?></td>

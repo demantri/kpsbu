@@ -3654,6 +3654,8 @@ group by no_bbp";
     public function penyusutan()
     {
       # code...
+      $this->db->select("*");
+      $this->db->join("log_penyusutan", "log_penyusutan.id_penyusutan = penyusutan.id_penyusutan");
       $penyusutan = $this->db->get("penyusutan")->result();
       $data['penyusutan'] = $penyusutan;
       $this->template->load('template', 'penyusutan/index', $data);

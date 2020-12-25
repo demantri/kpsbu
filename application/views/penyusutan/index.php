@@ -15,6 +15,7 @@
 					<th>ID Penyusutan</th>
 					<th>Bulan penyusutan</th>
 					<th>Nilai penyusutan</th>
+					<th>Nilai buku</th>
 					<!-- <th>Status</th> -->
 					<th>Aksi</th>
 				</tr>
@@ -28,6 +29,7 @@
 						<td><?= $data->id_penyusutan ?> </td>
 						<td><?= $data->bulan_penyusutan ?> </td>
 						<td><?= penyusutan($data->total_penyusutan) ?></td>
+						<td><?= penyusutan($data->nilai_akhir) ?></td>
 						<td>
 							<a href="" class="btn btn-sm btn-info">Detail
 						</td>

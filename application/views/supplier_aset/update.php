@@ -11,11 +11,11 @@
   	 	<div class="x_content">
   	 	
 			<body>
-				<form method = "POST" action = "<?php echo site_url('c_masterdata/simpan_supp_aset');?>">
+				<form method = "POST" action = "<?php echo site_url('c_masterdata/update_supplier');?>">
 					
 					<div class="form-group">
 					  <label>ID Aset</label>
-					  <input type = "text" name = "id_aset" class = "form-control" value="<?php echo $data->id ?>" readonly>
+					  <input type = "text" name = "id_supplier_aset" class = "form-control" value="<?php echo $data->id ?>" readonly>
 					</div>
 
 					<div class="form-group">

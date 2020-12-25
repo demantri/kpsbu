@@ -2174,20 +2174,28 @@ class c_masterdata extends CI_controller{
    {
       $config = array(
          array(
-            'field' => 'simpanan',
-            'label' => 'Simpanan',
+            'field' => 'nama_supplier',
+            'label' => 'Nama supplier',
             'rules' => 'required',
             'errors' => array(
                'required' => '%s tidak boleh kosong!'
             )
          ),
          array(
-            'field' => 'biaya',
-            'label' => 'Biaya',
+            'field' => 'alamat',
+            'label' => 'Alamat',
             'rules' => 'required',
             'errors' => array(
                'required' => '%s tidak boleh kosong!'
                // 'is_natural_no_zero' => '%s minimal 1 tahun!'
+            )
+         ),
+         array(
+            'field' => 'no_telepon',
+            'label' => 'No Telepon',
+            'rules' => 'required',
+            'errors' => array(
+               'required' => '%s tidak boleh kosong!'
             )
          ),
       );
@@ -2195,33 +2203,33 @@ class c_masterdata extends CI_controller{
       $this->form_validation->set_rules($config);
          
       if ($this->form_validation->run() == FALSE) {
-         $id = $_POST['kode_simpanan'];
+         $id = $_POST['id_supplier_aset'];
          $this->editSimpanan($id);
       } else {
-         $id   = $_POST['kode_simpanan'];
-         $simpanan = $_POST['simpanan'];
-         $biaya    = $_POST['biaya'];
+         $id   = $_POST['id_supplier_aset'];
+         $nama_supplier = $_POST['nama_supplier'];
+         $alamat    = $_POST['alamat'];
+         $no_telepon    = $_POST['no_telepon'];
          
          $data = array(
-            'kode_simpanan' => $id,
-            'simpanan' => $simpanan,
-            'biaya' => $biaya
+            'nama_supplier' => $nama_supplier,
+            'alamat' => $alamat,
+            'no_telepon' => $no_telepon
          );
          // print_r($data);exit;
-         
-         $this->db->where('kode_simpanan', $id);
-         $this->M_masterdata->update_data('simpanan', $data);
-         redirect('c_masterdata/simpanan');
+         $this->db->where('id', $id);
+         $this->M_masterdata->update_data('supplier_aset', $data);
+         redirect('c_masterdata/supplier_aset');
          
       }
    }
 
-   public function hapusSimpanan($kode_simpanan)
+   public function hapusSupplier($id)
    {
       # code...
-      $where = array("kode_simpanan" => $kode_simpanan);
-      $this->M_masterdata->hapus_data("simpanan" ,$where);
-      redirect("c_masterdata/simpanan");
+      $where = array("id" => $id);
+      $this->M_masterdata->hapus_data("supplier_aset" ,$where);
+      redirect("c_masterdata/supplier_aset");
    }
 
    public function aset()

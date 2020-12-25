@@ -68,7 +68,8 @@
 
 					  		<?php
 					  		if (empty($log_penyusutan_kosong)) { ?>
-					  			<input type="hidden" name="nilai_akhir" value="<?= penyusutan($detail_peny->subtotal - $nilai_penyusutan)?>" readonly>
+					  			<?php $rumus = $detail_peny->subtotal/$detail_peny->jumlah ?>
+					  			<input type="hidden" name="nilai_akhir" value="<?= penyusutan($rumus - $nilai_penyusutan)?>" readonly>
 					  		<?php } else { ?>
 					  			<input type="hidden" name="nilai_akhir" value="<?= penyusutan($log_penyusutan_kosong->nilai_akhir - $nilai_penyusutan)?>" readonly>
 					  		<?php } ?>

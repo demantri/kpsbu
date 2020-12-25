@@ -2162,6 +2162,60 @@ class c_masterdata extends CI_controller{
       }
    }
 
+   public function edit_supplier($id)
+   {
+      $x['data'] = $this->M_masterdata->edit_data('supplier_aset', "id = '$id'")->row();
+      // print_r($x['data']);exit;
+      $x['supplier'] = $this->db->get("supplier_aset")->result();
+      $this->template->load('template', 'supplier_aset/update', $x); 
+   }
+
+   public function update_supplier()
+   {
+      $config = array(
+         array(
+            'field' => 'simpanan',
+            'label' => 'Simpanan',
+            'rules' => 'required',
+            'errors' => array(
+               'required' => '%s tidak boleh kosong!'
+            )
+         ),
+         array(
+            'field' => 'biaya',
+            'label' => 'Biaya',
+            'rules' => 'required',
+            'errors' => array(
+               'required' => '%s tidak boleh kosong!'
+               // 'is_natural_no_zero' => '%s minimal 1 tahun!'
+            )
+         ),
+      );
+      $this->form_validation->set_error_delimiters('<div class="alert alert-danger"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>  ', '</div>');
+      $this->form_validation->set_rules($config);
+         
+      if ($this->form_validation->run() == FALSE) {
+         $id = $_POST['kode_simpanan'];
+         $this->editSimpanan($id);
+      } else {
+         $id   = $_POST['kode_simpanan'];
+         $simpanan = $_POST['simpanan'];
+         $biaya    = $_POST['biaya'];
+         
+         $data = array(
+            'kode_simpanan' => $id,
+            'simpanan' => $simpanan,
+            'biaya' => $biaya
+         );
+         // print_r($data);exit;
+         
+         $this->db->where('kode_simpanan', $id);
+         $this->M_masterdata->update_data('simpanan', $data);
+         redirect('c_masterdata/simpanan');
+         
+      }
+   }
+
    public function hapusSimpanan($kode_simpanan)
    {
       # code...

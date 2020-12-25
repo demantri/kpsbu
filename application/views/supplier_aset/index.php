@@ -29,7 +29,7 @@
 						<td><?= $r->alamat?></td>
 						<td><?= $r->no_telepon?></td>
 						<td>
-							<a href="isi_edit_supp_aset/<?php echo $r->id; ?>">
+							<a href="<?= site_url("c_masterdata/edit_supplier/". $r->id) ?>">
 								
 								<span class="fa-stack">
 								  	<i class="fa fa-square fa-stack-2x" style="color:#2A3F54;"></i>

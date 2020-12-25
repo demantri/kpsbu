@@ -268,13 +268,9 @@
 		     				$("#btn-simpan").prop("disabled", true);
 						} else {
 							var next_trans = data.nextPayment;
-							// console.log(hari_ini)
 							if (hari_ini >= next_trans) {
-								// console.log("bisa transaksi")
-								// alert("bisa transaksi")
 		     					$("#btn-simpan").prop("disabled", false);
 							} else 
-								// alert("belum bisa transaksi")
 		     					$("#btn-simpan").prop("disabled", true);
 						}
 

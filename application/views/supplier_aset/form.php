@@ -40,7 +40,7 @@
 					
 					<hr>
 					<input type="submit" class="btn btn-default btn-primary" value="Simpan">
-					<a href = "<?php echo site_url()."/c_masterdata/aset"?>" type="button" class="btn btn-default">Kembali</a>
+					<a href = "<?php echo site_url("c_masterdata/supplier_aset") ?>" type="button" class="btn btn-default">Kembali</a>
 				</form>
 			</body>
 		</div>

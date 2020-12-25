@@ -61,8 +61,13 @@
 
 						<div class="form-group row">
 						  	<label class="col-sm-1">Harga Aset</label>	
-							<div class="col-sm-5">
+							<div class="col-sm-2">
 						  		<input type = "text" name = "harga_aset" class = "form-control" id="harga_aset" autocomplete="off" placeholder="Harga aset">
+							</div>
+
+							<label class="col-sm-1">Jumlah</label>	
+							<div class="col-sm-2">
+						  		<input type = "number" name = "jumlah" class = "form-control" id="jumlah" autocomplete="off" placeholder="Jumlah aset" min="1">
 							</div>
 
 							<label class="col-sm-1">Nilai Residu</label>	
@@ -73,10 +78,10 @@
 
 						<div class="form-group row">
 						  	<label class="col-sm-1">Biaya</label>	
-							<div class="col-sm-10">
+							<div class="col-sm-9">
 						  		<input type = "text" name = "biaya" class = "form-control" id="biaya" autocomplete="off" placeholder="Biaya">
 							</div>
-							<div class="col-sm-1">
+							<div class="col-sm-2">
 						  		<input type = "submit" value="Tambah" class="btn btn-primary btn-tambah" id="btn-tambah" style="width: 100%">
 							</div>
 						</div>
@@ -91,9 +96,10 @@
 								<th class="text-center" style="width: 5%">No</th>
 								<th class="text-center" style="width: 15%">Supplier</th>
 								<th class="text-center" style="width: 20%">Aset</th>
+								<th class="text-center" style="width: 5%">Jumlah</th>
 								<th class="text-center" style="width: 15%">Harga Aset</th>
 								<th class="text-center" style="width: 15%">Biaya</th>
-								<th class="text-center" style="width: 15%">Nilai residu</th>
+								<th class="text-center" style="width: 10%">Nilai residu</th>
 								<th class="text-center">Total perolehan aset</th>
 							</tr>
 						</thead>
@@ -104,18 +110,19 @@
 							<tr>
 								<td><?= $no++ ?></td>
 								<td><?= $r->nama_supplier?></td>
-								<td><?= $r->id.''.$r->aset?></td>
-								<td><?= format_rp($r->nominal)?></td>
-								<td><?= format_rp($r->biaya)?></td>
-								<td><?= format_rp($r->nilai_sisa)?></td>
-								<td><?= format_rp($r->subtotal)?></td>
+								<td><?= $r->id.' '.$r->aset?></td>
+								<td><?= $r->jumlah ?></td>
+								<td class="text-right"><?= format_rp($r->nominal)?></td>
+								<td class="text-right"><?= format_rp($r->biaya)?></td>
+								<td class="text-right"><?= format_rp($r->nilai_sisa)?></td>
+								<td class="text-right"><?= format_rp($r->subtotal)?></td>
 							</tr>
 							<?php } ?>
 						</tbody>
 						<tfoot>
 							<tr>
-								<th colspan="6">Subtotal</th>
-								<th colspan="1"><?= format_rp($total) ?></th>
+								<th colspan="7">Subtotal</th>
+								<th colspan="1" class="text-right"><?= format_rp($total) ?></th>
 							</tr>
 						</tfoot>
 						
@@ -147,7 +154,6 @@
 	$(document).ready(function () {
 
 		$("#supplier").change(function () {
-            // alert("holaaa")
             var id_supplier = $("#supplier").val();
             // console.log(id)
             if (id_supplier != '') {
@@ -169,6 +175,7 @@
        	$("#harga_aset").prop("readonly", true);
        	$("#nilai_residu").prop("readonly", true);
        	$("#biaya").prop("readonly", true);
+       	$("#jumlah").prop("readonly", true);
        	$("#btn-tambah").prop("disabled", true);
 
         // $("#no_nota").on("click", function () {
@@ -186,6 +193,7 @@
 	       			$("#harga_aset").prop("readonly", false);
 	       			$("#nilai_residu").prop("readonly", false);
 	       			$("#biaya").prop("readonly", false);
+	       			$("#jumlah").prop("readonly", false);
 	       			$("#btn-tambah").prop("disabled", false);
 	        	} else {
 	        		$("#supplier").prop("disabled", true);
@@ -193,6 +201,7 @@
 			       	$("#harga_aset").prop("readonly", true);
 			       	$("#nilai_residu").prop("readonly", true);
 			       	$("#biaya").prop("readonly", true);
+			       	$("#jumlah").prop("readonly", true);
 			       	$("#btn-tambah").prop("disabled", true);
 	        	}
         	})

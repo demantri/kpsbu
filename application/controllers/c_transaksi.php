@@ -211,14 +211,12 @@ class c_transaksi extends CI_controller{
     $status = $this->input->post("");
     $id_supplier = $this->input->post("id_supplier");
     $id_aset = $this->input->post("id_aset");
+    $jumlah = $this->input->post("jumlah");
 
-    $total = $biaya + $harga_aset;  
+    $total = $biaya + ( $harga_aset * $jumlah);  
     // print_r($total);exit;
-
     $this->db->where("id_pembelian", $id_pembelian);
     $cek = $this->db->get("pembelian_aset")->row();
-
-    // print_r($cek);exit;
 
     $query = $this->db->get("detail_pembelian");
     // print_r($query);exit;
@@ -234,16 +232,17 @@ class c_transaksi extends CI_controller{
       $umur = $this->db->get("aset")->row()->umur_aset;
 
       $data_detail = array (
-      "id_pembelian" => $id_pembelian,
-      "id_aset" => $id_aset,
-      "id_supplier" => $id_supplier,
-      "nominal" => $harga_aset,
-      "biaya" => $biaya,
-      "nilai_sisa" => $nilai_sisa,
-      "subtotal" => $total,
-      "sisa_umur" => $umur,
-      "sisa_umur_aset" => $umur,
-      "tgl_nota" => $tgl_nota
+        "id_pembelian" => $id_pembelian,
+        "id_aset" => $id_aset,
+        "id_supplier" => $id_supplier,
+        "nominal" => $harga_aset,
+        "biaya" => $biaya,
+        "nilai_sisa" => $nilai_sisa,
+        "subtotal" => $total,
+        "sisa_umur" => $umur,
+        "sisa_umur_aset" => $umur,
+        "tgl_nota" => $tgl_nota,
+        "jumlah" => $jumlah,
       );
       $this->db->insert('detail_pembelian', $data_detail);
     } else {
@@ -252,16 +251,16 @@ class c_transaksi extends CI_controller{
       $umur = $this->db->get("aset")->row()->umur_aset;
 
       $data_detail = array (
-      "id_pembelian" => $id_pembelian,
-      "id_aset" => $id_aset,
-      "id_supplier" => $id_supplier,
-      "nominal" => $harga_aset,
-      "biaya" => $biaya,
-      "subtotal" => $total,
-      "nilai_sisa" => $nilai_sisa,
-      "sisa_umur" => $umur,
-      "sisa_umur_aset" => $umur,
-      "tgl_nota" => $tgl_nota
+        "id_pembelian" => $id_pembelian,
+        "id_aset" => $id_aset,
+        "id_supplier" => $id_supplier,
+        "nominal" => $harga_aset,
+        "biaya" => $biaya,
+        "subtotal" => $total,
+        "nilai_sisa" => $nilai_sisa,
+        "sisa_umur" => $umur,
+        "sisa_umur_aset" => $umur,
+        "jumlah" => $jumlah,
       );
       // print_r($data_detail);exit;
       $this->db->insert('detail_pembelian', $data_detail);

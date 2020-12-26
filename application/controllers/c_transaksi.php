@@ -81,7 +81,7 @@ class c_transaksi extends CI_controller{
     );
     $this->db->insert("log_pinjaman", $data);
 
-    $this->db->set("pinjaman =", $this->input->post("biaya"));
+    $this->db->set("pinjaman", $this->input->post("biaya"));
     $this->db->where("no_peternak", $this->input->post("peternak"));
     $this->db->update("peternak");
     // jurnal

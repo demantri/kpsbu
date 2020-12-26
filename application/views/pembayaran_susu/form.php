@@ -216,7 +216,7 @@
 		     				var tgl_transaksi = data.tgl_transaksi;
 		     				var next_trans = data.next_trans;
 
-	     					if (hari_ini != next_trans) {
+	     					if (hari_ini >= next_trans) {
 		     					$("#btn-simpan").prop("disabled", true);
 		     					// show notif
 		     					$("#notif").show();

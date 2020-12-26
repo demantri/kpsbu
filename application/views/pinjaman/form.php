@@ -20,7 +20,7 @@
 
 				<div class="form-group">
 				  <label>Anggota</label>
-				  <select name="peternak" class="form-control" id="anggota">
+				  <select name="peternak" class="form-control" id="anggota" required="">
 				  	<option value="" >Pilih Anggota</option>
 				  	<?php foreach ($anggota as $data) { ?>
 				  		<option value="<?= $data->no_peternak?>"><?= $data->nama_peternak?></option>
@@ -31,7 +31,7 @@
 
 				<div class="form-group">
 				  <label>Nominal pinjaman</label>
-				  <input type = "number" min="0" name ="biaya" class = "form-control" id="biaya" placeholder="Isi pinjaman">
+				  <input type = "number" min="0" name ="biaya" class = "form-control" id="biaya" placeholder="Isi pinjaman" required="">
 				  <?php echo form_error('biaya'); ?>
 				</div>
 

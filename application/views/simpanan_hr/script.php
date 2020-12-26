@@ -1,19 +1,5 @@
 <script type="text/javascript">
-    var harga_aset = document.getElementById("harga_aset");
-    var nilai_residu = document.getElementById("nilai_residu");
     var biaya = document.getElementById("biaya");
-
-    harga_aset.addEventListener("keyup", function(e) {
-      // tambahkan 'Rp.' pada saat form di ketik
-      // gunakan fungsi formatRupiah() untuk mengubah angka yang di ketik menjadi format angka
-      harga_aset.value = formatRupiah(this.value);
-    });
-
-    nilai_residu.addEventListener("keyup", function(e) {
-      // tambahkan 'Rp.' pada saat form di ketik
-      // gunakan fungsi formatRupiah() untuk mengubah angka yang di ketik menjadi format angka
-      nilai_residu.value = formatRupiah(this.value);
-    });
 
     biaya.addEventListener("keyup", function(e) {
       // tambahkan 'Rp.' pada saat form di ketik

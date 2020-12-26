@@ -3709,7 +3709,7 @@ group by no_bbp";
       $datenow = date("Ymd");
       $no_trans = "PNY".$datenow."".$kd;
 
-      $last_code_pny = $kd -1;
+      // $last_code_pny = $kd -1;
       
       $data['id_penyusutan'] = $no_trans;
 
@@ -3929,58 +3929,133 @@ group by no_bbp";
         "simpanan_wajib" => $this->input->post("jumlah_pembayaran"),
         "jumlah_harga_susu" => $this->input->post("jumlah_harga_susu"),
         "subtotal" => $this->input->post("total_trans_susu"),
-        "subtotal" => $this->input->post("total_trans_susu"),
-        "subtotal" => $this->input->post("total_trans_susu"),
+        "pinjaman" => $this->input->post("pinjaman"),
+        // "piutang" => $this->input->post("piutang"),
         // "tgl_transaksi" => date("Y-m-d"),
       );
-      // print_r($data_log);exit;
-      $this->db->insert("log_pembayaran_susu", $data_log);
+      print_r($data_log);exit;
+      // $this->db->insert("log_pembayaran_susu", $data_log);
 
-      $pembayaran_susu = array (
-        "kode_pembayaran" => $this->input->post("kode_pembayaran"),
-        "total_bayar" => $this->input->post("total_trans_susu"),
-        "tgl_transaksi" => date("Y-m-d"),
-      );
-      $this->db->insert("pembayaran_susu", $pembayaran_susu);
+      // $pembayaran_susu = array (
+      //   "kode_pembayaran" => $this->input->post("kode_pembayaran"),
+      //   "total_bayar" => $this->input->post("total_trans_susu"),
+      //   "tgl_transaksi" => date("Y-m-d"),
+      // );
+      // $this->db->insert("pembayaran_susu", $pembayaran_susu);
 
-      // jurnal
-      $pbb = array (
-        "id_jurnal" => $this->input->post("kode_pembayaran"),
-        "tgl_jurnal" => date("Y-m-d"),
-        "no_coa" => 1112,
-        "posisi_dr_cr" => "d",
-        "nominal" => $this->input->post("jumlah_harga_susu"),
-      );
-      $this->db->insert("jurnal", $pbb);
+      // // jurnal
+      // $pbb = array (
+      //   "id_jurnal" => $this->input->post("kode_pembayaran"),
+      //   "tgl_jurnal" => date("Y-m-d"),
+      //   "no_coa" => 1112,
+      //   "posisi_dr_cr" => "d",
+      //   "nominal" => $this->input->post("jumlah_harga_susu"),
+      // );
+      // $this->db->insert("jurnal", $pbb);
 
-      $kas = array (
-        "id_jurnal" => $this->input->post("kode_pembayaran"),
-        "tgl_jurnal" => date("Y-m-d"),
-        "no_coa" => 1111,
-        "posisi_dr_cr" => "k",
-        "nominal" => $this->input->post("total_trans_susu"),
-      );
-      $this->db->insert("jurnal", $kas);
+      // $kas = array (
+      //   "id_jurnal" => $this->input->post("kode_pembayaran"),
+      //   "tgl_jurnal" => date("Y-m-d"),
+      //   "no_coa" => 1111,
+      //   "posisi_dr_cr" => "k",
+      //   "nominal" => $this->input->post("total_trans_susu"),
+      // );
+      // $this->db->insert("jurnal", $kas);
 
-      $simpanan_wajib = array (
-        "id_jurnal" => $this->input->post("kode_pembayaran"),
-        "tgl_jurnal" => date("Y-m-d"),
-        "no_coa" => 3786,
-        "posisi_dr_cr" => "k",
-        "nominal" => $this->input->post("jumlah_pembayaran"),
-      );
-      $this->db->insert("jurnal", $simpanan_wajib);
+      // $simpanan_wajib = array (
+      //   "id_jurnal" => $this->input->post("kode_pembayaran"),
+      //   "tgl_jurnal" => date("Y-m-d"),
+      //   "no_coa" => 3786,
+      //   "posisi_dr_cr" => "k",
+      //   "nominal" => $this->input->post("jumlah_pembayaran"),
+      // );
+      // $this->db->insert("jurnal", $simpanan_wajib);
 
-      $simpanan_masuka = array (
-        "id_jurnal" => $this->input->post("kode_pembayaran"),
-        "tgl_jurnal" => date("Y-m-d"),
-        "no_coa" => 3787,
-        "posisi_dr_cr" => "k",
-        "nominal" => $this->input->post("manasuka"),
-      );
-      $this->db->insert("jurnal", $simpanan_masuka);
+      // $simpanan_masuka = array (
+      //   "id_jurnal" => $this->input->post("kode_pembayaran"),
+      //   "tgl_jurnal" => date("Y-m-d"),
+      //   "no_coa" => 3787,
+      //   "posisi_dr_cr" => "k",
+      //   "nominal" => $this->input->post("manasuka"),
+      // );
+      // $this->db->insert("jurnal", $simpanan_masuka);
 
     }
     redirect("c_transaksi/pembayaran_susu");
   }
+
+
+  public function simpanan_hr()
+  {
+    # code...
+    $this->db->select("nama_peternak, tgl_simpanan, kode_simpanan_hr, nominal");
+    $this->db->join("peternak","peternak.no_peternak = log_simpanan_hr.id_anggota");
+    $this->db->order_by("tgl_simpanan", "DESC");
+    $data['index'] = $this->db->get("log_simpanan_hr")->result();
+    $this->template->load("template", "simpanan_hr/index", $data);
+  }
+
+  public function form_hr()
+  {
+    # code...
+    $query1 = "SELECT  MAX(RIGHT(kode_simpanan_hr,4)) as kode FROM log_simpanan_hr";
+    $abc = $this->db->query($query1);
+    $no_trans = "";
+    if($abc->num_rows()>0){
+      foreach($abc->result() as $k){
+          $tmp = ((int)$k->kode)+1;
+          $kd = sprintf("%04s", $tmp);
+        }
+      }else{
+        $kd = "001";
+      }
+    // $datenow = date("Ymd");
+    $no_trans = "SHR-".$kd;
+
+    // $last_code_pny = $kd -1;
+    
+    $data['kode_simpanan_hr'] = $no_trans;
+    $data['anggota'] = $this->db->get("peternak")->result();
+
+    $this->template->load("template", "simpanan_hr/form", $data);
+  }
+
+  public function simpan_hr()
+  {
+    # code...
+    // explode dulu 
+    $biaya = str_replace(".", "", $this->input->post("biaya"));
+    $data = array (
+      "kode_simpanan_hr" => $this->input->post("kode_simpanan"),
+      "tgl_simpanan" => $this->input->post("tgl_simpanan_hr"),
+      "id_anggota" => $this->input->post("peternak"),
+      "nominal" => $biaya,
+    );
+    // print_r($data);exit;
+    $this->db->insert("log_simpanan_hr", $data);
+
+
+    // Jurnal 
+    $jurnal_d = array (
+      "id_jurnal" => $this->input->post("kode_simpanan"),
+      "tgl_jurnal" => date("Y-m-d"),
+      "no_coa" => 3785,
+      "posisi_dr_cr" => "d",
+      "nominal" => $biaya,
+    );
+    $this->db->insert("jurnal", $jurnal_d);
+
+    $jurnal_k = array (
+      "id_jurnal" => $this->input->post("kode_simpanan"),
+      "tgl_jurnal" => date("Y-m-d"),
+      "no_coa" => 1111,
+      "posisi_dr_cr" => "k",
+      "nominal" => $biaya,
+    );
+    
+    $this->db->insert("jurnal", $jurnal_k);
+    // berhasil direct ke index
+    redirect("c_transaksi/simpanan_hr");
+  }
+
 }//end

@@ -137,16 +137,18 @@ class m_transaksi extends CI_Model {
     {
     	# code...
     	$sql = "
-    	SELECT total, detail_pembelian_bb.no_peternak, nominal, status
+    	SELECT total, log_pembayaran_susu.id_anggota, pinjaman
+		-- , nominal, status
 		FROM peternak
-				JOIN 
-					(
-						SELECT no_peternak, count(no_trans) as total
-					    FROM detail_pembelian_bb
-					    GROUP BY no_peternak
-					) detail_pembelian_bb ON peternak.no_peternak = detail_pembelian_bb.no_peternak
-		            JOIN log_pinjaman ON log_pinjaman.id_anggota = peternak.no_peternak
-				WHERE detail_pembelian_bb.no_peternak = '$id_peternak' AND total > 1
+		JOIN 
+		(
+			SELECT id_anggota, count(id_pembayaran) as total
+			FROM log_pembayaran_susu
+			WHERE id_anggota = '$id_peternak'
+			GROUP BY id_anggota
+		) log_pembayaran_susu ON peternak.no_peternak = log_pembayaran_susu.id_anggota
+		-- JOIN log_pinjaman ON log_pinjaman.id_anggota = peternak.no_peternak
+		WHERE log_pembayaran_susu.id_anggota = '$id_peternak'
     	";
     	return $this->db->query($sql);
     }

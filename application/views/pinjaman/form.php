@@ -74,8 +74,8 @@
             		$("#biaya").prop("readonly", true);
             		$("#btn-simpan").prop("disabled", true);
             	} else {
-            		var status = data.status;
-            		if (status == 1) {
+            		var pinjaman = data.pinjaman;
+            		if (pinjaman != 0) {
             			$("#info").show();
 	            		var info = 'Anda belum melakukan pelunasan. <strong>Silahkan melakukan pelunasan!</strong>'
 	            		$("#info").html(info);

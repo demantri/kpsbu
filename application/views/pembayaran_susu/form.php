@@ -203,6 +203,7 @@
 						    mm='0'+mm;
 						}
 						var hari_ini = yyyy+'-'+mm+'-'+dd;
+						// var hari_ini = '2020-01-07';
 
 	     				$("#notif").hide();
 
@@ -214,9 +215,9 @@
 	     					var id_anggota = data.id_peternak;
 		     				var tgl_transaksi = data.tgl_transaksi;
 		     				var next_trans = data.next_trans;
-	     					if (hari_ini !== next_trans) {
-		     					$("#btn-simpan").prop("disabled", true);
 
+	     					if (hari_ini != next_trans) {
+		     					$("#btn-simpan").prop("disabled", true);
 		     					// show notif
 		     					$("#notif").show();
 		     					var notif = 'Silahkan lakukan transaksi berikutnya pada : <strong>'+next_trans+'<strong>';
@@ -231,7 +232,7 @@
 		     				}
 	     				}
 
-	                    // console.log(data)
+	                    console.log(hari_ini)
 	                }
 	            });
 	            return false;
@@ -261,9 +262,9 @@
 						{
 						    mm='0'+mm;
 						}
-						// var hari_ini = yyyy+'-'+mm+'-'+dd;
+						var hari_ini = yyyy+'-'+mm+'-'+dd;
 						$("#notif").hide();
-						var hari_ini = '2020-12-24'
+						// var hari_ini = '2021-01-07'
 						if (data == null) {
 							// console.log("dede")
 		     				$("#btn-simpan").prop("disabled", true);
@@ -279,7 +280,7 @@
 						}
 
 
-	                    console.log(data)
+	                    console.log(next_trans)
 	                }
 	            });
 	            return false;

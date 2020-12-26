@@ -37,7 +37,6 @@
 			</tr>
 		</thead>
 		<tbody>
-			<!-- $total = 0; -->
 			<?php 
 			$no = 1; 
 			foreach ($detail as $data) { ?>
@@ -48,9 +47,7 @@
 				<td><?= $data->nama_peternak ?></td>
 				<td align='right'><?= format_rp($data->nominal) ?></td>
 			</tr>
-				<!-- <td><?= $total += $data->subtotal ?></td> -->
 			<?php } ?>
-			<!-- $total += $data->subtotal; -->
 		</tbody>
 		
 	

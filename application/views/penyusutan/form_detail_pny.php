@@ -16,7 +16,7 @@
 					<?php $tgl_input = date("Y-m-d"); ?>
 					<input type="hidden" name="tgl_input" value="<?= $tgl_input?>" >
 
-					<input type="text" name="id" value="<?= $detail_peny->id_detail_aset ?>">
+					<input type="hidden" name="id" value="<?= $detail_peny->id_detail_aset ?>">
 					
 					<div class="form-group row">
 						<label class="col-sm-1">ID Penyusutan</label>	
@@ -64,23 +64,36 @@
 
 					<div class="form-group row">
 						<label class="col-sm-1">Nilai penyusutan</label>	
-						<div class="col-sm-6">
+						<div class="col-sm-3">
 					  		<?php if (empty($log_penyusutan_kosong)) { ?>
 					  			<input type="text" class="form-control" name="nilai_penyusutan" value="<?= penyusutan($nilai_penyusutan)?>" readonly>
 					  		<?php } else { ?>
 					  			<input type="text" class="form-control" name="nilai_penyusutan" value="<?= penyusutan($nilai_penyusutan_fix)?>" readonly>
 					  		<?php } ?>
+					  	</div>
 
+					  	<!-- <div> -->
+					  	<!-- nilai bukunya disini -->
+				  		<label class="col-sm-1">Akumulasi</label>
+				  		<div class="col-sm-3">
 					  		<?php
 					  		if (empty($log_penyusutan_kosong)) { ?>
-					  			<!-- <?php $rumus = $detail_peny->subtotal/$detail_peny->jumlah ?> -->
-					  			<input type="text" name="nilai_akhir" value="<?= penyusutan($detail_peny->subtotal - $nilai_penyusutan)?>" readonly>
+					  			<input type="text" name="akumulasi_peny" class="form-control" value="<?= penyusutan($nilai_penyusutan)?>" readonly>
 					  		<?php } else { ?>
-					  			<input type="text" name="nilai_akhir" value="<?= penyusutan($log_penyusutan_kosong->nilai_akhir - $nilai_penyusutan)?>" readonly>
+					  			<input type="text" name="akumulasi_peny" class="form-control" value="<?= penyusutan($akumulasi_fix)?>" readonly>
 					  		<?php } ?>
+				  		</div>
 
-
-						</div>
+				  		<label class="col-sm-1">Nilai buku</label>
+				  		<div class="col-sm-2">
+					  		<?php
+					  		if (empty($log_penyusutan_kosong)) { ?>
+					  			<input type="text" name="nilai_akhir" class="form-control" value="<?= penyusutan($detail_peny->subtotal - $nilai_penyusutan)?>" readonly>
+					  		<?php } else { ?>
+					  			<input type="text" name="nilai_akhir" class="form-control" value="<?= penyusutan($log_penyusutan_kosong->nilai_akhir - $nilai_penyusutan)?>" readonly>
+					  		<?php } ?>
+				  		</div>
+					<!-- </div> -->
 
 						<div class="col-sm-1">
 							<input style="width: 100%" type="submit" name="submit" value="Simpan" class="btn btn-success" >

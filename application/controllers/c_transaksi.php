@@ -3746,8 +3746,18 @@ group by no_bbp";
       $data['nilai_penyusutan'] = $nilai_penyusutan;
 
       $this->db->where("id_detail", $id);
+
       $nilai_penyusutan_fix = $this->db->get("penyusutan")->row()->total_penyusutan ?? 0 ;
+
       $data['nilai_penyusutan_fix'] = $nilai_penyusutan_fix;
+
+      // ambil nilai akumulasi terakhir + nilai penyusutan
+      $this->db->where("id_detail", $id);
+      $this->db->order_by("akumulasi_peny", "DESC");
+      $akumulasi_fix = $this->db->get("penyusutan")->row()->akumulasi_peny ?? 0 ;
+
+      $data['akumulasi_fix'] = $akumulasi_fix + $nilai_penyusutan_fix;
+      // print_r($data['akumulasi_fix']);exit;
 
       $data['month_now'] = $bulan;
 
@@ -3759,7 +3769,6 @@ group by no_bbp";
       ";
       $log_penyusutan_kosong = $this->db->query($query)->row();
       // print_r($log_penyusutan_kosong);exit;
-
       $data['log_penyusutan_kosong'] = $log_penyusutan_kosong;
       $this->template->load('template', 'penyusutan/form_detail_pny', $data);
     }
@@ -3775,6 +3784,10 @@ group by no_bbp";
       $total_penyusutan = str_replace("Rp.", "", $this->input->post("nilai_penyusutan"));
       $tp_fix = str_replace(".", "", $total_penyusutan);
 
+      // nilai akumulasi penyusutan
+      $akumulasi_peny = str_replace("Rp.", "", $this->input->post("akumulasi_peny"));
+      $akumulasi_peny_fix = str_replace(".", "", $akumulasi_peny);
+
       // nilai akhir
       $nilai_akhir = str_replace('Rp.', '', $this->input->post("nilai_akhir"));
       // convert nilai akhir
@@ -3787,7 +3800,9 @@ group by no_bbp";
         "bulan_penyusutan" => $bulan_penyusutan,
         "total_penyusutan" => $tp_fix,
         "id_detail" => $id,
+        "akumulasi_peny" => $akumulasi_peny_fix,
       );
+      // print_r($data_penyusutan);exit;
       $this->db->insert("penyusutan", $data_penyusutan);
 
       $data_log = array ( 
@@ -3804,7 +3819,7 @@ group by no_bbp";
       $this->db->where("id_detail_aset", $id);
       $this->db->update("detail_pembelian");
 
-      // jurnal
+      // // jurnal
       $this->m_keuangan->GenerateJurnal('1122',$id,'d',$tp_fix);
       $this->m_keuangan->GenerateJurnal('1120',$id,'k',$tp_fix);
       redirect('c_transaksi/penyusutan');

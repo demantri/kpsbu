@@ -222,6 +222,7 @@ class m_transaksi extends CI_Model {
 		JOIN detail_pembelian_bb ON detail_pembelian_bb.no_trans = pembelian_bb.no_trans
 		WHERE detail_pembelian_bb.no_peternak = '$id_peternak'
 		ORDER BY `pembelian_bb`.`tgl_trans`  ASC
+		limit 1
 		";
 		return $this->db->query($sql);
 	}

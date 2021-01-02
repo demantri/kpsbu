@@ -24,6 +24,8 @@
 				
 				<div role="tabpanel" class="tab-pane fade" id="tab_content2" aria-labelledby="profile-tab">
 					<!-- <p>Ini kartu penyusutan </p> -->
+					<?php $this->load->view("penyusutan/kartu_penyusutan") ?>
+
 				</div>
 			</div>
 		</div>

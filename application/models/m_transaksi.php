@@ -119,6 +119,18 @@ class m_transaksi extends CI_Model {
 		return $this->db->query($query);
     }
 
+    function coba($id_peternak){ 
+        $query = "
+        SELECT SUM(jumlah) as total_jumlah, SUM(subtotal) as total_trans_susu, pinjaman, tgl_trans, tgl_trans + INTERVAL 14 DAY as nextPayment
+		FROM detail_pembelian_bb
+		JOIN pembelian_bb ON (pembelian_bb.no_trans = detail_pembelian_bb.no_trans)
+		JOIN peternak ON (peternak.no_peternak = detail_pembelian_bb.no_peternak)
+		WHERE tgl_trans BETWEEN (NOW() - INTERVAL 14 DAY) AND NOW() AND detail_pembelian_bb.no_peternak = '$id_peternak'
+		GROUP BY tgl_trans
+		";
+		return $this->db->query($query);
+    }
+
     public function getJumlah($id_peternak)
     {
     	# code...

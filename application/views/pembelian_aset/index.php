@@ -19,7 +19,7 @@
 					<th>Tanggal Pembelian</th>
 					<th>Total</th>
 					<th>Status</th>
-					<!-- <th>Aksi</th> -->
+					<th style="width: 10px;" class="text-center">Aksi</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -33,7 +33,9 @@
 						<td><?= $data->tgl_input ?></td>
 						<td><?= format_rp($data->total) ?></td>
 						<td><?= $data->status ?></td>
-						<!-- <td>coming soon</td> -->
+						<td>
+							<a href="<?= site_url("c_transaksi/perolehanDetail/".$data->id_pembelian)?>" class="btn btn-xs btn-info">Detail Pembelian</a>
+						</td>
 					</tr>
 				<?php } ?>
 			</tbody>

@@ -5,42 +5,27 @@
     <h3 class="panel-title"><b>Daftar Peyusutan Aset</b></h3>
   </div>
   	 <div class="x_content">
-  	 	
-  	 		<a href = "<?php echo site_url()."c_transaksi/form_penyusutan"?>" class="btn btn-info" role="button"><span class="glyphicon glyphicon-plus"></span> Tambah Data</a>
+	   <div class="" role="tabpanel" data-example-id="togglable-tabs">
 
-  	 	 <table id="datatable" class="table table-striped table-bordered table-hover jambo_table">
-		 	<thead>
-				<tr class="headings">
-					<th style="width: 2px;">No</th>
-					<th>ID Penyusutan</th>
-					<th>Bulan penyusutan</th>
-					<th>Nilai penyusutan</th>
-					<th>Nilai akumulasi penyusutan</th>
-					<th>Nilai buku</th>
-					<!-- <th>Status</th> -->
-					<th>Aksi</th>
-				</tr>
-			</thead>
-			<tbody>
-				<?php 
-				$no = 1;
-				foreach ($penyusutan as $data) { ?>
-					<tr>
-						<td><?= $no++ ?></td>
-						<td><?= $data->id_penyusutan ?> </td>
-						<td><?= $data->bulan_penyusutan ?> </td>
-						<td><?= penyusutan($data->total_penyusutan) ?></td>
-						<td><?= penyusutan($data->akumulasi_peny) ?></td>
-						<td><?= penyusutan($data->nilai_akhir) ?></td>
-						<td>
-							<a href="" class="btn btn-sm btn-info">Detail
-						</td>
-					</tr>
-				<?php } ?>
-			</tbody>
-		</table>
-
-	
-	
+			<ul id="myTab" class="nav nav-tabs bar_tabs" role="tablist">
+				<li role="presentation" class="active">
+					<a href="#tab_content1" id="home-tab" role="tab" data-toggle="tab" aria-expanded="true">Daftar Penyusutan</a>
+				</li>
+				
+				<li role="presentation" class="">
+					<a href="#tab_content2" role="tab" id="profile-tab" data-toggle="tab" aria-expanded="false">Kartu Penyusutan</a>
+				</li>
+			</ul>
+			
+			<div id="myTabContent" class="tab-content">
+				<div role="tabpanel" class="tab-pane fade active in" id="tab_content1" aria-labelledby="home-tab">
+					<?php $this->load->view("penyusutan/daftar_penyusutan") ?>
+				</div>
+				
+				<div role="tabpanel" class="tab-pane fade" id="tab_content2" aria-labelledby="profile-tab">
+					<!-- <p>Ini kartu penyusutan </p> -->
+				</div>
+			</div>
+		</div>
 	</body>
 </html>

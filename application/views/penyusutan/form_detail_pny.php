@@ -64,14 +64,18 @@
 					<div class="form-group row">
 						<label class="col-sm-1">Nilai penyusutan</label>	
 						<div class="col-sm-6">
-					  		<input type="text" class="form-control" name="nilai_penyusutan" value="<?= penyusutan($nilai_penyusutan)?>" readonly>
+							<?php if (empty($log_penyusutan_kosong)) { ?>
+					  			<input type="text" class="form-control" name="nilai_penyusutan" value="<?= penyusutan($nilai_penyusutan)?>" readonly>
+					  		<?php } else { ?>
+					  			<input type="text" class="form-control" name="nilai_penyusutan" value="<?= penyusutan($nilai_penyusutan_fix)?>" readonly>
+					  		<?php } ?>
 
 					  		<?php
 					  		if (empty($log_penyusutan_kosong)) { ?>
 					  			<?php $rumus = $detail_peny->subtotal/$detail_peny->jumlah ?>
 					  			<input type="hidden" name="nilai_akhir" value="<?= penyusutan($rumus - $nilai_penyusutan)?>" readonly>
 					  		<?php } else { ?>
-					  			<input type="hidden" name="nilai_akhir" value="<?= penyusutan($nilai_penyusutan)?>" readonly>
+					  			<input type="hidden" name="nilai_akhir" value="<?= penyusutan($nilai_penyusutan_fix)?>" readonly>
 					  		<?php } ?>
 
 

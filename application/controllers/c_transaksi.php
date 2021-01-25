@@ -3727,6 +3727,10 @@ group by no_bbp";
       // print_r($nilai_penyusutan);exit;
 
       $data['nilai_penyusutan'] = $nilai_penyusutan;
+
+      $nilai_penyusutan_fix = $this->db->get("penyusutan")->row()->total_penyusutan ?? 0 ;
+      $data['nilai_penyusutan_fix'] = $nilai_penyusutan_fix;
+
       $data['month_now'] = $bulan;
 
       // $this->db->select("log_penyusutan.*, detail_pembelian.id as id_detail_pembelian, subtotal");
@@ -3738,7 +3742,6 @@ group by no_bbp";
 
       $query = "SELECT * FROM log_penyusutan WHERE id_detail = '$id' ORDER BY id_penyusutan DESC
       ";
-      // print_r($detail_peny);exit;
       $log_penyusutan_kosong = $this->db->query($query)->row();
       // print_r($log_penyusutan_kosong);exit;
       $data['log_penyusutan_kosong'] = $log_penyusutan_kosong;

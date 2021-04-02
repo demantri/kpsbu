@@ -213,7 +213,7 @@
 							$("#notif").hide();
 
 							// ubah hardcode disini 
-							var hari_ini = '2021-01-07'
+							var hari_ini = '2021-04-16'
 
                         	if (total == null) {
 								$("#susu").val(0);

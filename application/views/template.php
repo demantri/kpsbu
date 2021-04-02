@@ -90,76 +90,74 @@
                            <li><a href="<?php echo site_url();?>c_masterdata/beranda"><i class="fa fa-home"></i> Home </a>
                            </li>
                         </ul>
-                       <?php 
-                           if($this->session->userdata('level')=="admin" OR $this->session->userdata('level')=="produksi1" OR $this->session->userdata('level')=="produksi2" OR $this->session->userdata('level')=="penjualan" OR $this->session->userdata('level')=="keuangan3" OR $this->session->userdata('level')=="keuangan1" OR $this->session->userdata('level')=="keuangan2"):
-                            ?>
+                       <?php if($this->session->userdata('level')=="admin" OR $this->session->userdata('level')=="produksi1" OR $this->session->userdata('level')=="produksi2" OR $this->session->userdata('level')=="penjualan" OR $this->session->userdata('level')=="keuangan3" OR $this->session->userdata('level')=="keuangan1" OR $this->session->userdata('level')=="keuangan2"): ?>
                         <ul class="nav side-menu">
-                           <li>
-                              <a><i class="fa fa-table"></i> Master Data <span class="fa fa-chevron-down"></span></a>
-                              <ul class="nav child_menu">
-                                 <?php
-                                    if( $this->session->userdata('level')=="admin"):
-                                     ?>
-                                 <li><a href="<?php echo site_url();?>c_masterdata/lihat_coa">COA</a></li>
-                                 <li><a href="<?php echo site_url();?>c_masterdata/aset">Aset</a></li>
-                                 <li><a href="<?php echo site_url();?>c_masterdata/lihat_bb">Bahan Baku</a></li>
-                                 <li><a href="<?php echo site_url();?>c_masterdata/lihat_bp">Bahan Penolong</a></li>
-                                 <li><a href="<?php echo site_url();?>c_masterdata/lihat_bdp">Produk Dalam Proses</a></li>
-                                 <li><a href="<?php echo site_url();?>c_masterdata/lihat_peternak">Anggota</a></li>
-                                 <li><a href="<?php echo site_url();?>c_masterdata/simpanan">Simpanan</a></li>
-                                 <li><a href="<?php echo site_url();?>c_masterdata/lihat_supp_bp">Supplier Bahan Penolong</a></li>
-                                 <li><a href="<?php echo site_url();?>c_masterdata/supplier_aset">Supplier Aset</a></li>
-                                 <li><a href="<?php echo site_url();?>c_masterdata/lihat_produk">Produk</a></li>
-                                 <li><a href="<?php echo site_url();?>c_masterdata/lihat_jbop">Jenis BOP</a></li>
-                                 <li><a href="<?php echo site_url();?>c_masterdata/lihat_bom">BOM</a></li>
-                                 <li><a href="<?php echo site_url();?>c_masterdata/lihat_bop">BOP</a></li>
-                                 <li><a href="<?php echo site_url();?>c_masterdata/lihat_bopo">BOP</a></li>
-                                 <li><a href="<?php echo site_url();?>c_masterdata/lihat_btk">BTKL</a></li>
-                                 <li><a href="<?php echo site_url();?>c_masterdata/lihat_btko">BTKL</a></li>
-                                 <li><a href="<?php echo site_url();?>c_masterdata/lihat_ips">Konsumen IPS</a></li>
-                                  
+                          <li>
+                            <a><i class="fa fa-table"></i> Master Data <span class="fa fa-chevron-down"></span></a>
+                            <ul class="nav child_menu">
+                               <?php
+                                  if( $this->session->userdata('level')=="admin"):
+                                   ?>
+                               <li><a href="<?php echo site_url();?>c_masterdata/lihat_coa">COA</a></li>
+                               <li><a href="<?php echo site_url();?>c_masterdata/aset">Aset</a></li>
+                               <li><a href="<?php echo site_url();?>c_masterdata/lihat_bb">Bahan Baku</a></li>
+                               <li><a href="<?php echo site_url();?>c_masterdata/lihat_bp">Bahan Penolong</a></li>
+                               <li><a href="<?php echo site_url();?>c_masterdata/lihat_bdp">Produk Dalam Proses</a></li>
+                               <li><a href="<?php echo site_url();?>c_masterdata/lihat_peternak">Anggota</a></li>
+                               <li><a href="<?php echo site_url();?>c_masterdata/simpanan">Simpanan</a></li>
+                               <li><a href="<?php echo site_url();?>c_masterdata/lihat_supp_bp">Supplier Bahan Penolong</a></li>
+                               <li><a href="<?php echo site_url();?>c_masterdata/supplier_aset">Supplier Aset</a></li>
+                               <li><a href="<?php echo site_url();?>c_masterdata/lihat_produk">Produk</a></li>
+                               <li><a href="<?php echo site_url();?>c_masterdata/lihat_jbop">Jenis BOP</a></li>
+                               <li><a href="<?php echo site_url();?>c_masterdata/lihat_bom">BOM</a></li>
+                               <li><a href="<?php echo site_url();?>c_masterdata/lihat_bop">BOP</a></li>
+                               <li><a href="<?php echo site_url();?>c_masterdata/lihat_bopo">BOP</a></li>
+                               <li><a href="<?php echo site_url();?>c_masterdata/lihat_btk">BTKL</a></li>
+                               <li><a href="<?php echo site_url();?>c_masterdata/lihat_btko">BTKL</a></li>
+                               <li><a href="<?php echo site_url();?>c_masterdata/lihat_ips">Konsumen IPS</a></li>
                                 
-                                 <?php 
-                                    elseif( $this->session->userdata('level')=="produksi1"):
-                                     ?>
-                                      <li><a href="<?php echo site_url();?>c_masterdata/lihat_bb">Bahan Baku</a></li>
-                                       <li><a href="<?php echo site_url();?>c_masterdata/lihat_peternak">Peternak</a></li>
-                                  <li><a href="<?php echo site_url();?>c_masterdata/lihat_bom">BOM</a></li>
-                                  <li><a href="<?php echo site_url();?>c_masterdata/lihat_jbop">Jenis BOP</a></li>
-                                 <li><a href="<?php echo site_url();?>c_masterdata/lihat_bop">BOP</a></li>
-                                 <li><a href="<?php echo site_url();?>c_masterdata/lihat_btk">BTKL</a></li>
-                                 <?php 
-                                    elseif( $this->session->userdata('level')=="produksi2"):
-                                     ?>
-                                  <li><a href="<?php echo site_url();?>c_masterdata/lihat_bp">Bahan Penolong</a></li>
-                                  <li><a href="<?php echo site_url();?>c_masterdata/lihat_supp_bp">Supplier Bahan Penolong</a></li>
-                                  <li><a href="<?php echo site_url();?>c_masterdata/lihat_bdp">Produk Dalam Proses</a></li>
-                                  <li><a href="<?php echo site_url();?>c_masterdata/lihat_bom">BOM</a></li>
-                                 <li><a href="<?php echo site_url();?>c_masterdata/lihat_bopo">BOP</a></li>
-                                 <li><a href="<?php echo site_url();?>c_masterdata/lihat_btko">BTKL</a></li>
-                                  <?php
-                                    elseif( $this->session->userdata('level')=="penjualan"):
-                                     ?>
-                                       <li><a href="<?php echo site_url();?>c_masterdata/lihat_produk">Produk</a></li>
-                                      <li><a href="<?php echo site_url();?>c_masterdata/lihat_ips">Konsumen IPS</a></li>
-                                       <?php
-                                    elseif( $this->session->userdata('level')=="keuangan3"):
-                                     ?>
-                                       <li><a href="<?php echo site_url();?>c_masterdata/lihat_coa">COA</a></li>
-                                        <?php
-                                    elseif( $this->session->userdata('level')=="keuangan1"):
-                                     ?>
-                                       <li><a href="<?php echo site_url();?>c_masterdata/lihat_coa">COA</a></li>
-                                        <?php
-                                    elseif( $this->session->userdata('level')=="keuangan2"):
-                                     ?>
-                                       <li><a href="<?php echo site_url();?>c_masterdata/lihat_coa">COA</a></li>
-                                 <?php 
+                              
+                               <?php 
+                                  elseif( $this->session->userdata('level')=="produksi1"):
+                                   ?>
+                                    <li><a href="<?php echo site_url();?>c_masterdata/lihat_bb">Bahan Baku</a></li>
+                                     <li><a href="<?php echo site_url();?>c_masterdata/lihat_peternak">Peternak</a></li>
+                                <li><a href="<?php echo site_url();?>c_masterdata/lihat_bom">BOM</a></li>
+                                <li><a href="<?php echo site_url();?>c_masterdata/lihat_jbop">Jenis BOP</a></li>
+                               <li><a href="<?php echo site_url();?>c_masterdata/lihat_bop">BOP</a></li>
+                               <li><a href="<?php echo site_url();?>c_masterdata/lihat_btk">BTKL</a></li>
+                               <?php 
+                                  elseif( $this->session->userdata('level')=="produksi2"):
+                                   ?>
+                                <li><a href="<?php echo site_url();?>c_masterdata/lihat_bp">Bahan Penolong</a></li>
+                                <li><a href="<?php echo site_url();?>c_masterdata/lihat_supp_bp">Supplier Bahan Penolong</a></li>
+                                <li><a href="<?php echo site_url();?>c_masterdata/lihat_bdp">Produk Dalam Proses</a></li>
+                                <li><a href="<?php echo site_url();?>c_masterdata/lihat_bom">BOM</a></li>
+                               <li><a href="<?php echo site_url();?>c_masterdata/lihat_bopo">BOP</a></li>
+                               <li><a href="<?php echo site_url();?>c_masterdata/lihat_btko">BTKL</a></li>
+                                <?php
+                                  elseif( $this->session->userdata('level')=="penjualan"):
+                                   ?>
+                                     <li><a href="<?php echo site_url();?>c_masterdata/lihat_produk">Produk</a></li>
+                                    <li><a href="<?php echo site_url();?>c_masterdata/lihat_ips">Konsumen IPS</a></li>
+                                     <?php
+                                  elseif( $this->session->userdata('level')=="keuangan3"):
+                                   ?>
+                                     <li><a href="<?php echo site_url();?>c_masterdata/lihat_coa">COA</a></li>
+                                      <?php
+                                  elseif( $this->session->userdata('level')=="keuangan1"):
+                                   ?>
+                                     <li><a href="<?php echo site_url();?>c_masterdata/lihat_coa">COA</a></li>
+                                      <?php
+                                  elseif( $this->session->userdata('level')=="keuangan2"):
+                                   ?>
+                                     <li><a href="<?php echo site_url();?>c_masterdata/lihat_coa">COA</a></li>
+                               <?php 
 
-                                    endif
-                                    ?>
-                              </ul>
-                           </li>
+                                  endif
+                                  ?>
+                            </ul>
+                          </li>
                         </ul>
                         <?php
                            endif
@@ -172,7 +170,6 @@
                             ?>
                         <ul class="nav side-menu">
                            <li>
-                           
                               <a><i class="fa fa-edit"></i> Transaksi <span class="fa fa-chevron-down"></span></a>
                               <ul class="nav child_menu">
                                  <?php
@@ -226,32 +223,26 @@
                               </ul>
                            </li>
                         </ul>
-                         <?php 
-                                    endif 
-                                    ?>
-                        <?php 
-                           endif 
-                           ?>
-                        <?php 
-                           if(!empty($this->session->userdata('level'))):
-                             ?>
-                        <?php 
-                            if($this->session->userdata('level')=="admin" OR $this->session->userdata('level')=="produksi1" OR $this->session->userdata('level')=="produksi2" OR $this->session->userdata('level')=="penjualan" OR $this->session->userdata('level')=="keuangan1" OR $this->session->userdata('level')=="keuangan2" OR $this->session->userdata('level')=="keuangan3"):
-                            ?>
+                         <?php endif ?>
+                        <?php endif ?>
+
+                        <!-- menu baru -->
+                        <?php if(!empty($this->session->userdata('level'))):?>
+                        <?php if($this->session->userdata('level')=="admin" OR $this->session->userdata('level')=="produksi1" OR $this->session->userdata('level')=="produksi2" OR $this->session->userdata('level')=="penjualan" OR $this->session->userdata('level')=="keuangan1" OR $this->session->userdata('level')=="keuangan2" OR $this->session->userdata('level')=="keuangan3"):?>
                         <ul class="nav side-menu">
                            <li> 
                           
 
-                              <a><i class="fa fa-bar-chart-o"></i> Laporan <span class="fa fa-chevron-down"></span></a>
+                              <a>
+                                <i class="fa fa-bar-chart-o"></i> Laporan <span class="fa fa-chevron-down"></span>
+                              </a>
                               <ul class="nav child_menu">
-                                  <?php 
-                           if( $this->session->userdata('level')=="keuangan" OR $this->session->userdata('level')=="admin"):
-                            ?>
+                                <?php if( $this->session->userdata('level')=="keuangan" OR $this->session->userdata('level')=="admin"):?>
                                     <li><a href="<?php echo site_url();?>c_keuangan/view_jurnal">Jurnal</a></li>
                                     <li><a href="<?php echo site_url();?>c_keuangan/view_bukubesar">Buku Besar</a></li>
                                     <li><a href="<?php echo site_url();?>c_keuangan/view_bukubesar">Kartu Simpanan Wajib</a></li>
                                     <li><a href="<?php echo site_url();?>c_keuangan/view_bukubesar">Kartu Simpanan Manasuka</a></li>
-                                    <li><a href="<?php echo site_url();?>simpanan/kartu_simpanan_susu">Kartu Simpanan Susu</a></li>
+                                    <li><a href="<?php echo site_url();?>simpanan/laporan_setoran_anggota">Laporan Setoran Susu Anggota</a></li>
                                     <li><a href="<?php echo site_url();?>simpanan/kartu_simpanan_hr">Kartu Simpanan Hari Raya</a></li>
                                     <li><a href="<?php echo site_url();?>c_keuangan/lap_pemb">Laporan Pembelian Bahan Baku</a></li>
                                     <li><a href="<?php echo site_url();?>c_keuangan/lap_pembp">Laporan Pembelian Bahan Penolong</a></li>
@@ -327,12 +318,30 @@
                               </ul>
                            </li>
                         </ul>
-                         <?php 
-                                    endif 
-                                      ?>
-                        <?php 
-                           endif
-                           ?>
+                        <?php endif ?>
+                        <?php endif ?>
+
+                        <!-- menu baru -->
+                        <?php if(!empty($this->session->userdata('level'))):?>
+                        <?php if($this->session->userdata('level')=="admin" OR $this->session->userdata('level')=="produksi1" OR $this->session->userdata('level')=="produksi2" OR $this->session->userdata('level')=="penjualan" OR $this->session->userdata('level')=="keuangan1" OR $this->session->userdata('level')=="keuangan2" OR $this->session->userdata('level')=="keuangan3"):?>
+                        <ul class="nav side-menu">
+                           <li> 
+                              <a>
+                                <i class="fa fa-bar-chart-o"></i>Kartu Simpanan Anggota <span class="fa fa-chevron-down"></span>
+                              </a>
+                              <ul class="nav child_menu">
+                                <?php if( $this->session->userdata('level')=="keuangan" OR $this->session->userdata('level')=="admin"):?>
+                                    <li><a href="<?php echo site_url();?>simpanan/kartu_simpanan_wajib">Kartu Simpanan Wajib</a></li>
+                                    <li><a href="<?php echo site_url();?>simpanan/kartu_simpanan_masuka">Kartu Simpanan Masuka</a></li>
+                                    <li><a href="<?php echo site_url();?>simpanan/kartu_simpanan_hr">Kartu Simpanan Hari Raya</a></li>
+                                    <?php
+                                   endif
+                                   ?>
+                              </ul>
+                           </li>
+                        </ul>
+                        <?php endif ?>
+                        <?php endif ?>
                      </div>
                   </div>
                   <!-- /sidebar menu -->

@@ -5,9 +5,9 @@ class c_keuangan extends CI_Controller
 	  function __construct(){
         parent:: __construct();
            date_default_timezone_set('Asia/Jakarta');
-       if(empty($this->session->userdata('level'))){
-            redirect('c_login/home');
-        }
+       		if(empty($this->session->userdata('level'))){
+            	redirect('c_login/home');
+        	}
     }
     
 	public function view_jurnal(){

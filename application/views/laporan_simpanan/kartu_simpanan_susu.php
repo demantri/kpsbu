@@ -2,13 +2,12 @@
 	<body>
 		<div class="x_panel">
  <div class="x_title">
-    <h3 class="panel-title"><b>Kartu simpanan susu</b></h3>
+    <h3 class="panel-title"><b>Laporan Setoran Susu Anggota</b></h3>
   </div>
   	 <div class="x_content">
   	 	<div class="row">
   	 		<div class="col-sm-7">
-  	 			<form method="post" action="<?php echo site_url().'simpanan/kartu_simpanan_susu' ?> " class="form-inline">
-
+  	 			<form method="post" action="<?php echo site_url().'simpanan/laporan_setoran_anggota' ?> " class="form-inline">
 					<label>Pilih anggota</label>
 					<select name="id_peternak" class="form-control">
 						<option value="#" >Pilih anggota</option>
@@ -16,9 +15,6 @@
 						<option value="<?= $data->no_peternak?>"><?= $data->nama_peternak?></option>
 						<?php } ?>
 					</select>&nbsp&nbsp
-
-					<!-- <input type = "submit" >&nbsp&nbsp -->
-
 					<input type="submit" value="Filter" class="btn btn-info">
 				</form>
 			</div>
@@ -26,7 +22,7 @@
 		</div>
 		<hr>
 		<center>
-			<h3>Kartu simpanan susu</h3>
+			<h3>Laporan Setoran Susu Anggota</h3>
 		</center>
 	<hr>
 	<table id="datatable" class="table table-striped table-bordered table-hover jambo_table">

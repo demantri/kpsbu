@@ -60,5 +60,35 @@ class simpanan_model extends CI_model
 		";
 		return $this->db->query($sql);
 	}
-	
+
+	public function _total_simpanan_hr($id_peternak)
+	{
+		$sql = "SELECT SUM(nominal) as total
+		FROM log_simpanan_hr
+		WHERE id_anggota = '$id_peternak'
+		";
+		// >> $query = $this->db->get('nama_table'); //select semua table dari yang di cari
+		// return $query;
+		return $this->db->query($sql);
+	}
+
+	public function _masuka_list($id_peternak)
+	{
+		$sql = "SELECT simpanan_masuka, id_anggota, tgl_transaksi, id_pembayaran, nama_peternak
+		FROM log_pembayaran_susu a
+		JOIN peternak b ON b.no_peternak = a.id_anggota
+		JOIN pembayaran_susu c ON c.kode_pembayaran = a.id_pembayaran
+		WHERE id_anggota = '$id_peternak'
+		";
+		return $this->db->query($sql);
+	}
+
+	public function sum_masuka($id_peternak)
+	{
+		$sql = "SELECT SUM(simpanan_masuka) AS total
+		FROM log_pembayaran_susu
+		WHERE id_anggota = '$id_peternak'
+		";
+		return $this->db->query($sql);
+	}
 }

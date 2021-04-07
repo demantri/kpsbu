@@ -51,15 +51,16 @@ class simpanan extends ci_controller
 				'detail' => $this->simpanan->detailHr($id_peternak)->result(),
 				'peternak' => $this->db->get("peternak")->result(),
 				'anggota' => $this->simpanan->anggota($id_peternak)->row(),
+				'total' => $this->simpanan->_total_simpanan_hr($id_peternak)->row()->total
 			);
-			// print_r($data['detail']);exit;
+			// print_r($data['total']);exit;
 			$this->template->load("template", "laporan_simpanan/kartu_simpanan_hr", $data);
 		} else {
 			$data = array (
 				'id_peternak' => is_null($id_peternak),
 				'detail' => $this->simpanan->detailHr($id_peternak)->result(),
 				'peternak' => $this->db->get("peternak")->result(),
-				// 'total' => 0,
+				'total' => 0,
 			);
 			// print_r($data['detail']);exit;
 			$this->template->load("template", "laporan_simpanan/kartu_simpanan_hr", $data);
@@ -88,6 +89,30 @@ class simpanan extends ci_controller
 				'total' => 0,
 			);
 			$this->template->load('template', 'laporan_simpanan/kartu_simpanan_wajib', $data);
+		}
+	}
+
+	public function kartu_simpanan_masuka()
+	{
+		# code...
+		$id_peternak = $this->input->post('id_peternak');
+		if (isset($id_peternak)) {
+			# code...
+			$data = array(
+				'id_peternak' => $id_peternak,	
+				'detail' => $this->simpanan->_masuka_list($id_peternak)->result(),	
+				'peternak' => $this->db->get("peternak")->result(),
+				'total' => $this->simpanan->sum_masuka($id_peternak)->row()->total
+			);
+			$this->template->load('template', 'laporan_simpanan/kartu_simpanan_masuka', $data);
+		} else {
+			$data = array(
+				'id_peternak' => is_null($id_peternak),	
+				'detail' => $this->simpanan->_masuka_list($id_peternak)->result(),	
+				'peternak' => $this->db->get("peternak")->result(),
+				'total' => 0
+			);
+			$this->template->load('template', 'laporan_simpanan/kartu_simpanan_masuka', $data);
 		}
 	}
 } 

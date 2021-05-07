@@ -115,6 +115,7 @@
                                <li><a href="<?php echo site_url();?>c_masterdata/lihat_btk">BTKL</a></li>
                                <li><a href="<?php echo site_url();?>c_masterdata/lihat_btko">BTKL</a></li>
                                <li><a href="<?php echo site_url();?>c_masterdata/lihat_ips">Konsumen IPS</a></li>
+                               <li><a href="<?php echo site_url();?>c_masterdata/tps">TPS</a></li>
                                 
                               
                                <?php 

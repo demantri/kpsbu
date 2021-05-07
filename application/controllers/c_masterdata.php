@@ -2519,6 +2519,49 @@ class c_masterdata extends CI_controller{
    // }
 
 
+   public function tps()
+   {
+      $data['tps'] = $this->db->get('tps')->result();
+      $this->template->load('template', 'tps/index', $data);
+   }
+
+   public function tambah_tps()
+   {
+      $query1   = "SELECT  MAX(RIGHT(kode_tps, 3)) as kode FROM tps";
+      $abc      = $this->db->query($query1);
+      $kd_tps = "";
+      if ($abc->num_rows() > 0) {
+         foreach ($abc->result() as $k) {
+            $tmp = ((int) $k->kode) + 1;
+            $kd  = sprintf("%03s", $tmp);
+         }
+      } else {
+         $kd = "001";
+      }
+      $kd_tps   = "TPS_" . $kd;
+      
+      $data = [
+         'id' => $kd_tps
+      ];
+
+      $this->template->load('template', 'tps/tambah_tps', $data);
+   }
+
+   public function simpan_tps()
+   {
+      $kd = $this->input->post('id');
+      $alamat = $this->input->post('alamat');
+      $kordinator = $this->input->post('kordinator');
+
+      $data = [
+         'kode_tps' => $kd,
+         'alamat' => $alamat,
+         'kordinator' => $kordinator
+      ];
+
+      $this->db->insert('tps', $data);
+      redirect('c_masterdata/tps');
+   }
 
 
 

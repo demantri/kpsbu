@@ -129,86 +129,87 @@ class c_transaksi extends CI_controller{
 
    public function form_pembelian_aset()
    {
-    $this->db->where('status', 'dalam proses');
-    $query = $this->db->get('pembelian_aset');
-    if($query->num_rows() == 0) {
-      // id pembelian
-      $query1   = "SELECT  MAX(RIGHT(id_pembelian,3)) as kode FROM pembelian_aset";
-      $abc      = $this->db->query($query1);
-      $id_pembelian = "";
-      if ($abc->num_rows() > 0) {
-         foreach ($abc->result() as $k) {
-            $tmp = ((int) $k->kode) + 1;
-            $kd  = sprintf("%03s", $tmp);
+      $this->db->where('status', 'dalam proses');
+      $query = $this->db->get('pembelian_aset');
+      if($query->num_rows() == 0) {
+         // id pembelian
+         $query1   = "SELECT  MAX(RIGHT(id_pembelian,3)) as kode FROM pembelian_aset";
+         $abc      = $this->db->query($query1);
+         $id_pembelian = "";
+         if ($abc->num_rows() > 0) {
+            foreach ($abc->result() as $k) {
+               $tmp = ((int) $k->kode) + 1;
+               $kd  = sprintf("%03s", $tmp);
+            }
+         } else {
+            $kd = "001";
          }
-      } else {
-         $kd = "001";
-      }
-      $datenow = date('Ymd');
-      $id_pembelian   = "PMBAST".$datenow."" . $kd;
+         $datenow = date('Ymd');
+         $id_pembelian   = "PMBAST".$datenow."" . $kd;
 
-      // nota 
-      $kd_nota   = "SELECT  MAX(RIGHT(no_nota, 3)) as kode FROM pembelian_aset";
-      $abc      = $this->db->query($kd_nota);
-      $no_nota = "";
-      if ($abc->num_rows() > 0) {
-         foreach ($abc->result() as $k) {
-            $tmp = ((int) $k->kode) + 1;
-            $kd  = sprintf("%03s", $tmp);
+         // nota 
+         $kd_nota   = "SELECT  MAX(RIGHT(no_nota, 3)) as kode FROM pembelian_aset";
+         $abc      = $this->db->query($kd_nota);
+         $no_nota = "";
+         if ($abc->num_rows() > 0) {
+            foreach ($abc->result() as $k) {
+               $tmp = ((int) $k->kode) + 1;
+               $kd  = sprintf("%03s", $tmp);
+            }
+         } else {
+            $kd = "001";
          }
+         $datenow = date('Ymd');
+         $no_nota   = "NOTA".$datenow."" . $kd;
+
+         $input = array(
+         'id_pembelian' => $id_pembelian,
+         'no_nota' => $no_nota,
+         'total' => 0,
+         'status' => 'dalam proses'
+         );
+         $this->db->insert('pembelian_aset', $input);
       } else {
-         $kd = "001";
+         $id_pembelian = $query->row()->id_pembelian;
+         $no_nota = $query->row()->no_nota;
       }
-      $datenow = date('Ymd');
-      $no_nota   = "NOTA".$datenow."" . $kd;
+      $data['id'] = $id_pembelian;
+      $data['no_nota'] = $no_nota;
 
-      $input = array(
-        'id_pembelian' => $id_pembelian,
-        'no_nota' => $no_nota,
-        'total' => 0,
-        'status' => 'dalam proses'
-      );
-      $this->db->insert('pembelian_aset', $input);
-    } else {
-      $id_pembelian = $query->row()->id_pembelian;
-      $no_nota = $query->row()->no_nota;
-    }
-    $data['id'] = $id_pembelian;
-    $data['no_nota'] = $no_nota;
-
-    $query1 = "SELECT  MAX(RIGHT(id_detail_aset,3)) as id_detail FROM detail_pembelian";
-    $abc = $this->db->query($query1);
-    $id_detail = "";
-    if($abc->num_rows()>0){
-          foreach($abc->result() as $k){
+      // id detail aset 
+      $query1 = "SELECT  MAX(RIGHT(id_detail_aset,3)) as id_detail FROM detail_pembelian";
+      $abc = $this->db->query($query1);
+      $id_detail = "";
+      if($abc->num_rows()>0){
+         foreach($abc->result() as $k){
             $tmp = ((int)$k->id_detail)+1;
             $kd = sprintf("%03s", $tmp);
-          }
-        }else{
-          $kd = "001";
-        }
-    $id_detail = "IDA-".$kd;
-    $data['id_detail'] = $id_detail;
+         }
+      }else{
+         $kd = "001";
+      }
+      $id_detail = "IDA-".$kd;
+      $data['id_detail'] = $id_detail;
 
-    $supplier = $this->supplier_dropdown();
-    $data['supplier'] = $supplier;
+      $supplier = $this->supplier_dropdown();
+      $data['supplier'] = $supplier;
 
-    // detail
-    $data['detail'] = $this->model->get_detail($id_pembelian);
-    // print_r($data['detail']);exit;
-    // cek nmr transaksi 
-    $this->db->where("id_pembelian", $id_pembelian);
-    $data['cek'] = $this->db->get("detail_pembelian")->result();
+      // detail
+      $data['detail'] = $this->model->get_detail($id_pembelian);
+      // print_r($data['detail']);exit;
+      // cek nmr transaksi 
+      $this->db->where("id_pembelian", $id_pembelian);
+      $data['cek'] = $this->db->get("detail_pembelian")->result();
 
 
-    $querytotal = "SELECT SUM(subtotal) as total FROM detail_pembelian WHERE id_pembelian = '$id_pembelian'";
-    $data['total'] = $this->db->query($querytotal)->row()->total;
+      $querytotal = "SELECT SUM(subtotal) as total FROM detail_pembelian WHERE id_pembelian = '$id_pembelian'";
+      $data['total'] = $this->db->query($querytotal)->row()->total;
 
-    // ambil nilai sisa
-    $ns = "SELECT SUM(nilai_sisa) as total_sisa FROM detail_pembelian WHERE id_pembelian = '$id_pembelian' ";
-    $data['nilai_sisa'] = $this->db->query($ns)->row()->total_sisa;
+      // ambil nilai sisa
+      $ns = "SELECT SUM(nilai_sisa) as total_sisa FROM detail_pembelian WHERE id_pembelian = '$id_pembelian' ";
+      $data['nilai_sisa'] = $this->db->query($ns)->row()->total_sisa;
 
-    $this->template->load('template', 'pembelian_aset/form', $data);
+      $this->template->load('template', 'pembelian_aset/form', $data);
    }
 
    public function perolehanDetail($id_pembelian)
@@ -233,74 +234,120 @@ class c_transaksi extends CI_controller{
 
    public function tambahPembelianAset()
    {
-    $id_pembelian = $this->input->post("id");
-    $no_nota = $this->input->post("no_nota");
-    $tgl_nota = $this->input->post("tgl_pembelian");
-    $tgl_input = $this->input->post("tgl_input");
-    $biaya = str_replace(".", "", $this->input->post("biaya"));
-    $harga_aset = str_replace(".", "", $this->input->post("harga_aset"));
-    $nilai_sisa = str_replace(".", "", $this->input->post("nilai_residu"));
-    $status = $this->input->post("");
-    $id_supplier = $this->input->post("id_supplier");
-    $id_aset = $this->input->post("id_aset");
-    $id_detail_aset = $this->input->post("id_detail_aset");
-    // $jumlah = $this->input->post("jumlah");
+      $id_pembelian = $this->input->post("id");
+      $no_nota = $this->input->post("no_nota");
+      $tgl_nota = $this->input->post("tgl_pembelian");
+      $tgl_input = $this->input->post("tgl_input");
+      $biaya = str_replace(".", "", $this->input->post("biaya"));
+      $harga_aset = str_replace(".", "", $this->input->post("harga_aset"));
+      $nilai_sisa = str_replace(".", "", $this->input->post("nilai_residu"));
+      $status = $this->input->post("");
+      $id_supplier = $this->input->post("id_supplier");
+      $id_aset = $this->input->post("id_aset");
+      $id_detail_aset = $this->input->post("id_detail_aset");
+      $jumlah = $this->input->post("jumlah");
 
-    // $total = $biaya + ( $harga_aset * $jumlah);  
-    $total = $biaya + ( $harga_aset);  
-    // print_r($total);exit;
-    $this->db->where("id_pembelian", $id_pembelian);
-    $cek = $this->db->get("pembelian_aset")->row();
+      // print_r($jumlah);exit;
+      // $total = $biaya + ( $harga_aset * $jumlah);  
+      $total = $biaya + ( $harga_aset);  
+      // print_r($total);exit;
+      $this->db->where("id_pembelian", $id_pembelian);
+      $cek = $this->db->get("pembelian_aset")->row();
 
-    $query = $this->db->get("detail_pembelian");
-    // print_r($query);exit;
-    if ($cek->no_nota == NULL) {
-      # code...
-      $this->db->where('id_pembelian', $id_pembelian);
-      $this->db->set('no_nota', $no_nota);
-      // $this->db->set('tgl_nota', $tgl_nota);
-      $this->db->update('pembelian_aset');
+      $query = $this->db->get("detail_pembelian");
+      // print_r($query);exit;
+      if ($cek->no_nota == NULL) {
+         # code...
+         $this->db->where('id_pembelian', $id_pembelian);
+         $this->db->set('no_nota', $no_nota);
+         // $this->db->set('tgl_nota', $tgl_nota);
+         $this->db->update('pembelian_aset');
 
-      // ambil umur 
-      $this->db->where('id', $id_aset);
-      $umur = $this->db->get("aset")->row()->umur_aset;
+         // ambil umur 
+         $this->db->where('id', $id_aset);
+         $umur = $this->db->get("aset")->row()->umur_aset;
 
-      $data_detail = array (
-        "id_pembelian" => $id_pembelian,
-        "id_aset" => $id_aset,
-        "id_supplier" => $id_supplier,
-        "nominal" => $harga_aset,
-        "biaya" => $biaya,
-        "nilai_sisa" => $nilai_sisa,
-        "subtotal" => $total,
-        "sisa_umur" => $umur,
-        "sisa_umur_aset" => $umur,
-        "tgl_nota" => $tgl_nota,
-        "id_detail_aset" => $id_detail_aset,
-        // "jumlah" => $jumlah,
-      );
-      $this->db->insert('detail_pembelian', $data_detail);
-    } else {
-      // ambil umur 
-      $this->db->where('id', $id_aset);
-      $umur = $this->db->get("aset")->row()->umur_aset;
+         // $data_detail = array (
+         // "id_pembelian" => $id_pembelian,
+         // "id_aset" => $id_aset,
+         // "id_supplier" => $id_supplier,
+         // "nominal" => $harga_aset,
+         // "biaya" => $biaya,
+         // "nilai_sisa" => $nilai_sisa,
+         // "subtotal" => $total,
+         // "sisa_umur" => $umur,
+         // "sisa_umur_aset" => $umur,
+         // "tgl_nota" => $tgl_nota,
+         // "id_detail_aset" => $id_detail_aset,
+         // // "jumlah" => $jumlah,
+         // );
+         // $this->db->insert('detail_pembelian', $data_detail);
 
-      $data_detail = array (
-        "id_pembelian" => $id_pembelian,
-        "id_aset" => $id_aset,
-        "id_supplier" => $id_supplier,
-        "nominal" => $harga_aset,
-        "biaya" => $biaya,
-        "subtotal" => $total,
-        "nilai_sisa" => $nilai_sisa,
-        "sisa_umur" => $umur,
-        "sisa_umur_aset" => $umur,
-        "id_detail_aset" => $id_detail_aset,
-        // "jumlah" => $jumlah,
-      );
-      // print_r($data_detail);exit;
-      $this->db->insert('detail_pembelian', $data_detail);
-    }
+         // coba 
+         $data_detail = [];
+         for ($i=0; $i < $jumlah; $i++) { 
+            $data_detail[] = array(
+               "id_pembelian" => $id_pembelian[$i],
+               "id_aset" => $id_aset[$i],
+               "id_supplier" => $id_supplier[$i],
+               "nominal" => $harga_aset[$i],
+               "biaya" => $biaya[$i],
+               "nilai_sisa" => $nilai_sisa[$i],
+               "subtotal" => $total[$i],
+               "sisa_umur" => $umur[$i],
+               "sisa_umur_aset" => $umur[$i],
+               "tgl_nota" => $tgl_nota[$i],
+               "id_detail_aset" => $id_detail_aset[$i],
+            );
+         }
+         print_r($data_detail);exit;
+         // $this->db->insert_batch('detail_pembelian', $data_detail);
+      } else {
+         // ambil umur 
+         $this->db->where('id', $id_aset);
+         $umur = $this->db->get("aset")->row()->umur_aset;
+
+         // $data_detail = array (
+         // "id_pembelian" => $id_pembelian,
+         // "id_aset" => $id_aset,
+         // "id_supplier" => $id_supplier,
+         // "nominal" => $harga_aset,
+         // "biaya" => $biaya,
+         // "subtotal" => $total,
+         // "nilai_sisa" => $nilai_sisa,
+         // "sisa_umur" => $umur,
+         // "sisa_umur_aset" => $umur,
+         // "id_detail_aset" => $id_detail_aset,
+         // // "jumlah" => $jumlah,
+         // );
+         // // print_r($data_detail);exit;
+         // $this->db->insert('detail_pembelian', $data_detail);
+
+         // coba 
+         $data_detail = [];
+         for ($i = 0; $i < $jumlah; $i++) {
+            // baru nyoba2 doang ini
+            $detail_fix = substr($id_detail_aset, 6) + $i;
+            // $tmp = ((int)$k->id_detail)+1;
+            $kd = sprintf("%03s", $detail_fix);
+            $kode = 'IDA-'.$kd;
+            // print_r($kode);exit;
+            $data_detail[] = array(
+               "id_pembelian" => $id_pembelian,
+               "id_aset" => $id_aset,
+               "id_supplier" => $id_supplier,
+               "nominal" => $harga_aset,
+               "biaya" => $biaya,
+               "nilai_sisa" => $nilai_sisa,
+               "subtotal" => $total,
+               "sisa_umur" => $umur,
+               "sisa_umur_aset" => $umur,
+               "id_detail_aset" => $kode
+            );
+         }
+         // print_r($data_detail);exit;
+         $this->db->insert_batch('detail_pembelian', $data_detail);
+      }
     
 
     redirect('c_transaksi/form_pembelian_aset');

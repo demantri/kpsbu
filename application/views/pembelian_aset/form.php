@@ -69,10 +69,10 @@
 						  		<input type = "text" name = "harga_aset" class = "form-control" id="harga_aset" autocomplete="off" placeholder="Harga aset">
 							</div>
 
-							<!-- <label class="col-sm-1">Jumlah</label>	
+							<label class="col-sm-1">Jumlah</label>	
 							<div class="col-sm-2">
 						  		<input type = "number" name = "jumlah" class = "form-control" id="jumlah" autocomplete="off" placeholder="Jumlah aset" min="1">
-							</div> -->
+							</div>
 
 							<label class="col-sm-1">Nilai Residu</label>	
 							<div class="col-sm-2">

@@ -69,14 +69,13 @@
 			<div class="col-xs-5">
 				<div class="form-group">
 				<label>Peternak</label>
-						<select name = "no_peternak" class = "form-control">
-							    <option value="#" disabled selected>Pilih Peternak</option>
-								<?php				
-								foreach($peternak as $data){				
-								echo "<option value = ".$data['no_peternak'].">".$data['no_peternak']." - ".$data['nama_peternak']."</option>";
-															}
-								?>
-						</select>
+					<select name = "no_peternak" class = "form-control">
+					<option value="#" disabled selected>Pilih Peternak</option>
+						<?php				
+						foreach($peternak as $data){				
+						echo "<option value = ".$data['no_peternak'].">".$data['no_peternak']." - ".$data['nama_peternak']."</option>";
+					} ?>
+					</select>
 			  <?php echo form_error('no_peternak'); ?>
 					
 				</div>

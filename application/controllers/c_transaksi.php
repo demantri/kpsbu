@@ -601,12 +601,13 @@ class c_transaksi extends CI_controller{
 
   
    public function selesai_pemb($id,$total){
-      $data = array('no_trans' => $id, 
-                    'tgl_trans' => date('Y-m-d'),
-                    'total' => $total,
-                    'status' => '1');
+      $data = array(
+         'no_trans' => $id, 
+         'tgl_trans' => date('Y-m-d'),
+         'total' => $total,
+         'status' => '1'
+      );
       $this->db->insert('pembelian_bb', $data);
-
       redirect('c_transaksi/lihat_pemb');
    }
 
@@ -4019,6 +4020,8 @@ group by no_bbp";
       $pinjaman = $this->input->post("pinjaman");
       $bayar_tunai = $this->input->post("bayar_tunai");
 
+      // $is_paid = 1;
+
       $kas_totalbayar_lebihdari_pinjaman = $jumlah_harga_susu - $simpanan_masuka - $simpanan_wajib - $pinjaman;
 
       $data_log = array (
@@ -4040,7 +4043,9 @@ group by no_bbp";
         "kode_pembayaran" => $this->input->post("kode_pembayaran"),
         "total_bayar" => $this->input->post("total_trans_susu"),
         "tgl_transaksi" => date("Y-m-d"),
+        "is_paid" => 1
       );
+      // print_r($pembayaran_susu);exit;
       $this->db->insert("pembayaran_susu", $pembayaran_susu);
 
       // kalo gak ada utang nih jurnalnya

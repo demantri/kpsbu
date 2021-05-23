@@ -31,7 +31,7 @@
 
 				<div class="form-group">
 				  <label>Nominal pinjaman</label>
-				  <input type = "number" min="0" name ="biaya" class = "form-control" id="biaya" placeholder="Isi pinjaman" required="">
+				  <input type = "number" min="0" name ="biaya" class = "form-control" id="biaya" placeholder="Isi pinjaman" required="" autocomplete="off">
 				  <?php echo form_error('biaya'); ?>
 				</div>
 
@@ -63,86 +63,83 @@
             dataType : 'json',
             success: function(data){
             	$("#info").hide();
-            	// var anggota = data.no_peternak;
-            	// var total_setor = data.total_setor;
-            	if (data == null) {
-            		// kalo semisal belum memenuhi target. pembelian total selama 8bln
-            		$("#info").show();
-            		var info = 'Anda masih belum bisa melakukan pinjaman. <strong>Masih kurang target selama 8 bulan terakhir</strong>'
-            		$("#info").html(info);
+            	// if (data == null) {
+            	// 	// kalo semisal belum memenuhi target. pembelian total selama 8bln
+            	// 	$("#info").show();
+            	// 	var info = 'Anda masih belum bisa melakukan pinjaman. <strong>Masih kurang target selama 8 bulan terakhir</strong>'
+            	// 	$("#info").html(info);
 
-            		$("#biaya").prop("readonly", true);
-            		$("#btn-simpan").prop("disabled", true);
-            	} else {
-            		var pinjaman = data.pinjaman;
-            		if (pinjaman != 0) {
-            			$("#info").show();
-	            		var info = 'Anda belum melakukan pelunasan. <strong>Silahkan melakukan pelunasan!</strong>'
-	            		$("#info").html(info);
+            	// 	$("#biaya").prop("readonly", true);
+            	// 	$("#btn-simpan").prop("disabled", true);
+            	// } else {
+            	// 	var pinjaman = data.pinjaman;
+            	// 	if (pinjaman != 0) {
+            	// 		$("#info").show();
+	            // 		var info = 'Anda belum melakukan pelunasan. <strong>Silahkan melakukan pelunasan!</strong>'
+	            // 		$("#info").html(info);
 
-            			$("#biaya").prop("readonly", true);
-	            		$("#btn-simpan").prop("disabled", true);
-            		} else {
-						$("#biaya").prop("readonly", false);
-	            		$("#btn-simpan").prop("disabled", false);
-            		}
-            	}
+            	// 		$("#biaya").prop("readonly", true);
+	            // 		$("#btn-simpan").prop("disabled", true);
+            	// 	} else {
+				// 		$("#biaya").prop("readonly", false);
+	            // 		$("#btn-simpan").prop("disabled", false);
+            	// 	}
+            	// }
+
+				// data real 
+				// var total = data.total
+				var pinjaman = data.pinjaman
+
+				// hardcode
+				var total = 16
+				// var pinjaman = 0
+				
+				$("input[name='biaya']").keyup(function() {
+					console.log($(this).val());
+				})
+
+				$("input[name='biaya']").focusout(function(){
+					if($(this).val() >= 5000001) {
+						$("#info").show();
+						var info = 'Pinjaman tidak bisa lebih dari <strong>5.000.000</strong>'
+						$("#info").html(info);
+
+						$("#btn-simpan").prop("disabled", true)
+					} else {
+						$("#info").hide();
+						$("#btn-simpan").prop("disabled", false)
+					}
+				});
+
+            	// console.log()
+
+				if (total >= 16 && pinjaman == 0) {
+					// kalo bener
+					$("#info").hide();
+					// alert('done')
+					$('#biaya').prop('readonly', false)
+	            	$("#btn-simpan").prop("disabled", false)
+				} else if (total >= 16 && pinjaman != 0) {
+					// pembayaran lulus, tapi punya utang
+					$("#info").show();
+					var info = 'Mon maap, anda <strong>punya utang !</strong>'
+	            	$("#info").html(info);
+
+					$('#biaya').prop('readonly', true)
+	            	$("#btn-simpan").prop("disabled", true)
+				} else if (total < 16) {
+					$("#info").show();
+					var info = 'Mon maap, anda tidak memenuhi <strong>SYARAT !</strong>'
+	            	$("#info").html(info);
+
+					$('#biaya').prop('readonly', true)
+	            	$("#btn-simpan").prop("disabled", true)
+				}
+
             	console.log(data)
+
             }
         });
         return false;
 	});
-
-	// $("#anggota").change(function () {
-
-	// 	var id_peternak = $("#anggota").val()
-	// 	var info = "";
-
-	// 	$.ajax({
- //            url : "<?php echo site_url('c_transaksi/cek_utang');?>",
- //            method : "POST",
- //            data : {id_peternak: id_peternak},
- //            async : true,
- //            dataType : 'json',
- //            success: function(data){
- //            	$("#info").hide();
-
- //            	// if (data != null) {
- //            	// 	$("#biaya").prop("readonly", true);
-
- //            	// 	var status = data.status;
- //            	// 	if (status != 0) {
-
- //            	// 		// $("#info").show();
- //            	// 		// var info = 'Anda belum melakukan pelunasan. <strong>Silahkan melakukan pelunasan!</strong>';
-
- //            	// 		// $("#info").html(info);
-
- //            	// 		$("#biaya").prop("readonly", true);
-
- //            	// 	// console.log(status)
- //            	// 	} else {
- //            	// 		$("#biaya").prop("readonly", false);
- //            	// 	}
- //            	// }
- //            	if (data == null) {
- //            		$("#biaya").prop("readonly", true);
- //            		$("#btn-simpan").prop("disabled", true);
- //            	} else {
- //            		var status = data.status;
- //            		if (status == 1) {
- //            			$("#biaya").prop("readonly", true);
- //            			$("#btn-simpan").prop("disabled", true);
-
- //            		} else {
-	//             		$("#biaya").prop("readonly", false);
-	//             		$("#btn-simpan").prop("disabled", false);
- //            		}
-
- //            	}
- //            	// console.log(data.status)
- //            }
- //        });
- //        return false;
-	// });
 </script>

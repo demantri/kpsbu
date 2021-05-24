@@ -15,13 +15,44 @@ class c_transaksi extends CI_controller{
  //PEMBELIAN BAHAN BAKU
    public function lihat_pemb(){
    
-    $this->db->where('tgl_trans', date('Y-m-d'));
-    $cek_kualitas = $this->db->get('cek_kualitas')->result();
-    $data['cek'] = $cek_kualitas;
-    $data['error'] = "Pembelian hari ini sudah selesai!";
-    $data['result'] = $this->db->get('pembelian_bb')->result_array();
-        $this->template->load('template', 'pemb/view', $data);
-      // var_dump($cek1);
+      $this->db->where('tgl_trans', date('Y-m-d'));
+      $cek_kualitas = $this->db->get('cek_kualitas')->result();
+      $data['cek'] = $cek_kualitas;
+      $data['error'] = "Pembelian hari ini sudah selesai!";
+      $data['result'] = $this->db->get('pembelian_bb')->result_array();
+
+      $_truck = "SELECT aset, id_detail_aset, id_aset
+      FROM detail_pembelian a
+      INNER JOIN aset b ON a.id_aset = b.id
+      WHERE aset LIKE '%Truck%'
+      ";
+
+      $truck = $this->db->query($_truck)->result();
+      $data['truck'] = $truck;
+
+      $t_i = $this->db->get('truck_information')->result();
+      // print_r($t_i);exit;
+      $data['ti'] = $t_i;
+
+      $this->template->load('template', 'pemb/view', $data);
+   }
+
+   public function save_truck_information()
+   {
+      $id_pembelian = $this->input->post('id_pembelian');
+      $id_aset = $this->input->post('id_aset');
+      $data = [
+         'id_pembelian' => $id_pembelian,
+         'id_aset' => $id_aset,
+      ];
+      $this->db->insert('truck_information', $data);
+      redirect('c_transaksi/lihat_pemb');
+   }
+
+   public function getDetailAset()
+   {
+      $id_aset = $this->input->post('id_aset');
+      echo json_encode($id_aset);
    }
 
    public function pinjaman()
@@ -300,8 +331,8 @@ class c_transaksi extends CI_controller{
                "id_detail_aset" => $id_detail_aset[$i],
             );
          }
-         print_r($data_detail);exit;
-         // $this->db->insert_batch('detail_pembelian', $data_detail);
+         // print_r($data_detail);exit;
+         $this->db->insert_batch('detail_pembelian', $data_detail);
       } else {
          // ambil umur 
          $this->db->where('id', $id_aset);

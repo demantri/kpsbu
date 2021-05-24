@@ -33,7 +33,7 @@
 					</div>
 				</div>
 				<hr>
-				<a href="<?= base_url('c_masterdata/tps')?>" class="btn btn-secondary">Kembali</a>
+				<a href="<?= base_url('c_masterdata/tps')?>" class="btn btn-default">Kembali</a>
 				<button type="submit" class="btn btn-primary">Simpan</button>
 			</form>
 		</body>

@@ -17,9 +17,20 @@
 			  <input type = "text" name = "no_peternak" class = "form-control" value="<?php echo $id?>" readonly>
 			
 			</div>
+
+			<div class="form-group">
+				<label for="">TPS</label>
+				<select name="" id="" class="form-control">
+				<option value="">Pilih TPS</option>
+				<?php foreach ($tps as $d) { ?>
+				<option value="<?= $d->kode_tps?>"><?= $d->alamat?></option>
+				<?php } ?>
+				</select>
+			</div>
+
 			<div class="form-group">
 			  <label>Nama Peternak</label>
-			  <input type = "text" name = "nama_peternak" class = "form-control">
+			  <input type = "text" name = "nama_peternak" class = "form-control" placeholder="Nama Peternak" autocomplete="off">
 			  
 			  <?php echo form_error('nama_peternak'); ?>
 			
@@ -27,7 +38,7 @@
 
 			<div class="form-group">
 			  <label>No. Telepon</label>
-			  <input type = "text" name = "notel" class = "form-control">
+			  <input type = "text" name = "notel" class = "form-control" placeholder="No. Telepon" autocomplete="off">
 			  
 			  <?php echo form_error('notel'); ?>
 			
@@ -35,7 +46,7 @@
 
 			<div class="form-group">
 			  <label>Alamat</label>
-			  <input type = "text" name = "alamat" class = "form-control">
+			  <input type = "text" name = "alamat" class = "form-control" placeholder="Alamat" autocomplete="off">
 			  
 			  <?php echo form_error('alamat'); ?>
 			

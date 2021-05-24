@@ -13,6 +13,7 @@
 			<tr class="headings">
 				<th style="width: 2px;">No</th>
 				<th>ID Peternak</th>
+				<th>Kode TPS</th>
 				<th>Nama Peternak</th>
 				<th>No. Telepon</th>
 				<th>Alamat</th>
@@ -27,6 +28,7 @@
 
 						<tr><td>$no</td>
 							<td>".$data['no_peternak']."</td>
+							<td>".$data['alamat_tps']."</td>
 							<td>".$data['nama_peternak']."</td>
 							<td align='right'>".$data['notel']."</td>
 							<td>".$data['alamat']."</td>" ?>

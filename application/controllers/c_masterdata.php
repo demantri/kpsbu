@@ -648,7 +648,12 @@ class c_masterdata extends CI_controller{
    //PETERNAK
     public function lihat_peternak()
    {
-         $data['result'] = $this->db->get('peternak')->result_array();
+         $this->db->select('peternak.*, tps.alamat as alamat_tps');
+         $this->db->from('peternak');
+         $this->db->join('tps', 'peternak.kd_tps = tps.kode_tps', 'left');
+         $this->db->order_by('no_peternak', 'desc');
+         $data['result'] = $this->db->get()->result_array();
+         // print_r($data['result']);exit;
          $this->template->load('template', 'peternak/view', $data);
    }
    public function form_peternak()
@@ -672,6 +677,8 @@ class c_masterdata extends CI_controller{
          $simpanan_wajib = $this->db->get("simpanan")->row()->biaya;
          // $this->db->query($simpanan_wajib);
          // print_r($simpanan_wajib);exit;
+
+         $data['tps'] = $this->db->get('tps')->result();
 
          $data['simpanan'] = $simpanan_wajib;
          // print_r($simpanan_wajib);exit;

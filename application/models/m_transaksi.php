@@ -238,4 +238,13 @@ class m_transaksi extends CI_Model {
 		";
 		return $this->db->query($sql);
 	}
+
+	public function getTruck($id)
+	{
+		$sql = "SELECT a.id, aset, id_detail_aset, id_aset
+		FROM detail_pembelian a
+		INNER JOIN aset b ON a.id_aset = b.id
+		WHERE a.id = $id ";
+		return $this->db->query($sql);
+	}
 }

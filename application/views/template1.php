@@ -40,10 +40,10 @@
                 <?php if (isset($error)){ echo "<div class='alert alert-warning'>".$error."</div>"; }?>
   
               <div>
-                <input type="text" class="form-control" placeholder="Username" required="" name="username"/>
+                <input type="text" class="form-control" placeholder="Username" required="" name="username" autocomplete="off"/>
               </div>
               <div>
-                <input type="password" class="form-control" placeholder="Password" required="" name="password"/>
+                <input type="password" class="form-control" placeholder="Password" required="" name="password" autocomplete="off"/>
               </div>
               <div>
                 <button type="submit" class="btn btn-default btn-primary">Log in</button>

@@ -116,7 +116,7 @@
 								<td><?= $no++ ?></td>
 								<td><?= $r->nama_supplier?></td>
 								<td><?= $r->id_detail_aset ?></td>
-								<td><?= $r->id.' '.$r->aset?></td>
+								<td><?= $r->id.' - '.$r->aset?></td>
 								<td class="text-right"><?= format_rp($r->nominal)?></td>
 								<td class="text-right"><?= format_rp($r->biaya)?></td>
 								<td class="text-right"><?= format_rp($r->nilai_sisa)?></td>

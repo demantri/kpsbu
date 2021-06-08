@@ -11,17 +11,18 @@
                 <form action="<?= base_url('c_transaksi/save_truck_information')?>" method="post">
                     <div class="modal-body">
                         <input type="hidden" value="<?= $d['no_trans']?>" name="id_pembelian">
-                        <input type="text" class="id_detail_aset">
+                        <!-- <input type="text" class="id_detail_aset"> -->
+                        <input type="text" class="nama_aset" name="nama_aset">
+                        <input type="text" class="id_detail_pembelian" name="id_detail_pembelian">
                         <div class="form-group">
                             <label for="">Aset</label>
                             <div class="">
-                                <select name="id_aset" class="form-control id_aset">
+                                <select name="id_aset" class="form-control id_aset" required>
                                 <option value="">Pilih Aset</option>
                                 <?php foreach ($truck as $t) { ?>
-                                <option value="<?= $t->id_aset?>"><?= $t->aset?> - <?= $t->id_detail_aset?></option>
+                                <option value="<?= $t->id?>"><?= $t->aset?> - <?= $t->id_detail_aset?></option>
                                 <?php } ?>
                                 </select>
-                                <!-- <input type="text" value="<?= $ti?>"> -->
                             </div>
                         </div>
 
@@ -46,7 +47,16 @@
                 id_aset : id_aset
             },
             success:function(data) {
-                console.log(data)
+                obj = JSON.parse(data)
+                
+                var id = obj[0].id
+                var id_detail_aset = obj[0].id_detail_aset
+                var aset = obj[0].aset + ' - ' + id_detail_aset 
+
+                $('.nama_aset').val(aset)
+                $('.id_detail_pembelian').val(id_detail_aset)
+                
+                console.log(obj)
             }
         })
     })

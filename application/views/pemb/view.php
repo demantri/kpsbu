@@ -25,29 +25,28 @@
 					<tbody>
 						<?php
 						$no=1;
-							foreach($result as $data){
-								echo "
-
-									<tr><td>$no</td>
-										<td>".$data['no_trans']."</td>
-										<td>".$data['tgl_trans']."</td>
-										<td>
-											<button data-target='#truck_".$data['no_trans']."' data-toggle='modal'>Pilih truck</button> <span> asd</span>
-										</td>
-										" ?>
-										<td>
-										<a href="isi_edit_pemb/<?php echo $data['no_trans']; ?>">
-										
-										<span class="fa-stack">
-										<i class="fa fa-square fa-stack-2x" style="color:#2A3F54;"></i>
-										<span class="glyphicon glyphicon-pencil fa-stack-1x" aria-hidden="true" style="color:white"></span>
-										</span> </a>
-										</td>
-									</tr>
-									
-								<?php
-								$no++;
-							}
+							foreach($result as $data){ ?>
+							<tr>
+								<td><?= $no++ ?></td>
+								<td><?= $data['no_trans'] ?></td>
+								<td><?= $data['tgl_trans'] ?></td>
+								<td style="width: 20%;" class="text-center">
+									<?php if ($data['nama_aset'] == '') { ?>
+										<button data-target='#truck_<?= $data["no_trans"]?>' data-toggle='modal' class="btn btn-default btn-sm">set truck</button>
+									<?php } else { ?>
+										<span>
+											
+											<button class="btn btn-success btn-sm"><?= $data['nama_aset']?></button>
+											<a href="/" class="btn btn-warning btn-sm"><i class="fa fa-pencil"></i></a>
+											<a href="delete_truck/<?= $data['no_trans']?>" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
+										</span>
+									<?php } ?>
+								</td>
+								<td style="width: 20%;" class="text-center">
+									<a href="isi_edit_pemb/<?= $data['no_trans']?>" class="btn btn-default btn-sm"> Detail Pembelian Bahan Baku</a>
+								</td>
+							</tr>
+							<?php }
 						?>
 					</tbody>
 				</table>

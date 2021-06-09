@@ -25,6 +25,8 @@ class c_transaksi extends CI_controller{
       $data['result'] = $this->db->get('pembelian_bb')->result_array();
       // print_r($data['result']);exit;
 
+      $data['aset'] = $this->db->get('aset')->result();
+
       $_truck = "SELECT a.id, aset, id_detail_aset, id_aset
       FROM detail_pembelian a
       INNER JOIN aset b ON a.id_aset = b.id
@@ -59,9 +61,10 @@ class c_transaksi extends CI_controller{
       redirect('c_transaksi/lihat_pemb');
    }
 
-   public function delete_truck()
+   public function delete_truck($id)
    {
       $where = array('id' => $id);
+      // print_r($where);
       $this->crud->delete($where, 'truck_information');
       redirect('c_transaksi/lihat_pemb');
    }

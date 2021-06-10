@@ -32,13 +32,14 @@
 								<td><?= $data['tgl_trans'] ?></td>
 								<td style="width: 20%;" class="text-center">
 									<?php if ($data['nama_aset'] == '') { ?>
-										<!-- <button data-id="<?= $data['no_trans']?>" data-target='#truck_<?= $data['no_trans']?>' data-toggle='modal' class="btn btn-default btn-sm">set truck</button> -->
+										<button id="modal_menu" data-target="#modal" data-toggle="modal" data-trans="<?= $data['no_trans']?>">set truck</button>
+									<?php } else if ($data['is_deleted'] == 1) { ?>
 										<button id="modal_menu" data-target="#modal" data-toggle="modal" data-trans="<?= $data['no_trans']?>">set truck</button>
 									<?php } else { ?>
 										<span>
 											<button class="btn btn-success btn-sm"><?= $data['nama_aset']?></button>
 											<a href="/" class="btn btn-warning btn-sm"><i class="fa fa-pencil"></i></a>
-											<a href="<?= base_url('c_transaksi/delete_truck/'.$data['id'].' ')?>" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
+											<a href="<?= base_url('c_transaksi/delete_truck/'.$data['id'].' ')?>" class="btn btn-danger btn-sm"><i class="fa fa-trash" onclick="return confirm('are u sure?');"></i></a>
 										</span>
 									<?php } ?>
 								</td>

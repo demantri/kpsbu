@@ -22,6 +22,7 @@ class c_transaksi extends CI_controller{
       $data['error'] = "Pembelian hari ini sudah selesai!";
 
       $this->db->join('truck_information', 'truck_information.id_pembelian = pembelian_bb.no_trans', 'LEFT');
+      // $this->db->where('is_deleted =',0);
       $data['result'] = $this->db->get('pembelian_bb')->result_array();
       // print_r($data['result']);exit;
 
@@ -62,10 +63,12 @@ class c_transaksi extends CI_controller{
    }
 
    public function delete_truck($id)
-   {
-      $where = array('id' => $id);
-      // print_r($where);
-      $this->crud->delete($where, 'truck_information');
+   {  
+      $data = array(
+         'is_deleted' => 1,
+      );
+      $this->db->where('id', $id);
+      $this->db->update('truck_information', $data);
       redirect('c_transaksi/lihat_pemb');
    }
 

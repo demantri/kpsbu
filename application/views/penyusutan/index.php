@@ -1,33 +1,43 @@
 <html>
 	<body>
 		<div class="x_panel">
- <div class="x_title">
-    <h3 class="panel-title"><b>Daftar Peyusutan Aset</b></h3>
-  </div>
-  	 <div class="x_content">
-	   <div class="" role="tabpanel" data-example-id="togglable-tabs">
+			<div class="x_title">
+				<h3 class="panel-title"><b>Daftar Peyusutan Aset</b></h3>
+			</div>
+			<div class="x_content">
+				<div class="" role="tabpanel" data-example-id="togglable-tabs">
+					<a href = "<?php echo site_url()."c_transaksi/form_penyusutan"?>" class="btn btn-info btn-sm" role="button"><span class="glyphicon glyphicon-plus"></span> Tambah Data</a>
 
-			<ul id="myTab" class="nav nav-tabs bar_tabs" role="tablist">
-				<li role="presentation" class="active">
-					<a href="#tab_content1" id="home-tab" role="tab" data-toggle="tab" aria-expanded="true">Daftar Penyusutan</a>
-				</li>
-				
-				<li role="presentation" class="">
-					<a href="#tab_content2" role="tab" id="profile-tab" data-toggle="tab" aria-expanded="false">Kartu Penyusutan</a>
-				</li>
-			</ul>
-			
-			<div id="myTabContent" class="tab-content">
-				<div role="tabpanel" class="tab-pane fade active in" id="tab_content1" aria-labelledby="home-tab">
-					<?php $this->load->view("penyusutan/daftar_penyusutan") ?>
-				</div>
-				
-				<div role="tabpanel" class="tab-pane fade" id="tab_content2" aria-labelledby="profile-tab">
-					<!-- <p>Ini kartu penyusutan </p> -->
-					<?php $this->load->view("penyusutan/kartu_penyusutan") ?>
-
+					<table id="datatable" class="table table-striped table-bordered table-hover jambo_table">
+						<thead>
+							<tr class="headings">
+								<th style="width: 5%;">No</th>
+								<th>ID Penyusutan</th>
+								<th>Bulan penyusutan</th>
+								<th>Nama Aset</th>
+								<th style="width: 15%;" class="text-center">Aksi</th>
+							</tr>
+						</thead>
+						<tbody>
+							<?php 
+							$no = 1;
+							foreach ($penyusutan as $key => $value) { ?>
+							<tr>
+								<td><?= $no++ ?></td>
+								<td><?= $value->id_penyusutan ?></td>
+								<td><?= $value->bulan_penyusutan ?></td>
+								<td><?= $value->aset ?> - <b><?= $value->id_detail_aset ?></b></td>
+								<td class="text-center">
+									<!-- <a href="#" class="btn btn-primary" data-target="#detail_modal_<?= $value->id_penyusutan ?>" data-toggle="modal">Detail</a> -->
+									<a href="<?= base_url('c_transaksi/detail/'.$value->id_penyusutan)?>" class="btn btn-primary">Detail</a>
+								</td>
+							</tr>
+							<?php } ?>
+						</tbody> 
+					</table>
 				</div>
 			</div>
 		</div>
+		<?php $this->load->view('penyusutan/detail_modal');?>
 	</body>
 </html>

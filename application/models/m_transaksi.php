@@ -120,14 +120,18 @@ class m_transaksi extends CI_Model {
     }
 
     function coba($id_peternak){ 
-        $query = "
-        SELECT SUM(jumlah) as total_jumlah, SUM(subtotal) as total_trans_susu, pinjaman, tgl_trans, tgl_trans + INTERVAL 14 DAY as nextPayment
+        // $query = "SELECT SUM(jumlah) as total_jumlah, SUM(subtotal) as total_trans_susu, pinjaman, tgl_trans, tgl_trans + INTERVAL 14 DAY as nextPayment
+		// FROM detail_pembelian_bb
+		// JOIN pembelian_bb ON (pembelian_bb.no_trans = detail_pembelian_bb.no_trans)
+		// JOIN peternak ON (peternak.no_peternak = detail_pembelian_bb.no_peternak)
+		// WHERE tgl_trans BETWEEN (NOW() - INTERVAL 14 DAY) AND NOW() AND detail_pembelian_bb.no_peternak = '$id_peternak'
+		// GROUP BY tgl_trans";
+		$query = "SELECT SUM(jumlah) as total_jumlah, SUM(subtotal) as total_trans_susu, pinjaman, tgl_trans, tgl_trans + INTERVAL 14 DAY as nextPayment
 		FROM detail_pembelian_bb
 		JOIN pembelian_bb ON (pembelian_bb.no_trans = detail_pembelian_bb.no_trans)
 		JOIN peternak ON (peternak.no_peternak = detail_pembelian_bb.no_peternak)
-		WHERE tgl_trans BETWEEN (NOW() - INTERVAL 14 DAY) AND NOW() AND detail_pembelian_bb.no_peternak = '$id_peternak'
-		GROUP BY tgl_trans
-		";
+		WHERE tgl_trans BETWEEN (LEFT(SYSDATE(),10) - INTERVAL 14 DAY) AND LEFT(SYSDATE(),10) 
+		AND detail_pembelian_bb.no_peternak = '$id_peternak'";
 		return $this->db->query($query);
     }
 
@@ -245,6 +249,16 @@ class m_transaksi extends CI_Model {
 		FROM detail_pembelian a
 		INNER JOIN aset b ON a.id_aset = b.id
 		WHERE a.id = $id ";
+		return $this->db->query($sql);
+	}
+
+	public function getPny()
+	{
+		$sql = "SELECT a.id_penyusutan, a.bulan_penyusutan, d.aset, c.id_detail_aset
+		FROM penyusutan a
+		INNER JOIN log_penyusutan b ON a.id_penyusutan = b.id_penyusutan
+		INNER JOIN detail_pembelian c ON a.id_detail = c.id_detail_aset
+		INNER JOIN aset d ON c.id_aset = d.id";
 		return $this->db->query($sql);
 	}
 }

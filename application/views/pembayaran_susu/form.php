@@ -109,6 +109,7 @@
 	                async : true,
 	                dataType : 'json',
 	                success: function(data){
+						console.log(data)
 	                	$("#jml_susu").show();
 						$("#simpanan_manasuka").show();
 						$("#jumlah_pembayaran").show();
@@ -172,12 +173,12 @@
 							}
 
 							// main disini tgl nya
-							// var hari_ini = yyyy+'-'+mm+'-'+dd;
+							var hari_ini = yyyy+'-'+mm+'-'+dd;
 							
 							$("#notif").hide();
 
 							// ubah hardcode disini 
-							var hari_ini = '2021-07-02'
+							// var hari_ini = '2021-07-15'
 
                         	if (total == null) {
 								$("#susu").val(0);

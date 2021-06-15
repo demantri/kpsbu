@@ -57,9 +57,49 @@ class c_transaksi extends CI_controller{
          'nama_aset' => $nama_aset,
          'id_detail_pembelian' => $id_detail_pembelian,
       ];
-      // print_r($data);exit;
       $this->db->insert('truck_information', $data);
+
+      // insert untuk confirm 
+      $data_confirm = [
+         'id_detail_truck' => $id_detail_pembelian,
+         'nama_aset' => $nama_aset,
+         'kd_pembelian' => $id_pembelian
+      ];
+      $this->db->insert('log_confirm_truck', $data_confirm);
+      
+      // print_r($data);exit;
       redirect('c_transaksi/lihat_pemb');
+   }
+
+   public function confirm_truck()
+   {
+      // $this->db->where('status =', 0);
+      $list = $this->db->get('log_confirm_truck')->result();
+      // print_r($list);exit;
+
+      $data = [
+         'list' => $list
+      ];
+      $this->template->load('template', 'pemb/confirm', $data);
+   }
+
+   public function update_confirm_truck($id)
+   {
+      // print_r($id);exit;
+      $data = array(
+         'status' => 1, 
+         'tgl_confirm' => date('Y-m-d')
+      );
+      $this->db->where('kd_pembelian', $id);
+      $this->db->update('log_confirm_truck', $data);
+
+      $data_truck = array(
+         'is_confirm' => 1
+      );
+      $this->db->where('id_pembelian', $id);
+      $this->db->update('truck_information', $data_truck);
+      
+      redirect('c_transaksi/confirm_truck');
    }
 
    public function delete_truck($id)
@@ -461,19 +501,19 @@ class c_transaksi extends CI_controller{
    }
 
    public function form_pemb(){
-          $query1   = "SELECT  MAX(RIGHT(no_trans,3)) as kode FROM pembelian_bb";
-         $abc      = $this->db->query($query1);
-         $no_trans = "";
-         if ($abc->num_rows() > 0) {
-            foreach ($abc->result() as $k) {
-               $tmp = ((int) $k->kode) + 1;
-               $kd  = sprintf("%03s", $tmp);
-            }
-         } else {
-            $kd = "001";
+      $query1   = "SELECT  MAX(RIGHT(no_trans,3)) as kode FROM pembelian_bb";
+      $abc      = $this->db->query($query1);
+      $no_trans = "";
+      if ($abc->num_rows() > 0) {
+         foreach ($abc->result() as $k) {
+            $tmp = ((int) $k->kode) + 1;
+            $kd  = sprintf("%03s", $tmp);
          }
-         $no_trans   = "PMB_" . $kd;
-         $data['id'] = $no_trans;
+      } else {
+         $kd = "001";
+      }
+      $no_trans   = "PMB_" . $kd;
+      $data['id'] = $no_trans;
 
 
       //UPDATE TABEL PEMBELIAN_BB

@@ -31,7 +31,7 @@
 								<td><?= $data['no_trans'] ?></td>
 								<td><?= $data['tgl_trans'] ?></td>
 								<td style="width: 20%;" class="text-center">
-									<?php if ($data['nama_aset'] == '') { ?>
+									<!-- <?php if ($data['nama_aset'] == '') { ?>
 										<button id="modal_menu" data-target="#modal" data-toggle="modal" data-trans="<?= $data['no_trans']?>">set truck</button>
 									<?php } else if ($data['is_deleted'] == 1) { ?>
 										<button id="modal_menu" data-target="#modal" data-toggle="modal" data-trans="<?= $data['no_trans']?>">set truck</button>
@@ -40,6 +40,17 @@
 											<button class="btn btn-success btn-sm"><?= $data['nama_aset']?></button>
 											<a href="/" class="btn btn-warning btn-sm"><i class="fa fa-pencil"></i></a>
 											<a href="<?= base_url('c_transaksi/delete_truck/'.$data['id'].' ')?>" class="btn btn-danger btn-sm"><i class="fa fa-trash" onclick="return confirm('are u sure?');"></i></a>
+										</span>
+									<?php } ?> -->
+									<?php if ($data['nama_aset'] == '') { ?>
+										<button id="modal_menu" data-target="#modal" data-toggle="modal" data-trans="<?= $data['no_trans']?>">set truck</button>
+									<?php } else if ($data['is_confirm'] == 1) { ?>
+										<button class="btn btn-primary btn-sm">Truck Sudah Sampai</button>
+									<?php } else { ?>
+										<span>
+											<button class="btn btn-success btn-sm"><?= $data['nama_aset']?></button>
+											<a href="#" onclick="return alert('masih belum selesai :)')" class="btn btn-warning btn-sm"><i class="fa fa-pencil"></i></a>
+											<!-- <a href="<?= base_url('c_transaksi/delete_truck/'.$data['id'].' ')?>" class="btn btn-danger btn-sm"><i class="fa fa-trash" onclick="return confirm('are u sure?');"></i></a> -->
 										</span>
 									<?php } ?>
 								</td>

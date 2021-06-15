@@ -29,7 +29,8 @@
 				<div class="form-group row">
 					<label class="col-sm-2">Kordinator Wilayah</label>	
 					<div class="col-sm-6">
-				  		<input type ="text" name ="kordinator" class="form-control" autocomplete="off" placeholder="Nama Kordinator Wilayah" required>
+				  		<input type ="text" name ="kordinator" class="form-control" autocomplete="off" placeholder="Nama Kordinator Wilayah">
+						  <?= form_error('kordinator')?>
 					</div>
 				</div>
 				<hr>

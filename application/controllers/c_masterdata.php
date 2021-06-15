@@ -730,7 +730,8 @@ class c_masterdata extends CI_controller{
                'nama_peternak' => $_POST['nama_peternak'],
                'notel' => $_POST['notel'],
                'alamat' => $_POST['alamat'],
-               'deposit' => $_POST['deposit']
+               'deposit' => $_POST['deposit'], 
+               'kd_tps' => $_POST['tps']
             );
             // print_r($data);exit;
             $this->db->insert('peternak', $data);
@@ -2556,18 +2557,36 @@ class c_masterdata extends CI_controller{
 
    public function simpan_tps()
    {
-      $kd = $this->input->post('id');
-      $alamat = $this->input->post('alamat');
-      $kordinator = $this->input->post('kordinator');
+      $config = array(
+         array(
+            'field' => 'kordinator',
+            'label' => 'Kordinator',
+            'rules' => 'required|alpha',
+            'errors' => array(
+               'required' => '%s tidak boleh kosong!', 
+               'alpha' => '%s tidak bisa menggunakan angka',
+            )
+         )
+      );
+      $this->form_validation->set_error_delimiters('<div class="alert alert-danger"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>  ', '</div>');
+      $this->form_validation->set_rules($config);
+         
+      if ($this->form_validation->run() == FALSE) {
+         $this->tambah_tps();
+      } else {
+         $kd = $this->input->post('id');
+         $alamat = $this->input->post('alamat');
+         $kordinator = $this->input->post('kordinator');
 
-      $data = [
-         'kode_tps' => $kd,
-         'alamat' => $alamat,
-         'kordinator' => $kordinator
-      ];
+         $data = [
+            'kode_tps' => $kd,
+            'alamat' => $alamat,
+            'kordinator' => $kordinator
+         ];
 
-      $this->db->insert('tps', $data);
-      redirect('c_masterdata/tps');
+         $this->db->insert('tps', $data);
+         redirect('c_masterdata/tps');
+      }
    }
 
 

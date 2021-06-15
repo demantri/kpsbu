@@ -19,8 +19,8 @@
 			</div>
 
 			<div class="form-group">
-				<label for="">TPS</label>
-				<select name="" id="" class="form-control">
+				<label for="tps">TPS</label>
+				<select name="tps" id="tps" class="form-control">
 				<option value="">Pilih TPS</option>
 				<?php foreach ($tps as $d) { ?>
 				<option value="<?= $d->kode_tps?>"><?= $d->alamat?></option>

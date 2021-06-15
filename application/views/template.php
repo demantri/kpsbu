@@ -182,6 +182,7 @@
                                  <li><a href="<?php echo site_url();?>c_transaksi/penyusutan">Penyusutan</a></li>
                                  <li><a href="<?php echo site_url();?>c_transaksi/perbaikan">Perbaikan</a></li>
                                  <li><a href="<?php echo site_url();?>c_transaksi/revaluasi">Revaluasi</a></li>
+                                 <li><a href="<?php echo site_url();?>c_transaksi/confirm_truck">Konfirmasi Truck</a></li>
                                  <li><a href="<?php echo site_url();?>c_transaksi/lihat_ck">Cek Kualitas</a></li>
                                  <li><a href="<?php echo site_url();?>c_transaksi/lihat_produksi_ke1">Produksi ke IPS</a></li>
                                  <li><a href="<?php echo site_url();?>c_transaksi/lihat_pembagian">Pembagian</a></li>

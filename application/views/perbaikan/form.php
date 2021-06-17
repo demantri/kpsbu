@@ -9,6 +9,8 @@
         <body>
             <form method = "POST" action = "<?php echo site_url('c_transaksi/simpan_perbaikan');?>">
 
+                <input type="hidden" id="ue" name="ue">
+                <!-- <input type="text" id="revaluasi"> -->
                 <div class="form-group row">
                     <label class="col-sm-2" for="id_perbaikan">ID Perbaikan</label>	
                     <div class="col-sm-3">
@@ -22,6 +24,7 @@
                         <input type="date" class="form-control" id="date" name="date" required>
                     </div>
                 </div>
+
 
                 <div class="form-group row">
                     <label class="col-sm-2" for="aset">Aset</label>	
@@ -76,4 +79,30 @@
     rupiah = split[1] != undefined ? rupiah + "," + split[1] : rupiah;
     return prefix == undefined ? rupiah : rupiah ? "Rp. " + rupiah : "";
     }
+</script>
+<script>
+    $(document).ready(function() {
+        $('#aset').on('change', function() {
+            var id_detail = $('#aset').val()
+            // alert(id_detail)
+            $.ajax({
+                url : '<?= base_url('c_transaksi/list_aset')?>', 
+                data : {
+                    id_detail : id_detail
+                },
+                type: "POST",
+                success : function(data) {
+                    var obj = JSON.parse(data)
+
+                    if (obj !== null) {
+                        var ue = obj.sisa_umur
+                        $('#ue').val(ue)
+                    } else {
+                        $('#ue').val('')
+                    }
+
+                }
+            })
+        })
+    })
 </script>

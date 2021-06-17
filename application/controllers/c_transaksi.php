@@ -393,9 +393,10 @@ class c_transaksi extends CI_controller{
             // $detail_fix = substr($id_detail_aset, 6) + $i;
             $getlastid = "SELECT MAX(RIGHT(id_detail_aset, 3)) as last_detail from detail_pembelian";
             $abc = $this->db->query($getlastid);
+            // print_r($abc);exit;
             if ($abc->num_rows() > 0) {
                foreach ($abc->result() as $k) {
-                  $tmp = ((int) $k->last_detail) + $i;
+                  $tmp = ((int) $k->last_detail) + $i + 1;
                   $kd  = sprintf("%03s", $tmp);
                }
             } else {
@@ -3810,7 +3811,140 @@ group by no_bbp";
 
    public function revaluasi()
    {
-      $this->template->load('template', 'revaluasi/index');
+      $data['list'] = $this->db->get('revaluasi')->result();
+      $this->template->load('template', 'revaluasi/index', $data);
+   }
+
+   public function form_revaluasi()
+   {
+      $aset = $this->model->detail_rev();
+      $data['aset'] = $aset;
+      
+      $this->template->load('template', 'revaluasi/form', $data);
+   }
+
+   public function direvaluasikan()
+   {
+      $this->form_detail_revaluasi();
+   }
+
+   public function form_detail_revaluasi()
+   {
+      $query1 = "SELECT  MAX(RIGHT(id_revaluasi,3)) as kode FROM revaluasi";
+      $abc = $this->db->query($query1);
+      $no_trans = "";
+      if($abc->num_rows()>0){
+         foreach($abc->result() as $k){
+            $tmp = ((int)$k->kode)+1;
+            $kd = sprintf("%03s", $tmp);
+            }
+         }else{
+            $kd = "001";
+         }
+      $datenow = date("Ymd");
+      $no_trans = "REV".$datenow."".$kd;
+      $data['id_revaluasi'] = $no_trans;
+
+      $get_id_pny = "SELECT  MAX(RIGHT(id_penyusutan,3)) as kode FROM penyusutan";
+      $zxc = $this->db->query($get_id_pny);
+      $id_pny = "";
+      if($zxc->num_rows()>0){
+         foreach($zxc->result() as $k)
+            {
+               $tmp = ((int)$k->kode)+1;
+               $_id_pny = sprintf("%03s", $tmp);
+            }
+         } else {
+            $_id_pny = "001";
+         }
+      $datenow = date("Ymd");
+      $id_pny = "PNY".$datenow."".$_id_pny;
+      $data['id_pny'] = $id_pny;
+
+
+      $id = $this->input->post('id');
+      $data['id'] = $id;
+      // print_r($id);exit;
+
+      $rowPny = "SELECT a.id, aset, sisa_umur, umur_aset, subtotal, sisa_umur_aset, nilai_sisa, id_detail_aset, tgl_input
+      FROM detail_pembelian a
+      JOIN aset b ON a.id_aset = b.id
+      JOIN pembelian_aset c ON a.id_pembelian = c.id_pembelian
+      WHERE id_detail_aset = '$id'";
+      $detail_peny = $this->db->query($rowPny)->row();
+      $data['detail_peny'] = $detail_peny;
+      // print_r($detail_peny);exit;
+
+      $bulan = date('F Y');
+      // ambil nilai 
+      $hp = $detail_peny->subtotal;
+      $nilai_sisa = $detail_peny->nilai_sisa;
+      
+      // jumlah aset 
+      // $jumlah = $detail_peny->jumlah;
+
+      // hp / jumlah
+      $harga_persatuan = $hp;
+
+      $umur_aset = $detail_peny->umur_aset;
+
+      $nilai_penyusutan = ($hp - $nilai_sisa) / $umur_aset ;
+      // print_r($nilai_penyusutan);exit;
+
+      $data['nilai_penyusutan'] = $nilai_penyusutan;
+
+      $this->db->where("id_detail", $id);
+
+      $nilai_penyusutan_fix = $this->db->get("penyusutan")->row()->total_penyusutan ?? 0 ;
+      // print_r($nilai_penyusutan_fix);exit;
+
+      $data['nilai_penyusutan_fix'] = $nilai_penyusutan_fix;
+
+      // ambil nilai akumulasi terakhir + nilai penyusutan
+      $this->db->where("id_detail", $id);
+      $this->db->order_by("akumulasi_peny", "DESC");
+      $akumulasi_fix = $this->db->get("penyusutan")->row()->akumulasi_peny ?? 0 ;
+
+      $data['akumulasi_fix'] = $akumulasi_fix + $nilai_penyusutan_fix;
+      // print_r($data['akumulasi_fix']);exit;
+
+      $data['month_now'] = $bulan;
+
+      $query = "SELECT * 
+      FROM log_penyusutan 
+      WHERE id_detail = '$id' 
+      ORDER BY id_penyusutan DESC
+      ";
+      $log_penyusutan_kosong = $this->db->query($query)->row();
+      $data['log_penyusutan_kosong'] = $log_penyusutan_kosong;
+
+      $_log_rev = "SELECT * 
+      FROM revaluasi 
+      WHERE id_detail = '$id'
+      ORDER BY id_revaluasi DESC
+      ";
+      $log_rev = $this->db->query($_log_rev)->row();
+      // print_r($log_rev);exit;
+      $data['log_rev'] = $log_rev;
+
+      $_nilai_akhir = "SELECT nilai_akhir
+      FROM log_penyusutan 
+      WHERE id_detail = '$id' 
+      ORDER BY id_penyusutan DESC
+      ";
+      $nilai_akhir = $this->db->query($_nilai_akhir)->row()->nilai_akhir;
+      $data['nilai_akhir'] = $nilai_akhir;
+
+      $_rev = "SELECT *
+      FROM perbaikan
+      WHERE id_detail_aset = '$id'";
+      $nilai_rev = $this->db->query($_rev)->row()->nilai_revaluasi ?? 0;
+      $nilai_perbaikan = $this->db->query($_rev)->row()->nilai_perbaikan ?? 0;
+      $nilai_buku_perbaikan = $nilai_perbaikan - $nilai_rev;
+      // print_r($nilai_rev);exit;
+      $data['nilai_rev'] = $nilai_rev;
+      $data['nilai_buku_perbaikan'] = $nilai_buku_perbaikan;
+      $this->template->load('template', 'revaluasi/form_detail_rev', $data);
    }
 
    public function perbaikan()
@@ -3843,7 +3977,10 @@ group by no_bbp";
       
       $getaset = "SELECT a.*, aset
       FROM detail_pembelian a
-      INNER JOIN aset b ON a.id_aset = b.id";
+      INNER JOIN aset b ON a.id_aset = b.id
+      WHERE cek_bulan_perb IS NULL
+      AND cek_bulan_peny != LEFT(SYSDATE(), 7)
+      ";
       $aset = $this->db->query($getaset)->result();
 
       $id_perbaikan = $kodetampil;
@@ -3856,6 +3993,13 @@ group by no_bbp";
       $this->template->load('template', 'perbaikan/form', $data);
    }
 
+   public function list_aset()
+   {
+      $id_detail = $this->input->post('id_detail');
+      $data = $this->model->list_aset($id_detail)->row();
+      echo json_encode($data);
+   }
+
    public function simpan_perbaikan()
    {
       $np = str_replace('.', '', $this->input->post('nilai_perbaikan'));
@@ -3864,6 +4008,9 @@ group by no_bbp";
       $date = $this->input->post('date');
       $aset = $this->input->post('aset');
       $keterangan = $this->input->post('keterangan');
+      $ue = $this->input->post('ue');
+
+      $revaluasi = $nilai_perbaikan / $ue;
 
       $data = [
          'id_perbaikan' => $kode,
@@ -3871,9 +4018,17 @@ group by no_bbp";
          'tgl_perbaikan' => $date,
          'ket_perbaikan' => $keterangan,
          'nilai_perbaikan' => $nilai_perbaikan,
+         'nilai_revaluasi' => number($revaluasi)
       ];
       // print_r($data);exit;
       $this->db->insert('perbaikan', $data);
+
+      $data_update = [
+         'cek_bulan_perb' => date('Y-m')
+      ];
+      $this->db->where('id_detail_aset', $aset);
+      $this->db->update('detail_pembelian', $data_update);
+      // update cek bulan perbaikan di tb_pembelian_aset
       redirect('c_transaksi/perbaikan');
    }
 
@@ -3950,8 +4105,6 @@ group by no_bbp";
 
     public function form_detail_penyusutan()
     {
-      # code...
-      # code...
       $query1 = "SELECT  MAX(RIGHT(id_penyusutan,3)) as kode FROM penyusutan";
       $abc = $this->db->query($query1);
       $no_trans = "";
@@ -3975,12 +4128,19 @@ group by no_bbp";
       $data['id'] = $id;
       // print_r($id);exit;
 
-      $this->db->select("detail_pembelian.id, aset, sisa_umur, umur_aset, subtotal, sisa_umur_aset, nilai_sisa, id_detail_aset");
-      $this->db->from("detail_pembelian");
-      $this->db->join("aset", "aset.id = detail_pembelian.id_aset");
-      $this->db->where("detail_pembelian.id_detail_aset", $id);
+      // $this->db->select("detail_pembelian.id, aset, sisa_umur, umur_aset, subtotal, sisa_umur_aset, nilai_sisa, id_detail_aset, tgl_input");
+      // $this->db->from("detail_pembelian");
+      // $this->db->join("aset", "aset.id = detail_pembelian.id_aset");
+      // $this->db->where("detail_pembelian.id_detail_aset", $id);
+      // $detail_peny = $this->db->get()->row();
 
-      $detail_peny = $this->db->get()->row();
+      $rowPny = "SELECT a.id, aset, sisa_umur, umur_aset, subtotal, sisa_umur_aset, nilai_sisa, id_detail_aset, tgl_input
+      FROM detail_pembelian a
+      JOIN aset b ON a.id_aset = b.id
+      JOIN pembelian_aset c ON a.id_pembelian = c.id_pembelian
+      WHERE id_detail_aset = '$id'";
+      $detail_peny = $this->db->query($rowPny)->row();
+
       $data['detail_peny'] = $detail_peny;
       // print_r($detail_peny);exit;
 
@@ -4030,9 +4190,8 @@ group by no_bbp";
       $this->template->load('template', 'penyusutan/form_detail_pny', $data);
     }
 
-    public function tambah_peny()
-    {
-      # code...
+   public function tambah_peny()
+   {
       $id = $this->input->post("id");
       $id_penyusutan = $this->input->post("id_penyusutan");
       $tgl_input = $this->input->post("tgl_input");
@@ -4052,20 +4211,20 @@ group by no_bbp";
 
 
       $data_penyusutan = array ( 
-        "id_penyusutan" => $id_penyusutan,
-        "tgl_input" => $tgl_input,
-        "bulan_penyusutan" => $bulan_penyusutan,
-        "total_penyusutan" => $tp_fix,
-        "id_detail" => $id,
-        "akumulasi_peny" => $akumulasi_peny_fix,
+         "id_penyusutan" => $id_penyusutan,
+         "tgl_input" => $tgl_input,
+         "bulan_penyusutan" => $bulan_penyusutan,
+         "total_penyusutan" => $tp_fix,
+         "id_detail" => $id,
+         "akumulasi_peny" => $akumulasi_peny_fix,
       );
       // print_r($data_penyusutan);exit;
       $this->db->insert("penyusutan", $data_penyusutan);
 
       $data_log = array ( 
-        "id_penyusutan" => $id_penyusutan,
-        "id_detail" => $id,
-        "nilai_akhir" => $na_fix
+         "id_penyusutan" => $id_penyusutan,
+         "id_detail" => $id,
+         "nilai_akhir" => $na_fix
       );
       $this->db->insert("log_penyusutan", $data_log);
       // print_r($data_log);exit;
@@ -4080,7 +4239,85 @@ group by no_bbp";
       $this->m_keuangan->GenerateJurnal('1122',$id,'d',$tp_fix);
       $this->m_keuangan->GenerateJurnal('1120',$id,'k',$tp_fix);
       redirect('c_transaksi/penyusutan');
-    }
+   }
+
+   public function tambah_rev()
+   {
+      $id = $this->input->post("id");
+      $id_penyusutan = $this->input->post("id_penyusutan");
+      $tgl_input = $this->input->post("tgl_input");
+      $bulan_penyusutan = $this->input->post("bln_peny");
+      // convert
+      $total_penyusutan = str_replace("Rp.", "", $this->input->post("nilai_penyusutan"));
+      $tp_fix = str_replace(".", "", $total_penyusutan);
+
+      // nilai akumulasi penyusutan
+      $akumulasi_peny = str_replace("Rp.", "", $this->input->post("akumulasi_peny"));
+      $akumulasi_peny_fix = str_replace(".", "", $akumulasi_peny);
+
+      // nilai akhir
+      $nilai_akhir = str_replace('Rp.', '', $this->input->post("nilai_akhir"));
+      // convert nilai akhir
+      $na_fix = str_replace("." , "", $nilai_akhir);
+
+      $id_rev = $this->input->post('id_revaluasi');
+      $_tarif_rev = str_replace("Rp.", "", $this->input->post('tarif_rev'));
+      $tarif_rev = str_replace(".", "", $_tarif_rev);
+
+      $_nilai_buku_perbaikan = str_replace("Rp.", "", $this->input->post('nilai_buku_perbaikan'));
+      $nilai_buku_perbaikan = str_replace(".", "", $_nilai_buku_perbaikan);
+
+      $_nilai_buku_baru = str_replace("Rp.", "", $this->input->post('nilai_buku_baru'));
+      $nilai_buku_baru = str_replace(".", "", $_nilai_buku_baru);
+
+
+      $data_penyusutan = array ( 
+         "id_penyusutan" => $id_penyusutan,
+         "tgl_input" => $tgl_input,
+         "bulan_penyusutan" => $bulan_penyusutan,
+         "total_penyusutan" => $tp_fix,
+         "id_detail" => $id,
+         "akumulasi_peny" => $akumulasi_peny_fix,
+      );
+      // print_r($data_penyusutan);exit;
+      $this->db->insert("penyusutan", $data_penyusutan);
+
+      $data_log = array ( 
+         "id_penyusutan" => $id_penyusutan,
+         "id_detail" => $id,
+         "nilai_akhir" => $na_fix
+      );
+      $this->db->insert("log_penyusutan", $data_log);
+      // print_r($data_log);exit;
+
+      $data_rev = [
+         'id_revaluasi' => $id_rev,
+         'id_detail' => $id,
+         'bulan_revaluasi' => date('F Y'),
+         'tarif_revaluasi' => $tarif_rev,
+         'nilai_buku_perbaikan' => $nilai_buku_perbaikan,
+         'nilai_buku_baru' => $nilai_buku_baru,
+      ];
+      // print_r($data_log);exit;
+      $this->db->insert('revaluasi', $data_rev);
+
+      $update_data = [
+         'is_rev' => 1
+      ];
+      $this->db->where('id_detail_aset', $id);
+      $this->db->update('detail_pembelian', $update_data);
+
+      // set pengurangan umur per bulan
+      $this->db->set("sisa_umur", "(sisa_umur) - 1", FALSE);
+      $this->db->set("cek_bulan_peny", date("Y-m"));
+      $this->db->where("id_detail_aset", $id);
+      $this->db->update("detail_pembelian");
+
+      // // jurnal
+      $this->m_keuangan->GenerateJurnal('1122',$id,'d',$tp_fix);
+      $this->m_keuangan->GenerateJurnal('1120',$id,'k',$tp_fix);
+      redirect('c_transaksi/revaluasi');
+   }
 
     public function kartu_simpanan_susu()
     {

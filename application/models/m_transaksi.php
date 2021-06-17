@@ -93,10 +93,31 @@ class m_transaksi extends CI_Model {
 		$this->db->join("aset", "aset.id = detail_pembelian.id_aset");
 		// $this->db->join("penyusutan", "aset.id = penyusutan.id_aset");
 		$this->db->where("sisa_umur !=", "0");
-		$this->db->where("cek_bulan_peny !=", date("Y-m") );
+		$this->db->where("is_rev =", 1);
+		$this->db->where("cek_bulan_peny !=", date("Y-m"));
 
 		$sql = $this->db->get("detail_pembelian");
 		return $sql->result();
+	}
+
+	public function detail_rev() {
+		$sql = "SELECT a.*, b.id as kd_aset, aset, umur_aset, sisa_umur
+		from detail_pembelian a
+		join aset b on a.id_aset = b.id 
+		where sisa_umur != 0 
+		and cek_bulan_perb is not null
+		";
+		return $this->db->query($sql)->result();
+	}
+
+	public function list_aset($id)
+	{
+		$sql = "SELECT a.*, aset
+		FROM detail_pembelian a
+		INNER JOIN aset b ON a.id_aset = b.id
+		WHERE cek_bulan_perb IS NULL
+		AND id_detail_aset = '$id' ";
+		return $this->db->query($sql);
 	}
 
 	public function anggota_pinjaman_dropdown() {
@@ -254,7 +275,7 @@ class m_transaksi extends CI_Model {
 
 	public function getPny()
 	{
-		$sql = "SELECT a.id_penyusutan, a.bulan_penyusutan, d.aset, c.id_detail_aset
+		$sql = "SELECT a.id_penyusutan, a.bulan_penyusutan, d.aset, c.id_detail_aset, total_penyusutan
 		FROM penyusutan a
 		INNER JOIN log_penyusutan b ON a.id_penyusutan = b.id_penyusutan
 		INNER JOIN detail_pembelian c ON a.id_detail = c.id_detail_aset

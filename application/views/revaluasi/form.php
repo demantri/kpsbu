@@ -1,17 +1,17 @@
 <!-- <html> -->
-	<head>
+<head>
 		<title>Master Data Aset</title>
 	</head>
 	
 	<div class="x_panel">
  		<div class="x_title">
-    		<h3 class="panel-title"><b>Form Penyusutan Aset</b></h3>
+    		<h3 class="panel-title"><b>Form Revaluasi Aset</b></h3>
   		</div>
   	 	
   	 	<div class="x_content">
   	 	
 			<body>
-				<form method = "POST" action = "<?php echo site_url('c_transaksi/disusutkan');?>">
+				<form method = "POST" action = "<?php echo site_url('c_transaksi/direvaluasikan');?>">
 					
 					<div class="form-group row">
 						<label class="col-sm-1">Pilih Aset</label>	
@@ -24,10 +24,10 @@
 					  			<?php } ?>
 					  		</select>
 						</div>
-						<button type="submit" class="btn btn-primary">Susutkan</button>
+						<button type="submit" class="btn btn-primary">Revaluasi</button>
 					</div>
 					<hr>
-					<a href="<?= base_url('c_transaksi/penyusutan')?>" class="btn btn-default">Kembali</a>
+					<a href="<?= base_url('c_transaksi/revaluasi')?>" class="btn btn-default">Kembali</a>
 				</form>
 			</body>
 		</div>

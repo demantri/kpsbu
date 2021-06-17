@@ -14,36 +14,42 @@
 					<table class="table table-striped table-bordered table-hover jambo_table">
 						<thead>
 							<tr class="headings">
-								<th style="width: 5%;">No</th>
 								<th>ID Transaksi</th>
 								<th>Bulan Penyusutan</th>
 								<th>Jenis Transaksi</th>
 								<th>Nilai Penyusutan</th>
 								<th>Nilai Akumulasi Penyusutan</th>
-								<th>Nilai Revaluasi</th>
+								<!-- <th>Nilai Revaluasi</th> -->
 								<th>Nilai Buku</th>
+								<th>Tarif Peny. Revaluasi</th>
+								<th>Nilai Buku Perbaikan</th>
+								<th>Nilai Buku Baru</th>
 							</tr>
 						</thead>
 						<tbody>
                             <tr>
-                                <td colspan="7"></td>
+                                <td colspan="5"></td>
                                 <td class="text-right"><?= penyusutan($nilai_buku) ?></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
                             </tr>
 							<?php
-                            $no = 1;
                             foreach ($list as $key => $value) { ?>
                             <?php 
                             $jenis = substr($value->id_penyusutan, 0, 3) == 'PNY' ? 'Penyusutan' : 'Revaluasi';
                             $detail_id = $value->id_penyusutan == $id ? '<b> '.$value->id_penyusutan.' </b>' : ' '.$value->id_penyusutan.' ';
                             ?>
                             <tr>
-                                <td><?= $no++ ?></td>
                                 <td><?= $detail_id ?></td>
                                 <td><?= $value->bulan_penyusutan ?></td>
                                 <td><?= $jenis ?></td>
                                 <td class="text-right"><?= penyusutan($value->total_penyusutan) ?></td>
                                 <td class="text-right"><?= penyusutan($value->akumulasi_peny) ?></td>
-                                <td class="text-right"><?= penyusutan($value->akumulasi_peny) ?></td>
+                                <!-- <td class="text-right"><?= penyusutan($value->akumulasi_peny) ?></td> -->
+                                <td class="text-right"><?= penyusutan($value->nilai_akhir) ?></td>
+                                <td class="text-right"><?= penyusutan($value->nilai_akhir) ?></td>
+                                <td class="text-right"><?= penyusutan($value->nilai_akhir) ?></td>
                                 <td class="text-right"><?= penyusutan($value->nilai_akhir) ?></td>
                             </tr>
                             <?php } ?>

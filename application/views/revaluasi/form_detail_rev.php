@@ -5,23 +5,24 @@
 	
 	<div class="x_panel">
  		<div class="x_title">
-    		<h3 class="panel-title"><b>Penyusutan Aset</b></h3>
+    		<h3 class="panel-title"><b>Revaluasi Aset</b></h3>
   		</div>
   	 	
   	 	<div class="x_content">
   	 	
 			<body>
-				<form method = "POST" action = "<?php echo site_url('c_transaksi/tambah_peny');?>">
+				<form method = "POST" action = "<?php echo site_url('c_transaksi/tambah_rev');?>">
 
 					<?php $tgl_input = date("Y-m-d"); ?>
 					<input type="hidden" name="tgl_input" value="<?= $tgl_input?>" >
 
 					<input type="hidden" name="id" value="<?= $detail_peny->id_detail_aset ?>">
+					<input type="hidden" name="id_penyusutan" value="<?= $id_pny ?>">
 					
 					<div class="form-group row">
-						<label class="col-sm-1">ID Penyusutan</label>	
+						<label class="col-sm-1">ID Revaluasi</label>	
 						<div class="col-sm-3">
-					  		<input type="text" class="form-control" name="id_penyusutan" value="<?= $id_penyusutan?>" readonly>
+					  		<input type="text" class="form-control" name="id_revaluasi" value="<?= $id_revaluasi?>" readonly>
 						</div>
 
 						<label class="col-sm-1">Bulan penyusutan</label>	
@@ -75,7 +76,6 @@
 						<div class="col-sm-3">
 
 					  		<?php if (empty($log_penyusutan_kosong)) { ?>
-					  		<!-- <?php $rumus = $detail_peny->subtotal/$detail_peny->jumlah ?> -->
 					  		<input type="text" class="form-control" name="harga_perolehan" value="<?= format_rp($detail_peny->subtotal) ?> " readonly>
 					  		<?php } else { ?>
 					  		<input type="text" class="form-control" name="harga_perolehan" value="<?= format_rp($log_penyusutan_kosong->nilai_akhir)?>" readonly>
@@ -105,7 +105,7 @@
 
 					  	<!-- <div> -->
 					  	<!-- nilai bukunya disini -->
-				  		<label class="col-sm-1">Akumulasi</label>
+				  		<label class="col-sm-1">Akumulasi Penyusutan</label>
 				  		<div class="col-sm-3">
 					  		<?php
 					  		if (empty($log_penyusutan_kosong)) { ?>
@@ -115,7 +115,7 @@
 					  		<?php } ?>
 				  		</div>
 
-				  		<label class="col-sm-1">Nilai buku</label>
+				  		<label class="col-sm-1">Nilai Buku</label>
 				  		<div class="col-sm-2">
 					  		<?php
 					  		if (empty($log_penyusutan_kosong)) { ?>
@@ -124,14 +124,38 @@
 					  			<input type="text" name="nilai_akhir" class="form-control" value="<?= penyusutan($log_penyusutan_kosong->nilai_akhir - $nilai_penyusutan)?>" readonly>
 					  		<?php } ?>
 				  		</div>
-					<!-- </div> -->
-
-						<!-- <div class="col-sm-1">
-							<input style="width: 100%" type="submit" name="submit" value="Simpan" class="btn btn-success" >
-						</div> -->
 					</div>
 					<hr>
-					<a href="<?= base_url('c_transaksi/form_penyusutan')?>" class="btn btn-default">Kembali</a>
+                    <div class="form-group row">
+						<label class="col-sm-1">Tarif Peny. Revaluasi</label>	
+						<div class="col-sm-3">
+							<input type="text" name="tarif_rev" class="form-control" value="<?= penyusutan($nilai_rev)?>" readonly>
+					  	</div>
+
+					  	<!-- <div> -->
+					  	<!-- nilai bukunya disini -->
+				  		<label class="col-sm-1">Nilai Buku Perbaikan</label>
+				  		<div class="col-sm-3">
+                            <!-- <input type="text" name="nilai_buku_perbaikan" class="form-control" value="<?= penyusutan($nilai_buku_perbaikan) ?>" readonly> -->
+							<?php if (empty($log_rev)) { ?>
+                            	<input type="text" name="nilai_buku_perbaikan" class="form-control" value="<?= penyusutan($nilai_buku_perbaikan)?>" readonly>
+							<?php } else { ?>
+                            	<input type="text" name="nilai_buku_perbaikan" class="form-control" value="<?= penyusutan($log_rev->nilai_buku_perbaikan - $log_rev->tarif_revaluasi)?>" readonly>
+							<?php } ?>
+				  		</div>
+
+				  		<label class="col-sm-1">Nilai Buku Baru</label>
+				  		<div class="col-sm-2">
+						  	<?php if (empty($log_rev)) { ?>
+                            	<input type="text" name="nilai_buku_baru" class="form-control" value="<?= penyusutan(($log_penyusutan_kosong->nilai_akhir - $nilai_penyusutan) + $nilai_buku_perbaikan)?>" readonly>
+							<?php } else { ?>
+                            	<input type="text" name="nilai_buku_baru" class="form-control" value="<?= penyusutan( ($log_rev->nilai_buku_perbaikan - $log_rev->tarif_revaluasi) + ($log_penyusutan_kosong->nilai_akhir - $nilai_penyusutan))?>" readonly>
+							<?php } ?>
+                            <!-- <input type="text" name="nilai_buku_baru" class="form-control" value="<?= penyusutan(($log_penyusutan_kosong->nilai_akhir - $nilai_penyusutan) + $nilai_buku_perbaikan)?>" readonly> -->
+				  		</div>
+					</div>
+                    <hr>
+					<a href="<?= base_url('c_transaksi/form_revaluasi')?>" class="btn btn-default">Kembali</a>
 					<input type="submit" name="submit" value="Simpan" class="btn btn-primary" >
 				</form>
 			</body>

@@ -8,33 +8,32 @@
             <div class="x_content">
 
                 <div class="" role="tabpanel" data-example-id="togglable-tabs">
-
-                    <!-- <ul id="myTab" class="nav nav-tabs bar_tabs" role="tablist">
-                        <li role="presentation" class="active">
-                            <a href="#tab_content1" id="home-tab" role="tab" data-toggle="tab" aria-expanded="true">Daftar Penyusutan</a>
-                        </li>
-                        
-                        <li role="presentation" class="">
-                            <a href="#tab_content2" role="tab" id="profile-tab" data-toggle="tab" aria-expanded="false">Kartu Penyusutan</a>
-                        </li>
-                    </ul> -->
                         
                     <div id="myTabContent" class="tab-content">
                         <div role="tabpanel" class="tab-pane fade active in" id="tab_content1" aria-labelledby="home-tab">
-                            <a href = "<?php echo site_url()."c_transaksi/form_penyusutan"?>" class="btn btn-info btn-sm" role="button"><span class="glyphicon glyphicon-plus"></span> Tambah Data</a>
+                            <a href = "<?php echo site_url()."c_transaksi/form_revaluasi"?>" class="btn btn-info btn-sm" role="button"><span class="glyphicon glyphicon-plus"></span> Tambah Data</a>
                             <table id="datatable" class="table table-striped table-bordered table-hover jambo_table">
                                 <thead>
                                     <tr class="headings">
                                         <th style="width: 2px;">No</th>
                                         <th>ID Revaluasi</th>
-                                        <th>Bulan penyusutan</th>
-                                        <th>Nilai penyusutan</th>
-                                        <th>Nilai akumulasi penyusutan</th>
-                                        <th>Nilai buku</th>
+                                        <th>Bulan Revaluasi</th>
+                                        <th>Nilai Buku Perbaikan</th>
+                                        <th>Nilai Buku Baru</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    
+                                <?php
+                                $no = 1;
+                                foreach ($list as $key => $value) { ?>
+                                    <tr>
+                                        <td><?= $no++ ?></td>
+                                        <td><?= $value->id_revaluasi?></td>
+                                        <td><?= $value->bulan_revaluasi?></td>
+                                        <td><?= penyusutan($value->nilai_buku_perbaikan)?></td>
+                                        <td><?= penyusutan($value->nilai_buku_baru)?></td>
+                                    </tr>
+                                <?php } ?>
                                 </tbody>
                             </table>
                         </div>

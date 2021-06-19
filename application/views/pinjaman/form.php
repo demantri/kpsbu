@@ -38,9 +38,8 @@
 				<div id="info"></div>
 				
 				<hr>
-				<button type="submit" id="btn-simpan" class="btn btn-default btn-primary">Simpan</button>
-
 				<a href = "<?php echo site_url()."/c_transaksi/pinjaman"?>" type="button" class="btn btn-default">Kembali</a>
+				<button type="submit" id="btn-simpan" class="btn btn-default btn-primary">Simpan</button>
 			</form>
 		</body>
 	</div>
@@ -63,35 +62,17 @@
             dataType : 'json',
             success: function(data){
             	$("#info").hide();
-            	// if (data == null) {
-            	// 	// kalo semisal belum memenuhi target. pembelian total selama 8bln
-            	// 	$("#info").show();
-            	// 	var info = 'Anda masih belum bisa melakukan pinjaman. <strong>Masih kurang target selama 8 bulan terakhir</strong>'
-            	// 	$("#info").html(info);
-
-            	// 	$("#biaya").prop("readonly", true);
-            	// 	$("#btn-simpan").prop("disabled", true);
-            	// } else {
-            	// 	var pinjaman = data.pinjaman;
-            	// 	if (pinjaman != 0) {
-            	// 		$("#info").show();
-	            // 		var info = 'Anda belum melakukan pelunasan. <strong>Silahkan melakukan pelunasan!</strong>'
-	            // 		$("#info").html(info);
-
-            	// 		$("#biaya").prop("readonly", true);
-	            // 		$("#btn-simpan").prop("disabled", true);
-            	// 	} else {
-				// 		$("#biaya").prop("readonly", false);
-	            // 		$("#btn-simpan").prop("disabled", false);
-            	// 	}
-            	// }
-
 				// data real 
 				// var total = data.total
 				var pinjaman = data.pinjaman
 
 				// hardcode
-				var total = 16
+				// var total = 16
+				var total = data.total
+
+				var total_bayar = data.total_bayar
+				var min_pinjam = (3 * 0.75 * total_bayar)
+				console.log(min_pinjam)
 				// var pinjaman = 0
 				
 				$("input[name='biaya']").keyup(function() {
@@ -99,14 +80,13 @@
 				})
 
 				$("input[name='biaya']").focusout(function(){
-					if($(this).val() >= 5000001) {
+					if($(this).val() > min_pinjam) {
 						$("#info").show();
-						var info = 'Pinjaman tidak bisa lebih dari <strong>5.000.000</strong>'
+						var info = 'Pinjaman tidak bisa lebih dari <strong> ' + min_pinjam + '</strong>'
 						$("#info").html(info);
-
 						$("#btn-simpan").prop("disabled", true)
 					} else {
-						$("#info").hide();
+						$("#info").hide(info);
 						$("#btn-simpan").prop("disabled", false)
 					}
 				});

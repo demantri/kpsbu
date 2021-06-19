@@ -128,7 +128,7 @@ class c_transaksi extends CI_controller{
    public function form_pinjaman()
    {
      # code...
-    $query1   = "SELECT  MAX(RIGHT(kode_pinjaman,3)) as kode FROM pinjaman";
+    $query1   = "SELECT  MAX(RIGHT(kode_pinjaman,3)) as kode FROM log_pinjaman";
     $abc      = $this->db->query($query1);
     $no_trans = "";
     if ($abc->num_rows() > 0) {

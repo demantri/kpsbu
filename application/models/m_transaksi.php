@@ -172,21 +172,40 @@ class m_transaksi extends CI_Model {
 
     public function getSyarat($id_peternak)
     {
-    	# code...
-    	$sql = "
-    	SELECT total, log_pembayaran_susu.id_anggota, pinjaman
-		-- , nominal, status
-		FROM peternak
-		JOIN 
+    	// $sql = "SELECT total, log_pembayaran_susu.id_anggota, pinjaman
+		// -- , nominal, status
+		// FROM peternak
+		// JOIN 
+		// (
+		// 	SELECT id_anggota, count(id_pembayaran) as total
+		// 	FROM log_pembayaran_susu
+		// 	WHERE id_anggota = '$id_peternak'
+		// 	GROUP BY id_anggota
+		// ) log_pembayaran_susu ON peternak.no_peternak = log_pembayaran_susu.id_anggota
+		// -- JOIN log_pinjaman ON log_pinjaman.id_anggota = peternak.no_peternak
+		// WHERE log_pembayaran_susu.id_anggota = '$id_peternak'
+    	// ";
+
+		// nyoba ganti sql nya 
+		$sql = "SELECT t.id_anggota, 
+		t.pinjaman, 
+		t.total_bayar, 
+		t.tgl_transaksi, 
 		(
-			SELECT id_anggota, count(id_pembayaran) as total
+			SELECT COUNT(id_pembayaran) AS total
 			FROM log_pembayaran_susu
 			WHERE id_anggota = '$id_peternak'
-			GROUP BY id_anggota
-		) log_pembayaran_susu ON peternak.no_peternak = log_pembayaran_susu.id_anggota
-		-- JOIN log_pinjaman ON log_pinjaman.id_anggota = peternak.no_peternak
-		WHERE log_pembayaran_susu.id_anggota = '$id_peternak'
-    	";
+		) AS total
+		FROM 
+			(
+			SELECT id_anggota, id_pembayaran, pinjaman, total_bayar, tgl_transaksi
+			FROM peternak a
+			INNER JOIN log_pembayaran_susu b ON a.no_peternak = b.id_anggota
+			INNER JOIN pembayaran_susu c ON c.kode_pembayaran = b.id_pembayaran
+			WHERE id_anggota = '$id_peternak' 
+		) t
+		ORDER BY tgl_transaksi DESC
+		LIMIT 1";
     	return $this->db->query($sql);
     }
 

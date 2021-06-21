@@ -4592,6 +4592,17 @@ group by no_bbp";
       // print_r($pembayaran_susu);exit;
       $this->db->insert("pembayaran_susu", $pembayaran_susu);
 
+      // update pinjaman ke tb peternak
+      $sisa_pinjaman = $this->input->post('sisa_pinjaman');
+      // $last_pinjaman = $this->db->get('peternak');
+      if ($sisa_pinjaman != 0) {
+         $update_sisa_pinjaman = [
+            'sisa_pinjaman' => $sisa_pinjaman
+         ];
+         $this->db->where('id_anggota', $id_anggota);
+         $this->db->update('log_pinjaman', $update_sisa_pinjaman);
+      }
+
       // kalo gak ada utang nih jurnalnya
       if ($pinjaman == 0) {
         // jurnal
@@ -4726,7 +4737,6 @@ group by no_bbp";
         );
         $this->db->insert("jurnal", $pinjaman);
       }
-
     }
     redirect("c_transaksi/pembayaran_susu");
   }

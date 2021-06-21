@@ -60,6 +60,8 @@
 							<input type="text" name="pinjaman" class="form-control" id="pinjaman" readonly>
 						</div>
 
+						<input type="text" id="sisa_pinjaman" name="sisa_pinjaman">
+
 						<div id="byr_tunai">
 							<label class="col-sm-1">Bayar Tunai</label>	
 							<div class="col-sm-3">
@@ -74,8 +76,6 @@
 					  		<input type="text" name="total_trans_susu" id="total_trans_susu" class="form-control" readonly="">
 						</div>
 					</div>
-
-					
 
 					<div id="notif"></div>
 
@@ -125,6 +125,7 @@
 							$("#hasil_pembayaran").val(0);
 							$("#total_trans_susu").val(0);
 							$("#tot_sus").val(0);
+							$("#sisa_pinjaman").val(0)
 							$("#pinjaman").val(0);
 							$("#piutang").val(0);
 
@@ -145,6 +146,10 @@
 
 	                        var pinjaman = data.pinjaman
 	                        var pinjaman_1 = data.pinjaman/5
+
+							var sisa_pinjaman = data.sisa_pinjaman
+
+							// var cek_pinjaman = 
 
 	                        if (pinjaman_1 <  rumus) {
 	                        	var kurang_bayar = rumus - pinjaman_1
@@ -186,6 +191,7 @@
 								$("#hasil_pembayaran").val(0);
 								$("#total_trans_susu").val(0);
 								$("#tot_sus").val(0);
+								$("#sisa_pinjaman").val(0)
 								$("#pinjaman").val(0);
 								$("#piutang").val(0);
 
@@ -202,9 +208,10 @@
 								$("#hasil_pembayaran").val(simpanan_wajib);
 								$("#total_trans_susu").val(rumus);
 								$("#tot_sus").val(total_trans_susu);
-
-								if (pinjaman != 0) {
+								
+								if (sisa_pinjaman != 0) {
 									$("#kalo_ngutang").show();
+									$("#sisa_pinjaman").val(sisa_pinjaman - pinjaman_1)
 									$("#pinjaman").val(pinjaman_1);
 									
 									console.log(rumus)
@@ -217,29 +224,10 @@
 									} else if (rumus < pinjaman_1) {
 										// $("#btn-simpan").prop("disabled", true)
 										// $("#total_trans_susu").val(rumus);
-
 										// alert('kurang')
 			                        	$("#byr_tunai").show();
 										$("#piutang").val(kurang_bayar);
-
-
 									}
-									// klw pembayaran lebih besar dari hutang
-									// if (rumus > pinjaman_1) {
-									// $("#pinjaman").val(pinjaman_1);
-									// 	$("#byr_tunai").show();
-									// 	var hasil = rumus - pinjaman_1
-									// 	$("#piutang").val(0)
-									// // klw hutang lebih besar dari pembayaran 
-
-			                        // } else if (pinjaman_1 > rumus) {
-			                        // 	// var kurang_bayar = pinjaman_1 - rumus
-									// 	$("#pinjaman").val(pinjaman_1);
-
-			                        // 	$("#byr_tunai").show();
-									// 	$("#piutang").val(kurang_bayar);
-
-			                        // }
 								} else {
 									$("#kalo_ngutang").hide();
 									$("#pinjaman").val(0);

@@ -168,12 +168,27 @@ class m_transaksi extends CI_Model {
 		// JOIN peternak ON (peternak.no_peternak = detail_pembelian_bb.no_peternak)
 		// WHERE tgl_trans BETWEEN (NOW() - INTERVAL 14 DAY) AND NOW() AND detail_pembelian_bb.no_peternak = '$id_peternak'
 		// GROUP BY tgl_trans";
-		$query = "SELECT SUM(jumlah) as total_jumlah, SUM(subtotal) as total_trans_susu, pinjaman, tgl_trans, tgl_trans + INTERVAL 14 DAY as nextPayment
+
+		// $query = "SELECT SUM(jumlah) as total_jumlah, SUM(subtotal) as total_trans_susu, pinjaman, tgl_trans, tgl_trans + INTERVAL 14 DAY as nextPayment
+		// FROM detail_pembelian_bb
+		// JOIN pembelian_bb ON (pembelian_bb.no_trans = detail_pembelian_bb.no_trans)
+		// JOIN peternak ON (peternak.no_peternak = detail_pembelian_bb.no_peternak)
+		// WHERE tgl_trans BETWEEN (LEFT(SYSDATE(),10) - INTERVAL 14 DAY) AND LEFT(SYSDATE(),10) 
+		// AND detail_pembelian_bb.no_peternak = '$id_peternak'";
+
+		$query = "SELECT SUM(jumlah) as total_jumlah, 
+		SUM(subtotal) as total_trans_susu, 
+		pinjaman, 
+		sisa_pinjaman,
+		tgl_trans, 
+		tgl_trans + INTERVAL 14 DAY as nextPayment
 		FROM detail_pembelian_bb
 		JOIN pembelian_bb ON (pembelian_bb.no_trans = detail_pembelian_bb.no_trans)
 		JOIN peternak ON (peternak.no_peternak = detail_pembelian_bb.no_peternak)
+		JOIN log_pinjaman ON log_pinjaman.id_anggota = detail_pembelian_bb.no_peternak
 		WHERE tgl_trans BETWEEN (LEFT(SYSDATE(),10) - INTERVAL 14 DAY) AND LEFT(SYSDATE(),10) 
-		AND detail_pembelian_bb.no_peternak = '$id_peternak'";
+		AND detail_pembelian_bb.no_peternak = '$id_peternak'
+		";
 		return $this->db->query($query);
     }
 
@@ -209,7 +224,8 @@ class m_transaksi extends CI_Model {
 
 		// nyoba ganti sql nya 
 		$sql = "SELECT t.id_anggota, 
-		t.pinjaman, 
+		t.pinjaman,
+		t.sisa_pinjaman,
 		t.total_bayar, 
 		t.tgl_transaksi, 
 		(
@@ -219,11 +235,12 @@ class m_transaksi extends CI_Model {
 		) AS total
 		FROM 
 			(
-			SELECT id_anggota, id_pembayaran, pinjaman, total_bayar, tgl_transaksi
+			SELECT d.id_anggota, id_pembayaran, pinjaman, sisa_pinjaman, total_bayar, tgl_transaksi
 			FROM peternak a
 			INNER JOIN log_pembayaran_susu b ON a.no_peternak = b.id_anggota
 			INNER JOIN pembayaran_susu c ON c.kode_pembayaran = b.id_pembayaran
-			WHERE id_anggota = '$id_peternak' 
+			INNER JOIN log_pinjaman d ON d.id_anggota = a.no_peternak
+			WHERE d.id_anggota = '$id_peternak' 
 		) t
 		ORDER BY tgl_transaksi DESC
 		LIMIT 1";

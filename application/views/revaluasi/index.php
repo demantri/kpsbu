@@ -18,8 +18,8 @@
                                         <th style="width: 2px;">No</th>
                                         <th>ID Revaluasi</th>
                                         <th>Bulan Revaluasi</th>
-                                        <th>Nilai Buku Perbaikan</th>
-                                        <th>Nilai Buku Baru</th>
+                                        <th>Tarif Revaluasi</th>
+                                        <th></th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -30,8 +30,10 @@
                                         <td><?= $no++ ?></td>
                                         <td><?= $value->id_revaluasi?></td>
                                         <td><?= $value->bulan_revaluasi?></td>
-                                        <td><?= penyusutan($value->nilai_buku_perbaikan)?></td>
-                                        <td><?= penyusutan($value->nilai_buku_baru)?></td>
+                                        <td><?= penyusutan($value->tarif_revaluasi)?></td>
+                                        <td class="text-center">
+                                            <a href="<?= base_url('c_transaksi/detail/'.$value->id_revaluasi)?>" class="btn btn-primary btn-sm">Detail Revaluasi</a>
+                                        </td>
                                     </tr>
                                 <?php } ?>
                                 </tbody>

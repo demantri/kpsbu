@@ -4047,46 +4047,115 @@ group by no_bbp";
 
    public function detail($id)
    {
-      $nilai_buku = "SELECT subtotal
-      FROM penyusutan a 
-      JOIN detail_pembelian b ON a.id_detail = b.id_detail_aset
-      WHERE id_penyusutan = '$id'";
-      $result = $this->db->query($nilai_buku)->row()->subtotal;
+      $cek_trans = $this->uri->segment(3);
 
-      $this->db->select("*");
-      $this->db->join("log_penyusutan", "log_penyusutan.id_penyusutan = penyusutan.id_penyusutan");
-      $penyusutan = $this->db->get("penyusutan")->result();
       
-      $_detail = "SELECT a.id_detail
-      from penyusutan a
-      WHERE a.id_penyusutan = '$id'
-      GROUP BY a.id_detail";
-      $id_detail = $this->db->query($_detail)->row()->id_detail;
-      
-      $_list = "SELECT a.*, nilai_akhir
-      from penyusutan a
-      JOIN log_penyusutan b ON a.id_penyusutan = b.id_penyusutan
-      WHERE a.id_detail = '$id_detail'";
-      $list = $this->db->query($_list)->result();
       // print_r($list);exit;
 
-      $_header = "SELECT a.id_penyusutan, a.bulan_penyusutan, d.aset, c.id_detail_aset
-		FROM penyusutan a
-		INNER JOIN log_penyusutan b ON a.id_penyusutan = b.id_penyusutan
-		INNER JOIN detail_pembelian c ON a.id_detail = c.id_detail_aset
-		INNER JOIN aset d ON c.id_aset = d.id
-      where a.id_penyusutan = '$id'
-      ";
-      $header = $this->db->query($_header)->row();
+      // $rev = "SELECT * 
+      // FROM revaluasi 
+      // WHERE id_detail = '$id_detail'
+      // ";
+      // $list_rev = $this->db->query($rev)->result();
 
-      $data = [
-         'id' => $id,
-         'nilai_buku' => $result, 
-         'list' => $list, 
-         'header' => $header
-      ];
+      
 
-      $this->template->load('template', 'penyusutan/detail', $data);
+      // $_header_rev = "SELECT a.*, d.aset, c.id_detail_aset
+      // FROM revaluasi a
+      // INNER JOIN detail_pembelian c ON a.id_detail = c.id_detail_aset
+      // INNER JOIN aset d ON c.id_aset = d.id
+      // where a.id_revaluasi = '$id'
+      // ";
+
+      // if (substr($cek_trans, 0, 3) == 'REV') {
+      //    # code...
+      //    $header = $this->db->query($_header_rev)->row();
+      // } else {
+      //    # code...
+      //    $header = $this->db->query($_header)->row();
+      // }
+
+      // $data = [
+      //    'id' => $id,
+      //    'nilai_buku' => $result, 
+      //    'list' => $list, 
+      //    'header' => $header, 
+      //    'list_rev' => $list_rev
+      // ];
+
+      // $cek_trans = $this->uri->segment(3);
+      // print_r($cek_trans);exit;
+      if (substr($cek_trans, 0, 3) == 'REV') {
+         $_detail = "SELECT a.id_detail
+         from revaluasi a
+         WHERE a.id_revaluasi = '$id'
+         GROUP BY a.id_detail";
+         $id_detail = $this->db->query($_detail)->row()->id_detail;
+
+         $rev = "SELECT * 
+         FROM revaluasi 
+         WHERE id_detail = '$id_detail'
+         ";
+         $list_rev = $this->db->query($rev)->result();
+         
+         $_header_rev = "SELECT a.*, d.aset, c.id_detail_aset
+         FROM revaluasi a
+         INNER JOIN detail_pembelian c ON a.id_detail = c.id_detail_aset
+         INNER JOIN aset d ON c.id_aset = d.id
+         where a.id_revaluasi = '$id'
+         ";
+         $header = $this->db->query($_header_rev)->row();
+
+         $data = [
+            'id' => $id,
+            'header' => $header, 
+            'list_rev' => $list_rev
+         ];
+         // echo 'Revaluasi';
+         $this->template->load('template', 'revaluasi/detail', $data);
+
+      } else {
+         $nilai_buku = "SELECT subtotal
+         FROM penyusutan a 
+         JOIN detail_pembelian b ON a.id_detail = b.id_detail_aset
+         WHERE id_penyusutan = '$id'";
+         $result = $this->db->query($nilai_buku)->row()->subtotal;
+
+         $this->db->select("*");
+         $this->db->join("log_penyusutan", "log_penyusutan.id_penyusutan = penyusutan.id_penyusutan");
+         $penyusutan = $this->db->get("penyusutan")->result();
+         
+         $_detail = "SELECT a.id_detail
+         from penyusutan a
+         WHERE a.id_penyusutan = '$id'
+         GROUP BY a.id_detail";
+         $id_detail = $this->db->query($_detail)->row()->id_detail;
+         
+         $_list = "SELECT a.*, nilai_akhir
+         from penyusutan a
+         JOIN log_penyusutan b ON a.id_penyusutan = b.id_penyusutan
+         WHERE a.id_detail = '$id_detail'";
+         $list = $this->db->query($_list)->result();
+
+         $_header = "SELECT a.id_penyusutan, a.bulan_penyusutan, d.aset, c.id_detail_aset
+         FROM penyusutan a
+         INNER JOIN log_penyusutan b ON a.id_penyusutan = b.id_penyusutan
+         INNER JOIN detail_pembelian c ON a.id_detail = c.id_detail_aset
+         INNER JOIN aset d ON c.id_aset = d.id
+         where a.id_penyusutan = '$id'
+         ";
+         $header = $this->db->query($_header)->row();
+
+         $data = [
+            'id' => $id,
+            'nilai_buku' => $result, 
+            'list' => $list, 
+            'header' => $header
+         ];
+         // echo 'bukan';
+         $this->template->load('template', 'penyusutan/detail', $data);
+
+      }
    }
 
     public function form_penyusutan()
@@ -4228,6 +4297,17 @@ group by no_bbp";
       );
       $this->db->insert("log_penyusutan", $data_log);
       // print_r($data_log);exit;
+
+      // insert ke tb trans_peny_rev
+      // $trans_peny_rev = [
+      //    'id_trans' => $id_penyusutan,
+      //    'total_peny' => $tp_fix,
+      //    'total_akum' => $akumulasi_peny_fix,
+      //    'nilai_peny' => $na_fix
+      // ];
+      // $this->db->insert("trans_peny_rev", $trans_peny_rev);
+
+
 
       // set pengurangan umur per bulan
       $this->db->set("sisa_umur", "(sisa_umur) - 1", FALSE);

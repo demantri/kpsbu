@@ -21,18 +21,12 @@
 								<th>Nilai Akumulasi Penyusutan</th>
 								<!-- <th>Nilai Revaluasi</th> -->
 								<th>Nilai Buku</th>
-								<th>Tarif Peny. Revaluasi</th>
-								<th>Nilai Buku Perbaikan</th>
-								<th>Nilai Buku Baru</th>
 							</tr>
 						</thead>
 						<tbody>
                             <tr>
                                 <td colspan="5"></td>
                                 <td class="text-right"><?= penyusutan($nilai_buku) ?></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
                             </tr>
 							<?php
                             foreach ($list as $key => $value) { ?>
@@ -47,9 +41,6 @@
                                 <td class="text-right"><?= penyusutan($value->total_penyusutan) ?></td>
                                 <td class="text-right"><?= penyusutan($value->akumulasi_peny) ?></td>
                                 <!-- <td class="text-right"><?= penyusutan($value->akumulasi_peny) ?></td> -->
-                                <td class="text-right"><?= penyusutan($value->nilai_akhir) ?></td>
-                                <td class="text-right"><?= penyusutan($value->nilai_akhir) ?></td>
-                                <td class="text-right"><?= penyusutan($value->nilai_akhir) ?></td>
                                 <td class="text-right"><?= penyusutan($value->nilai_akhir) ?></td>
                             </tr>
                             <?php } ?>

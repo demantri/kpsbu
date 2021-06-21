@@ -16,7 +16,7 @@
 								<th>Bulan Penyusutan</th>
 								<th>Nama Aset</th>
 								<th>Nilai Penyusutan</th>
-								<th style="width: 15%;" class="text-center">Aksi</th>
+								<th style="width: 17%;" class="text-center"></th>
 							</tr>
 						</thead>
 						<tbody>
@@ -31,7 +31,7 @@
 								<td class="text-right"><?= penyusutan($value->total_penyusutan) ?></td>
 								<td class="text-center">
 									<!-- <a href="#" class="btn btn-primary" data-target="#detail_modal_<?= $value->id_penyusutan ?>" data-toggle="modal">Detail</a> -->
-									<a href="<?= base_url('c_transaksi/detail/'.$value->id_penyusutan)?>" class="btn btn-primary">Detail</a>
+									<a href="<?= base_url('c_transaksi/detail/'.$value->id_penyusutan)?>" class="btn btn-primary btn-sm">Detail Penyusutan</a>
 								</td>
 							</tr>
 							<?php } ?>

@@ -38,7 +38,7 @@
                             <?php } ?>
 						</tbody> 
 					</table>
-                    <a href="<?= base_url('c_transaksi/penyusutan')?>" class="btn btn-default">Kembali</a>
+                    <a href="<?= base_url('c_transaksi/revaluasi')?>" class="btn btn-default">Kembali</a>
 				</div>
 			</div>
 		</div>

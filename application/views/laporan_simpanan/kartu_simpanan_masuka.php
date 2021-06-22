@@ -21,7 +21,7 @@
 		</div>
 		<hr>
 		<center>
-			<h3>Kartu Simpanan Masuka</h3>
+			<h3>Kartu Simpanan Masuka <br><?= $header ?></h3>
 		</center>
 	<hr>
 	<table id="datatable" class="table table-striped table-bordered table-hover jambo_table">
@@ -30,8 +30,9 @@
 				<th>No</th>
 				<th>No transaksi</th>
 				<th>Tanggal</th>
-				<th>Anggota</th>
-				<th>Total Simpanan</th>
+				<!-- <th>Anggota</th> -->
+				<th>Debit</th>
+				<th>Kredit</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -42,13 +43,15 @@
 				<td><?= $no++ ?></td>
 				<td><?= $data->id_pembayaran ?></td>
 				<td><?= $data->tgl_transaksi ?></td>
-				<td><?= $data->nama_peternak ?></td>
+				<!-- <td><?= $data->nama_peternak ?></td> -->
+				<td class="text-right"><?= format_rp(0) ?></td>
 				<td align='right'><?= format_rp($data->simpanan_masuka) ?></td>
 			</tr>
 			<?php } ?>
 		</tbody>
 		<tr>
-			<td colspan="4">Subtotal</td>
+			<td colspan="3">Subtotal</td>
+			<td class="text-right"><?= format_rp(0) ?></td>
 			<td align="right"><?= format_rp($total) ? format_rp($total) : format_rp(0) ?></td>
 		</tr>
 	</table>

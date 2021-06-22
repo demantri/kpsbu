@@ -51,7 +51,9 @@ class simpanan extends ci_controller
 				'detail' => $this->simpanan->detailHr($id_peternak)->result(),
 				'peternak' => $this->db->get("peternak")->result(),
 				'anggota' => $this->simpanan->anggota($id_peternak)->row(),
-				'total' => $this->simpanan->_total_simpanan_hr($id_peternak)->row()->total
+				'total' => $this->simpanan->_total_simpanan_hr($id_peternak)->row()->total, 
+				$this->db->where('no_peternak =', $id_peternak), 
+				'header' => $this->db->get('peternak')->row()->nama_peternak
 			);
 			// print_r($data['total']);exit;
 			$this->template->load("template", "laporan_simpanan/kartu_simpanan_hr", $data);
@@ -61,6 +63,7 @@ class simpanan extends ci_controller
 				'detail' => $this->simpanan->detailHr($id_peternak)->result(),
 				'peternak' => $this->db->get("peternak")->result(),
 				'total' => 0,
+				'header' => ''
 			);
 			// print_r($data['detail']);exit;
 			$this->template->load("template", "laporan_simpanan/kartu_simpanan_hr", $data);
@@ -78,6 +81,8 @@ class simpanan extends ci_controller
 				'peternak' 		=> $this->db->get("peternak")->result(),
 				'anggota' 		=> $this->simpanan->anggota($id_peternak)->row(),
 				'total' 		=> $this->simpanan->sum_simpwajib($id_peternak)->row()->total_simpanan_wajib,
+				$this->db->where('no_peternak =', $id_peternak), 
+				'header' => $this->db->get('peternak')->row()->nama_peternak
 			);
 			$this->template->load("template", "laporan_simpanan/kartu_simpanan_wajib", $data);
 		} else {
@@ -87,6 +92,7 @@ class simpanan extends ci_controller
 				'detail' => $this->simpanan->_simpanan_wajib_list($id_peternak)->result(),
 				'peternak' => $this->db->get("peternak")->result(),
 				'total' => 0,
+				'header' => ''
 			);
 			$this->template->load('template', 'laporan_simpanan/kartu_simpanan_wajib', $data);
 		}
@@ -102,7 +108,9 @@ class simpanan extends ci_controller
 				'id_peternak' => $id_peternak,	
 				'detail' => $this->simpanan->_masuka_list($id_peternak)->result(),	
 				'peternak' => $this->db->get("peternak")->result(),
-				'total' => $this->simpanan->sum_masuka($id_peternak)->row()->total
+				'total' => $this->simpanan->sum_masuka($id_peternak)->row()->total, 
+				$this->db->where('no_peternak =', $id_peternak), 
+				'header' => $this->db->get('peternak')->row()->nama_peternak
 			);
 			$this->template->load('template', 'laporan_simpanan/kartu_simpanan_masuka', $data);
 		} else {
@@ -110,7 +118,8 @@ class simpanan extends ci_controller
 				'id_peternak' => is_null($id_peternak),	
 				'detail' => $this->simpanan->_masuka_list($id_peternak)->result(),	
 				'peternak' => $this->db->get("peternak")->result(),
-				'total' => 0
+				'total' => 0, 
+				'header' => ''
 			);
 			$this->template->load('template', 'laporan_simpanan/kartu_simpanan_masuka', $data);
 		}

@@ -15,9 +15,11 @@
 				<th>ID Peternak</th>
 				<th>Kode TPS</th>
 				<th>Nama Peternak</th>
+				<th>Nama Peternakan</th>
 				<th>No. Telepon</th>
 				<th>Alamat</th>
-				<th>Aksi</th>
+				<th>Tanggal Daftar</th>
+				<th></th>
 			</tr>
 		</thead>
 		<tbody>
@@ -25,25 +27,29 @@
 			$no=1;
 				foreach($result as $data){
 					echo "
-
-						<tr><td>$no</td>
+						<tr>
+							<td>$no</td>
 							<td>".$data['no_peternak']."</td>
 							<td>".$data['alamat_tps']."</td>
 							<td>".$data['nama_peternak']."</td>
+							<td>".$data['nm_peternakan']."</td>
 							<td align='right'>".$data['notel']."</td>
-							<td>".$data['alamat']."</td>" ?>
+							<td>".$data['alamat']."</td>
+							<td>".$data['create_date']."</td>"?>
 							<td>
-							<a href="isi_edit_peternak/<?php echo $data['no_peternak']; ?>">
-								
-							<span class="fa-stack">
-							  <i class="fa fa-square fa-stack-2x" style="color:#2A3F54;"></i>
-							 <span class="glyphicon glyphicon-pencil fa-stack-1x" aria-hidden="true" style="color:white"></span>
-							</span></a>
+								<a href="" data-target="#kartu_simpanan_<?= $data['no_peternak']?>" data-toggle="modal">
+									<span class="fa-stack">
+									<i class="fa fa-square fa-stack-2x" style="color:#2A3F54;"></i>
+									<span class="glyphicon glyphicon-file fa-stack-1x" aria-hidden="true" style="color:white"></span>
+									</span>
+								</a>
+								<a href="isi_edit_peternak/<?php echo $data['no_peternak']; ?>">
+									<span class="fa-stack">
+									<i class="fa fa-square fa-stack-2x" style="color:#2A3F54;"></i>
+									<span class="glyphicon glyphicon-pencil fa-stack-1x" aria-hidden="true" style="color:white"></span>
+									</span>
+								</a>
 							</td>
-							<!--<td align="center">
-							<a class="btn btn-warning" href="isi_edit_peternak/<?php echo $data['no_peternak']; ?>" onclick="return confirm('Yakin mau dihapus?')" class="btn btn-daner">Hapus</a>
-					</td>-->
-
 						</tr>
 						
 					<?php
@@ -52,8 +58,6 @@
 			?>
 			</tbody>
 		</table>
-
-	
-	
 	</body>
 </html>
+<?php $this->load->view('peternak/modal_kartu_simpanan');?>

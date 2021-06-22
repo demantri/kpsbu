@@ -53,7 +53,7 @@
 			</div>
 
 			<div class="form-group">
-			  <label>Deposit</label>
+			  <label>Simpanan Pokok</label>
 			  <input type = "text" name = "deposit" class = "form-control" value="<?= $simpanan?>" readonly>
 			  <?php echo form_error('deposit'); ?>
 			

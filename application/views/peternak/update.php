@@ -21,8 +21,33 @@
 	<div class="form-group">
 		<div class="row">
 			<div class="col-xs-4">
+				<label>TPS</label>
+				<select name="tps" id="" class="form-control" required>
+					<option value="">Pilih TPS</option>
+					<?php foreach ($tps as $key => $value) { ?>
+					<option value="<?= $value->kode_tps ?>"<?= $value->kode_tps == $data['kd_tps'] ? 'selected' : '';?>><?= $value->alamat?></option>
+					<?php } ?>
+				</select>
+			</div>
+		</div>
+		<?php echo form_error('tps'); ?>
+	</div>
+
+	<div class="form-group">
+		<div class="row">
+			<div class="col-xs-4">
 				<label>Nama Peternak</label>
 				<input type="text" class="form-control" name="nama_peternak" value="<?php echo $data['nama_peternak'] ; ?>" >
+			</div>
+		</div>
+		<?php echo form_error('nama_peternak'); ?>
+	</div>
+
+	<div class="form-group">
+		<div class="row">
+			<div class="col-xs-4">
+				<label>Nama Peternakan</label>
+				<input type="text" class="form-control" name="nm_peternakan" value="<?php echo $data['nm_peternakan'] ; ?>" >
 			</div>
 		</div>
 		<?php echo form_error('nama_peternak'); ?>

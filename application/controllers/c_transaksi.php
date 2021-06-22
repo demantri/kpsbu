@@ -682,6 +682,26 @@ class c_transaksi extends CI_controller{
          'status' => '1'
       );
       $this->db->insert('pembelian_bb', $data);
+
+      // jurnal 
+      $data_d = [
+         'id_jurnal' => $id,
+         'tgl_jurnal' => date('Y-m-d'),
+         'no_coa' => 1112,
+         'posisi_dr_cr' => 'd',
+         'nominal' => $total,
+      ];
+      $this->db->insert('jurnal', $data_d);
+
+      $data_k = [
+         'id_jurnal' => $id,
+         'tgl_jurnal' => date('Y-m-d'),
+         'no_coa' => 2111,
+         'posisi_dr_cr' => 'k',
+         'nominal' => $total,
+      ];
+      $this->db->insert('jurnal', $data_k);
+      
       redirect('c_transaksi/lihat_pemb');
    }
 
@@ -4796,7 +4816,7 @@ group by no_bbp";
     $jurnal_d = array (
       "id_jurnal" => $this->input->post("kode_simpanan"),
       "tgl_jurnal" => date("Y-m-d"),
-      "no_coa" => 3785,
+      "no_coa" => 1111,
       "posisi_dr_cr" => "d",
       "nominal" => $biaya,
     );
@@ -4805,7 +4825,7 @@ group by no_bbp";
     $jurnal_k = array (
       "id_jurnal" => $this->input->post("kode_simpanan"),
       "tgl_jurnal" => date("Y-m-d"),
-      "no_coa" => 1111,
+      "no_coa" => 3785,
       "posisi_dr_cr" => "k",
       "nominal" => $biaya,
     );

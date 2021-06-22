@@ -760,11 +760,10 @@ class c_masterdata extends CI_controller{
    
    public function isi_edit_peternak($id)
    {
-      
-         
-         
-         $x['data'] = $this->M_masterdata->edit_data('peternak', "no_peternak = '$id'")->row_array();
-         $this->template->load('template', 'peternak/update', $x);
+      $x['data'] = $this->M_masterdata->edit_data('peternak', "no_peternak = '$id'")->row_array();
+      $x['tps'] = $this->db->get('tps')->result();
+      // print_r($x['data']);exit;
+      $this->template->load('template', 'peternak/update', $x);
        
       
    }
@@ -818,7 +817,9 @@ class c_masterdata extends CI_controller{
             $data = array(
                'nama_peternak' => $nama_peternak,
                'notel' => $_POST['notel'],
-               'alamat' => $_POST['alamat']
+               'alamat' => $_POST['alamat'], 
+               'kd_tps' => $_POST['tps'], 
+               'nm_peternakan' => $_POST['nm_peternakan']
             );
             
             $this->db->where('no_peternak', $no_peternak);

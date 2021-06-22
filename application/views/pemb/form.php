@@ -54,14 +54,14 @@
 			<div class="col-xs-2">
 				<div class="form-group">
 				<label>Jumlah (Liter)</label>
-				<input type="number" class="form-control" name="jumlah" >
+				<input type="number" class="form-control" name="jumlah" min="0" placeholder="Masukkan jumlah liter" autocomplete="off">
 			  <?php echo form_error('jumlah'); ?>
 				</div>
 			</div>
 			<div class="col-xs-2">
 				<div class="form-group">
 				<label>Harga</label>
-				<input type="number" class="form-control" name="harga" >
+				<input type="number" class="form-control" name="harga" placeholder="Masukkan harga" min="0" autocomplete="off">
 			  <?php echo form_error('harga'); ?>
 				</div>
 			</div>

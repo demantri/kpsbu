@@ -20,7 +20,7 @@
 
 			<div class="form-group">
 				<label for="tps">TPS</label>
-				<select name="tps" id="tps" class="form-control">
+				<select name="tps" id="tps" class="form-control" required>
 				<option value="">Pilih TPS</option>
 				<?php foreach ($tps as $d) { ?>
 				<option value="<?= $d->kode_tps?>"><?= $d->alamat?></option>
@@ -33,6 +33,13 @@
 			  <input type = "text" name = "nama_peternak" class = "form-control" placeholder="Nama Peternak" autocomplete="off">
 			  
 			  <?php echo form_error('nama_peternak'); ?>
+			
+			</div>
+			
+			<div class="form-group">
+			  <label>Nama Peternakan</label>
+			  <input type = "text" name = "nm_peternakan" class = "form-control" placeholder="Nama Peternakan" autocomplete="off">
+			  <?php echo form_error('nm_peternakan'); ?>
 			
 			</div>
 

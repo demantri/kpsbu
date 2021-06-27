@@ -11,7 +11,6 @@
   	 	 <table id="datatable" class="table table-striped table-bordered table-hover jambo_table">
 		 	<thead>
 			<tr class="headings">
-				<th style="width: 2px;">No</th>
 				<th>ID Peternak</th>
 				<th>Kode TPS</th>
 				<th>Nama Peternak</th>
@@ -28,7 +27,6 @@
 				foreach($result as $data){
 					echo "
 						<tr>
-							<td>$no</td>
 							<td>".$data['no_peternak']."</td>
 							<td>".$data['alamat_tps']."</td>
 							<td>".$data['nama_peternak']."</td>
@@ -47,6 +45,12 @@
 									<span class="fa-stack">
 									<i class="fa fa-square fa-stack-2x" style="color:#2A3F54;"></i>
 									<span class="glyphicon glyphicon-pencil fa-stack-1x" aria-hidden="true" style="color:white"></span>
+									</span>
+								</a>
+								<a href="deactive/<?php echo $data['no_peternak']; ?>" onclick="return confirm('Anda yakin?')">
+									<span class="fa-stack">
+									<i class="fa fa-square fa-stack-2x" style="color:#2A3F54;"></i>
+									<span class="glyphicon glyphicon-ban-circle fa-stack-1x" aria-hidden="true" style="color:white"></span>
 									</span>
 								</a>
 							</td>

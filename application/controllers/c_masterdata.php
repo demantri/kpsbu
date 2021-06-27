@@ -20,9 +20,11 @@ class c_masterdata extends CI_controller{
       
          $this->db->order_by('no_coa ASC');
          $data['result'] = $this->db->get('coa')->result_array();
+         // print_r($data['result']);exit;
          $this->template->load('template', 'coa/view', $data);
        
    }
+
    public function form_coa()
    {
         
@@ -30,6 +32,28 @@ class c_masterdata extends CI_controller{
          //  $data['bahan_baku'] = $this->db->get('bahan_baku')->result_array();
          $this->template->load('template', 'coa/form');
           
+   }
+
+   public function edit_form_coa($id)
+   {
+
+      $this->db->where('id =', $id);
+      $data['coa'] = $this->db->get('coa')->row();
+
+      $this->template->load('template', 'coa/edit_form', $data);
+   }
+
+   public function isi_edit_COA()
+   {
+      $id = $this->input->post('id');
+      $no_coa = $this->input->post('no_coa');
+      $data = [
+         'no_coa' => $no_coa
+      ];
+      // print_r($data);exit;
+      $this->db->where('id', $id);
+      $this->db->update('coa', $data);
+      redirect('c_masterdata/lihat_coa');
    }
    
    public function tambah_coa()
@@ -651,6 +675,7 @@ class c_masterdata extends CI_controller{
          $this->db->select('peternak.*, tps.alamat as alamat_tps');
          $this->db->from('peternak');
          $this->db->join('tps', 'peternak.kd_tps = tps.kode_tps', 'left');
+         $this->db->where('is_deactive =', 0);
          $this->db->order_by('no_peternak', 'desc');
          $data['result'] = $this->db->get()->result_array();
          // print_r($data['result']);exit;
@@ -692,13 +717,12 @@ class c_masterdata extends CI_controller{
             array(
                'field' => 'nama_peternak',
                'label' => 'Nama Peternak',
-               'rules' => 'required|callback_customAlpha|min_length[3]|max_length[30]|is_unique[peternak.nama_peternak]',
+               'rules' => 'required|callback_customAlpha|min_length[3]|max_length[30]',
                'errors' => array(
                   'required' => '%s tidak boleh kosong!',
                   'min_length' => '%s minimal 3 huruf!',
                   'max_length' => '%s maksimal 30 huruf!',
-                  'customAlpha' => '%s hanya boleh berupa huruf!',
-                  'is_unique' => '%s sudah ada di database!'
+                  'customAlpha' => '%s hanya boleh berupa huruf!'
                )
             ),
             array(
@@ -708,6 +732,14 @@ class c_masterdata extends CI_controller{
                'errors' => array(
                   'required' => '%s tidak boleh kosong!',
                   'is_natural' => '%s harus angka!'
+               )
+            ),
+            array(
+               'field' => 'nm_peternakan',
+               'label' => 'Nama Peternakan',
+               'rules' => 'is_unique[peternak.nm_peternakan]',
+               'errors' => array(
+                  'is_unique' => 'Punten, %s sudah ada nih'
                )
             ),
             array(
@@ -731,7 +763,8 @@ class c_masterdata extends CI_controller{
                'notel' => $_POST['notel'],
                'alamat' => $_POST['alamat'],
                'deposit' => $_POST['deposit'], 
-               'kd_tps' => $_POST['tps']
+               'kd_tps' => $_POST['tps'],
+               'nm_peternakan' => $_POST['nm_peternakan'],
             );
             // print_r($data);exit;
             $this->db->insert('peternak', $data);
@@ -749,13 +782,24 @@ class c_masterdata extends CI_controller{
             $kredit = array (
               "id_jurnal" => "DP".$_POST['no_peternak'],
               "tgl_jurnal" => date("Y-m-d"),
-              "no_coa" => 3788,
+              "no_coa" => 3111,
               "posisi_dr_cr" => "k",
               "nominal" => $_POST['deposit'],
             );
             $this->db->insert("jurnal", $kredit);
             redirect('c_masterdata/lihat_peternak');
          }
+   }
+
+   public function deactive($id)
+   {
+      $data = [
+         'is_deactive' => 1
+      ];
+      $this->db->where('no_peternak', $id);
+      $this->db->update('peternak', $data);
+
+      redirect('c_masterdata/lihat_peternak');
    }
    
    public function isi_edit_peternak($id)

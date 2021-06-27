@@ -146,6 +146,7 @@ class c_transaksi extends CI_controller{
     
 
     // $data['anggota'] = $this->model->anggota_pinjaman_dropdown();
+    $this->db->where('is_deactive =', 0);
     $data['anggota'] = $this->db->get("peternak")->result();
     // print_r($data['anggota']);exit;
     $this->template->load('template', 'pinjaman/form', $data);
@@ -184,7 +185,6 @@ class c_transaksi extends CI_controller{
       ];
       $this->db->insert("log_bayar_pinjaman", $log_bayar_pinjaman);
 
-
       $this->db->set("pinjaman", $this->input->post("biaya"));
       $this->db->where("no_peternak", $this->input->post("peternak"));
       $this->db->update("peternak");
@@ -192,7 +192,7 @@ class c_transaksi extends CI_controller{
       $debit = array (
          "id_jurnal" => $this->input->post("kode_simpanan"),
          "tgl_jurnal" => date("Y-m-d"),
-         "no_coa" => 3789,
+         "no_coa" => 1115,
          "posisi_dr_cr" => "d",
          "nominal" => $this->input->post("biaya"),
       );
@@ -210,10 +210,22 @@ class c_transaksi extends CI_controller{
       redirect("c_transaksi/pinjaman");
    }
 
-   public function buku_pinjaman()
+   public function buku_pinjaman($peternak = '')
    {
-      $data['list'] = $this->model->getListPinjaman()->result();
-      $this->template->load('template', 'pinjaman/buku_pinjaman', $data);
+      $peternak = $this->input->post('id_peternak');
+
+      if (isset($peternak)) {
+         # code...
+         $data['list'] = $this->model->getListPinjaman($peternak)->result();
+         $this->db->where('is_deactive =', 0);
+         $data['peternak'] = $this->db->get('peternak')->result();
+         $this->template->load('template', 'pinjaman/buku_pinjaman', $data);
+      } else {
+         $data['list'] = $this->model->getListPinjaman($peternak)->result();
+         $this->db->where('is_deactive =', 0);
+         $data['peternak'] = $this->db->get('peternak')->result();
+         $this->template->load('template', 'pinjaman/buku_pinjaman', $data);
+      }
    }
 
    // index pemb. aset
@@ -546,7 +558,9 @@ class c_transaksi extends CI_controller{
        // $data['cek_selesai'] = $this->db->query($query1)->num_rows();
       $this->db->where('no_trans', $no_trans);
       $data['cek_selesai'] = $this->db->get('detail_pembelian_bb')->num_rows();
-       $data['peternak'] = $this->db->get('peternak')->result_array();
+
+      $this->db->where('is_deactive =', 0);
+      $data['peternak'] = $this->db->get('peternak')->result_array();
 
        $this->db->select_sum('subtotal');
        $this->db->where('no_trans', $no_trans);
@@ -4501,7 +4515,7 @@ group by no_bbp";
       // $data['cek_hari'] = $model;
       
       // print_r($model);exit;
-
+      $this->db->where('is_deactive =', 0);
       $data['anggota'] = $this->db->get("peternak")->result_array();
       // print_r($model);exit;
 
@@ -4686,7 +4700,7 @@ group by no_bbp";
         $simpanan_wajib = array (
           "id_jurnal" => $this->input->post("kode_pembayaran"),
           "tgl_jurnal" => date("Y-m-d"),
-          "no_coa" => 3786,
+          "no_coa" => 3112,
           "posisi_dr_cr" => "k",
           "nominal" => $this->input->post("jumlah_pembayaran"),
         );
@@ -4725,7 +4739,7 @@ group by no_bbp";
         $simpanan_wajib = array (
           "id_jurnal" => $this->input->post("kode_pembayaran"),
           "tgl_jurnal" => date("Y-m-d"),
-          "no_coa" => 3786,
+          "no_coa" => 3112,
           "posisi_dr_cr" => "k",
           "nominal" => $this->input->post("jumlah_pembayaran"),
         );
@@ -4743,7 +4757,7 @@ group by no_bbp";
         $pinjaman = array (
           "id_jurnal" => $this->input->post("kode_pembayaran"),
           "tgl_jurnal" => date("Y-m-d"),
-          "no_coa" => 1199,
+          "no_coa" => 1115,
           "posisi_dr_cr" => "k",
           "nominal" => $pinjaman,
         );
@@ -4772,7 +4786,7 @@ group by no_bbp";
         $simpanan_wajib = array (
           "id_jurnal" => $this->input->post("kode_pembayaran"),
           "tgl_jurnal" => date("Y-m-d"),
-          "no_coa" => 3786,
+          "no_coa" => 3112,
           "posisi_dr_cr" => "k",
           "nominal" => $this->input->post("jumlah_pembayaran"),
         );
@@ -4790,7 +4804,7 @@ group by no_bbp";
         $pinjaman = array (
           "id_jurnal" => $this->input->post("kode_pembayaran"),
           "tgl_jurnal" => date("Y-m-d"),
-          "no_coa" => 1199,
+          "no_coa" => 1115,
           "posisi_dr_cr" => "k",
           "nominal" => $pinjaman,
         );
@@ -4831,6 +4845,8 @@ group by no_bbp";
     // $last_code_pny = $kd -1;
     
     $data['kode_simpanan_hr'] = $no_trans;
+
+    $this->db->where('is_deactive =', 0);
     $data['anggota'] = $this->db->get("peternak")->result();
 
     $this->template->load("template", "simpanan_hr/form", $data);
@@ -4850,7 +4866,6 @@ group by no_bbp";
     // print_r($data);exit;
     $this->db->insert("log_simpanan_hr", $data);
 
-
     // Jurnal 
     $jurnal_d = array (
       "id_jurnal" => $this->input->post("kode_simpanan"),
@@ -4864,7 +4879,7 @@ group by no_bbp";
     $jurnal_k = array (
       "id_jurnal" => $this->input->post("kode_simpanan"),
       "tgl_jurnal" => date("Y-m-d"),
-      "no_coa" => 3785,
+      "no_coa" => 2112,
       "posisi_dr_cr" => "k",
       "nominal" => $biaya,
     );

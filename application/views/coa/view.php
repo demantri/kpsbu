@@ -1,8 +1,4 @@
 <html>
-	<head><title>Master Data COA</title></head>
-		<!-- <h3><center><b>Master Data COA</b></center></h3></head>
-	
-	<hr> -->
 	
 		<div class="x_panel">
  <div class="x_title">
@@ -16,6 +12,7 @@
 			<tr class="headings">
 				<th>No COA</th>
 				<th>Nama COA</th>
+				<!-- <th></th> -->
 				<!-- <th>Jenis COA</th> -->
 			</tr>
 		</thead>
@@ -26,14 +23,10 @@
 					echo "
 							<td>".$data['no_coa']."</td>
 							<td>".$data['nama_coa']."</td>
-							
 							" ?>
-							<!--<td align="center">
-							<a class="btn btn-primary" href="isi_edit_COA/<?php echo $data['no_COA']; ?>">Ubah</a>
-							</td>
-							<td align="center">
-							<a class="btn btn-warning" href="isi_edit_bb/<?php echo $data['no_bb']; ?>" onclick="return confirm('Yakin mau dihapus?')" class="btn btn-daner">Hapus</a>
-					</td>-->
+							<!-- <td align="center">
+							<a class="btn btn-primary" href="edit_form_coa/<?= $data['id']?>">Ubah</a>
+							</td> -->
 						</tr>
 					<?php
 					$no++;

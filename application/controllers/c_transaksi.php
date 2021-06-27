@@ -173,6 +173,7 @@ class c_transaksi extends CI_controller{
       'id_anggota' => $this->input->post("peternak"),
       'tanggal_pinjaman' => date("Y-m-d"),
       'nominal' => $this->input->post("biaya"),
+      'sisa_pinjaman' => $this->input->post("biaya"),
     );
     $this->db->insert("log_pinjaman", $data);
 
@@ -4614,8 +4615,10 @@ group by no_bbp";
 
       // update pinjaman ke tb peternak
       $sisa_pinjaman = $this->input->post('sisa_pinjaman');
+      // print_r($sisa_pinjaman);exit;
+
       // $last_pinjaman = $this->db->get('peternak');
-      if ($sisa_pinjaman != 0) {
+      if ($sisa_pinjaman != '') {
          $update_sisa_pinjaman = [
             'sisa_pinjaman' => $sisa_pinjaman
          ];
@@ -4623,8 +4626,23 @@ group by no_bbp";
          $this->db->update('log_pinjaman', $update_sisa_pinjaman);
       }
 
+      if ($sisa_pinjaman == 0) {
+         $update_status = [
+            'status' => 0
+         ];
+         $this->db->where('id_anggota', $id_anggota);
+         $this->db->update('log_pinjaman', $update_status);
+      }
+
+      // add tb_bayar_pinjaman
+      $log_bayar_pinjaman = [
+         'id_anggota' => $id_anggota,
+         'nominal' => $sisa_pinjaman,
+      ];
+      $this->db->insert('log_bayar_pinjaman', $log_bayar_pinjaman);
+
       // kalo gak ada utang nih jurnalnya
-      if ($pinjaman == 0) {
+      if ($sisa_pinjaman == 0) {
         // jurnal
         $pbb = array (
           "id_jurnal" => $this->input->post("kode_pembayaran"),
@@ -4662,7 +4680,7 @@ group by no_bbp";
         );
         $this->db->insert("jurnal", $simpanan_masuka);
 
-      } else if ($subtotal > $pinjaman) {
+      } else if ($subtotal > $sisa_pinjaman) {
 
         // jurnal
         $pbb = array (

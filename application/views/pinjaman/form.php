@@ -95,13 +95,13 @@
 					// console.log()
 	
 					$("#btn-simpan").prop("disabled", true)
-					if (total >= 16 && pinjaman == 0) {
+					if (total >= 16 && pinjaman === null) {
 						// kalo bener
 						$("#info").hide();
 						// alert('done')
 						$('#biaya').prop('readonly', false)
 						$("#btn-simpan").prop("disabled", false)
-					} else if (total >= 16 && pinjaman != 0) {
+					} else if (total >= 16 && pinjaman !== null) {
 						// pembayaran lulus, tapi punya utang
 						$("#info").show();
 						var info = 'Mon maap, anda <strong>punya utang !</strong>'
@@ -117,10 +117,17 @@
 						$('#biaya').prop('readonly', true)
 						$("#btn-simpan").prop("disabled", true)
 					}
+
+					// nyobain
+					// if (pinjaman === null && total >= 16) {
+					// 	console.log('pinjaman null, total leih dari 16')
+					// } else {
+					// 	console.log('pinjaman ada isinya')
+					// }
+
 				} else {
 					// alert('data kosong')
 					$('#biaya').prop('readonly', true)
-
 					$("#btn-simpan").prop("disabled", true)	
 				}
 				

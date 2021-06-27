@@ -14,10 +14,11 @@
 		 	<thead>
 				<tr class="headings">
 					<th style="width: 2px;">No</th>
+					<th>Kode Pinjaman</th>
 					<th>Nama Anggota</th>
 					<th>Tanggal Pinjaman</th>
 					<th>Nominal</th>
-					<th>Status</th>
+					<th class="text-center">Status</th>
 				</tr>
 			</thead>
 			<?php
@@ -26,14 +27,15 @@
 			foreach ($index as $data) { ?>
 				<tr>
 					<td><?= $no++ ?></td>
+					<td><?= $data->kode_pinjaman ?></td>
 					<td><?= $data->nama_peternak ?></td>
-					<td><?= $data->tanggal_pinjaman ?></td>
+					<td><?= date('d F Y', strtotime($data->tanggal_pinjaman)) ?></td>
 					<td><?= format_rp($data->nominal) ?></td>
-					<td>
-						<?php if ($data->status != "0") { 
-							echo "Belum lunas"; 
+					<td class="text-center" style="width: 13%;">
+						<?php if ($data->status == 1) { 
+							echo "<button class='btn btn-warning btn-sm'>Belum lunas</button>"; 
 						} else {
-							echo "Lunas";
+							echo "<button class='btn btn-success btn-sm'>Sudah lunas</button>";
 						} ?>
 					</td>
 				</tr>

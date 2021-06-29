@@ -1,4 +1,5 @@
-
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<link rel="stylesheet" href="/resources/demos/style.css">
 <div class="x_panel">
     <div class="x_title">
         <h3 class="panel-title"><b>Perbaikan Aset</b></h3>
@@ -21,7 +22,7 @@
                 <div class="form-group row">
                     <label class="col-sm-2" for="date">Tanggal Perbaikan</label>	
                     <div class="col-sm-3">
-                        <input type="date" class="form-control" id="date" name="date" required>
+                        <input type="text" class="form-control" id="date" name="date" placeholder="Tanggal Perbaikan" required>
                     </div>
                 </div>
 
@@ -58,6 +59,8 @@
         </body>
     </div>
 </div>
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script>
     var rupiah = document.getElementById("nilai_perbaikan");
     rupiah.addEventListener("keyup", function(e) {
@@ -82,6 +85,10 @@
 </script>
 <script>
     $(document).ready(function() {
+        $('#date').datepicker({
+            minDate: 0, 
+            dateFormat: 'dd/mm/yy'
+        })
         $('#aset').on('change', function() {
             var id_detail = $('#aset').val()
             // alert(id_detail)

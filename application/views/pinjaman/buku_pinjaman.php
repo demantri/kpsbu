@@ -22,7 +22,7 @@
 					</div>
 				</div>
 				<hr>
-                <table id="datatable" class="table table-striped table-bordered table-hover jambo_table">
+                <table class="table table-striped table-bordered table-hover jambo_table">
                     <thead>
                         <tr>
                             <th rowspan="2" class="text-center">Waktu Bayar</th>

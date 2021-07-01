@@ -174,6 +174,7 @@ class m_transaksi extends CI_Model {
 		left JOIN log_pinjaman ON log_pinjaman.id_anggota = detail_pembelian_bb.no_peternak
 		WHERE tgl_trans BETWEEN (LEFT(SYSDATE(),10) - INTERVAL 14 DAY) AND LEFT(SYSDATE(),10) 
 		AND detail_pembelian_bb.no_peternak = '$id_peternak'
+		AND log_pinjaman.status = 1
 		";
 		return $this->db->query($query);
     }
@@ -237,6 +238,7 @@ class m_transaksi extends CI_Model {
 		FROM log_bayar_pinjaman a
 		INNER JOIN coa b ON a.kd_coa = b.no_coa
 		where id_anggota = '$id'
+		order by a.id asc
 		";
 		return $this->db->query($sql);
 	}

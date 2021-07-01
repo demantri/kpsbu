@@ -4649,7 +4649,7 @@ group by no_bbp";
          $log_bayar_pinjaman = [
             'id_anggota' => $id_anggota,
             'nominal' => $pinjaman,
-            // 'kd_coa' => 1112
+            'kd_coa' => 1112
          ];
          $this->db->insert('log_bayar_pinjaman', $log_bayar_pinjaman);
          

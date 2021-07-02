@@ -39,7 +39,7 @@
 					<div class="form-group row">
 						<label class="col-sm-1">Tanggal Beli</label>	
 						<div class="col-sm-2">
-							<input type = "text" name = "tgl_pembelian" class = "form-control" id="tgl_pembelian" placeholder="Tanggal Pembelian">
+							<input type = "text" name = "tgl_pembelian" class = "form-control" id="tgl_pembelian" placeholder="Tanggal Pembelian" autocomplete="off">
 						</div>
 					</div>
 

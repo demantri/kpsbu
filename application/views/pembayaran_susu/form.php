@@ -210,7 +210,11 @@
 								$("#total_trans_susu").val(rumus);
 								$("#tot_sus").val(total_trans_susu);
 								
-								if (pinjaman != 0 && sisa_pinjaman != 0) {
+								if (!sisa_pinjaman) {
+									$("#kalo_ngutang").hide();
+									$("#pinjaman").val(0);
+									$("#piutang").val(0);
+								} else if (pinjaman != 0 && sisa_pinjaman != 0) {
 									$("#kalo_ngutang").show();
 									// $("#sp").val(sisa_pinjaman)
 									$("#sisa_pinjaman").val(sisa_pinjaman - pinjaman_1)

@@ -2312,6 +2312,7 @@ class c_masterdata extends CI_controller{
 
       $data['id'] = $no_trans;
       $data['supplier'] = $this->db->get('supplier_aset')->result();
+      $data['coa'] = $this->db->get('coa')->result();
 
       // print_r($data['supplier']);exit;
       $this->template->load('template', 'aset/form', $data);
@@ -2335,10 +2336,7 @@ class c_masterdata extends CI_controller{
                'rules' => 'required|is_natural_no_zero',
                'errors' => array(
                   'required' => '%s tidak boleh kosong!',
-                  'is_natural_no_zero' => '%s minimal 1 tahun!'
-                  // 'max_length' => '%s maksimal 30 huruf!',
-                  // 'customAlpha' => '%s hanya boleh berupa huruf!',
-                  // 'is_unique' => '%s sudah ada di database!'
+                  'is_natural_no_zero' => '%s minimal 1 tahun atau 12 bulan !'
                )
             ),
          );
@@ -2353,7 +2351,8 @@ class c_masterdata extends CI_controller{
                'id' => $this->input->post('id_aset'),
                'aset' => $this->input->post('aset'),
                'umur_aset' => $this->input->post('umur_aset'),
-               'id_supplier' => $this->input->post('supplier')
+               'id_supplier' => $this->input->post('supplier'), 
+               'kel_akun' => $this->input->post('kel_akun'), 
             );
             // print_r($data);exit;
             $this->db->insert('aset', $data);

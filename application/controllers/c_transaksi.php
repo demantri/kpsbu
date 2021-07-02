@@ -449,45 +449,51 @@ class c_transaksi extends CI_controller{
          // print_r($data_detail);exit;
          $this->db->insert_batch('detail_pembelian', $data_detail);
       }
-    
-
     redirect('c_transaksi/form_pembelian_aset');
    }
 
    public function selesai($id, $total)
    {
-    $this->db->where('id_pembelian', $id);
-    $this->db->set('tgl_input', date("Y-m-d"));
-    $this->db->set('status', 'selesai');
-    $this->db->set('total', $total);
-    $this->db->update('pembelian_aset');
+      // print_r($id);exit;
+      $this->db->where('id_pembelian', $id);
+      $this->db->set('tgl_input', date("Y-m-d"));
+      $this->db->set('status', 'selesai');
+      $this->db->set('total', $total);
+      $this->db->update('pembelian_aset');
 
+      // $this->db->select("aset");
+      // $this->db->join("detail_pembelian", "detail_pembelian.id_aset = aset.id");
+      // $this->db->where("detail_pembelian.id_pembelian", $id); 
+      // $nama_aset = $this->db->get("aset")->result();
 
-    $this->db->select("aset");
-    $this->db->join("detail_pembelian", "detail_pembelian.id_aset = aset.id");
-    $this->db->where("detail_pembelian.id_pembelian", $id); 
-    $nama_aset = $this->db->get("aset")->result();
+      $getAset = "SELECT kel_akun, nama_coa
+      FROM aset a
+      INNER JOIN detail_pembelian b ON a.id = b.id_aset
+      INNER JOIN coa c ON a.kel_akun = c.no_coa
+      WHERE b.id_pembelian = '$id'
+      ";
+      $aset = $this->db->query($getAset)->row()->kel_akun;
 
-    // jurnal
-    $pemb_aset = array (
-      'id_jurnal' => $id,
-      'tgl_jurnal' => date("Y-m-d") ,
-      'no_coa' => 5000,
-      'posisi_dr_cr' => "d",
-      'nominal' => $total,
-    );
-    $this->db->insert("jurnal", $pemb_aset);
+      // // jurnal
+      $pemb_aset = array (
+         'id_jurnal' => $id,
+         'tgl_jurnal' => date("Y-m-d") ,
+         'no_coa' => $aset,
+         'posisi_dr_cr' => "d",
+         'nominal' => $total,
+      );
+      $this->db->insert("jurnal", $pemb_aset);
 
-    $pemb_aset_kredit = array (
-      'id_jurnal' => $id,
-      'tgl_jurnal' => date("Y-m-d") ,
-      'no_coa' => 1111,
-      'posisi_dr_cr' => "k",
-      'nominal' => $total,
-    );
-    $this->db->insert("jurnal", $pemb_aset_kredit);
+      $pemb_aset_kredit = array (
+         'id_jurnal' => $id,
+         'tgl_jurnal' => date("Y-m-d") ,
+         'no_coa' => 1111,
+         'posisi_dr_cr' => "k",
+         'nominal' => $total,
+      );
+      $this->db->insert("jurnal", $pemb_aset_kredit);
 
-    redirect("c_transaksi/pembelian_aset");
+      redirect("c_transaksi/pembelian_aset");
    }
 
    private function supplier_dropdown()

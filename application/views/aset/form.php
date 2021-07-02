@@ -2,7 +2,7 @@
 	<head>
 		<title>Master Data Aset</title>
 	</head>
-	
+	<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 	<div class="x_panel">
  		<div class="x_title">
     		<h3 class="panel-title"><b>Form Aset</b></h3>
@@ -20,26 +20,37 @@
 
 					<div class="form-group">
 					  <label>Aset</label>
-					  <input type = "text" name = "aset" class = "form-control">
+					  <input type = "text" name = "aset" class = "form-control" autocomplete="off" required>
 					  <?php echo form_error('aset'); ?>
 					</div>
 
 					<div class="form-group">
 					  <label>Umur Aset (*per Bulan)</label>
-					  <input type = "number" name = "umur_aset" class = "form-control" min="0">
+					  <input type = "number" name = "umur_aset" class = "form-control" min="0" required>
 					  <?php echo form_error('umur_aset'); ?>
 					</div>
 
 					<div class="form-group">
 					  <label>Supplier Aset</label>
-					  <select name="supplier" class="form-control" id="supplier">
+					  <select name="supplier" class="form-control select2" id="supplier" required>
 					  	<option value="">Pilih supplier</option>
 					  	<?php foreach ($supplier as $d) { ?>
 					  	<option value="<?= $d->id?>"><?= $d->nama_supplier?></option>
 					  	<?php } ?>
 					  </select>
 					  <?php echo form_error('umur_aset'); ?>
-					</div>					
+					</div>	
+
+					<div class="form-group">
+					  <label for="kel_akun">Kelompok Akun</label>
+					  <select name="kel_akun" class="form-control select2" id="kel_akun" required>
+					  	<option value="">Kelompok Akun</option>
+					  	<?php foreach ($coa as $d) { ?>
+					  	<option value="<?= $d->no_coa?>"><?= $d->nama_coa?></option>
+					  	<?php } ?>
+					  </select>
+					  <?php echo form_error('kel_akun'); ?>
+					</div>				
 					
 					<hr>
 					<input type="submit" class="btn btn-default btn-primary" value="Simpan">
@@ -48,4 +59,10 @@
 			</body>
 		</div>
 	</div>
+	<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+	<script>
+		$(document).ready(function() {
+			$('.select2').select2()
+		})
+	</script>
 </html>

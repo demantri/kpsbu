@@ -162,19 +162,40 @@ class m_transaksi extends CI_Model {
     }
 
     function coba($id_peternak){ 
-		$query = "SELECT SUM(jumlah) as total_jumlah, 
-		SUM(subtotal) as total_trans_susu, 
-		pinjaman, 
-		sisa_pinjaman,
-		tgl_trans, 
-		tgl_trans + INTERVAL 14 DAY as nextPayment
+		// $query = "SELECT SUM(jumlah) as total_jumlah, 
+		// SUM(subtotal) as total_trans_susu, 
+		// pinjaman, 
+		// sisa_pinjaman,
+		// tgl_trans, 
+		// tgl_trans + INTERVAL 14 DAY as nextPayment
+		// FROM detail_pembelian_bb
+		// JOIN pembelian_bb ON (pembelian_bb.no_trans = detail_pembelian_bb.no_trans)
+		// JOIN peternak ON (peternak.no_peternak = detail_pembelian_bb.no_peternak)
+		// left JOIN log_pinjaman ON log_pinjaman.id_anggota = detail_pembelian_bb.no_peternak
+		// WHERE tgl_trans BETWEEN (LEFT(SYSDATE(),10) - INTERVAL 14 DAY) AND LEFT(SYSDATE(),10) 
+		// AND detail_pembelian_bb.no_peternak = '$id_peternak'
+		// AND log_pinjaman.status = 1
+		// ";
+		$query = "SELECT 
+			SUM(jumlah) as total_jumlah, 
+			SUM(subtotal) as total_trans_susu, 
+			pinjaman, 
+			-- sisa_pinjaman,
+			(
+				SELECT sisa_pinjaman 
+				FROM log_pinjaman
+				WHERE id_anggota = '$id_peternak' 
+				AND status = 1
+			) AS sisa_pinjaman,
+			tgl_trans, 
+			tgl_trans + INTERVAL 14 DAY as nextPayment
 		FROM detail_pembelian_bb
 		JOIN pembelian_bb ON (pembelian_bb.no_trans = detail_pembelian_bb.no_trans)
 		JOIN peternak ON (peternak.no_peternak = detail_pembelian_bb.no_peternak)
-		left JOIN log_pinjaman ON log_pinjaman.id_anggota = detail_pembelian_bb.no_peternak
+		-- inner JOIN log_pinjaman ON log_pinjaman.id_anggota = detail_pembelian_bb.no_peternak
 		WHERE tgl_trans BETWEEN (LEFT(SYSDATE(),10) - INTERVAL 14 DAY) AND LEFT(SYSDATE(),10) 
 		AND detail_pembelian_bb.no_peternak = '$id_peternak'
-		AND log_pinjaman.status = 1
+		-- AND log_pinjaman.status = 1
 		";
 		return $this->db->query($query);
     }

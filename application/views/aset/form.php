@@ -50,6 +50,28 @@
 					  	<?php } ?>
 					  </select>
 					  <?php echo form_error('kel_akun'); ?>
+					</div>
+
+					<div class="form-group">
+					  <label for="kel_akun">Penyusutan Debit</label>
+					  <select name="kel_akun_d" class="form-control select2" required>
+					  	<option value="">Kel.Akun Penyusutan Debit</option>
+					  	<?php foreach ($coa as $d) { ?>
+					  	<option value="<?= $d->no_coa?>"><?= $d->nama_coa?></option>
+					  	<?php } ?>
+					  </select>
+					  <?php echo form_error('kel_akun_d'); ?>
+					</div>
+
+					<div class="form-group">
+					  <label for="kel_akun">Penyusutan Kredit</label>
+					  <select name="kel_akun_k" class="form-control select2" required>
+					  	<option value="">Kel.Akun Penyusutan Kredit</option>
+					  	<?php foreach ($coa as $d) { ?>
+					  	<option value="<?= $d->no_coa?>"><?= $d->nama_coa?></option>
+					  	<?php } ?>
+					  </select>
+					  <?php echo form_error('kel_akun_k'); ?>
 					</div>				
 					
 					<hr>

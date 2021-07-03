@@ -3997,6 +3997,7 @@ group by no_bbp";
       // print_r($nilai_rev);exit;
       $data['nilai_rev'] = $nilai_rev;
       $data['nilai_buku_perbaikan'] = $nilai_buku_perbaikan;
+      $data['nilai_perbaikan'] = $nilai_perbaikan;
       $this->template->load('template', 'revaluasi/form_detail_rev', $data);
    }
 
@@ -4025,8 +4026,7 @@ group by no_bbp";
       }
       $tgl=date('Ymd'); 
       $batas = str_pad($kode, 3, "0", STR_PAD_LEFT);    
-      $kodetampil = "PRB".$tgl.$batas;  //format kode
-      // return $kodetampil;  
+      $kodetampil = "PRB".$tgl.$batas;
       
       $getaset = "SELECT a.*, aset
       FROM detail_pembelian a
@@ -4082,6 +4082,25 @@ group by no_bbp";
       $this->db->where('id_detail_aset', $aset);
       $this->db->update('detail_pembelian', $data_update);
       // update cek bulan perbaikan di tb_pembelian_aset
+
+      // jurnal perbaikan
+      $beban_per = [
+         'id_jurnal' => $kode,
+         'tgl_jurnal' => date('Y-m-d'),
+         'no_coa' => 5224,
+         'posisi_dr_cr' => 'd',
+         'nominal' => $nilai_perbaikan,
+      ];
+      $this->db->insert('jurnal', $beban_per);
+
+      $kas = [
+         'id_jurnal' => $kode,
+         'tgl_jurnal' => date('Y-m-d'),
+         'no_coa' => 1111,
+         'posisi_dr_cr' => 'k',
+         'nominal' => $nilai_perbaikan,
+      ];
+      $this->db->insert('jurnal', $kas);
       redirect('c_transaksi/perbaikan');
    }
 
@@ -4225,19 +4244,19 @@ group by no_bbp";
       $this->form_detail_penyusutan();
     }
 
-    public function form_detail_penyusutan()
-    {
+   public function form_detail_penyusutan()
+   {
       $query1 = "SELECT  MAX(RIGHT(id_penyusutan,3)) as kode FROM penyusutan";
       $abc = $this->db->query($query1);
       $no_trans = "";
       if($abc->num_rows()>0){
-        foreach($abc->result() as $k){
+         foreach($abc->result() as $k){
             $tmp = ((int)$k->kode)+1;
             $kd = sprintf("%03s", $tmp);
-          }
-        }else{
-          $kd = "001";
-        }
+            }
+         }else{
+            $kd = "001";
+         }
       $datenow = date("Ymd");
       $no_trans = "PNY".$datenow."".$kd;
 
@@ -4300,8 +4319,7 @@ group by no_bbp";
 
       $data['month_now'] = $bulan;
 
-      $query = "
-      SELECT * 
+      $query = "SELECT * 
       FROM log_penyusutan 
       WHERE id_detail = '$id' 
       ORDER BY id_penyusutan DESC
@@ -4310,7 +4328,14 @@ group by no_bbp";
       // print_r($log_penyusutan_kosong);exit;
       $data['log_penyusutan_kosong'] = $log_penyusutan_kosong;
       $this->template->load('template', 'penyusutan/form_detail_pny', $data);
-    }
+   }
+
+   public function getKd()
+   {
+      $id_detail = $this->input->post('id_detail');
+      $data = $this->model->getKd($id_detail)->row();
+      echo json_encode($data);
+   }
 
    public function tambah_peny()
    {
@@ -4331,6 +4356,8 @@ group by no_bbp";
       // convert nilai akhir
       $na_fix = str_replace("." , "", $nilai_akhir);
 
+      $kd_peny_d = $this->input->post('kd_peny_d');
+      $kd_peny_k = $this->input->post('kd_peny_k');
 
       $data_penyusutan = array ( 
          "id_penyusutan" => $id_penyusutan,
@@ -4349,18 +4376,16 @@ group by no_bbp";
          "nilai_akhir" => $na_fix
       );
       $this->db->insert("log_penyusutan", $data_log);
-      // print_r($data_log);exit;
 
       // insert ke tb trans_peny_rev
       $trans_peny_rev = [
          'id_trans' => $id_penyusutan,
          'total_peny' => $tp_fix,
          'total_akum' => $akumulasi_peny_fix,
-         'nilai_peny' => $na_fix
+         'nilai_peny' => $na_fix, 
+         'id_detail' => $id
       ];
       $this->db->insert("trans_peny_rev", $trans_peny_rev);
-
-
 
       // set pengurangan umur per bulan
       $this->db->set("sisa_umur", "(sisa_umur) - 1", FALSE);
@@ -4369,8 +4394,8 @@ group by no_bbp";
       $this->db->update("detail_pembelian");
 
       // // jurnal
-      $this->m_keuangan->GenerateJurnal('1122',$id,'d',$tp_fix);
-      $this->m_keuangan->GenerateJurnal('1120',$id,'k',$tp_fix);
+      $this->m_keuangan->GenerateJurnal($kd_peny_d, $id, 'd' ,$tp_fix);
+      $this->m_keuangan->GenerateJurnal($kd_peny_k, $id, 'k' ,$tp_fix);
       redirect('c_transaksi/penyusutan');
    }
 
@@ -4403,6 +4428,36 @@ group by no_bbp";
       $_nilai_buku_baru = str_replace("Rp.", "", $this->input->post('nilai_buku_baru'));
       $nilai_buku_baru = str_replace(".", "", $_nilai_buku_baru);
 
+      $kd_akun = $this->input->post('kd_akun');
+      $kd_peny_d = $this->input->post('kd_peny_d');
+      $kd_peny_k = $this->input->post('kd_peny_k');
+
+      $nilai_perbaikannya = $this->input->post('nilai_perbaikannya');
+
+      // // // jurnal rev
+      $this->db->where('id_detail_aset =', $id);
+      $this->db->where('is_rev =', 1);
+      $cek_rev = $this->db->get('detail_pembelian')->num_rows();
+      if ($cek_rev == 0) {
+         $kel_akun = [
+            'id_jurnal' => $id_rev,
+            'tgl_jurnal' => date("Y-m-d"),
+            'no_coa' => $kd_akun,
+            'posisi_dr_cr' => "d",
+            'nominal' => $nilai_perbaikannya,
+         ];
+         // print_r($kel_akun);exit;
+         $this->db->insert('jurnal', $kel_akun);
+
+         $beban = [
+            'id_jurnal' => $id_rev,
+            'tgl_jurnal' => date("Y-m-d"),
+            'no_coa' => 5224,
+            'posisi_dr_cr' => "k",
+            'nominal' => $nilai_perbaikannya,
+         ];
+         $this->db->insert('jurnal', $beban);
+      }
 
       $data_penyusutan = array ( 
          "id_penyusutan" => $id_penyusutan,
@@ -4436,7 +4491,7 @@ group by no_bbp";
 
       $data_trans_peny_rev = [
          'id_trans' => $id_rev,
-         // 'id_detail' => $id,
+         'id_detail' => $id,
          'total_peny' => $tp_fix,
          'total_akum' => $akumulasi_peny_fix,
          'nilai_peny' => $na_fix,
@@ -4459,9 +4514,27 @@ group by no_bbp";
       $this->db->where("id_detail_aset", $id);
       $this->db->update("detail_pembelian");
 
-      // // jurnal
-      $this->m_keuangan->GenerateJurnal('1122',$id,'d',$tp_fix);
-      $this->m_keuangan->GenerateJurnal('1120',$id,'k',$tp_fix);
+      // jurnal peny
+      $kel_akun = [
+         'id_jurnal' => $id_penyusutan,
+         'tgl_jurnal' => date("Y-m-d"),
+         'no_coa' => $kd_peny_d,
+         'posisi_dr_cr' => "d",
+         'nominal' => $tp_fix + $tarif_rev,
+      ];
+      $this->db->insert('jurnal', $kel_akun);
+
+      $beban = [
+         'id_jurnal' => $id_penyusutan,
+         'tgl_jurnal' => date("Y-m-d"),
+         'no_coa' => $kd_peny_k,
+         'posisi_dr_cr' => "k",
+         'nominal' => $tp_fix + $tarif_rev,
+      ];
+      $this->db->insert('jurnal', $beban);
+
+      // // $this->m_keuangan->GenerateJurnal('1122',$id,'d',$tp_fix);
+      // // $this->m_keuangan->GenerateJurnal('1120',$id,'k',$tp_fix);
       redirect('c_transaksi/revaluasi');
    }
 
@@ -4480,7 +4553,7 @@ group by no_bbp";
          ];
          $this->template->load('template', 'laporan/kartu_aset', $data);
       } else {
-         $cb = "select * from trans_peny_rev where id_detail is null";
+         $cb = "select * from trans_peny_rev where id_detail = '' ";
          $list = $this->db->query($cb)->result();
          $data = [
             'list' => $list, 

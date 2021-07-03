@@ -38,7 +38,7 @@
                         </select>
                     </div>
                 </div>
-
+                <!-- <input type="text" id="detail_aset"> -->
                 <div class="form-group row">
                     <label class="col-sm-2" for="nilai_perbaikan">Nilai Perbaikan</label>	
                     <div class="col-sm-3">
@@ -100,7 +100,7 @@
                 type: "POST",
                 success : function(data) {
                     var obj = JSON.parse(data)
-
+                    // $("#detail_aset").val(obj.id_detail_aset)
                     if (obj !== null) {
                         var ue = obj.sisa_umur
                         $('#ue').val(ue)

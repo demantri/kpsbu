@@ -127,6 +127,7 @@ class m_transaksi extends CI_Model {
 		join aset b on a.id_aset = b.id 
 		where sisa_umur != 0 
 		and cek_bulan_perb is not null
+		AND cek_bulan_peny != LEFT(SYSDATE(), 7)
 		";
 		return $this->db->query($sql)->result();
 	}
@@ -199,6 +200,16 @@ class m_transaksi extends CI_Model {
 		";
 		return $this->db->query($query);
     }
+
+	public function getKd($id_detail)
+	{
+		$query = "SELECT kel_akun, kel_akun_peny_d, kel_akun_peny_k, nama_coa
+		FROM aset a
+		INNER JOIN detail_pembelian b ON a.id = b.id_aset
+		INNER JOIN coa c ON a.kel_akun = c.no_coa
+		WHERE b.id_detail_aset = '$id_detail'";
+		return $this->db->query($query);
+	}
 
     public function getJumlah($id_peternak)
     {

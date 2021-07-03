@@ -2352,7 +2352,9 @@ class c_masterdata extends CI_controller{
                'aset' => $this->input->post('aset'),
                'umur_aset' => $this->input->post('umur_aset'),
                'id_supplier' => $this->input->post('supplier'), 
-               'kel_akun' => $this->input->post('kel_akun'), 
+               'kel_akun' => $this->input->post('kel_akun'),
+               'kel_akun_peny_d' => $this->input->post('kel_akun_d'),
+               'kel_akun_peny_k' => $this->input->post('kel_akun_k'),
             );
             // print_r($data);exit;
             $this->db->insert('aset', $data);

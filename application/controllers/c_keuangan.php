@@ -50,49 +50,44 @@ class c_keuangan extends CI_Controller
 
 	
 	public function view_bukubesar()
-	{	
-		   // if(!empty($this->session->userdata('level'))){
-   
+	{
 	if(isset($_POST['no_akun'], $_POST['bulan'])){
-		date_default_timezone_set('Asia/Jakarta');
-				$no_akun = $_POST['no_akun'];
-				$bulan1 = $_POST['bulan'];
-				$tahun1 = date("Y",strtotime($_POST['tahun']));;
-				$cek = date('m-d-Y', mktime(0,0,0,1,$bulan1-1,$tahun1));
-				$bulan = substr($cek, 3,2);
-				$tahun = substr($cek, 6,5);
-				$data['bulan'] = $_POST['bulan'];
-				$data['tahun'] = $_POST['tahun'];
-				$data['no_akun'] = $no_akun;
-				$query = "SELECT sum(nominal) as debit , (SELECT sum(nominal) FROM jurnal WHERE no_coa = '$no_akun' AND MONTH(tgl_jurnal) <= '$bulan' AND YEAR(tgl_jurnal) <= '$tahun' and posisi_dr_cr = 'k' order by no) AS kredit FROM jurnal WHERE no_coa = '$no_akun' AND MONTH(tgl_jurnal) <= '$bulan' AND YEAR(tgl_jurnal) <= '$tahun' and posisi_dr_cr = 'd' 
-					";
-				$data['saldoawal'] = $this->db->query($query)->row_array();
-				$data['akun'] = $this->M_keuangan->GetDataAkun();
-				$data['dataakun'] = $this->M_keuangan->GetSaldoAkun($no_akun);
-				$data['jurnal'] = $this->M_keuangan->getdatabukubesar($no_akun, $bulan1, $tahun1);
-				$this->template->load('template','bukubesar',$data);
-				// var_dump($cek);
-			}else{
-				date_default_timezone_set('Asia/Jakarta');
-				$no_akun = '1111';
-				$bulan1 = date('m');
-				$tahun1 = date('Y');
-				$cek = date('m-d-Y', mktime(0,0,0,1,$bulan1-1,$tahun1));
-				$bulan = substr($cek, 3,2);
-				$tahun = substr($cek, 6,5);
-				$query = "SELECT sum(nominal) as debit , (SELECT sum(nominal) FROM jurnal WHERE no_coa = '$no_akun' AND MONTH(tgl_jurnal) <= '$bulan' AND YEAR(tgl_jurnal) <= '$tahun' and posisi_dr_cr = 'k' ) AS kredit FROM jurnal WHERE no_coa = '$no_akun' AND MONTH(tgl_jurnal) <= '$bulan' AND YEAR(tgl_jurnal) <= '$tahun' and posisi_dr_cr = 'd' ";
-				$data['bulan'] = date('m');
-				$data['tahun'] = date('Y');
-				$data['saldoawal'] = $this->db->query($query)->row_array();
-				$data['akun'] = $this->M_keuangan->GetDataAkun();
-				$data['dataakun'] = $this->M_keuangan->GetSaldoAkun($no_akun);
-				$data['jurnal'] = $this->M_keuangan->getdatabukubesar($no_akun, $bulan1, $tahun1);
-				$this->template->load('template','bukubesar',$data);
-				// var_dump($data['saldoawal']);
-			}
-			 // }else{
-    //   redirect('c_login/home');
-    // }
+	date_default_timezone_set('Asia/Jakarta');
+			$no_akun = $_POST['no_akun'];
+			$bulan1 = $_POST['bulan'];
+			$tahun1 = date("Y",strtotime($_POST['tahun']));;
+			$cek = date('m-d-Y', mktime(0,0,0,1,$bulan1-1,$tahun1));
+			$bulan = substr($cek, 3,2);
+			$tahun = substr($cek, 6,5);
+			$data['bulan'] = $_POST['bulan'];
+			$data['tahun'] = $_POST['tahun'];
+			$data['no_akun'] = $no_akun;
+			$query = "SELECT sum(nominal) as debit , (SELECT sum(nominal) FROM jurnal WHERE no_coa = '$no_akun' AND MONTH(tgl_jurnal) <= '$bulan' AND YEAR(tgl_jurnal) <= '$tahun' and posisi_dr_cr = 'k' order by no) AS kredit FROM jurnal WHERE no_coa = '$no_akun' AND MONTH(tgl_jurnal) <= '$bulan' AND YEAR(tgl_jurnal) <= '$tahun' and posisi_dr_cr = 'd' 
+				";
+			$data['saldoawal'] = $this->db->query($query)->row_array();
+			$data['akun'] = $this->M_keuangan->GetDataAkun();
+			$data['dataakun'] = $this->M_keuangan->GetSaldoAkun($no_akun);
+			$data['jurnal'] = $this->M_keuangan->getdatabukubesar($no_akun, $bulan1, $tahun1);
+			$this->template->load('template','bukubesar',$data);
+			// var_dump($cek);
+		}else{
+			date_default_timezone_set('Asia/Jakarta');
+			$no_akun = '1111';
+			$bulan1 = date('m');
+			$tahun1 = date('Y');
+			$cek = date('m-d-Y', mktime(0,0,0,1,$bulan1-1,$tahun1));
+			$bulan = substr($cek, 3,2);
+			$tahun = substr($cek, 6,5);
+			$query = "SELECT sum(nominal) as debit , (SELECT sum(nominal) FROM jurnal WHERE no_coa = '$no_akun' AND MONTH(tgl_jurnal) <= '$bulan' AND YEAR(tgl_jurnal) <= '$tahun' and posisi_dr_cr = 'k' ) AS kredit FROM jurnal WHERE no_coa = '$no_akun' AND MONTH(tgl_jurnal) <= '$bulan' AND YEAR(tgl_jurnal) <= '$tahun' and posisi_dr_cr = 'd' ";
+			$data['bulan'] = date('m');
+			$data['tahun'] = date('Y');
+			$data['saldoawal'] = $this->db->query($query)->row_array();
+			$data['akun'] = $this->M_keuangan->GetDataAkun();
+			$data['dataakun'] = $this->M_keuangan->GetSaldoAkun($no_akun);
+			$data['jurnal'] = $this->M_keuangan->getdatabukubesar($no_akun, $bulan1, $tahun1);
+			$this->template->load('template','bukubesar',$data);
+			// var_dump($data['saldoawal']);
+		}
 	}
 
 	// public function bukubesar_pdf_all(){
@@ -100,22 +95,21 @@ class c_keuangan extends CI_Controller
 	// 	$this->template->load('template_pdf','jurnal_pdf', $data);
 	// }
 
-	public function bukubesar_pdf_filter($no_akun, $bulan5, $tahun5){
-
-				$bulan1 = $bulan5;
-				$tahun1 = date("Y",strtotime($tahun5));;
-				$cek = date('m-d-Y', mktime(0,0,0,1,$bulan1-1,$tahun1));
-				$bulan = substr($cek, 3,2);
-				$tahun = substr($cek, 6,5);
-				$data['bulan'] = $bulan5;
-				$data['tahun'] = $tahun5;
-				$query = "SELECT sum(nominal) as debit , (SELECT sum(nominal) FROM jurnal WHERE no_coa = '$no_akun' AND MONTH(tgl_jurnal) <= '$bulan' AND YEAR(tgl_jurnal) <= '$tahun' and posisi_dr_cr = 'K' ) AS kredit FROM jurnal WHERE no_coa = '$no_akun' AND MONTH(tgl_jurnal) <= '$bulan' AND YEAR(tgl_jurnal) <= '$tahun' and posisi_dr_cr = 'd' ";
-				$data['saldoawal'] = $this->db->query($query)->row_array();
-				$data['akun'] = $this->M_keuangan->GetDataAkun();
-				$data['dataakun'] = $this->M_keuangan->GetSaldoAkun($no_akun);
-				$data['jurnal'] = $this->M_keuangan->getdatabukubesar($no_akun, $bulan5, $tahun5);
+	public function bukubesar_pdf_filter($no_akun, $bulan5, $tahun5)
+	{
+		$bulan1 = $bulan5;
+		$tahun1 = date("Y",strtotime($tahun5));;
+		$cek = date('m-d-Y', mktime(0,0,0,1,$bulan1-1,$tahun1));
+		$bulan = substr($cek, 3,2);
+		$tahun = substr($cek, 6,5);
+		$data['bulan'] = $bulan5;
+		$data['tahun'] = $tahun5;
+		$query = "SELECT sum(nominal) as debit , (SELECT sum(nominal) FROM jurnal WHERE no_coa = '$no_akun' AND MONTH(tgl_jurnal) <= '$bulan' AND YEAR(tgl_jurnal) <= '$tahun' and posisi_dr_cr = 'K' ) AS kredit FROM jurnal WHERE no_coa = '$no_akun' AND MONTH(tgl_jurnal) <= '$bulan' AND YEAR(tgl_jurnal) <= '$tahun' and posisi_dr_cr = 'd' ";
+		$data['saldoawal'] = $this->db->query($query)->row_array();
+		$data['akun'] = $this->M_keuangan->GetDataAkun();
+		$data['dataakun'] = $this->M_keuangan->GetSaldoAkun($no_akun);
+		$data['jurnal'] = $this->M_keuangan->getdatabukubesar($no_akun, $bulan5, $tahun5);
 		$this->template->load('template_pdf','bukubesar_pdf', $data);
-		//var_dump($awal);
 	}
 
 	// public function bukubesar_excel_all(){

@@ -793,13 +793,32 @@ class c_masterdata extends CI_controller{
 
    public function deactive($id)
    {
-      $data = [
-         'is_deactive' => 1
-      ];
-      $this->db->where('no_peternak', $id);
-      $this->db->update('peternak', $data);
+      // $id = 'PTRNK_031';
+      $sql = "SELECT sisa_pinjaman
+      FROM peternak a
+      INNER JOIN log_pinjaman b ON a.no_peternak = b.id_anggota
+      WHERE no_peternak = '$id'
+      ORDER BY tanggal_pinjaman DESC 
+      LIMIT 1";
+      $cek_sisa = $this->db->query($sql)->row();
+      // print_r($cek_sisa);exit;
 
-      redirect('c_masterdata/lihat_peternak');
+      if (empty($cek_sisa) OR $cek_sisa->sisa_pinjaman == 0) {
+         # code...
+         $data = [
+            'is_deactive' => 1
+         ];
+         $this->db->where('no_peternak', $id);
+         $this->db->update('peternak', $data);
+
+         $this->session->set_flashdata('message', '<p class="alert alert-success">Peternak berhasil di non-aktifkan.</p>');
+
+         redirect('c_masterdata/lihat_peternak');
+      } else {
+         $this->session->set_flashdata('message', '<p class="alert alert-danger">Silahkan melunaskan pinjaman terlebih dahulu.</p>');
+         redirect('c_masterdata/lihat_peternak');
+      }
+
    }
    
    public function isi_edit_peternak($id)

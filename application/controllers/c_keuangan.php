@@ -48,6 +48,44 @@ class c_keuangan extends CI_Controller
 		//$this->template->load('template','laporan_penj',$data);
 	}
 
+	public function bukubesar()
+	{
+		$no_coa = $this->input->post('no_coa');
+		$my = $this->input->post('bulan');
+
+		if (isset($no_coa, $my)) {
+			# code...
+			$coa = $this->db->get('coa')->result();
+			$list = $this->M_keuangan->getBB($no_coa, $my)->result();
+			$saldo = $this->M_keuangan->getBB($no_coa, $my)->row()->saldo_awal ?? 0;
+			
+			$query = "select * from coa where no_coa = '$no_coa'";
+			$nm_akun = $this->db->query($query)->row()->nama_coa;
+			// print_r($nm_akun);exit;
+			$data = [
+				'coa' => $coa,
+				'list' => $list,
+				'saldo' => $saldo,
+				'periode' => date('F Y', strtotime($my)), 
+				'nm_akun' => $nm_akun
+			];
+			// print_r($data);exit;
+			$this->template->load('template', 'new_bukubesar', $data);
+		} else {
+			$list = $this->M_keuangan->bb_kosongan()->result();
+			$coa = $this->db->get('coa')->result();
+			$saldo = 0;
+			$data = [
+				'list' => $list,
+				'coa' => $coa,
+                'saldo' => $saldo,
+				'periode' => '-', 
+				'nm_akun' => ''
+			];
+			$this->template->load('template', 'new_bukubesar', $data);
+		}
+	}
+
 	
 	public function view_bukubesar()
 	{

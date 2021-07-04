@@ -95,5 +95,27 @@ class m_keuangan extends CI_model
 		return $query->result_array();
 		}
 
+	public function getBB($coa, $tgl)
+	{
+		$sql ="SELECT a.*, nama_coa, saldo_awal
+		FROM jurnal a
+		JOIN coa b ON a.no_coa = b.no_coa
+		WHERE a.no_coa = '$coa'
+		AND LEFT(tgl_jurnal, 7) = '$tgl'
+		";
+		return $this->db->query($sql);
+	}
+
+	public function bb_kosongan()
+	{
+		$sql ="SELECT a.*, nama_coa, saldo_awal
+		FROM jurnal a
+		JOIN coa b ON a.no_coa = b.no_coa
+		WHERE a.no_coa = ''
+		AND LEFT(tgl_jurnal, 7) = LEFT(SYSDATE(),7)
+		";
+		return $this->db->query($sql);
+	}
+
 	
 }

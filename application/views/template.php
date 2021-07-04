@@ -287,7 +287,8 @@
                                     elseif( $this->session->userdata('level')=="keuangan3"):
                                      ?>
                                      <li><a href="<?php echo site_url();?>c_keuangan/view_jurnal">Jurnal</a></li>
-                                    <li><a href="<?php echo site_url();?>c_keuangan/view_bukubesar">Buku Besar</a></li>
+                                    <!-- <li><a href="<?php echo site_url();?>c_keuangan/view_bukubesar">Buku Besar</a></li> -->
+                                    <li><a href="<?php echo site_url();?>c_keuangan/bukubesar">Buku Besar</a></li>
                                      <li><a href="<?php echo site_url();?>c_keuangan/lap_penjs">Laporan Penjualan IPS</a></li>
                                     <li><a href="<?php echo site_url();?>c_keuangan/lap_penjt">Laporan Penjualan Toko</a></li>
                                      <li><a href="<?php echo site_url();?>c_keuangan/lap_pemby">Laporan Pembayaran Beban</a></li>

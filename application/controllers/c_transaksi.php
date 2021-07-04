@@ -559,8 +559,6 @@ class c_transaksi extends CI_controller{
       $this->db->where('no_trans', $no_trans);
       $this->db->select_sum('jumlah');
       $data['cek_jml_pmb'] = $this->db->get('detail_pembelian_bb')->row()->jumlah;
-
-
        // $data['cek_selesai'] = $this->db->query($query1)->num_rows();
       $this->db->where('no_trans', $no_trans);
       $data['cek_selesai'] = $this->db->get('detail_pembelian_bb')->num_rows();
@@ -568,10 +566,9 @@ class c_transaksi extends CI_controller{
       $this->db->where('is_deactive =', 0);
       $data['peternak'] = $this->db->get('peternak')->result_array();
 
-       $this->db->select_sum('subtotal');
-       $this->db->where('no_trans', $no_trans);
-       $data['total'] = $this->db->get('detail_pembelian_bb')->row()->subtotal;
-
+      $this->db->select_sum('subtotal');
+      $this->db->where('no_trans', $no_trans);
+      $data['total'] = $this->db->get('detail_pembelian_bb')->row()->subtotal;
 
       $this->db->select('nama_bb, a.jumlah, harga,satuan,nama_peternak, a.no_peternak');
       $this->db->from('detail_pembelian_bb a');
@@ -580,8 +577,7 @@ class c_transaksi extends CI_controller{
       $this->db->where('no_trans', $no_trans);
       $data['detail'] = $this->db->get()->result_array();
 
-         $this->template->load('template', 'pemb/form', $data);
-      // var_dump($data['cek_jml_pmb']);
+      $this->template->load('template', 'pemb/form', $data);
    }
 
    public function tambah_pemb(){
@@ -4547,9 +4543,16 @@ group by no_bbp";
          # code...
          $this->db->where('id_detail =', $id);
          $list = $this->db->get('trans_peny_rev')->result();
+
+         $this->db->select('aset');
+         $this->db->join('aset', 'aset.id = detail_pembelian.id_aset');
+         $this->db->where('id_detail_aset =', $id);
+         $x = $this->db->get('detail_pembelian')->row()->aset;
+
          $data = [
             'list' => $list,
-            'aset' => $aset
+            'aset' => $aset, 
+            'nm_aset' => $x
          ];
          $this->template->load('template', 'laporan/kartu_aset', $data);
       } else {
@@ -4557,7 +4560,8 @@ group by no_bbp";
          $list = $this->db->query($cb)->result();
          $data = [
             'list' => $list, 
-            'aset' => $aset
+            'aset' => $aset, 
+            'nm_aset' => ''
          ];
          $this->template->load('template', 'laporan/kartu_aset', $data);
       }

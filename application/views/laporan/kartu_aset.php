@@ -24,6 +24,7 @@
 				<hr>
 				<center>
 					<h3>Kartu Penyusutan Aset</h3>
+					<h2><?= $nm_aset ?></h2>
 				</center>
 				<hr>
 				<table id="datatable" class="table table-striped table-bordered table-hover jambo_table">

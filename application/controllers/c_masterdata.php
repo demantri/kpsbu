@@ -675,7 +675,7 @@ class c_masterdata extends CI_controller{
          $this->db->select('peternak.*, tps.alamat as alamat_tps');
          $this->db->from('peternak');
          $this->db->join('tps', 'peternak.kd_tps = tps.kode_tps', 'left');
-         $this->db->where('is_deactive =', 0);
+         // $this->db->where('is_deactive =', 0);
          $this->db->order_by('no_peternak', 'desc');
          $data['result'] = $this->db->get()->result_array();
          // print_r($data['result']);exit;

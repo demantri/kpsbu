@@ -242,7 +242,7 @@
                               <ul class="nav child_menu">
                                 <?php if( $this->session->userdata('level')=="keuangan" OR $this->session->userdata('level')=="admin"):?>
                                     <li><a href="<?php echo site_url();?>c_keuangan/view_jurnal">Jurnal</a></li>
-                                    <li><a href="<?php echo site_url();?>c_keuangan/view_bukubesar">Buku Besar</a></li>
+                                    <li><a href="<?php echo site_url();?>c_keuangan/bukubesar">Buku Besar</a></li>
                                     <!-- <li><a href="<?php echo site_url();?>c_keuangan/view_bukubesar">Kartu Simpanan Wajib</a></li> -->
                                     <!-- <li><a href="<?php echo site_url();?>c_keuangan/view_bukubesar">Kartu Simpanan Manasuka</a></li> -->
                                     <li><a href="<?php echo site_url();?>simpanan/laporan_setoran_anggota">Laporan Setoran Susu Anggota</a></li>

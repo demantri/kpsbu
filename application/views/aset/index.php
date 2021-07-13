@@ -29,6 +29,7 @@
 						<td><?= $r->aset?></td>
 						<td><?= $r->umur_aset?></td>
 						<td class="text-center">
+						
 							<a href="isi_edit_aset/<?php echo $r->id; ?>">
 								<span class="fa-stack">
 								  	<i class="fa fa-square fa-stack-2x" style="color:#2A3F54;"></i>
@@ -36,12 +37,12 @@
 								</span>
 							</a>
 
-							<a href="<?= site_url("c_masterdata/hapusAset/". $r->id ) ?>">
+							<!-- <a href="<?= site_url("c_masterdata/hapusAset/". $r->id ) ?>">
 								<span class="fa-stack">
 								  	<i class="fa fa-square fa-stack-2x" style="color:#2A3F54;"></i>
 								 	<span class="glyphicon glyphicon-trash fa-stack-1x" aria-hidden="true" style="color:white"></span>
 								</span>
-							</a>
+							</a> -->
 						</td>
 					</tr>
 				<?php } ?>

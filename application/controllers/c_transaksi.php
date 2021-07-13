@@ -4,9 +4,9 @@ class c_transaksi extends CI_controller{
       function __construct(){
         parent:: __construct();
         $this->load->model( array (
-          "m_transaksi" => "model",
-          "m_keuangan" => "m_keuangan", 
-          "crud_model" => "crud"
+            "m_transaksi" => "model",
+            "m_keuangan" => "m_keuangan", 
+            "crud_model" => "crud"
         ));
         date_default_timezone_set('Asia/Jakarta');
         if(empty($this->session->userdata('level'))){
@@ -228,18 +228,18 @@ class c_transaksi extends CI_controller{
       }
    }
 
-   // index pemb. aset
+   // index pemb. aset // ini punya dila 
    public function pembelian_aset()
    {
-     # code...
-    $pembelian_aset = $this->db->get('pembelian_aset');
-    $data['pembelian_aset'] = $pembelian_aset;
+      // $ itu = variabel
+      $pembelian_aset = $this->db->get('pembelian_aset');
+      $data['pembelian_aset'] = $pembelian_aset;
 
-    // $detail =$this->model->detail_view();
-    $detail =$this->db->get("pembelian_aset")->result();
-    $data['detail'] = $detail;
+      // $detail =$this->model->detail_view();
+      $detail =$this->db->get("pembelian_aset")->result();
+      $data['detail'] = $detail;
 
-    $this->template->load('template', 'pembelian_aset/index', $data);
+      $this->template->load('template', 'pembelian_aset/index', $data);
    }
 
     function aset(){
@@ -4649,7 +4649,7 @@ group by no_bbp";
          $log_bayar_pinjaman = [
             'id_anggota' => $id_anggota,
             'nominal' => $pinjaman,
-            'kd_coa' => 1112
+            // 'kd_coa' => 1112
          ];
          $this->db->insert('log_bayar_pinjaman', $log_bayar_pinjaman);
          
@@ -4678,140 +4678,186 @@ group by no_bbp";
 
       // kalo gak ada utang nih jurnalnya
       if ($sisa_pinjaman == 0) {
-        // jurnal
-        $pbb = array (
-          "id_jurnal" => $this->input->post("kode_pembayaran"),
-          "tgl_jurnal" => date("Y-m-d"),
-          "no_coa" => 1112,
-          "posisi_dr_cr" => "d",
-          "nominal" => $this->input->post("jumlah_harga_susu"),
-        );
-        $this->db->insert("jurnal", $pbb);
+         // jurnal
+         $pbb = array (
+            "id_jurnal" => $this->input->post("kode_pembayaran"),
+            "tgl_jurnal" => date("Y-m-d"),
+            "no_coa" => 2111,
+            "posisi_dr_cr" => "d",
+            "nominal" => $this->input->post("jumlah_harga_susu"),
+         );
+         $this->db->insert("jurnal", $pbb);
 
-        $kas = array (
-          "id_jurnal" => $this->input->post("kode_pembayaran"),
-          "tgl_jurnal" => date("Y-m-d"),
-          "no_coa" => 1111,
-          "posisi_dr_cr" => "k",
-          "nominal" => $this->input->post("total_trans_susu"),
-        );
-        $this->db->insert("jurnal", $kas);
+         $kas = array (
+            "id_jurnal" => $this->input->post("kode_pembayaran"),
+            "tgl_jurnal" => date("Y-m-d"),
+            "no_coa" => 1111,
+            "posisi_dr_cr" => "k",
+            "nominal" => $this->input->post("total_trans_susu"),
+         );
+         $this->db->insert("jurnal", $kas);
 
-        $simpanan_wajib = array (
-          "id_jurnal" => $this->input->post("kode_pembayaran"),
-          "tgl_jurnal" => date("Y-m-d"),
-          "no_coa" => 3112,
-          "posisi_dr_cr" => "k",
-          "nominal" => $this->input->post("jumlah_pembayaran"),
-        );
-        $this->db->insert("jurnal", $simpanan_wajib);
+         $simpanan_wajib = array (
+            "id_jurnal" => $this->input->post("kode_pembayaran"),
+            "tgl_jurnal" => date("Y-m-d"),
+            "no_coa" => 3112,
+            "posisi_dr_cr" => "k",
+            "nominal" => $this->input->post("jumlah_pembayaran"),
+         );
+         $this->db->insert("jurnal", $simpanan_wajib);
 
-        $simpanan_masuka = array (
-          "id_jurnal" => $this->input->post("kode_pembayaran"),
-          "tgl_jurnal" => date("Y-m-d"),
-          "no_coa" => 3787,
-          "posisi_dr_cr" => "k",
-          "nominal" => $this->input->post("manasuka"),
-        );
-        $this->db->insert("jurnal", $simpanan_masuka);
+         $simpanan_masuka = array (
+            "id_jurnal" => $this->input->post("kode_pembayaran"),
+            "tgl_jurnal" => date("Y-m-d"),
+            "no_coa" => 3113,
+            "posisi_dr_cr" => "k",
+            "nominal" => $this->input->post("manasuka"),
+         );
+         $this->db->insert("jurnal", $simpanan_masuka);
 
-      } else if ($subtotal > $sisa_pinjaman) {
+      } else if ($pinjaman != '') {
+         // jurnal
+         $pbb = array (
+            "id_jurnal" => $this->input->post("kode_pembayaran"),
+            "tgl_jurnal" => date("Y-m-d"),
+            "no_coa" => 2111,
+            "posisi_dr_cr" => "d",
+            "nominal" => $this->input->post("jumlah_harga_susu"),
+         );
+         $this->db->insert("jurnal", $pbb);
 
-        // jurnal
-        $pbb = array (
-          "id_jurnal" => $this->input->post("kode_pembayaran"),
-          "tgl_jurnal" => date("Y-m-d"),
-          "no_coa" => 1112,
-          "posisi_dr_cr" => "d",
-          "nominal" => $this->input->post("jumlah_harga_susu"),
-        );
-        $this->db->insert("jurnal", $pbb);
+         $kas = array (
+            "id_jurnal" => $this->input->post("kode_pembayaran"),
+            "tgl_jurnal" => date("Y-m-d"),
+            "no_coa" => 1111,
+            "posisi_dr_cr" => "k",
+            "nominal" => $this->input->post("total_trans_susu"),
+         );
+         $this->db->insert("jurnal", $kas);
+         
+         $pin_angt = array (
+            "id_jurnal" => $this->input->post("kode_pembayaran"),
+            "tgl_jurnal" => date("Y-m-d"),
+            "no_coa" => 1115,
+            "posisi_dr_cr" => "k",
+            "nominal" => $this->input->post("pinjaman"),
+         );
+         $this->db->insert("jurnal", $pin_angt);
 
-        $kas = array (
-          "id_jurnal" => $this->input->post("kode_pembayaran"),
-          "tgl_jurnal" => date("Y-m-d"),
-          "no_coa" => 1111,
-          "posisi_dr_cr" => "k",
-          "nominal" => $kas_totalbayar_lebihdari_pinjaman,
-        );
-        $this->db->insert("jurnal", $kas);
+         $simpanan_wajib = array (
+            "id_jurnal" => $this->input->post("kode_pembayaran"),
+            "tgl_jurnal" => date("Y-m-d"),
+            "no_coa" => 3112,
+            "posisi_dr_cr" => "k",
+            "nominal" => $this->input->post("jumlah_pembayaran"),
+         );
+         $this->db->insert("jurnal", $simpanan_wajib);
 
-        $simpanan_wajib = array (
-          "id_jurnal" => $this->input->post("kode_pembayaran"),
-          "tgl_jurnal" => date("Y-m-d"),
-          "no_coa" => 3112,
-          "posisi_dr_cr" => "k",
-          "nominal" => $this->input->post("jumlah_pembayaran"),
-        );
-        $this->db->insert("jurnal", $simpanan_wajib);
+         $simpanan_masuka = array (
+            "id_jurnal" => $this->input->post("kode_pembayaran"),
+            "tgl_jurnal" => date("Y-m-d"),
+            "no_coa" => 3113,
+            "posisi_dr_cr" => "k",
+            "nominal" => $this->input->post("manasuka"),
+         );
+         $this->db->insert("jurnal", $simpanan_masuka);
+      } else if ($subtotal > $pinjaman) {
 
-        $simpanan_masuka = array (
-          "id_jurnal" => $this->input->post("kode_pembayaran"),
-          "tgl_jurnal" => date("Y-m-d"),
-          "no_coa" => 3787,
-          "posisi_dr_cr" => "k",
-          "nominal" => $this->input->post("manasuka"),
-        );
-        $this->db->insert("jurnal", $simpanan_masuka);
+         // jurnal
+         $pbb = array (
+            "id_jurnal" => $this->input->post("kode_pembayaran"),
+            "tgl_jurnal" => date("Y-m-d"),
+            "no_coa" => 1112,
+            "posisi_dr_cr" => "d",
+            "nominal" => $this->input->post("jumlah_harga_susu"),
+         );
+         $this->db->insert("jurnal", $pbb);
 
-        $pinjaman = array (
-          "id_jurnal" => $this->input->post("kode_pembayaran"),
-          "tgl_jurnal" => date("Y-m-d"),
-          "no_coa" => 1115,
-          "posisi_dr_cr" => "k",
-          "nominal" => $pinjaman,
-        );
-        $this->db->insert("jurnal", $pinjaman);
+         $kas = array (
+            "id_jurnal" => $this->input->post("kode_pembayaran"),
+            "tgl_jurnal" => date("Y-m-d"),
+            "no_coa" => 1111,
+            "posisi_dr_cr" => "k",
+            "nominal" => $kas_totalbayar_lebihdari_pinjaman,
+         );
+         $this->db->insert("jurnal", $kas);
+
+         $simpanan_wajib = array (
+            "id_jurnal" => $this->input->post("kode_pembayaran"),
+            "tgl_jurnal" => date("Y-m-d"),
+            "no_coa" => 3112,
+            "posisi_dr_cr" => "k",
+            "nominal" => $this->input->post("jumlah_pembayaran"),
+         );
+         $this->db->insert("jurnal", $simpanan_wajib);
+
+         $simpanan_masuka = array (
+            "id_jurnal" => $this->input->post("kode_pembayaran"),
+            "tgl_jurnal" => date("Y-m-d"),
+            "no_coa" => 3787,
+            "posisi_dr_cr" => "k",
+            "nominal" => $this->input->post("manasuka"),
+         );
+         $this->db->insert("jurnal", $simpanan_masuka);
+
+         $pinjaman = array (
+            "id_jurnal" => $this->input->post("kode_pembayaran"),
+            "tgl_jurnal" => date("Y-m-d"),
+            "no_coa" => 1115,
+            "posisi_dr_cr" => "k",
+            "nominal" => $pinjaman,
+         );
+         $this->db->insert("jurnal", $pinjaman);
       } 
       else if ($bayar_tunai != 0) {
-        // jurnal
-        $pbb = array (
-          "id_jurnal" => $this->input->post("kode_pembayaran"),
-          "tgl_jurnal" => date("Y-m-d"),
-          "no_coa" => 1112,
-          "posisi_dr_cr" => "d",
-          "nominal" => $this->input->post("jumlah_harga_susu"),
-        );
-        $this->db->insert("jurnal", $pbb);
+         // jurnal
+         $pbb = array (
+            "id_jurnal" => $this->input->post("kode_pembayaran"),
+            "tgl_jurnal" => date("Y-m-d"),
+            "no_coa" => 1112,
+            "posisi_dr_cr" => "d",
+            "nominal" => $this->input->post("jumlah_harga_susu"),
+         );
+         $this->db->insert("jurnal", $pbb);
 
-        $kas = array (
-          "id_jurnal" => $this->input->post("kode_pembayaran"),
-          "tgl_jurnal" => date("Y-m-d"),
-          "no_coa" => 1111,
-          "posisi_dr_cr" => "d",
-          "nominal" => $this->input->post("bayar_tunai"),
-        );
-        $this->db->insert("jurnal", $kas);
+         $kas = array (
+            "id_jurnal" => $this->input->post("kode_pembayaran"),
+            "tgl_jurnal" => date("Y-m-d"),
+            "no_coa" => 1111,
+            "posisi_dr_cr" => "d",
+            "nominal" => $this->input->post("bayar_tunai"),
+         );
+         $this->db->insert("jurnal", $kas);
 
-        $simpanan_wajib = array (
-          "id_jurnal" => $this->input->post("kode_pembayaran"),
-          "tgl_jurnal" => date("Y-m-d"),
-          "no_coa" => 3112,
-          "posisi_dr_cr" => "k",
-          "nominal" => $this->input->post("jumlah_pembayaran"),
-        );
-        $this->db->insert("jurnal", $simpanan_wajib);
+         $simpanan_wajib = array (
+            "id_jurnal" => $this->input->post("kode_pembayaran"),
+            "tgl_jurnal" => date("Y-m-d"),
+            "no_coa" => 3112,
+            "posisi_dr_cr" => "k",
+            "nominal" => $this->input->post("jumlah_pembayaran"),
+         );
+         $this->db->insert("jurnal", $simpanan_wajib);
 
-        $simpanan_masuka = array (
-          "id_jurnal" => $this->input->post("kode_pembayaran"),
-          "tgl_jurnal" => date("Y-m-d"),
-          "no_coa" => 3787,
-          "posisi_dr_cr" => "k",
-          "nominal" => $this->input->post("manasuka"),
-        );
-        $this->db->insert("jurnal", $simpanan_masuka);
+         $simpanan_masuka = array (
+            "id_jurnal" => $this->input->post("kode_pembayaran"),
+            "tgl_jurnal" => date("Y-m-d"),
+            "no_coa" => 3787,
+            "posisi_dr_cr" => "k",
+            "nominal" => $this->input->post("manasuka"),
+         );
+         $this->db->insert("jurnal", $simpanan_masuka);
 
-        $pinjaman = array (
-          "id_jurnal" => $this->input->post("kode_pembayaran"),
-          "tgl_jurnal" => date("Y-m-d"),
-          "no_coa" => 1115,
-          "posisi_dr_cr" => "k",
-          "nominal" => $pinjaman,
-        );
-        $this->db->insert("jurnal", $pinjaman);
+         $pinjaman = array (
+            "id_jurnal" => $this->input->post("kode_pembayaran"),
+            "tgl_jurnal" => date("Y-m-d"),
+            "no_coa" => 1115,
+            "posisi_dr_cr" => "k",
+            "nominal" => $pinjaman,
+         );
+         $this->db->insert("jurnal", $pinjaman);
       }
-    }
-    redirect("c_transaksi/pembayaran_susu");
+   }
+   redirect("c_transaksi/pembayaran_susu");
   }
 
 

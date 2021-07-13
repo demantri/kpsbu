@@ -36,12 +36,12 @@
 								</span>
 							</a>
 
-							<a href="<?= site_url("c_masterdata/hapusSupplier/". $r->id) ?>">
+							<!-- <a href="<?= site_url("c_masterdata/hapusSupplier/". $r->id) ?>">
 								<span class="fa-stack">
 								  	<i class="fa fa-square fa-stack-2x" style="color:#2A3F54;"></i>
 								 	<span class="glyphicon glyphicon-trash fa-stack-1x" aria-hidden="true" style="color:white"></span>
 								</span>
-							</a>
+							</a> -->
 						</td>
 					</tr>
 				<?php } ?>

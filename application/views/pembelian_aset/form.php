@@ -2,7 +2,7 @@
 	<head>
 		<title>Master Data Aset</title>
 	</head>
-	
+	<!-- <link href="http://code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css" rel="Stylesheet" type="text/css"> -->
 	<div class="x_panel">
  		<div class="x_title">
     		<h3 class="panel-title"><b>Form Aset</b></h3>
@@ -37,7 +37,8 @@
 						<div class="form-group row">
 						  	<label class="col-sm-1">Tanggal Beli</label>	
 							<div class="col-sm-2">
-						  		<input type = "date" name = "tgl_pembelian" class = "form-control" id="tgl_pembelian">
+						  		<!-- <input type = "text" name = "tgl_pembelian" class = "form-control" id="tgl_pembelian" placeholder="Tanggal Pembelian"> -->
+						  		<input type = "date" name = "tgl_pembelian" class = "form-control" id="tgl_pembelian" placeholder="Tanggal Pembelian">
 							</div>
 						</div>
 
@@ -155,8 +156,14 @@
 	</div>
 
 <!-- </html> -->
+<!-- <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.2.min.js"></script> -->
+<!-- <script type="text/javascript" src="http://code.jquery.com/ui/1.10.4/jquery-ui.js"></script> -->
 <script>
 	$(document).ready(function () {
+		// $('#tgl_pembelian').datepicker({
+		// 	minDate: 0, 
+		// 	dateFormat: 'yy-mm-dd'
+		// });
 
 		$("#supplier").change(function () {
             var id_supplier = $("#supplier").val();

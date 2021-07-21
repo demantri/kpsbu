@@ -21,7 +21,6 @@
                                         <th>Bulan Perbaikan</th>
                                         <th>Kategori</th>
                                         <th>Nilai Perbaikan</th>
-                                        <th>Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -35,9 +34,9 @@
                                         <td><?= date('F Y', strtotime($value->tgl_perbaikan))?></td>
                                         <td><?= $value->ket_perbaikan?></td>
                                         <td class="text-right"><?= penyusutan($value->nilai_perbaikan)?></td>
-                                        <td class="text-center">
+                                        <!-- <td class="text-center">
                                             <a href="<?= base_url('c_transaksi/detail/'.$value->id_perbaikan)?>" class="btn btn-primary">Detail</a>
-                                        </td>
+                                        </td> -->
                                     </tr>
                                     <?php } ?>
                                 </tbody>

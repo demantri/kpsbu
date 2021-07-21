@@ -4299,13 +4299,13 @@ group by no_bbp";
       // print_r($data_log);exit;
 
       // insert ke tb trans_peny_rev
-      // $trans_peny_rev = [
-      //    'id_trans' => $id_penyusutan,
-      //    'total_peny' => $tp_fix,
-      //    'total_akum' => $akumulasi_peny_fix,
-      //    'nilai_peny' => $na_fix
-      // ];
-      // $this->db->insert("trans_peny_rev", $trans_peny_rev);
+      $trans_peny_rev = [
+         'id_trans' => $id_penyusutan,
+         'total_peny' => $tp_fix,
+         'total_akum' => $akumulasi_peny_fix,
+         'nilai_peny' => $na_fix
+      ];
+      $this->db->insert("trans_peny_rev", $trans_peny_rev);
 
 
 
@@ -4381,6 +4381,19 @@ group by no_bbp";
       // print_r($data_log);exit;
       $this->db->insert('revaluasi', $data_rev);
 
+      $data_trans_peny_rev = [
+         'id_trans' => $id_rev,
+         // 'id_detail' => $id,
+         'total_peny' => $tp_fix,
+         'total_akum' => $akumulasi_peny_fix,
+         'nilai_peny' => $na_fix,
+         'tarif_rev' => $tarif_rev,
+         'nilai_bk_perbaikan' => $nilai_buku_perbaikan,
+         'nilai_bk_baru' => $nilai_buku_baru,
+      ];
+      // print_r($data_log);exit;
+      $this->db->insert('trans_peny_rev', $data_trans_peny_rev);
+
       $update_data = [
          'is_rev' => 1
       ];
@@ -4397,6 +4410,31 @@ group by no_bbp";
       $this->m_keuangan->GenerateJurnal('1122',$id,'d',$tp_fix);
       $this->m_keuangan->GenerateJurnal('1120',$id,'k',$tp_fix);
       redirect('c_transaksi/revaluasi');
+   }
+
+   public function kartu_aset()
+   {
+      $aset = $this->model->getAset()->result();
+      $id = $this->input->post('aset');
+
+      if (isset($id)) {
+         # code...
+         $this->db->where('id_detail =', $id);
+         $list = $this->db->get('trans_peny_rev')->result();
+         $data = [
+            'list' => $list,
+            'aset' => $aset
+         ];
+         $this->template->load('template', 'laporan/kartu_aset', $data);
+      } else {
+         $cb = "select * from trans_peny_rev where id_detail is null";
+         $list = $this->db->query($cb)->result();
+         $data = [
+            'list' => $list, 
+            'aset' => $aset
+         ];
+         $this->template->load('template', 'laporan/kartu_aset', $data);
+      }
    }
 
     public function kartu_simpanan_susu()

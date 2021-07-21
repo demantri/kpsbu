@@ -88,16 +88,37 @@ class m_transaksi extends CI_Model {
 		return $sql->result();
 	}
 
-	public function detail_penyusutan() {
-		$this->db->select("detail_pembelian.*, aset.id as kd_aset, aset, umur_aset, sisa_umur");
-		$this->db->join("aset", "aset.id = detail_pembelian.id_aset");
-		// $this->db->join("penyusutan", "aset.id = penyusutan.id_aset");
-		$this->db->where("sisa_umur !=", "0");
-		$this->db->where("is_rev =", 1);
-		$this->db->where("cek_bulan_peny !=", date("Y-m"));
+	// public function detail_penyusutan() {
+	// 	$this->db->select("detail_pembelian.*, aset.id as kd_aset, aset, umur_aset, sisa_umur");
+	// 	$this->db->join("aset", "aset.id = detail_pembelian.id_aset");
+	// 	// $this->db->join("penyusutan", "aset.id = penyusutan.id_aset");
+	// 	$this->db->where("sisa_umur !=", "0");
+	// 	$this->db->where("is_rev =", 0);
+	// 	$this->db->where("cek_bulan_peny !=", date("Y-m"));
 
-		$sql = $this->db->get("detail_pembelian");
-		return $sql->result();
+	// 	$sql = $this->db->get("detail_pembelian");
+	// 	return $sql->result();
+	// }
+
+	public function getAset()
+	{
+		$sql = "SELECT detail_pembelian.*, aset.id as kd_aset, aset, umur_aset, sisa_umur 
+		FROM detail_pembelian
+		JOIN aset ON aset.id = detail_pembelian.id_aset
+		";
+		return $this->db->query($sql);
+	}
+
+	public function detail_penyusutan() {
+		$sql = "SELECT detail_pembelian.*, aset.id as kd_aset, aset, umur_aset, sisa_umur 
+		FROM detail_pembelian
+		JOIN aset ON aset.id = detail_pembelian.id_aset
+		WHERE sisa_umur != 0
+		AND is_rev = 0
+		AND cek_bulan_peny != LEFT(SYSDATE(), 7)
+		AND cek_bulan_perb is null
+		";
+		return $this->db->query($sql)->result();
 	}
 
 	public function detail_rev() {

@@ -231,6 +231,14 @@ class m_transaksi extends CI_Model {
     	return $this->db->query($sql);
     }
 
+	public function getListPinjaman()
+	{
+		$sql = "SELECT *, nama_coa
+		FROM log_bayar_pinjaman a
+		INNER JOIN coa b ON a.kd_coa = b.no_coa";
+		return $this->db->query($sql);
+	}
+
     public function getIndex()
     {
     	# code...

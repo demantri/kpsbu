@@ -168,38 +168,52 @@ class c_transaksi extends CI_controller{
    public function simpan_pinjaman()
    {
      # code...
-    $data = array (
-      'kode_pinjaman' => $this->input->post("kode_simpanan"),
-      'id_anggota' => $this->input->post("peternak"),
-      'tanggal_pinjaman' => date("Y-m-d"),
-      'nominal' => $this->input->post("biaya"),
-      'sisa_pinjaman' => $this->input->post("biaya"),
-    );
-    $this->db->insert("log_pinjaman", $data);
+      $data = array (
+         'kode_pinjaman' => $this->input->post("kode_simpanan"),
+         'id_anggota' => $this->input->post("peternak"),
+         'tanggal_pinjaman' => date("Y-m-d"),
+         'nominal' => $this->input->post("biaya"),
+         'sisa_pinjaman' => $this->input->post("biaya"),
+      );
+      $this->db->insert("log_pinjaman", $data);
 
-    $this->db->set("pinjaman", $this->input->post("biaya"));
-    $this->db->where("no_peternak", $this->input->post("peternak"));
-    $this->db->update("peternak");
-    // jurnal
-    $debit = array (
-      "id_jurnal" => $this->input->post("kode_simpanan"),
-      "tgl_jurnal" => date("Y-m-d"),
-      "no_coa" => 3789,
-      "posisi_dr_cr" => "d",
-      "nominal" => $this->input->post("biaya"),
-    );
-    $this->db->insert("jurnal", $debit);
+      $log_bayar_pinjaman = [
+         'id_anggota' => $this->input->post("peternak"),
+         'nominal' => $this->input->post("biaya"),
+         'kd_coa' => 1111
+      ];
+      $this->db->insert("log_bayar_pinjaman", $log_bayar_pinjaman);
 
-    $kredit = array (
-      "id_jurnal" => $this->input->post("kode_simpanan"),
-      "tgl_jurnal" => date("Y-m-d"),
-      "no_coa" => 1111,
-      "posisi_dr_cr" => "k",
-      "nominal" => $this->input->post("biaya"),
-    );
-    $this->db->insert("jurnal", $kredit);
 
-    redirect("c_transaksi/pinjaman");
+      $this->db->set("pinjaman", $this->input->post("biaya"));
+      $this->db->where("no_peternak", $this->input->post("peternak"));
+      $this->db->update("peternak");
+      // jurnal
+      $debit = array (
+         "id_jurnal" => $this->input->post("kode_simpanan"),
+         "tgl_jurnal" => date("Y-m-d"),
+         "no_coa" => 3789,
+         "posisi_dr_cr" => "d",
+         "nominal" => $this->input->post("biaya"),
+      );
+      $this->db->insert("jurnal", $debit);
+
+      $kredit = array (
+         "id_jurnal" => $this->input->post("kode_simpanan"),
+         "tgl_jurnal" => date("Y-m-d"),
+         "no_coa" => 1111,
+         "posisi_dr_cr" => "k",
+         "nominal" => $this->input->post("biaya"),
+      );
+      $this->db->insert("jurnal", $kredit);
+
+      redirect("c_transaksi/pinjaman");
+   }
+
+   public function buku_pinjaman()
+   {
+      $data['list'] = $this->model->getListPinjaman()->result();
+      $this->template->load('template', 'pinjaman/buku_pinjaman', $data);
    }
 
    // index pemb. aset
@@ -3029,8 +3043,6 @@ group by no_bbp";
 
    }
 
-   
-
    //PENJUALAN toko
 
    public function lihat_penjt(){
@@ -4619,6 +4631,14 @@ group by no_bbp";
 
       // $last_pinjaman = $this->db->get('peternak');
       if ($sisa_pinjaman != '') {
+         // add tb_bayar_pinjaman
+         $log_bayar_pinjaman = [
+            'id_anggota' => $id_anggota,
+            'nominal' => $pinjaman,
+            'kd_coa' => 1112
+         ];
+         $this->db->insert('log_bayar_pinjaman', $log_bayar_pinjaman);
+         
          $update_sisa_pinjaman = [
             'sisa_pinjaman' => $sisa_pinjaman
          ];
@@ -4634,12 +4654,13 @@ group by no_bbp";
          $this->db->update('log_pinjaman', $update_status);
       }
 
-      // add tb_bayar_pinjaman
-      $log_bayar_pinjaman = [
-         'id_anggota' => $id_anggota,
-         'nominal' => $sisa_pinjaman,
-      ];
-      $this->db->insert('log_bayar_pinjaman', $log_bayar_pinjaman);
+      // // add tb_bayar_pinjaman
+      // $log_bayar_pinjaman = [
+      //    'id_anggota' => $id_anggota,
+      //    'nominal' => $pinjaman,
+      //    'kd_coa' => 1112
+      // ];
+      // $this->db->insert('log_bayar_pinjaman', $log_bayar_pinjaman);
 
       // kalo gak ada utang nih jurnalnya
       if ($sisa_pinjaman == 0) {

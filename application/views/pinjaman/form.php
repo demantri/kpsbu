@@ -66,10 +66,13 @@
 				// var total = data.total
 				// var pinjaman = 0
 				
-				console.log(data)
+				// console.log(data)
 				if (data) {
 					// alert('ada datanya')
 					var pinjaman = data.sisa_pinjaman
+					// var pinjaman = 100
+					console.log(pinjaman)
+					// var pinjaman = 0
 					// hardcode
 					// var total = 16
 					var total = data.total
@@ -93,40 +96,66 @@
 					});
 	
 					// console.log()
-	
 					$("#btn-simpan").prop("disabled", true)
-					if (total >= 16 && pinjaman === null) {
+					// if (total >= 16 && pinjaman == null) {
+					// 	// kalo bener
+					// 	$("#info").hide();
+					// 	// alert('done')
+					// 	$('#biaya').prop('readonly', false)
+					// 	$("#btn-simpan").prop("disabled", false)
+					// } else if (total >= 16 && pinjaman != 0) {
+					// 	// pembayaran lulus, tapi punya utang
+					// 	$("#info").show();
+					// 	var info = 'Mon maap, anda <strong>punya utang !</strong>'
+					// 	$("#info").html(info);
+	
+					// 	$('#biaya').prop('readonly', true)
+					// 	$("#btn-simpan").prop("disabled", true)
+					// } else if (total < 16) {
+					// 	$("#info").show();
+					// 	var info = 'Mon maap, anda tidak memenuhi <strong>SYARAT !</strong>'
+					// 	$("#info").html(info);
+	
+					// 	$('#biaya').prop('readonly', true)
+					// 	$("#btn-simpan").prop("disabled", true)
+					// }
+
+					// nyobain
+					if (pinjaman === null && total >= 16) {
+						console.log('pinjaman null, total leih dari 16')
 						// kalo bener
 						$("#info").hide();
 						// alert('done')
 						$('#biaya').prop('readonly', false)
 						$("#btn-simpan").prop("disabled", false)
-					} else if (total >= 16 && pinjaman !== null) {
-						// pembayaran lulus, tapi punya utang
+					} else if (pinjaman != 0) {
+						console.log('masih ada pinjaman')
 						$("#info").show();
-						var info = 'Mon maap, anda <strong>punya utang !</strong>'
+						var info = 'Maaf, anda <strong>masih mempunyai pinjaman !</strong>'
 						$("#info").html(info);
 	
 						$('#biaya').prop('readonly', true)
 						$("#btn-simpan").prop("disabled", true)
+					} else if (pinjaman == 0) {
+						console.log('pinjaman sudah 0')
+						$('#biaya').prop('readonly', false)
+						$("#btn-simpan").prop("disabled", false)
 					} else if (total < 16) {
+						console.log('total kurang dari 16')
 						$("#info").show();
 						var info = 'Mon maap, anda tidak memenuhi <strong>SYARAT !</strong>'
 						$("#info").html(info);
-	
+
 						$('#biaya').prop('readonly', true)
 						$("#btn-simpan").prop("disabled", true)
 					}
 
-					// nyobain
-					// if (pinjaman === null && total >= 16) {
-					// 	console.log('pinjaman null, total leih dari 16')
-					// } else {
-					// 	console.log('pinjaman ada isinya')
-					// }
-
 				} else {
 					// alert('data kosong')
+					$("#info").show();
+					var info = '<strong>Tidak ada data tersimpan.</strong>'
+					$("#info").html(info);
+
 					$('#biaya').prop('readonly', true)
 					$("#btn-simpan").prop("disabled", true)	
 				}

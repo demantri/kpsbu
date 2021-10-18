@@ -1,794 +1,744 @@
 <?php
-class c_masterdata extends CI_controller{
-   
-    function __construct(){
-        parent:: __construct();
-          date_default_timezone_set('Asia/Jakarta');
-       if(empty($this->session->userdata('level'))){
-            redirect('c_login/home');
-        }
-    }
-    public function beranda()
+class c_masterdata extends CI_controller
+{
+
+   function __construct()
    {
-      
-         
-         $this->template->load('template', 'beranda');
-       
+      parent::__construct();
+      date_default_timezone_set('Asia/Jakarta');
+      if (empty($this->session->userdata('level'))) {
+         redirect('c_login/home');
+      }
    }
-  public function lihat_coa()
+   public function beranda()
    {
-      
-         $this->db->order_by('no_coa ASC');
-         $data['result'] = $this->db->get('coa')->result_array();
-         // print_r($data['result']);exit;
-         $this->template->load('template', 'coa/view', $data);
-       
+
+
+      $this->template->load('template', 'beranda');
+   }
+   public function lihat_coa()
+   {
+
+      $this->db->order_by('no_coa ASC');
+      $data['result'] = $this->db->get('coa')->result_array();
+      // print_r($data['result']);exit;
+      $this->template->load('template', 'coa/view', $data);
    }
 
    public function form_coa()
    {
-        
-         
-         //  $data['bahan_baku'] = $this->db->get('bahan_baku')->result_array();
-         $this->template->load('template', 'coa/form');
-          
+
+
+      //  $data['bahan_baku'] = $this->db->get('bahan_baku')->result_array();
+      $this->template->load('template', 'coa/form');
    }
 
    public function edit_form_coa($id)
    {
 
-      $this->db->where('id =', $id);
+      $this->db->where('no_coa =', $id);
       $data['coa'] = $this->db->get('coa')->row();
 
       $this->template->load('template', 'coa/edit_form', $data);
+      // var_dump($data);
    }
 
    public function isi_edit_COA()
    {
-      $id = $this->input->post('id');
+
       $no_coa = $this->input->post('no_coa');
+      $nama_coa = $this->input->post('nama_coa');
+      $saldo_awal = str_replace('.', '', $this->input->post('saldo_awal'));;
       $data = [
-         'no_coa' => $no_coa
+         'no_coa' => $no_coa,
+         'nama_coa' => $nama_coa,
+         'saldo_awal' => $saldo_awal
       ];
       // print_r($data);exit;
-      $this->db->where('id', $id);
+      $this->db->where('no_coa', $no_coa);
       $this->db->update('coa', $data);
       redirect('c_masterdata/lihat_coa');
    }
-   
+
    public function tambah_coa()
    {
-        
-         
-         $config = array(
-            
-            array(
-               'field' => 'no_coa',
-               'label' => 'Nomor Akun',
-               'rules' => 'required|is_natural|min_length[3]|max_length[11]|is_unique[coa.nama_coa]',
-               'errors' => array(
-                  'required' => '%s tidak boleh kosong!',
-                  'min_length' => '%s minimal 3 huruf!',
-                  'max_length' => '%s maksimal 11 huruf!',
-                  'is_natural' => '%s tidak boleh minus!',
-                  'is_unique' => '%s sudah ada didatabase!'
-               )
-            ),
-            array(
-               'field' => 'nama_coa',
-               'label' => 'Nama Akun',
-               'rules' => 'required|min_length[3]|max_length[30]',
-               'errors' => array(
-                  'required' => '%s tidak boleh kosong!',
-                  'min_length' => '%s minimal 3 huruf!',
-                  'max_length' => '%s maksimal 30 huruf!'
-               )
+
+
+      $config = array(
+
+         array(
+            'field' => 'no_coa',
+            'label' => 'Nomor Akun',
+            'rules' => 'required|is_natural|min_length[3]|max_length[11]|is_unique[coa.nama_coa]',
+            'errors' => array(
+               'required' => '%s tidak boleh kosong!',
+               'min_length' => '%s minimal 3 huruf!',
+               'max_length' => '%s maksimal 11 huruf!',
+               'is_natural' => '%s tidak boleh minus!',
+               'is_unique' => '%s sudah ada didatabase!'
             )
+         ),
+         array(
+            'field' => 'nama_coa',
+            'label' => 'Nama Akun',
+            'rules' => 'required|min_length[3]|max_length[30]',
+            'errors' => array(
+               'required' => '%s tidak boleh kosong!',
+               'min_length' => '%s minimal 3 huruf!',
+               'max_length' => '%s maksimal 30 huruf!'
+            )
+         )
+      );
+      $this->form_validation->set_error_delimiters('<div class="alert alert-danger"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>  ', '</div>');
+      $this->form_validation->set_rules($config);
+
+      if ($this->form_validation->run() == FALSE) {
+         $this->form_coa();
+      } else {
+
+         $data = array(
+            'no_coa' => $_POST['no_coa'],
+            'nama_coa' => $_POST['nama_coa'],
+            'saldo_awal' => ''
          );
-         $this->form_validation->set_error_delimiters('<div class="alert alert-danger"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>  ', '</div>');
-         $this->form_validation->set_rules($config);
-         
-         if ($this->form_validation->run() == FALSE) {
-            $this->form_coa();
-         } else {
-            
-            $data = array(
-               'no_coa' => $_POST['no_coa'],
-               'nama_coa' => $_POST['nama_coa'],
-               'saldo_awal' => ''
-            );
-            
-            $this->M_masterdata->tambah_data('coa', $data);
-            redirect('c_masterdata/lihat_coa');
-         }
-          
+
+         $this->M_masterdata->tambah_data('coa', $data);
+         redirect('c_masterdata/lihat_coa');
+      }
    }
 
    //bahan baku
 
-    public function lihat_bb()
+   public function lihat_bb()
    {
-      
-         
-         $data['result'] = $this->db->get('bahan_baku')->result_array();
-         $this->template->load('template', 'bb/view', $data);
-       
+
+
+      $data['result'] = $this->db->get('bahan_baku')->result_array();
+      $this->template->load('template', 'bb/view', $data);
    }
    public function form_bb()
    {
-      
-         
-         $query1   = "SELECT  MAX(RIGHT(no_bb,3)) as kode FROM bahan_baku";
-         $abc      = $this->db->query($query1);
-         $no_trans = "";
-         if ($abc->num_rows() > 0) {
-            foreach ($abc->result() as $k) {
-               $tmp = ((int) $k->kode) + 1;
-               $kd  = sprintf("%03s", $tmp);
-            }
-         } else {
-            $kd = "001";
+
+
+      $query1   = "SELECT  MAX(RIGHT(no_bb,3)) as kode FROM bahan_baku";
+      $abc      = $this->db->query($query1);
+      $no_trans = "";
+      if ($abc->num_rows() > 0) {
+         foreach ($abc->result() as $k) {
+            $tmp = ((int) $k->kode) + 1;
+            $kd  = sprintf("%03s", $tmp);
          }
-         $no_trans   = "BB_" . $kd;
-         $data['id'] = $no_trans;
-         $this->template->load('template', 'bb/form', $data);
-       
+      } else {
+         $kd = "001";
+      }
+      $no_trans   = "BB_" . $kd;
+      $data['id'] = $no_trans;
+      $this->template->load('template', 'bb/form', $data);
    }
-   
+
    public function tambah_bb()
    {
-      
-         
-         $config = array(
-            
-            array(
-               'field' => 'nama_bb',
-               'label' => 'Nama Bahan Baku',
-               'rules' => 'required|min_length[3]|max_length[30]|is_unique[bahan_baku.nama_bb]',
-               'errors' => array(
-                  'required' => '%s tidak boleh kosong!',
-                  'min_length' => '%s minimal 3 huruf!',
-                  'max_length' => '%s maksimal 30 huruf!',
-                  'customAlpha' => '%s hanya boleh berupa huruf!',
-                  'is_unique' => '%s sudah ada di database!'
-               )
-            ),
-            
-            array(
-               'field' => 'satuan',
-               'label' => 'Satuan',
-               'rules' => 'required',
-               'errors' => array(
-                  'required' => 'Inputan Salah'
-               )
+
+
+      $config = array(
+
+         array(
+            'field' => 'nama_bb',
+            'label' => 'Nama Bahan Baku',
+            'rules' => 'required|min_length[3]|max_length[30]|is_unique[bahan_baku.nama_bb]',
+            'errors' => array(
+               'required' => '%s tidak boleh kosong!',
+               'min_length' => '%s minimal 3 huruf!',
+               'max_length' => '%s maksimal 30 huruf!',
+               'customAlpha' => '%s hanya boleh berupa huruf!',
+               'is_unique' => '%s sudah ada di database!'
             )
+         ),
+
+         array(
+            'field' => 'satuan',
+            'label' => 'Satuan',
+            'rules' => 'required',
+            'errors' => array(
+               'required' => 'Inputan Salah'
+            )
+         )
+      );
+      $this->form_validation->set_error_delimiters('<div class="alert alert-danger"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>  ', '</div>');
+      $this->form_validation->set_rules($config);
+
+      if ($this->form_validation->run() == FALSE) {
+         $this->form_bb();
+      } else {
+         $data = array(
+            'no_bb' => $_POST['no_bb'],
+            'nama_bb' => $_POST['nama_bb'],
+            'stok' => 0,
+            'satuan' => $_POST['satuan']
          );
-         $this->form_validation->set_error_delimiters('<div class="alert alert-danger"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>  ', '</div>');
-         $this->form_validation->set_rules($config);
-         
-         if ($this->form_validation->run() == FALSE) {
-            $this->form_bb();
-         } else {
-            $data = array(
-               'no_bb' => $_POST['no_bb'],
-               'nama_bb' => $_POST['nama_bb'],
-               'stok' => 0,
-               'satuan' => $_POST['satuan']
-            );
-            $this->db->insert('bahan_baku', $data);
-           
-            redirect('c_masterdata/lihat_bb');
-         }
-       
-      
+         $this->db->insert('bahan_baku', $data);
+
+         redirect('c_masterdata/lihat_bb');
+      }
    }
-   
+
    public function isi_edit_bb($id)
    {
-      
-         
-         
-         $x['data'] = $this->M_masterdata->edit_data('bahan_baku', "no_bb = '$id'")->row_array();
-         $this->template->load('template', 'bb/update', $x);
-       
-      
+
+
+
+      $x['data'] = $this->M_masterdata->edit_data('bahan_baku', "no_bb = '$id'")->row_array();
+      $this->template->load('template', 'bb/update', $x);
    }
    public function edit_bb()
    {
-      
-         $config = array(
-            
-            array(
-               'field' => 'nama_bb',
-               'label' => 'Nama Bahan Baku',
-               'rules' => 'required|callback_customAlpha|min_length[3]|max_length[30]',
-               'errors' => array(
-                  'required' => '%s tidak boleh kosong!',
-                  'min_length' => '%s minimal 3 huruf!',
-                  'max_length' => '%s maksimal 30 huruf!',
-                  'customAlpha' => '%s hanya boleh berupa huruf!'
-               )
-            ),
-            
-            array(
-               'field' => 'satuan',
-               'label' => 'Satuan',
-               'rules' => 'required',
-               'errors' => array(
-                  'required' => 'Inputan Salah',
-                  'in_list' => 'Inputan Salah'
-               )
+
+      $config = array(
+
+         array(
+            'field' => 'nama_bb',
+            'label' => 'Nama Bahan Baku',
+            'rules' => 'required|callback_customAlpha|min_length[3]|max_length[30]',
+            'errors' => array(
+               'required' => '%s tidak boleh kosong!',
+               'min_length' => '%s minimal 3 huruf!',
+               'max_length' => '%s maksimal 30 huruf!',
+               'customAlpha' => '%s hanya boleh berupa huruf!'
             )
+         ),
+
+         array(
+            'field' => 'satuan',
+            'label' => 'Satuan',
+            'rules' => 'required',
+            'errors' => array(
+               'required' => 'Inputan Salah',
+               'in_list' => 'Inputan Salah'
+            )
+         )
+      );
+      $this->form_validation->set_error_delimiters('<div class="alert alert-danger"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>  ', '</div>');
+      $this->form_validation->set_rules($config);
+
+      if ($this->form_validation->run() == FALSE) {
+         $id = $_POST['no_bb'];
+         $this->isi_edit_bb($id);
+      } else {
+         $no_bb   = $_POST['no_bb'];
+         $nama_bb = $_POST['nama_bb'];
+         $stok    = $_POST['stok'];
+         $satuan  = $_POST['satuan'];
+
+         $data = array(
+            'nama_bb' => $nama_bb,
+            'stok' => $stok,
+            'satuan' => $satuan
          );
-         $this->form_validation->set_error_delimiters('<div class="alert alert-danger"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>  ', '</div>');
-         $this->form_validation->set_rules($config);
-         
-         if ($this->form_validation->run() == FALSE) {
-            $id = $_POST['no_bb'];
-            $this->isi_edit_bb($id);
-         } else {
-            $no_bb   = $_POST['no_bb'];
-            $nama_bb = $_POST['nama_bb'];
-            $stok    = $_POST['stok'];
-            $satuan  = $_POST['satuan'];
-            
-            $data = array(
-               'nama_bb' => $nama_bb,
-               'stok' => $stok,
-               'satuan' => $satuan
-            );
-            
-            $this->db->where('no_bb', $no_bb);
-            $this->M_masterdata->update_data('bahan_baku', $data);
-            redirect('c_masterdata/lihat_bb');
-            
-         }
-         
-       
+
+         $this->db->where('no_bb', $no_bb);
+         $this->M_masterdata->update_data('bahan_baku', $data);
+         redirect('c_masterdata/lihat_bb');
+      }
    }
 
    //bahan dalam proses
 
 
-    public function lihat_bdp()
+   public function lihat_bdp()
    {
-      
-         
-         $data['result'] = $this->db->get('bahan_dalam_proses')->result_array();
-         $this->template->load('template', 'bdp/view', $data);
-       
+
+
+      $data['result'] = $this->db->get('bahan_dalam_proses')->result_array();
+      $this->template->load('template', 'bdp/view', $data);
    }
    public function form_bdp()
    {
-      
-         
-         $query1   = "SELECT  MAX(RIGHT(no_bdp,3)) as kode FROM bahan_dalam_proses";
-         $abc      = $this->db->query($query1);
-         $no_trans = "";
-         if ($abc->num_rows() > 0) {
-            foreach ($abc->result() as $k) {
-               $tmp = ((int) $k->kode) + 1;
-               $kd  = sprintf("%03s", $tmp);
-            }
-         } else {
-            $kd = "001";
+
+
+      $query1   = "SELECT  MAX(RIGHT(no_bdp,3)) as kode FROM bahan_dalam_proses";
+      $abc      = $this->db->query($query1);
+      $no_trans = "";
+      if ($abc->num_rows() > 0) {
+         foreach ($abc->result() as $k) {
+            $tmp = ((int) $k->kode) + 1;
+            $kd  = sprintf("%03s", $tmp);
          }
-         $no_trans   = "BDP_" . $kd;
-         $data['id'] = $no_trans;
-         $this->template->load('template', 'bdp/form', $data);
-       
+      } else {
+         $kd = "001";
+      }
+      $no_trans   = "BDP_" . $kd;
+      $data['id'] = $no_trans;
+      $this->template->load('template', 'bdp/form', $data);
    }
-   
+
    public function tambah_bdp()
    {
-      
-         
-         $config = array(
-            
-            array(
-               'field' => 'nama_bdp',
-               'label' => 'Nama Bahan Dalam Proses',
-               'rules' => 'required|callback_customAlpha|min_length[3]|max_length[30]|is_unique[bahan_dalam_proses.nama_bdp]',
-               'errors' => array(
-                  'required' => '%s tidak boleh kosong!',
-                  'min_length' => '%s minimal 3 huruf!',
-                  'max_length' => '%s maksimal 30 huruf!',
-                  'customAlpha' => '%s hanya boleh berupa huruf!',
-                  'is_unique' => '%s sudah ada di database!'
-               )
-            ),
-            
-            array(
-               'field' => 'satuan',
-               'label' => 'Satuan',
-               'rules' => 'required',
-               'errors' => array(
-                  'required' => 'Inputan Salah'
-               )
+      $config = array(
+         array(
+            'field' => 'nama_bdp',
+            'label' => 'Nama Bahan Dalam Proses',
+            'rules' => 'required|callback_customAlpha|min_length[3]|max_length[30]|is_unique[bahan_dalam_proses.nama_bdp]',
+            'errors' => array(
+               'required' => '%s tidak boleh kosong!',
+               'min_length' => '%s minimal 3 huruf!',
+               'max_length' => '%s maksimal 30 huruf!',
+               'customAlpha' => '%s hanya boleh berupa huruf!',
+               'is_unique' => '%s sudah ada di database!'
             )
+         ),
+         array(
+            'field' => 'satuan',
+            'label' => 'Satuan',
+            'rules' => 'required',
+            'errors' => array(
+               'required' => 'Inputan Salah'
+            )
+         )
+      );
+      $this->form_validation->set_error_delimiters('<div class="alert alert-danger"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>  ', '</div>');
+      $this->form_validation->set_rules($config);
+
+      if ($this->form_validation->run() == FALSE) {
+         $this->form_bdp();
+      } else {
+         $data = array(
+            'no_bdp' => $_POST['no_bdp'],
+            'nama_bdp' => $_POST['nama_bdp'],
+            'stok' => 0,
+            'satuan' => $_POST['satuan']
          );
-         $this->form_validation->set_error_delimiters('<div class="alert alert-danger"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>  ', '</div>');
-         $this->form_validation->set_rules($config);
-         
-         if ($this->form_validation->run() == FALSE) {
-            $this->form_bdp();
-         } else {
-            $data = array(
-               'no_bdp' => $_POST['no_bdp'],
-               'nama_bdp' => $_POST['nama_bdp'],
-               'stok' => 0,
-               'satuan' => $_POST['satuan']
-            );
-            $this->db->insert('bahan_dalam_proses', $data);
-           
-            redirect('c_masterdata/lihat_bdp');
-         }
-       
-      
+         $this->db->insert('bahan_dalam_proses', $data);
+         redirect('c_masterdata/lihat_bdp');
+      }
    }
-   
+
    public function isi_edit_bdp($id)
    {
-      
-         
-         
-         $x['data'] = $this->M_masterdata->edit_data('bahan_dalam_proses', "no_bdp = '$id'")->row_array();
-         $this->template->load('template', 'bdp/update', $x);
-       
-      
+
+
+
+      $x['data'] = $this->M_masterdata->edit_data('bahan_dalam_proses', "no_bdp = '$id'")->row_array();
+      $this->template->load('template', 'bdp/update', $x);
    }
    public function edit_bdp()
    {
-      
-         $config = array(
-            
-            array(
-               'field' => 'nama_bdp',
-               'label' => 'Nama Bahan Dalam Proses',
-               'rules' => 'required|callback_customAlpha|min_length[3]|max_length[30]',
-               'errors' => array(
-                  'required' => '%s tidak boleh kosong!',
-                  'min_length' => '%s minimal 3 huruf!',
-                  'max_length' => '%s maksimal 30 huruf!',
-                  'customAlpha' => '%s hanya boleh berupa huruf!'
-               )
-            ),
-
-            array(
-               'field' => 'satuan',
-               'label' => 'Satuan',
-               'rules' => 'required',
-               'errors' => array(
-                  'required' => 'Inputan Salah',
-                  'in_list' => 'Inputan Salah'
-               )
+      $config = array(
+         array(
+            'field' => 'nama_bdp',
+            'label' => 'Nama Bahan Dalam Proses',
+            'rules' => 'required|callback_customAlpha|min_length[3]|max_length[30]',
+            'errors' => array(
+               'required' => '%s tidak boleh kosong!',
+               'min_length' => '%s minimal 3 huruf!',
+               'max_length' => '%s maksimal 30 huruf!',
+               'customAlpha' => '%s hanya boleh berupa huruf!'
             )
+         ),
+         array(
+            'field' => 'satuan',
+            'label' => 'Satuan',
+            'rules' => 'required',
+            'errors' => array(
+               'required' => 'Inputan Salah',
+               'in_list' => 'Inputan Salah'
+            )
+         )
+      );
+      $this->form_validation->set_error_delimiters('<div class="alert alert-danger"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>  ', '</div>');
+      $this->form_validation->set_rules($config);
+
+      if ($this->form_validation->run() == FALSE) {
+         $id = $_POST['no_bdp'];
+         $this->isi_edit_bdp($id);
+      } else {
+         $no_bdp   = $_POST['no_bdp'];
+         $nama_bdp = $_POST['nama_bdp'];
+         $stok    = $_POST['stok'];
+         $satuan  = $_POST['satuan'];
+
+         $data = array(
+            'nama_bdp' => $nama_bdp,
+            'stok' => $stok,
+            'satuan' => $satuan
          );
-         $this->form_validation->set_error_delimiters('<div class="alert alert-danger"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>  ', '</div>');
-         $this->form_validation->set_rules($config);
-         
-         if ($this->form_validation->run() == FALSE) {
-            $id = $_POST['no_bdp'];
-            $this->isi_edit_bdp($id);
-         } else {
-            $no_bdp   = $_POST['no_bdp'];
-            $nama_bdp = $_POST['nama_bdp'];
-            $stok    = $_POST['stok'];
-            $satuan  = $_POST['satuan'];
-            
-            $data = array(
-               'nama_bdp' => $nama_bdp,
-               'stok' => $stok,
-               'satuan' => $satuan
-            );
-            
-            $this->db->where('no_bdp', $no_bdp);
-            $this->M_masterdata->update_data('bahan_dalam_proses', $data);
-            redirect('c_masterdata/lihat_bdp');
-            
-         }
-         
-       
+
+         $this->db->where('no_bdp', $no_bdp);
+         $this->M_masterdata->update_data('bahan_dalam_proses', $data);
+         redirect('c_masterdata/lihat_bdp');
+      }
    }
 
-
-
-
    //bahan penolong
-
-    public function lihat_bp()
+   public function lihat_bp()
    {
-      
-         
-         $data['result'] = $this->db->get('bahan_penolong')->result_array();
-         $this->template->load('template', 'bp/view', $data);
-       
+      $data['result'] = $this->db->get('bahan_penolong')->result_array();
+      $this->template->load('template', 'bp/view', $data);
    }
    public function form_bp()
    {
-      
-         
-         $query1   = "SELECT  MAX(RIGHT(no_bp,3)) as kode FROM bahan_penolong";
-         $abc      = $this->db->query($query1);
-         $no_trans = "";
-         if ($abc->num_rows() > 0) {
-            foreach ($abc->result() as $k) {
-               $tmp = ((int) $k->kode) + 1;
-               $kd  = sprintf("%03s", $tmp);
-            }
-         } else {
-            $kd = "001";
+      $query1   = "SELECT  MAX(RIGHT(no_bp,3)) as kode FROM bahan_penolong";
+      $abc      = $this->db->query($query1);
+      $no_trans = "";
+      if ($abc->num_rows() > 0) {
+         foreach ($abc->result() as $k) {
+            $tmp = ((int) $k->kode) + 1;
+            $kd  = sprintf("%03s", $tmp);
          }
-         $no_trans   = "BP_" . $kd;
-         $data['id'] = $no_trans;
-         $this->template->load('template', 'bp/form', $data);
-       
+      } else {
+         $kd = "001";
+      }
+      $no_trans   = "BP_" . $kd;
+      $data['id'] = $no_trans;
+      $this->template->load('template', 'bp/form', $data);
    }
-   
+
    public function tambah_bp()
    {
-      
-         
-         $config = array(
-            
-            array(
-               'field' => 'nama_bp',
-               'label' => 'Nama Bahan Penolong',
-               'rules' => 'required|min_length[3]|max_length[30]|is_unique[bahan_penolong.nama_bp]',
-               'errors' => array(
-                  'required' => '%s tidak boleh kosong!',
-                  'min_length' => '%s minimal 3 huruf!',
-                  'max_length' => '%s maksimal 30 huruf!',
-                  'customAlpha' => '%s hanya boleh berupa huruf!',
-                  'is_unique' => '%s sudah ada di database!'
-               )
-            ),
-            array(
-               'field' => 'satuan',
-               'label' => 'Satuan',
-               'rules' => 'required',
-               'errors' => array(
-                  'required' => 'Inputan Salah'
-               )
+      $config = array(
+
+         array(
+            'field' => 'nama_bp',
+            'label' => 'Nama Bahan Penolong',
+            'rules' => 'required|min_length[3]|max_length[30]|is_unique[bahan_penolong.nama_bp]',
+            'errors' => array(
+               'required' => '%s tidak boleh kosong!',
+               'min_length' => '%s minimal 3 huruf!',
+               'max_length' => '%s maksimal 30 huruf!',
+               'customAlpha' => '%s hanya boleh berupa huruf!',
+               'is_unique' => '%s sudah ada di database!'
             )
+         ),
+         array(
+            'field' => 'satuan',
+            'label' => 'Satuan',
+            'rules' => 'required',
+            'errors' => array(
+               'required' => 'Inputan Salah'
+            )
+         )
+      );
+      $this->form_validation->set_error_delimiters('<div class="alert alert-danger"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>  ', '</div>');
+      $this->form_validation->set_rules($config);
+
+      if ($this->form_validation->run() == FALSE) {
+         $this->form_bp();
+      } else {
+         $data = array(
+            'no_bp' => $_POST['no_bp'],
+            'nama_bp' => $_POST['nama_bp'],
+            'stok' => 0,
+            'satuan' => $_POST['satuan']
          );
-         $this->form_validation->set_error_delimiters('<div class="alert alert-danger"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>  ', '</div>');
-         $this->form_validation->set_rules($config);
-         
-         if ($this->form_validation->run() == FALSE) {
-            $this->form_bp();
-         } else {
-            $data = array(
-               'no_bp' => $_POST['no_bp'],
-               'nama_bp' => $_POST['nama_bp'],
-               'stok' => 0,
-               'satuan' => $_POST['satuan']
-            );
-            $this->db->insert('bahan_penolong', $data);
-           
-            redirect('c_masterdata/lihat_bp');
-         }
-       
-      
+         $this->db->insert('bahan_penolong', $data);
+
+         redirect('c_masterdata/lihat_bp');
+      }
    }
-   
+
    public function isi_edit_bp($id)
    {
-      
-         
-         
-         $x['data'] = $this->M_masterdata->edit_data('bahan_penolong', "no_bp = '$id'")->row_array();
-         $this->template->load('template', 'bp/update', $x);
-       
-      
+      $x['data'] = $this->M_masterdata->edit_data('bahan_penolong', "no_bp = '$id'")->row_array();
+      $this->template->load('template', 'bp/update', $x);
    }
    public function edit_bp()
    {
-      
-         $config = array(
-            
-            array(
-               'field' => 'nama_bp',
-               'label' => 'Nama Bahan Penolong',
-               'rules' => 'required|min_length[3]|max_length[50]',
-               'errors' => array(
-                  'required' => '%s tidak boleh kosong!',
-                  'min_length' => '%s minimal 3 huruf!',
-                  'max_length' => '%s maksimal 30 huruf!',
-                  'customAlpha' => '%s hanya boleh berupa huruf!'
-               )
-            ),
-            
-            array(
-               'field' => 'satuan',
-               'label' => 'Satuan',
-               'rules' => 'required',
-               'errors' => array(
-                  'required' => 'Inputan Salah'
-               )
+
+      $config = array(
+
+         array(
+            'field' => 'nama_bp',
+            'label' => 'Nama Bahan Penolong',
+            'rules' => 'required|min_length[3]|max_length[50]',
+            'errors' => array(
+               'required' => '%s tidak boleh kosong!',
+               'min_length' => '%s minimal 3 huruf!',
+               'max_length' => '%s maksimal 30 huruf!',
+               'customAlpha' => '%s hanya boleh berupa huruf!'
             )
+         ),
+
+         array(
+            'field' => 'satuan',
+            'label' => 'Satuan',
+            'rules' => 'required',
+            'errors' => array(
+               'required' => 'Inputan Salah'
+            )
+         )
+      );
+      $this->form_validation->set_error_delimiters('<div class="alert alert-danger"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>  ', '</div>');
+      $this->form_validation->set_rules($config);
+
+      if ($this->form_validation->run() == FALSE) {
+         $id = $_POST['no_bp'];
+         $this->isi_edit_bp($id);
+      } else {
+         $no_bp   = $_POST['no_bp'];
+         $nama_bp = $_POST['nama_bp'];
+         $stok    = $_POST['stok'];
+         $satuan  = $_POST['satuan'];
+
+         $data = array(
+            'nama_bp' => $nama_bp,
+            'stok' => $stok,
+            'satuan' => $satuan
          );
-         $this->form_validation->set_error_delimiters('<div class="alert alert-danger"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>  ', '</div>');
-         $this->form_validation->set_rules($config);
-         
-         if ($this->form_validation->run() == FALSE) {
-            $id = $_POST['no_bp'];
-            $this->isi_edit_bp($id);
-         } else {
-            $no_bp   = $_POST['no_bp'];
-            $nama_bp = $_POST['nama_bp'];
-            $stok    = $_POST['stok'];
-            $satuan  = $_POST['satuan'];
-            
-            $data = array(
-               'nama_bp' => $nama_bp,
-               'stok' => $stok,
-               'satuan' => $satuan
-            );
-            
-            $this->db->where('no_bp', $no_bp);
-            $this->M_masterdata->update_data('bahan_penolong', $data);
-            redirect('c_masterdata/lihat_bp');
-            
-         }
-         
-       
+
+         $this->db->where('no_bp', $no_bp);
+         $this->M_masterdata->update_data('bahan_penolong', $data);
+         redirect('c_masterdata/lihat_bp');
+      }
    }
 
 
    //PRODUK
 
-    public function lihat_produk()
+   public function lihat_produk()
    {
-      
-         
-         $data['result'] = $this->db->get('produk')->result_array();
-         $this->template->load('template', 'produk/view', $data);
-       
+
+
+      $data['result'] = $this->db->get('produk')->result_array();
+      $this->template->load('template', 'produk/view', $data);
    }
    public function form_produk()
    {
-      
-         
-         $query1   = "SELECT  MAX(RIGHT(no_produk,3)) as kode FROM produk";
-         $abc      = $this->db->query($query1);
-         $no_trans = "";
-         if ($abc->num_rows() > 0) {
-            foreach ($abc->result() as $k) {
-               $tmp = ((int) $k->kode) + 1;
-               $kd  = sprintf("%03s", $tmp);
-            }
-         } else {
-            $kd = "001";
+
+
+      $query1   = "SELECT  MAX(RIGHT(no_produk,3)) as kode FROM produk";
+      $abc      = $this->db->query($query1);
+      $no_trans = "";
+      if ($abc->num_rows() > 0) {
+         foreach ($abc->result() as $k) {
+            $tmp = ((int) $k->kode) + 1;
+            $kd  = sprintf("%03s", $tmp);
          }
-         $no_trans   = "PR_" . $kd;
-         $data['id'] = $no_trans;
-         $this->template->load('template', 'produk/form', $data);
-       
+      } else {
+         $kd = "001";
+      }
+      $no_trans   = "PR_" . $kd;
+      $data['id'] = $no_trans;
+      $this->template->load('template', 'produk/form', $data);
    }
-   
+
    public function tambah_produk()
    {
-      
-         
-         $config = array(
-            
-            array(
-               'field' => 'nama_produk',
-               'label' => 'Nama Produk',
-               'rules' => 'required|min_length[3]|max_length[30]|is_unique[produk.nama_produk]',
-               'errors' => array(
-                  'required' => '%s tidak boleh kosong!',
-                  'min_length' => '%s minimal 3 huruf!',
-                  'max_length' => '%s maksimal 30 huruf!',
-                  'customAlpha' => '%s hanya boleh berupa huruf!',
-                  'is_unique' => '%s sudah ada di database!'
-               )
-            ),
-             array(
-               'field' => 'satuan',
-               'label' => 'Satuan',
-               'rules' => 'required',
-               'errors' => array(
-                  'required' => 'Inputan Salah'
-               )
+
+
+      $config = array(
+
+         array(
+            'field' => 'nama_produk',
+            'label' => 'Nama Produk',
+            'rules' => 'required|min_length[3]|max_length[30]|is_unique[produk.nama_produk]',
+            'errors' => array(
+               'required' => '%s tidak boleh kosong!',
+               'min_length' => '%s minimal 3 huruf!',
+               'max_length' => '%s maksimal 30 huruf!',
+               'customAlpha' => '%s hanya boleh berupa huruf!',
+               'is_unique' => '%s sudah ada di database!'
             )
+         ),
+         array(
+            'field' => 'satuan',
+            'label' => 'Satuan',
+            'rules' => 'required',
+            'errors' => array(
+               'required' => 'Inputan Salah'
+            )
+         )
+      );
+      $this->form_validation->set_error_delimiters('<div class="alert alert-danger"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>  ', '</div>');
+      $this->form_validation->set_rules($config);
+
+      if ($this->form_validation->run() == FALSE) {
+         $this->form_produk();
+      } else {
+         $data = array(
+            'no_produk' => $_POST['no_produk'],
+            'nama_produk' => $_POST['nama_produk'],
+            'stok' => 0,
+            'satuan' => $_POST['satuan']
          );
-         $this->form_validation->set_error_delimiters('<div class="alert alert-danger"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>  ', '</div>');
-         $this->form_validation->set_rules($config);
-         
-         if ($this->form_validation->run() == FALSE) {
-            $this->form_produk();
-         } else {
-            $data = array(
-               'no_produk' => $_POST['no_produk'],
-               'nama_produk' => $_POST['nama_produk'],
-               'stok' => 0,
-               'satuan' => $_POST['satuan']
-            );
-            $this->db->insert('produk', $data);
-          
-            redirect('c_masterdata/lihat_produk');
-         }
-       
-      
+         $this->db->insert('produk', $data);
+
+         redirect('c_masterdata/lihat_produk');
+      }
    }
-   
+
    public function isi_edit_produk($id)
    {
-         $x['data'] = $this->M_masterdata->edit_data('produk', "no_produk = '$id'")->row_array();
-         $this->template->load('template', 'produk/update', $x);
+      $x['data'] = $this->M_masterdata->edit_data('produk', "no_produk = '$id'")->row_array();
+      $this->template->load('template', 'produk/update', $x);
    }
    public function edit_produk()
    {
-         $config = array(
-            array(
-               'field' => 'nama_produk',
-               'label' => 'Nama Produk',
-               'rules' => 'required|callback_customAlpha|min_length[3]|max_length[30]|is_unique[produk.nama_produk]',
-               'errors' => array(
-                  'required' => '%s tidak boleh kosong!',
-                  'min_length' => '%s minimal 3 huruf!',
-                  'max_length' => '%s maksimal 30 huruf!',
-                  'customAlpha' => '%s hanya boleh berupa huruf!',
-                  'is_unique' => '%s sudah ada di database!'
-               )
-            ),
-             array(
-               'field' => 'satuan',
-               'label' => 'Satuan',
-               'rules' => 'required',
-               'errors' => array(
-                  'required' => 'Inputan Salah'
-               )
+      $config = array(
+         array(
+            'field' => 'nama_produk',
+            'label' => 'Nama Produk',
+            'rules' => 'required|callback_customAlpha|min_length[3]|max_length[30]|is_unique[produk.nama_produk]',
+            'errors' => array(
+               'required' => '%s tidak boleh kosong!',
+               'min_length' => '%s minimal 3 huruf!',
+               'max_length' => '%s maksimal 30 huruf!',
+               'customAlpha' => '%s hanya boleh berupa huruf!',
+               'is_unique' => '%s sudah ada di database!'
             )
+         ),
+         array(
+            'field' => 'satuan',
+            'label' => 'Satuan',
+            'rules' => 'required',
+            'errors' => array(
+               'required' => 'Inputan Salah'
+            )
+         )
+      );
+
+      $this->form_validation->set_error_delimiters('<div class="alert alert-danger"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>  ', '</div>');
+      $this->form_validation->set_rules($config);
+
+      if ($this->form_validation->run() == FALSE) {
+         $id = $_POST['no_produk'];
+         $this->isi_edit_produk($id);
+      } else {
+         $no_bb   = $_POST['no_produk'];
+         $nama_bb = $_POST['nama_produk'];
+
+
+         $data = array(
+            'nama_produk' => $nama_bb,
+            'stok' => $stok,
+            'satuan' => $_POST['satuan']
          );
 
-         $this->form_validation->set_error_delimiters('<div class="alert alert-danger"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>  ', '</div>');
-         $this->form_validation->set_rules($config);
-         
-         if ($this->form_validation->run() == FALSE) {
-            $id = $_POST['no_produk'];
-            $this->isi_edit_produk($id);
-         } else {
-            $no_bb   = $_POST['no_produk'];
-            $nama_bb = $_POST['nama_produk'];
-          
-            
-            $data = array(
-               'nama_produk' => $nama_bb,
-               'stok' => $stok,
-               'satuan' => $_POST['satuan']
-            );
-            
-            $this->db->where('no_produk', $no_bb);
-            $this->M_masterdata->update_data('produk', $data);
-            redirect('c_masterdata/lihat_produk');
-            
-         }
+         $this->db->where('no_produk', $no_bb);
+         $this->M_masterdata->update_data('produk', $data);
+         redirect('c_masterdata/lihat_produk');
+      }
    }
 
 
    //PETERNAK
-    public function lihat_peternak()
+   public function lihat_peternak()
    {
-         $this->db->select('peternak.*, tps.alamat as alamat_tps');
-         $this->db->from('peternak');
-         $this->db->join('tps', 'peternak.kd_tps = tps.kode_tps', 'left');
-         // $this->db->where('is_deactive =', 0);
-         $this->db->order_by('no_peternak', 'desc');
-         $data['result'] = $this->db->get()->result_array();
-         // print_r($data['result']);exit;
-         $this->template->load('template', 'peternak/view', $data);
+      $this->db->select('peternak.*, tps.alamat as alamat_tps');
+      $this->db->from('peternak');
+      $this->db->join('tps', 'peternak.kd_tps = tps.kode_tps', 'left');
+      // $this->db->where('is_deactive =', 0);
+      $this->db->order_by('no_peternak', 'desc');
+      $data['result'] = $this->db->get()->result_array();
+      // print_r($data['result']);exit;
+      $this->template->load('template', 'peternak/view', $data);
    }
    public function form_peternak()
    {
-         $query1   = "SELECT  MAX(RIGHT(no_peternak,3)) as kode FROM peternak";
-         $abc      = $this->db->query($query1);
-         $no_trans = "";
-         if ($abc->num_rows() > 0) {
-            foreach ($abc->result() as $k) {
-               $tmp = ((int) $k->kode) + 1;
-               $kd  = sprintf("%03s", $tmp);
-            }
-         } else {
-            $kd = "001";
+      $query1   = "SELECT  MAX(RIGHT(no_peternak,3)) as kode FROM peternak";
+      $abc      = $this->db->query($query1);
+      $no_trans = "";
+      if ($abc->num_rows() > 0) {
+         foreach ($abc->result() as $k) {
+            $tmp = ((int) $k->kode) + 1;
+            $kd  = sprintf("%03s", $tmp);
          }
-         $no_trans   = "PTRNK_" . $kd;
-         $data['id'] = $no_trans;
+      } else {
+         $kd = "001";
+      }
+      $no_trans   = "PTRNK_" . $kd;
+      $data['id'] = $no_trans;
 
-         // $this->db->select("biaya");
-         $this->db->where("kode_simpanan =", "JS-001");
-         $simpanan_wajib = $this->db->get("simpanan")->row()->biaya;
-         // $this->db->query($simpanan_wajib);
-         // print_r($simpanan_wajib);exit;
+      // $this->db->select("biaya");
+      $this->db->where("kode_simpanan =", "JS-001");
+      $simpanan_wajib = $this->db->get("simpanan")->row()->biaya;
+      // $this->db->query($simpanan_wajib);
+      // print_r($simpanan_wajib);exit;
 
-         $data['tps'] = $this->db->get('tps')->result();
+      $data['tps'] = $this->db->get('tps')->result();
 
-         $data['simpanan'] = $simpanan_wajib;
-         // print_r($simpanan_wajib);exit;
-         $this->template->load('template', 'peternak/form', $data); 
+      $data['simpanan'] = $simpanan_wajib;
+      // print_r($simpanan_wajib);exit;
+      $this->template->load('template', 'peternak/form', $data);
    }
-   
+
    public function tambah_peternak()
    {
-         $config = array(
-            
-            array(
-               'field' => 'nama_peternak',
-               'label' => 'Nama Peternak',
-               'rules' => 'required|callback_customAlpha|min_length[3]|max_length[30]',
-               'errors' => array(
-                  'required' => '%s tidak boleh kosong!',
-                  'min_length' => '%s minimal 3 huruf!',
-                  'max_length' => '%s maksimal 30 huruf!',
-                  'customAlpha' => '%s hanya boleh berupa huruf!'
-               )
-            ),
-            array(
-               'field' => 'notel',
-               'label' => 'No. Telepon',
-               'rules' => 'required|is_natural',
-               'errors' => array(
-                  'required' => '%s tidak boleh kosong!',
-                  'is_natural' => '%s harus angka!'
-               )
-            ),
-            array(
-               'field' => 'nm_peternakan',
-               'label' => 'Nama Peternakan',
-               'rules' => 'is_unique[peternak.nm_peternakan]',
-               'errors' => array(
-                  'is_unique' => 'Punten, %s sudah ada nih'
-               )
-            ),
-            array(
-               'field' => 'alamat',
-               'label' => 'Alamat',
-               'rules' => 'required',
-               'errors' => array(
-                  'required' => '%s tidak boleh kosong!'
-               )
+      $config = array(
+
+         array(
+            'field' => 'nama_peternak',
+            'label' => 'Nama Peternak',
+            'rules' => 'required|callback_customAlpha|min_length[3]|max_length[30]',
+            'errors' => array(
+               'required' => '%s tidak boleh kosong!',
+               'min_length' => '%s minimal 3 huruf!',
+               'max_length' => '%s maksimal 30 huruf!',
+               'customAlpha' => '%s hanya boleh berupa huruf!'
             )
+         ),
+         array(
+            'field' => 'notel',
+            'label' => 'No. Telepon',
+            'rules' => 'required|is_natural',
+            'errors' => array(
+               'required' => '%s tidak boleh kosong!',
+               'is_natural' => '%s harus angka!'
+            )
+         ),
+         array(
+            'field' => 'nm_peternakan',
+            'label' => 'Nama Peternakan',
+            'rules' => 'is_unique[peternak.nm_peternakan]',
+            'errors' => array(
+               'is_unique' => 'Punten, %s sudah ada nih'
+            )
+         ),
+         array(
+            'field' => 'alamat',
+            'label' => 'Alamat',
+            'rules' => 'required',
+            'errors' => array(
+               'required' => '%s tidak boleh kosong!'
+            )
+         )
+      );
+      $this->form_validation->set_error_delimiters('<div class="alert alert-danger"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>  ', '</div>');
+      $this->form_validation->set_rules($config);
+
+      if ($this->form_validation->run() == FALSE) {
+         $this->form_peternak();
+      } else {
+         $data = array(
+            'no_peternak' => $_POST['no_peternak'],
+            'nama_peternak' => $_POST['nama_peternak'],
+            'notel' => $_POST['notel'],
+            'alamat' => $_POST['alamat'],
+            'deposit' => $_POST['deposit'],
+            'kd_tps' => $_POST['tps'],
+            'nm_peternakan' => $_POST['nm_peternakan'],
          );
-         $this->form_validation->set_error_delimiters('<div class="alert alert-danger"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>  ', '</div>');
-         $this->form_validation->set_rules($config);
-         
-         if ($this->form_validation->run() == FALSE) {
-            $this->form_peternak();
-         } else {
-            $data = array(
-               'no_peternak' => $_POST['no_peternak'],
-               'nama_peternak' => $_POST['nama_peternak'],
-               'notel' => $_POST['notel'],
-               'alamat' => $_POST['alamat'],
-               'deposit' => $_POST['deposit'], 
-               'kd_tps' => $_POST['tps'],
-               'nm_peternakan' => $_POST['nm_peternakan'],
-            );
-            // print_r($data);exit;
-            $this->db->insert('peternak', $data);
+         // print_r($data);exit;
+         $this->db->insert('peternak', $data);
 
-            // jurnal
-            $debit = array (
-              "id_jurnal" => "DP".$_POST['no_peternak'],
-              "tgl_jurnal" => date("Y-m-d"),
-              "no_coa" => 1111,
-              "posisi_dr_cr" => "d",
-              "nominal" => $_POST['deposit'],
-            );
-            $this->db->insert("jurnal", $debit);
+         // jurnal
+         $debit = array(
+            "id_jurnal" => "DP" . $_POST['no_peternak'],
+            "tgl_jurnal" => date("Y-m-d"),
+            "no_coa" => 1111,
+            "posisi_dr_cr" => "d",
+            "nominal" => $_POST['deposit'],
+         );
+         $this->db->insert("jurnal", $debit);
 
-            $kredit = array (
-              "id_jurnal" => "DP".$_POST['no_peternak'],
-              "tgl_jurnal" => date("Y-m-d"),
-              "no_coa" => 3111,
-              "posisi_dr_cr" => "k",
-              "nominal" => $_POST['deposit'],
-            );
-            $this->db->insert("jurnal", $kredit);
-            redirect('c_masterdata/lihat_peternak');
-         }
+         $kredit = array(
+            "id_jurnal" => "DP" . $_POST['no_peternak'],
+            "tgl_jurnal" => date("Y-m-d"),
+            "no_coa" => 3111,
+            "posisi_dr_cr" => "k",
+            "nominal" => $_POST['deposit'],
+         );
+         $this->db->insert("jurnal", $kredit);
+         redirect('c_masterdata/lihat_peternak');
+      }
    }
 
    public function deactive($id)
@@ -803,7 +753,7 @@ class c_masterdata extends CI_controller{
       $cek_sisa = $this->db->query($sql)->row();
       // print_r($cek_sisa);exit;
 
-      if (empty($cek_sisa) OR $cek_sisa->sisa_pinjaman == 0) {
+      if (empty($cek_sisa) or $cek_sisa->sisa_pinjaman == 0) {
          # code...
          $data = [
             'is_deactive' => 1
@@ -818,655 +768,624 @@ class c_masterdata extends CI_controller{
          $this->session->set_flashdata('message', '<p class="alert alert-danger">Silahkan melunaskan pinjaman terlebih dahulu.</p>');
          redirect('c_masterdata/lihat_peternak');
       }
-
    }
-   
+
    public function isi_edit_peternak($id)
    {
       $x['data'] = $this->M_masterdata->edit_data('peternak', "no_peternak = '$id'")->row_array();
       $x['tps'] = $this->db->get('tps')->result();
       // print_r($x['data']);exit;
       $this->template->load('template', 'peternak/update', $x);
-       
-      
    }
    public function edit_peternak()
    {
-      
-         $config = array(
-            
-            array(
-               'field' => 'nama_peternak',
-               'label' => 'Nama Peternak',
-               'rules' => 'required|callback_customAlpha|min_length[3]|max_length[30]',
-               'errors' => array(
-                  'required' => '%s tidak boleh kosong!',
-                  'min_length' => '%s minimal 3 huruf!',
-                  'max_length' => '%s maksimal 30 huruf!',
-                  'customAlpha' => '%s hanya boleh berupa huruf!'
-               )
-            ),
-            array(
-               'field' => 'notel',
-               'label' => 'No. Telepon',
-               'rules' => 'required',
-               'errors' => array(
-                  'required' => '%s tidak boleh kosong!',
-                  'is_natural' => '%s harus angka!'
-               )
-            ),
-            array(
-               'field' => 'alamat',
-               'label' => 'Alamat',
-               'rules' => 'required',
-               'errors' => array(
-                  'required' => '%s tidak boleh kosong!'
-               )
+
+      $config = array(
+
+         array(
+            'field' => 'nama_peternak',
+            'label' => 'Nama Peternak',
+            'rules' => 'required|callback_customAlpha|min_length[3]|max_length[30]',
+            'errors' => array(
+               'required' => '%s tidak boleh kosong!',
+               'min_length' => '%s minimal 3 huruf!',
+               'max_length' => '%s maksimal 30 huruf!',
+               'customAlpha' => '%s hanya boleh berupa huruf!'
             )
-       
-            
-         
+         ),
+         array(
+            'field' => 'notel',
+            'label' => 'No. Telepon',
+            'rules' => 'required',
+            'errors' => array(
+               'required' => '%s tidak boleh kosong!',
+               'is_natural' => '%s harus angka!'
+            )
+         ),
+         array(
+            'field' => 'alamat',
+            'label' => 'Alamat',
+            'rules' => 'required',
+            'errors' => array(
+               'required' => '%s tidak boleh kosong!'
+            )
+         )
+
+
+
+      );
+      $this->form_validation->set_error_delimiters('<div class="alert alert-danger"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>  ', '</div>');
+      $this->form_validation->set_rules($config);
+
+      if ($this->form_validation->run() == FALSE) {
+         $id = $_POST['no_peternak'];
+         $this->isi_edit_peternak($id);
+      } else {
+         $no_peternak   = $_POST['no_peternak'];
+         $nama_peternak = $_POST['nama_peternak'];
+
+         $data = array(
+            'nama_peternak' => $nama_peternak,
+            'notel' => $_POST['notel'],
+            'alamat' => $_POST['alamat'],
+            'kd_tps' => $_POST['tps'],
+            'nm_peternakan' => $_POST['nm_peternakan']
          );
-         $this->form_validation->set_error_delimiters('<div class="alert alert-danger"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>  ', '</div>');
-         $this->form_validation->set_rules($config);
-         
-         if ($this->form_validation->run() == FALSE) {
-            $id = $_POST['no_peternak'];
-            $this->isi_edit_peternak($id);
-         } else {
-            $no_peternak   = $_POST['no_peternak'];
-            $nama_peternak = $_POST['nama_peternak'];
-            
-            $data = array(
-               'nama_peternak' => $nama_peternak,
-               'notel' => $_POST['notel'],
-               'alamat' => $_POST['alamat'], 
-               'kd_tps' => $_POST['tps'], 
-               'nm_peternakan' => $_POST['nm_peternakan']
-            );
-            
-            $this->db->where('no_peternak', $no_peternak);
-            $this->M_masterdata->update_data('peternak', $data);
-            redirect('c_masterdata/lihat_peternak');
-            
-         }
-         
-       
+
+         $this->db->where('no_peternak', $no_peternak);
+         $this->M_masterdata->update_data('peternak', $data);
+         redirect('c_masterdata/lihat_peternak');
+      }
    }
 
 
-    //SUPPLIER BP
+   //SUPPLIER BP
 
-    public function lihat_supp_bp()
+   public function lihat_supp_bp()
    {
-      
-         
-         $data['result'] = $this->db->get('supplier_bp')->result_array();
-         $this->template->load('template', 'supplier/view', $data);
-       
+
+
+      $data['result'] = $this->db->get('supplier_bp')->result_array();
+      $this->template->load('template', 'supplier/view', $data);
    }
    public function form_supp_bp()
    {
-      
-         
-         $query1   = "SELECT  MAX(RIGHT(no_supp_bp,3)) as kode FROM supplier_bp";
-         $abc      = $this->db->query($query1);
-         $no_trans = "";
-         if ($abc->num_rows() > 0) {
-            foreach ($abc->result() as $k) {
-               $tmp = ((int) $k->kode) + 1;
-               $kd  = sprintf("%03s", $tmp);
-            }
-         } else {
-            $kd = "001";
+
+
+      $query1   = "SELECT  MAX(RIGHT(no_supp_bp,3)) as kode FROM supplier_bp";
+      $abc      = $this->db->query($query1);
+      $no_trans = "";
+      if ($abc->num_rows() > 0) {
+         foreach ($abc->result() as $k) {
+            $tmp = ((int) $k->kode) + 1;
+            $kd  = sprintf("%03s", $tmp);
          }
-         $no_trans   = "SBP_" . $kd;
-         $data['id'] = $no_trans;
-         $this->template->load('template', 'supplier/form', $data);
-       
+      } else {
+         $kd = "001";
+      }
+      $no_trans   = "SBP_" . $kd;
+      $data['id'] = $no_trans;
+      $this->template->load('template', 'supplier/form', $data);
    }
-   
+
    public function tambah_supp_bp()
    {
-      
-         
-         $config = array(
-            
-            array(
-               'field' => 'nama_supp_bp',
-               'label' => 'Nama Supplier',
-               'rules' => 'required|callback_customAlpha|min_length[3]|max_length[30]|is_unique[supplier_bp.nama_supp_bp]',
-               'errors' => array(
-                  'required' => '%s tidak boleh kosong!',
-                  'min_length' => '%s minimal 3 huruf!',
-                  'max_length' => '%s maksimal 30 huruf!',
-                  'customAlpha' => '%s hanya boleh berupa huruf!',
-                  'is_unique' => '%s sudah ada di database!'
-               )
-            ),
-            array(
-               'field' => 'notel',
-               'label' => 'No. Telepon',
-               'rules' => 'required',
-               'errors' => array(
-                  'required' => '%s tidak boleh kosong!'
-               )
-            ),
-            array(
-               'field' => 'alamat',
-               'label' => 'Alamat',
-               'rules' => 'required',
-               'errors' => array(
-                  'required' => '%s tidak boleh kosong!'
-               )
+
+
+      $config = array(
+
+         array(
+            'field' => 'nama_supp_bp',
+            'label' => 'Nama Supplier',
+            'rules' => 'required|callback_customAlpha|min_length[3]|max_length[30]|is_unique[supplier_bp.nama_supp_bp]',
+            'errors' => array(
+               'required' => '%s tidak boleh kosong!',
+               'min_length' => '%s minimal 3 huruf!',
+               'max_length' => '%s maksimal 30 huruf!',
+               'customAlpha' => '%s hanya boleh berupa huruf!',
+               'is_unique' => '%s sudah ada di database!'
             )
+         ),
+         array(
+            'field' => 'notel',
+            'label' => 'No. Telepon',
+            'rules' => 'required',
+            'errors' => array(
+               'required' => '%s tidak boleh kosong!'
+            )
+         ),
+         array(
+            'field' => 'alamat',
+            'label' => 'Alamat',
+            'rules' => 'required',
+            'errors' => array(
+               'required' => '%s tidak boleh kosong!'
+            )
+         )
+      );
+      $this->form_validation->set_error_delimiters('<div class="alert alert-danger"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>  ', '</div>');
+      $this->form_validation->set_rules($config);
+
+      if ($this->form_validation->run() == FALSE) {
+         $this->form_supp_bp();
+      } else {
+         $data = array(
+            'no_supp_bp' => $_POST['no_supp_bp'],
+            'nama_supp_bp' => $_POST['nama_supp_bp'],
+            'notel'        => $_POST['notel'],
+            'alamat' => $_POST['alamat']
          );
-         $this->form_validation->set_error_delimiters('<div class="alert alert-danger"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>  ', '</div>');
-         $this->form_validation->set_rules($config);
-         
-         if ($this->form_validation->run() == FALSE) {
-            $this->form_supp_bp();
-         } else {
-            $data = array(
-               'no_supp_bp' => $_POST['no_supp_bp'],
-               'nama_supp_bp' => $_POST['nama_supp_bp'],
-               'notel'        => $_POST['notel'],
-               'alamat' => $_POST['alamat']
-            );
-            $this->db->insert('supplier_bp', $data);
-          
-            redirect('c_masterdata/lihat_supp_bp');
-         }
-       
-      
+         $this->db->insert('supplier_bp', $data);
+
+         redirect('c_masterdata/lihat_supp_bp');
+      }
    }
-   
+
    public function isi_edit_supp_bp($id)
    {
-      
-         
-         
-         $x['data'] = $this->M_masterdata->edit_data('supplier_bp', "no_supp_bp = '$id'")->row_array();
-         $this->template->load('template', 'supplier/update', $x);
-       
-      
+
+
+
+      $x['data'] = $this->M_masterdata->edit_data('supplier_bp', "no_supp_bp = '$id'")->row_array();
+      $this->template->load('template', 'supplier/update', $x);
    }
    public function edit_supp_bp()
    {
-      
-         $config = array(
-            
-            array(
-               'field' => 'nama_supp_bp',
-               'label' => 'Nama Supplier',
-               'rules' => 'required|callback_customAlpha|min_length[3]|max_length[30]',
-               'errors' => array(
-                  'required' => '%s tidak boleh kosong!',
-                  'min_length' => '%s minimal 3 huruf!',
-                  'max_length' => '%s maksimal 30 huruf!',
-                  'customAlpha' => '%s hanya boleh berupa huruf!'
-               )
-            ),
-            array(
-               'field' => 'notel',
-               'label' => 'No. Telepon',
-               'rules' => 'required',
-               'errors' => array(
-                  'required' => '%s tidak boleh kosong!'
-               )
-            ),
-            array(
-               'field' => 'alamat',
-               'label' => 'Alamat',
-               'rules' => 'required',
-               'errors' => array(
-                  'required' => '%s tidak boleh kosong!'
-               )
+
+      $config = array(
+
+         array(
+            'field' => 'nama_supp_bp',
+            'label' => 'Nama Supplier',
+            'rules' => 'required|callback_customAlpha|min_length[3]|max_length[30]',
+            'errors' => array(
+               'required' => '%s tidak boleh kosong!',
+               'min_length' => '%s minimal 3 huruf!',
+               'max_length' => '%s maksimal 30 huruf!',
+               'customAlpha' => '%s hanya boleh berupa huruf!'
             )
-       
-            
-         
+         ),
+         array(
+            'field' => 'notel',
+            'label' => 'No. Telepon',
+            'rules' => 'required',
+            'errors' => array(
+               'required' => '%s tidak boleh kosong!'
+            )
+         ),
+         array(
+            'field' => 'alamat',
+            'label' => 'Alamat',
+            'rules' => 'required',
+            'errors' => array(
+               'required' => '%s tidak boleh kosong!'
+            )
+         )
+
+
+
+      );
+      $this->form_validation->set_error_delimiters('<div class="alert alert-danger"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>  ', '</div>');
+      $this->form_validation->set_rules($config);
+
+      if ($this->form_validation->run() == FALSE) {
+         $id = $_POST['no_supp_bp'];
+         $this->isi_edit_supp_bp($id);
+      } else {
+         $no_supp_bp   = $_POST['no_supp_bp'];
+         $nama_supp_bp = $_POST['nama_supp_bp'];
+         $notel        = $_POST['notel'];
+         $alamat       = $_POST['alamat'];
+
+         $data = array(
+            'nama_supp_bp' => $nama_supp_bp,
+            'notel' => $notel,
+            'alamat' => $alamat
          );
-         $this->form_validation->set_error_delimiters('<div class="alert alert-danger"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>  ', '</div>');
-         $this->form_validation->set_rules($config);
-         
-         if ($this->form_validation->run() == FALSE) {
-            $id = $_POST['no_supp_bp'];
-            $this->isi_edit_supp_bp($id);
-         } else {
-            $no_supp_bp   = $_POST['no_supp_bp'];
-            $nama_supp_bp = $_POST['nama_supp_bp'];
-            $notel        = $_POST['notel'];
-            $alamat       = $_POST['alamat'];
-            
-            $data = array(
-               'nama_supp_bp' => $nama_supp_bp,
-               'notel' => $notel,
-               'alamat' => $alamat
-            );
-            
-            $this->db->where('no_supp_bp', $no_supp_bp);
-            $this->M_masterdata->update_data('supplier_bp', $data);
-            redirect('c_masterdata/lihat_supp_bp');
-            
-         }
-         
-       
+
+         $this->db->where('no_supp_bp', $no_supp_bp);
+         $this->M_masterdata->update_data('supplier_bp', $data);
+         redirect('c_masterdata/lihat_supp_bp');
+      }
    }
 
    //bop
 
-    public function lihat_bop()
+   public function lihat_bop()
    {
-      
-          $this->db->where('tgl_bop', date('Y-m-d'));
-         $data['cek'] = $this->db->get('bop')->result();
-         $data['result'] = $this->db->get('bop')->result_array();
-         $this->template->load('template', 'bop/view', $data);
-       
+
+      $this->db->where('tgl_bop', date('Y-m-d'));
+      $data['cek'] = $this->db->get('bop')->result();
+      $data['result'] = $this->db->get('bop')->result_array();
+      $this->template->load('template', 'bop/view', $data);
    }
    public function form_bop()
    {
       date_default_timezone_set('Asia/Jakarta');
-         $date = date('Y-m-d');
-         
-         $query1   = "SELECT  MAX(RIGHT(no_bop,3)) as kode FROM bop";
-         $abc      = $this->db->query($query1);
-         $no_trans = "";
-         if ($abc->num_rows() > 0) {
-            foreach ($abc->result() as $k) {
-               $tmp = ((int) $k->kode) + 1;
-               $kd  = sprintf("%03s", $tmp);
-            }
-         } else {
-            $kd = "001";
-         }
-         $no_trans   = "BOP_" . $kd;
-         $data['id'] = $no_trans;
+      $date = date('Y-m-d');
 
-         $this->template->load('template', 'bop/form', $data);
-       
+      $query1   = "SELECT  MAX(RIGHT(no_bop,3)) as kode FROM bop";
+      $abc      = $this->db->query($query1);
+      $no_trans = "";
+      if ($abc->num_rows() > 0) {
+         foreach ($abc->result() as $k) {
+            $tmp = ((int) $k->kode) + 1;
+            $kd  = sprintf("%03s", $tmp);
+         }
+      } else {
+         $kd = "001";
+      }
+      $no_trans   = "BOP_" . $kd;
+      $data['id'] = $no_trans;
+
+      $this->template->load('template', 'bop/form', $data);
    }
-   
+
    public function tambah_bop()
    {
-      
-         
-         $config = array(
-            
-            array(
-               'field' => 'tgl_bop',
-               'label' => 'Tanggal',
-               'rules' => 'required',
-               'errors' => array(
-                  'required' => '%s tidak boleh kosong!'
-               )
+      $config = array(
+
+         array(
+            'field' => 'tgl_bop',
+            'label' => 'Tanggal',
+            'rules' => 'required',
+            'errors' => array(
+               'required' => '%s tidak boleh kosong!'
             )
+         )
+      );
+      $this->form_validation->set_error_delimiters('<div class="alert alert-danger"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>  ', '</div>');
+      $this->form_validation->set_rules($config);
+
+      if ($this->form_validation->run() == FALSE) {
+         $this->form_bop();
+      } else {
+         $data = array(
+            'no_bop' => $_POST['no_bop'],
+            'tgl_bop' => $_POST['tgl_bop'],
+            'bulan' => '0',
+            'tahun' => '0'
          );
-         $this->form_validation->set_error_delimiters('<div class="alert alert-danger"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>  ', '</div>');
-         $this->form_validation->set_rules($config);
-         
-         if ($this->form_validation->run() == FALSE) {
-            $this->form_bop();
-         } else {
-            $data = array(
-               'no_bop' => $_POST['no_bop'],
-               'tgl_bop' => $_POST['tgl_bop'],
-               'bulan' => '0',
-               'tahun' => '0'
-            );
-            $this->db->insert('bop', $data);
-           
-            redirect('c_masterdata/lihat_bop');
-         }
-       
-      
+         $this->db->insert('bop', $data);
+
+         redirect('c_masterdata/lihat_bop');
+      }
    }
-   
+
    public function isi_edit_bop($id)
    {
-      
-
-         $x['jenis_bop'] = $this->db->get('jenis_bop')->result_array();
-         $this->db->where('no_bop', $id);
-         $tahun = $this->db->get('bop')->row()->tahun; //Mengambil tahun saat ini
 
 
+      $x['jenis_bop'] = $this->db->get('jenis_bop')->result_array();
+      $this->db->where('no_bop', $id);
+      $tahun = $this->db->get('bop')->row()->tahun; //Mengambil tahun saat ini
 
-         $this->db->where('no_bop', $id);
-         $bulan = $this->db->get('bop')->row()->bulan; //Mengambil bulan saat ini
-         $tgl_hari = $tahun."-".$bulan."-01";
-         
-        $query = "SELECT b.no_jbop, a.no_bop, c.nama_jbop, harga, DAY(LAST_DAY(CONCAT(tahun,'-',bulan,'-01'))) as hari
+
+
+      $this->db->where('no_bop', $id);
+      $bulan = $this->db->get('bop')->row()->bulan; //Mengambil bulan saat ini
+      $tgl_hari = $tahun . "-" . $bulan . "-01";
+
+      $query = "SELECT b.no_jbop, a.no_bop, c.nama_jbop, harga, DAY(LAST_DAY(CONCAT(tahun,'-',bulan,'-01'))) as hari
          FROM bop a 
          JOIN detail_bop b ON b.no_bop = a.no_bop
          JOIN jenis_bop c ON c.no_jbop = b.no_jbop
-         WHERE a.no_bop LIKE '".$id."'
+         WHERE a.no_bop LIKE '" . $id . "'
          ORDER BY b.no_jbop ASC
       ";
-         $x['result'] = $this->db->query($query)->result_array();
-         
-         $x['data'] = $this->M_masterdata->edit_data('bop', "no_bop = '$id'")->row_array();
-         $this->template->load('template', 'bop/update', $x);
-         // var_dump($x['result']);
-       
-      
+      $x['result'] = $this->db->query($query)->result_array();
+
+      $x['data'] = $this->M_masterdata->edit_data('bop', "no_bop = '$id'")->row_array();
+      $this->template->load('template', 'bop/update', $x);
+      // var_dump($x['result']);
+
+
    }
    public function edit_bop()
    {
-      
-         $config = array(
-            
-            array(
-               'field' => 'no_jbop',
-               'label' => 'Nama BOP',
-               'rules' => 'required',
-               'errors' => array(
-                  'required' => '%s tidak boleh kosong!'
-               )
-            )
-            // ,
-            // array(
-            //    'field' => 'harga',
-            //    'label' => 'Harga (bulanan)',
-            //    'rules' => 'required|is_natural_no_zero|min_length[1]|max_length[11]',
-            //    'errors' => array(
-            //       'required' => '%s tidak boleh kosong!',
-            //       'is_natural_no_zero' => '%s hanya berupa angka 1-9!',
-            //       'min_length' => '%s minimal 3 huruf!',
-            //       'max_length' => '%s maksimal 11 huruf!'
-            //    )
-            // )
-         );
-         $this->form_validation->set_error_delimiters('<div class="alert alert-danger"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>  ', '</div>');
-         $this->form_validation->set_rules($config);
-         
-         if ($this->form_validation->run() == FALSE) {
-            $id = $_POST['no_bop'];
-            $this->isi_edit_bop($id);
-         } else {
-            $no_bop   = $_POST['no_bop'];
-            $no_jbop = $_POST['no_jbop'];
-            $harga   = $_POST['harga'];
-            
-            $data = array(
-               'no_bop' => $no_bop,
-               'harga' => $harga,
-               'no_jbop' => $no_jbop
-            );
 
-            $this->db->where(array('no_bop' => $_POST['no_bop'], 'no_jbop' => $_POST['no_jbop']));
-            $cek =  $this->db->get('detail_bop')->num_rows();
-            if($cek == 0 ){
+      $config = array(
+
+         array(
+            'field' => 'no_jbop',
+            'label' => 'Nama BOP',
+            'rules' => 'required',
+            'errors' => array(
+               'required' => '%s tidak boleh kosong!'
+            )
+         )
+         // ,
+         // array(
+         //    'field' => 'harga',
+         //    'label' => 'Harga (bulanan)',
+         //    'rules' => 'required|is_natural_no_zero|min_length[1]|max_length[11]',
+         //    'errors' => array(
+         //       'required' => '%s tidak boleh kosong!',
+         //       'is_natural_no_zero' => '%s hanya berupa angka 1-9!',
+         //       'min_length' => '%s minimal 3 huruf!',
+         //       'max_length' => '%s maksimal 11 huruf!'
+         //    )
+         // )
+      );
+      $this->form_validation->set_error_delimiters('<div class="alert alert-danger"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>  ', '</div>');
+      $this->form_validation->set_rules($config);
+
+      if ($this->form_validation->run() == FALSE) {
+         $id = $_POST['no_bop'];
+         $this->isi_edit_bop($id);
+      } else {
+         $no_bop   = $_POST['no_bop'];
+         $no_jbop = $_POST['no_jbop'];
+         $harga   = $_POST['harga'];
+
+         $data = array(
+            'no_bop' => $no_bop,
+            'harga' => $harga,
+            'no_jbop' => $no_jbop
+         );
+
+         $this->db->where(array('no_bop' => $_POST['no_bop'], 'no_jbop' => $_POST['no_jbop']));
+         $cek =  $this->db->get('detail_bop')->num_rows();
+         if ($cek == 0) {
             $this->db->insert('detail_bop', $data);
-            }else{
+         } else {
             $this->db->set('harga', $_POST['harga'], FALSE);
             $this->db->where(array('no_bop' => $_POST['no_bop'], 'no_jbop' => $_POST['no_jbop']));
             $this->db->update('detail_bop');
-            }
-            redirect('c_masterdata/isi_edit_bop/'.$no_bop.'');
-            
          }
-         
-         
+         redirect('c_masterdata/isi_edit_bop/' . $no_bop . '');
+      }
    }
 
-   public function hapus_bop($id,$id2){
-      $this->db->query("SET GLOBAL FOREIGN_KEY_CHECKS=0");
-         $this->db->where('no_bop',$id);
-         $this->db->where('no_jbop', $id2);
-         $this->db->delete('detail_bop');
-         $this->db->query("SET GLOBAL FOREIGN_KEY_CHECKS=1");
-      
-            redirect('c_masterdata/isi_edit_bop/'.$id.'');
-   }
-
-    //bopo
-
-    public function lihat_bopo()
+   public function hapus_bop($id, $id2)
    {
-      
-          $this->db->where('tgl_bopo', date('Y-m-d'));
-         $data['cek'] = $this->db->get('bopo')->result();
-         $data['result'] = $this->db->get('bopo')->result_array();
-         $this->template->load('template', 'bopo/view', $data);
-       
+      $this->db->query("SET GLOBAL FOREIGN_KEY_CHECKS=0");
+      $this->db->where('no_bop', $id);
+      $this->db->where('no_jbop', $id2);
+      $this->db->delete('detail_bop');
+      $this->db->query("SET GLOBAL FOREIGN_KEY_CHECKS=1");
+
+      redirect('c_masterdata/isi_edit_bop/' . $id . '');
+   }
+
+   //bopo
+
+   public function lihat_bopo()
+   {
+
+      $this->db->where('tgl_bopo', date('Y-m-d'));
+      $data['cek'] = $this->db->get('bopo')->result();
+      $data['result'] = $this->db->get('bopo')->result_array();
+      $this->template->load('template', 'bopo/view', $data);
    }
    public function form_bopo()
    {
       date_default_timezone_set('Asia/Jakarta');
-         $date = date('Y-m-d');
-         
-         $query1   = "SELECT  MAX(RIGHT(no_bopo,3)) as kode FROM bopo";
-         $abc      = $this->db->query($query1);
-         $no_trans = "";
-         if ($abc->num_rows() > 0) {
-            foreach ($abc->result() as $k) {
-               $tmp = ((int) $k->kode) + 1;
-               $kd  = sprintf("%03s", $tmp);
-            }
-         } else {
-            $kd = "001";
-         }
-         $no_trans   = "BOPO_" . $kd;
-         $data['id'] = $no_trans;
+      $date = date('Y-m-d');
 
-         $this->template->load('template', 'bopo/form', $data);
-       
+      $query1   = "SELECT  MAX(RIGHT(no_bopo,3)) as kode FROM bopo";
+      $abc      = $this->db->query($query1);
+      $no_trans = "";
+      if ($abc->num_rows() > 0) {
+         foreach ($abc->result() as $k) {
+            $tmp = ((int) $k->kode) + 1;
+            $kd  = sprintf("%03s", $tmp);
+         }
+      } else {
+         $kd = "001";
+      }
+      $no_trans   = "BOPO_" . $kd;
+      $data['id'] = $no_trans;
+
+      $this->template->load('template', 'bopo/form', $data);
    }
-   
+
    public function tambah_bopo()
    {
-      
-         
-         $config = array(
-            
-            array(
-               'field' => 'tgl_bopo',
-               'label' => 'Tanggal',
-               'rules' => 'required',
-               'errors' => array(
-                  'required' => '%s tidak boleh kosong!'
-               )
+
+
+      $config = array(
+
+         array(
+            'field' => 'tgl_bopo',
+            'label' => 'Tanggal',
+            'rules' => 'required',
+            'errors' => array(
+               'required' => '%s tidak boleh kosong!'
             )
+         )
+      );
+      $this->form_validation->set_error_delimiters('<div class="alert alert-danger"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>  ', '</div>');
+      $this->form_validation->set_rules($config);
+
+      if ($this->form_validation->run() == FALSE) {
+         $this->form_bop();
+      } else {
+         $data = array(
+            'no_bopo' => $_POST['no_bopo'],
+            'tgl_bopo' => $_POST['tgl_bopo']
          );
-         $this->form_validation->set_error_delimiters('<div class="alert alert-danger"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>  ', '</div>');
-         $this->form_validation->set_rules($config);
-         
-         if ($this->form_validation->run() == FALSE) {
-            $this->form_bop();
-         } else {
-            $data = array(
-               'no_bopo' => $_POST['no_bopo'],
-               'tgl_bopo' => $_POST['tgl_bopo']
-            );
-            $this->db->insert('bopo', $data);
-           
-            redirect('c_masterdata/lihat_bopo');
-         }
-       
-      
+         $this->db->insert('bopo', $data);
+
+         redirect('c_masterdata/lihat_bopo');
+      }
    }
-   
+
    public function isi_edit_bopo($id)
    {
-      
-
-         // $this->db->where('no_bopo', $id);
-         // $tahun = $this->db->get('bopo')->row()->tahun; //Mengambil tahun saat ini
 
 
+      // $this->db->where('no_bopo', $id);
+      // $tahun = $this->db->get('bopo')->row()->tahun; //Mengambil tahun saat ini
 
-         // $this->db->where('no_bopo', $id);
-         // $bulan = $this->db->get('bopo')->row()->bulan; //Mengambil bulan saat ini
-         // $tgl_hari = $tahun."-".$bulan."-01";
-         
-         $x['jenis_bop'] = $this->db->get('jenis_bop')->result_array();
-        $query = "SELECT b.no_jbop, a.no_bopo, c.nama_jbop, harga
+
+
+      // $this->db->where('no_bopo', $id);
+      // $bulan = $this->db->get('bopo')->row()->bulan; //Mengambil bulan saat ini
+      // $tgl_hari = $tahun."-".$bulan."-01";
+
+      $x['jenis_bop'] = $this->db->get('jenis_bop')->result_array();
+      $query = "SELECT b.no_jbop, a.no_bopo, c.nama_jbop, harga
          FROM bopo a 
          JOIN detail_bopo b ON b.no_bopo = a.no_bopo
          JOIN jenis_bop c ON c.no_jbop = b.no_jbop
-         WHERE a.no_bopo LIKE '".$id."'
+         WHERE a.no_bopo LIKE '" . $id . "'
          ORDER BY b.no_jbop ASC
       ";
-         $x['result'] = $this->db->query($query)->result_array();
-         
-         $x['data'] = $this->M_masterdata->edit_data('bopo', "no_bopo = '$id'")->row_array();
-         $this->template->load('template', 'bopo/update', $x);
-         // var_dump($x['result']);
-       
-      
+      $x['result'] = $this->db->query($query)->result_array();
+
+      $x['data'] = $this->M_masterdata->edit_data('bopo', "no_bopo = '$id'")->row_array();
+      $this->template->load('template', 'bopo/update', $x);
+      // var_dump($x['result']);
+
+
    }
    public function edit_bopo()
    {
-      
-         $config = array(
-            
-            array(
-               'field' => 'no_jbop',
-               'label' => 'Nama BOP',
-               'rules' => 'required',
-               'errors' => array(
-                  'required' => '%s tidak boleh kosong!'
-               )
-            )
-            // ,
-            // array(
-            //    'field' => 'harga',
-            //    'label' => 'Harga (bulanan)',
-            //    'rules' => 'required|is_natural_no_zero|min_length[1]|max_length[11]',
-            //    'errors' => array(
-            //       'required' => '%s tidak boleh kosong!',
-            //       'is_natural_no_zero' => '%s hanya berupa angka 1-9!',
-            //       'min_length' => '%s minimal 3 huruf!',
-            //       'max_length' => '%s maksimal 11 huruf!'
-            //    )
-            // )
-         );
-         $this->form_validation->set_error_delimiters('<div class="alert alert-danger"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>  ', '</div>');
-         $this->form_validation->set_rules($config);
-         
-         if ($this->form_validation->run() == FALSE) {
-            $id = $_POST['no_bopo'];
-            $this->isi_edit_bopo($id);
-         } else {
-            $no_bop   = $_POST['no_bopo'];
-            $no_jbop = $_POST['no_jbop'];
-            $harga   = $_POST['harga'];
-            
-            $data = array(
-               'no_bopo' => $no_bop,
-               'harga' => $harga,
-               'no_jbop' => $no_jbop
-            );
 
-            $this->db->where(array('no_bopo' => $_POST['no_bopo'], 'no_jbop' => $_POST['no_jbop']));
-            $cek =  $this->db->get('detail_bopo')->num_rows();
-            if($cek == 0 ){
+      $config = array(
+
+         array(
+            'field' => 'no_jbop',
+            'label' => 'Nama BOP',
+            'rules' => 'required',
+            'errors' => array(
+               'required' => '%s tidak boleh kosong!'
+            )
+         )
+         // ,
+         // array(
+         //    'field' => 'harga',
+         //    'label' => 'Harga (bulanan)',
+         //    'rules' => 'required|is_natural_no_zero|min_length[1]|max_length[11]',
+         //    'errors' => array(
+         //       'required' => '%s tidak boleh kosong!',
+         //       'is_natural_no_zero' => '%s hanya berupa angka 1-9!',
+         //       'min_length' => '%s minimal 3 huruf!',
+         //       'max_length' => '%s maksimal 11 huruf!'
+         //    )
+         // )
+      );
+      $this->form_validation->set_error_delimiters('<div class="alert alert-danger"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>  ', '</div>');
+      $this->form_validation->set_rules($config);
+
+      if ($this->form_validation->run() == FALSE) {
+         $id = $_POST['no_bopo'];
+         $this->isi_edit_bopo($id);
+      } else {
+         $no_bop   = $_POST['no_bopo'];
+         $no_jbop = $_POST['no_jbop'];
+         $harga   = $_POST['harga'];
+
+         $data = array(
+            'no_bopo' => $no_bop,
+            'harga' => $harga,
+            'no_jbop' => $no_jbop
+         );
+
+         $this->db->where(array('no_bopo' => $_POST['no_bopo'], 'no_jbop' => $_POST['no_jbop']));
+         $cek =  $this->db->get('detail_bopo')->num_rows();
+         if ($cek == 0) {
             $this->db->insert('detail_bopo', $data);
-            }else{
+         } else {
             $this->db->set('harga', $_POST['harga'], FALSE);
             $this->db->where(array('no_bopo' => $_POST['no_bopo'], 'no_jbop' => $_POST['no_jbop']));
             $this->db->update('detail_bopo');
-            }
-            redirect('c_masterdata/isi_edit_bopo/'.$no_bop.'');
-            
          }
-         
-         
+         redirect('c_masterdata/isi_edit_bopo/' . $no_bop . '');
+      }
    }
 
-   public function hapus_bopo($id,$id2){
-      $this->db->query("SET GLOBAL FOREIGN_KEY_CHECKS=0");
-         $this->db->where('no_bopo',$id);
-         $this->db->where('no_jbop', $id2);
-         $this->db->delete('detail_bopo');
-         $this->db->query("SET GLOBAL FOREIGN_KEY_CHECKS=1");
-      
-            redirect('c_masterdata/isi_edit_bopo/'.$id.'');
-   }
-
-
-
- //btk
-
-    public function lihat_btk()
+   public function hapus_bopo($id, $id2)
    {
-         $this->db->where('tgl_btk', date('Y-m-d'));
-         $data['cek'] = $this->db->get('btk')->result();
-         
-         $this->db->like('no_btk', 'BTK_', 'after');
-         $data['result'] = $this->db->get('btk')->result_array();
-         $this->template->load('template', 'btk/view', $data);
-       
+      $this->db->query("SET GLOBAL FOREIGN_KEY_CHECKS=0");
+      $this->db->where('no_bopo', $id);
+      $this->db->where('no_jbop', $id2);
+      $this->db->delete('detail_bopo');
+      $this->db->query("SET GLOBAL FOREIGN_KEY_CHECKS=1");
+
+      redirect('c_masterdata/isi_edit_bopo/' . $id . '');
+   }
+
+
+
+   //btk
+
+   public function lihat_btk()
+   {
+      $this->db->where('tgl_btk', date('Y-m-d'));
+      $data['cek'] = $this->db->get('btk')->result();
+
+      $this->db->like('no_btk', 'BTK_', 'after');
+      $data['result'] = $this->db->get('btk')->result_array();
+      $this->template->load('template', 'btk/view', $data);
    }
    public function form_btk()
    {
       date_default_timezone_set('Asia/Jakarta');
-         $date = date('Y-m-d');
-         
-         $query1   = "SELECT  MAX(RIGHT(no_btk,3)) as kode FROM   btk
+      $date = date('Y-m-d');
+
+      $query1   = "SELECT  MAX(RIGHT(no_btk,3)) as kode FROM   btk
                      WHERE no_btk LIKE 'BTK_%'";
-         $abc      = $this->db->query($query1);
-         $no_trans = "";
-         if ($abc->num_rows() > 0) {
-            foreach ($abc->result() as $k) {
-               $tmp = ((int) $k->kode) + 1;
-               $kd  = sprintf("%03s", $tmp);
-            }
-         } else {
-            $kd = "001";
+      $abc      = $this->db->query($query1);
+      $no_trans = "";
+      if ($abc->num_rows() > 0) {
+         foreach ($abc->result() as $k) {
+            $tmp = ((int) $k->kode) + 1;
+            $kd  = sprintf("%03s", $tmp);
          }
-         $no_trans   = "BTK_" . $kd;
-         $data['id'] = $no_trans;
-         $this->template->load('template', 'btk/form', $data);
-       
+      } else {
+         $kd = "001";
+      }
+      $no_trans   = "BTK_" . $kd;
+      $data['id'] = $no_trans;
+      $this->template->load('template', 'btk/form', $data);
    }
-   
+
    public function tambah_btk()
    {
-      
-         
-         $config = array(
-            
-           array(
-               'field' => 'tgl_btk',
-               'label' => 'Tanggal',
-               'rules' => 'required',
-               'errors' => array(
-                  'required' => '%s tidak boleh kosong!'
-               )
-            ),
-            array(
-               'field' => 'jumlah_pgw',
-               'label' => 'Jumlah Pegawai',
-               'rules' => 'required',
-               'errors' => array(
-                  'required' => 'Inputan Salah'
-               )
-            ),
-            array(
-               'field' => 'tarif',
-               'label' => 'Tarif Harga',
-               'rules' => 'required|is_natural_no_zero|min_length[1]|max_length[11]',
-               'errors' => array(
-                  'required' => '%s tidak boleh kosong!',
-                  'is_natural_no_zero' => '%s hanya berupa angka 1-9!',
-                  'min_length' => '%s minimal 3 huruf!',
-                  'max_length' => '%s maksimal 11 huruf!'
-               )
-            )
 
-         );
-         $this->form_validation->set_error_delimiters('<div class="alert alert-danger"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>  ', '</div>');
-         $this->form_validation->set_rules($config);
-         
-         if ($this->form_validation->run() == FALSE) {
-            $this->form_btk();
-         } else {
-            $this->db->where('tgl_btk', $_POST['tgl_btk']);
-            $cek = $this->db->get('btk')->result_array();
-            if($cek == FALSE){
+
+      $config = array(
+
+         array(
+            'field' => 'tgl_btk',
+            'label' => 'Tanggal',
+            'rules' => 'required',
+            'errors' => array(
+               'required' => '%s tidak boleh kosong!'
+            )
+         ),
+         array(
+            'field' => 'jumlah_pgw',
+            'label' => 'Jumlah Pegawai',
+            'rules' => 'required',
+            'errors' => array(
+               'required' => 'Inputan Salah'
+            )
+         ),
+         array(
+            'field' => 'tarif',
+            'label' => 'Tarif Harga',
+            'rules' => 'required|is_natural_no_zero|min_length[1]|max_length[11]',
+            'errors' => array(
+               'required' => '%s tidak boleh kosong!',
+               'is_natural_no_zero' => '%s hanya berupa angka 1-9!',
+               'min_length' => '%s minimal 3 huruf!',
+               'max_length' => '%s maksimal 11 huruf!'
+            )
+         )
+
+      );
+      $this->form_validation->set_error_delimiters('<div class="alert alert-danger"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>  ', '</div>');
+      $this->form_validation->set_rules($config);
+
+      if ($this->form_validation->run() == FALSE) {
+         $this->form_btk();
+      } else {
+         $this->db->where('tgl_btk', $_POST['tgl_btk']);
+         $cek = $this->db->get('btk')->result_array();
+         if ($cek == FALSE) {
             $data = array(
                'no_btk' => $_POST['no_btk'],
                'bulan' => '0',
@@ -1476,167 +1395,159 @@ class c_masterdata extends CI_controller{
                'tarif' => $_POST['tarif']
             );
             $this->db->insert('btk', $data);
-           
+
             redirect('c_masterdata/lihat_btk');
-         }else{   $query1   = "SELECT  MAX(RIGHT(no_btk,3)) as kode FROM   btk";
-         $abc      = $this->db->query($query1);
-         $no_trans = "";
-         if ($abc->num_rows() > 0) {
-            foreach ($abc->result() as $k) {
-               $tmp = ((int) $k->kode) + 1;
-               $kd  = sprintf("%03s", $tmp);
-            }
          } else {
-            $kd = "001";
-         }
-         $no_trans   = "BTK_" . $kd;
-         $data['id'] = $no_trans;
+            $query1   = "SELECT  MAX(RIGHT(no_btk,3)) as kode FROM   btk";
+            $abc      = $this->db->query($query1);
+            $no_trans = "";
+            if ($abc->num_rows() > 0) {
+               foreach ($abc->result() as $k) {
+                  $tmp = ((int) $k->kode) + 1;
+                  $kd  = sprintf("%03s", $tmp);
+               }
+            } else {
+               $kd = "001";
+            }
+            $no_trans   = "BTK_" . $kd;
+            $data['id'] = $no_trans;
             $data['error'] = 'Tanggal sudah ada di database!';
-         $this->template->load('template', 'btk/form', $data);
+            $this->template->load('template', 'btk/form', $data);
          }
       }
-       
-      
    }
-   
+
    public function isi_edit_btk($id)
    {
-      
-         
-         
-         $x['data'] = $this->M_masterdata->edit_data('btk', "no_btk = '$id'")->row_array();
-         $this->template->load('template', 'btk/update', $x);
-       
-      
+
+
+
+      $x['data'] = $this->M_masterdata->edit_data('btk', "no_btk = '$id'")->row_array();
+      $this->template->load('template', 'btk/update', $x);
    }
    public function edit_btk()
    {
-      
-         $config = array(
-            
-            
-            array(
-               'field' => 'jumlah_pgw',
-               'label' => 'Jumlah Pegawai',
-               'rules' => 'required',
-               'errors' => array(
-                  'required' => 'Inputan Salah'
-               )
-            ),
-            array(
-               'field' => 'tarif',
-               'label' => 'Tarif Harga',
-               'rules' => 'required|is_natural_no_zero|min_length[1]|max_length[11]',
-               'errors' => array(
-                  'required' => '%s tidak boleh kosong!',
-                  'is_natural_no_zero' => '%s hanya berupa angka 1-9!',
-                  'min_length' => '%s minimal 3 huruf!',
-                  'max_length' => '%s maksimal 11 huruf!'
-               )
-            )
 
+      $config = array(
+
+
+         array(
+            'field' => 'jumlah_pgw',
+            'label' => 'Jumlah Pegawai',
+            'rules' => 'required',
+            'errors' => array(
+               'required' => 'Inputan Salah'
+            )
+         ),
+         array(
+            'field' => 'tarif',
+            'label' => 'Tarif Harga',
+            'rules' => 'required|is_natural_no_zero|min_length[1]|max_length[11]',
+            'errors' => array(
+               'required' => '%s tidak boleh kosong!',
+               'is_natural_no_zero' => '%s hanya berupa angka 1-9!',
+               'min_length' => '%s minimal 3 huruf!',
+               'max_length' => '%s maksimal 11 huruf!'
+            )
+         )
+
+      );
+      $this->form_validation->set_error_delimiters('<div class="alert alert-danger"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>  ', '</div>');
+      $this->form_validation->set_rules($config);
+
+      if ($this->form_validation->run() == FALSE) {
+         $id = $_POST['no_btk'];
+         $this->isi_edit_btk($id);
+      } else {
+
+         $data = array(
+            'jumlah_pgw' => $_POST['jumlah_pgw'],
+            'tarif' => $_POST['tarif']
          );
-         $this->form_validation->set_error_delimiters('<div class="alert alert-danger"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>  ', '</div>');
-         $this->form_validation->set_rules($config);
-         
-         if ($this->form_validation->run() == FALSE) {
-            $id = $_POST['no_btk'];
-            $this->isi_edit_btk($id);
-         } else {
-          
-            $data = array(
-               'jumlah_pgw' => $_POST['jumlah_pgw'],
-               'tarif' => $_POST['tarif']
-            );
-            
-            $this->db->where('no_btk', $_POST['no_btk']);
-            $this->M_masterdata->update_data('btk', $data);
-            redirect('c_masterdata/lihat_btk');
-            
-         }
-         
-       
+
+         $this->db->where('no_btk', $_POST['no_btk']);
+         $this->M_masterdata->update_data('btk', $data);
+         redirect('c_masterdata/lihat_btk');
+      }
    }
 
    //btko
 
-    public function lihat_btko()
+   public function lihat_btko()
    {
-         $this->db->where('tgl_btko', date('Y-m-d'));
-         $data['cek'] = $this->db->get('btko')->result();
-         
-         // $this->db->like('no_btk', 'BTKO_', 'after');
-         $data['result'] = $this->db->get('btko')->result_array();
-         $this->template->load('template', 'btko/view', $data);
-       
+      $this->db->where('tgl_btko', date('Y-m-d'));
+      $data['cek'] = $this->db->get('btko')->result();
+
+      // $this->db->like('no_btk', 'BTKO_', 'after');
+      $data['result'] = $this->db->get('btko')->result_array();
+      $this->template->load('template', 'btko/view', $data);
    }
    public function form_btko()
    {
       date_default_timezone_set('Asia/Jakarta');
-         $date = date('Y-m-d');
-         
-         $query1   = "SELECT  MAX(RIGHT(no_btko,3)) as kode FROM   btko
+      $date = date('Y-m-d');
+
+      $query1   = "SELECT  MAX(RIGHT(no_btko,3)) as kode FROM   btko
                      WHERE no_btko LIKE 'BTKO_%'";
-         $abc      = $this->db->query($query1);
-         $no_trans = "";
-         if ($abc->num_rows() > 0) {
-            foreach ($abc->result() as $k) {
-               $tmp = ((int) $k->kode) + 1;
-               $kd  = sprintf("%03s", $tmp);
-            }
-         } else {
-            $kd = "001";
+      $abc      = $this->db->query($query1);
+      $no_trans = "";
+      if ($abc->num_rows() > 0) {
+         foreach ($abc->result() as $k) {
+            $tmp = ((int) $k->kode) + 1;
+            $kd  = sprintf("%03s", $tmp);
          }
-         $no_trans   = "BTKO_" . $kd;
-         $data['id'] = $no_trans;
-         $this->template->load('template', 'btko/form', $data);
-       
+      } else {
+         $kd = "001";
+      }
+      $no_trans   = "BTKO_" . $kd;
+      $data['id'] = $no_trans;
+      $this->template->load('template', 'btko/form', $data);
    }
-   
+
    public function tambah_btko()
    {
-      
-         
-         $config = array(
-            
-           array(
-               'field' => 'tgl_btko',
-               'label' => 'Tanggal',
-               'rules' => 'required',
-               'errors' => array(
-                  'required' => '%s tidak boleh kosong!'
-               )
-            ),
-            array(
-               'field' => 'jumlah_pgw',
-               'label' => 'Jumlah Pegawai',
-               'rules' => 'required',
-               'errors' => array(
-                  'required' => 'Inputan Salah'
-               )
-            ),
-            array(
-               'field' => 'tarif',
-               'label' => 'Tarif Harga',
-               'rules' => 'required|is_natural_no_zero|min_length[1]|max_length[11]',
-               'errors' => array(
-                  'required' => '%s tidak boleh kosong!',
-                  'is_natural_no_zero' => '%s hanya berupa angka 1-9!',
-                  'min_length' => '%s minimal 3 huruf!',
-                  'max_length' => '%s maksimal 11 huruf!'
-               )
-            )
 
-         );
-         $this->form_validation->set_error_delimiters('<div class="alert alert-danger"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>  ', '</div>');
-         $this->form_validation->set_rules($config);
-         
-         if ($this->form_validation->run() == FALSE) {
-            $this->form_btko();
-         } else {
-            $this->db->where('tgl_btko', $_POST['tgl_btko']);
-            $cek = $this->db->get('btko')->result_array();
-            if($cek == FALSE){
+
+      $config = array(
+
+         array(
+            'field' => 'tgl_btko',
+            'label' => 'Tanggal',
+            'rules' => 'required',
+            'errors' => array(
+               'required' => '%s tidak boleh kosong!'
+            )
+         ),
+         array(
+            'field' => 'jumlah_pgw',
+            'label' => 'Jumlah Pegawai',
+            'rules' => 'required',
+            'errors' => array(
+               'required' => 'Inputan Salah'
+            )
+         ),
+         array(
+            'field' => 'tarif',
+            'label' => 'Tarif Harga',
+            'rules' => 'required|is_natural_no_zero|min_length[1]|max_length[11]',
+            'errors' => array(
+               'required' => '%s tidak boleh kosong!',
+               'is_natural_no_zero' => '%s hanya berupa angka 1-9!',
+               'min_length' => '%s minimal 3 huruf!',
+               'max_length' => '%s maksimal 11 huruf!'
+            )
+         )
+
+      );
+      $this->form_validation->set_error_delimiters('<div class="alert alert-danger"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>  ', '</div>');
+      $this->form_validation->set_rules($config);
+
+      if ($this->form_validation->run() == FALSE) {
+         $this->form_btko();
+      } else {
+         $this->db->where('tgl_btko', $_POST['tgl_btko']);
+         $cek = $this->db->get('btko')->result_array();
+         if ($cek == FALSE) {
             $data = array(
                'no_btko' => $_POST['no_btko'],
                'tgl_btko' => $_POST['tgl_btko'],
@@ -1644,474 +1555,444 @@ class c_masterdata extends CI_controller{
                'tarif' => $_POST['tarif']
             );
             $this->db->insert('btko', $data);
-           
+
             redirect('c_masterdata/lihat_btko');
-         }else{   
-         $query1   = "SELECT  MAX(RIGHT(no_btko,3)) as kode FROM   btko";
-         $abc      = $this->db->query($query1);
-         $no_trans = "";
-         if ($abc->num_rows() > 0) {
-            foreach ($abc->result() as $k) {
-               $tmp = ((int) $k->kode) + 1;
-               $kd  = sprintf("%03s", $tmp);
-            }
          } else {
-            $kd = "001";
-         }
-         $no_trans   = "BTKO_" . $kd;
-         $data['id'] = $no_trans;
+            $query1   = "SELECT  MAX(RIGHT(no_btko,3)) as kode FROM   btko";
+            $abc      = $this->db->query($query1);
+            $no_trans = "";
+            if ($abc->num_rows() > 0) {
+               foreach ($abc->result() as $k) {
+                  $tmp = ((int) $k->kode) + 1;
+                  $kd  = sprintf("%03s", $tmp);
+               }
+            } else {
+               $kd = "001";
+            }
+            $no_trans   = "BTKO_" . $kd;
+            $data['id'] = $no_trans;
             $data['error'] = 'Tanggal sudah ada di database!';
-         $this->template->load('template', 'btko/form', $data);
+            $this->template->load('template', 'btko/form', $data);
          }
       }
-       
-      
    }
-   
+
    public function isi_edit_btko($id)
    {
-      
-         
-         
-         $x['data'] = $this->M_masterdata->edit_data('btko', "no_btko = '$id'")->row_array();
-         $this->template->load('template', 'btko/update', $x);
-       
-      
+
+
+
+      $x['data'] = $this->M_masterdata->edit_data('btko', "no_btko = '$id'")->row_array();
+      $this->template->load('template', 'btko/update', $x);
    }
    public function edit_btko()
    {
-      
-         $config = array(
-            
-            
-            array(
-               'field' => 'jumlah_pgw',
-               'label' => 'Jumlah Pegawai',
-               'rules' => 'required',
-               'errors' => array(
-                  'required' => 'Inputan Salah'
-               )
-            ),
-            array(
-               'field' => 'tarif',
-               'label' => 'Tarif Harga',
-               'rules' => 'required|is_natural_no_zero|min_length[1]|max_length[11]',
-               'errors' => array(
-                  'required' => '%s tidak boleh kosong!',
-                  'is_natural_no_zero' => '%s hanya berupa angka 1-9!',
-                  'min_length' => '%s minimal 3 huruf!',
-                  'max_length' => '%s maksimal 11 huruf!'
-               )
-            )
 
+      $config = array(
+
+
+         array(
+            'field' => 'jumlah_pgw',
+            'label' => 'Jumlah Pegawai',
+            'rules' => 'required',
+            'errors' => array(
+               'required' => 'Inputan Salah'
+            )
+         ),
+         array(
+            'field' => 'tarif',
+            'label' => 'Tarif Harga',
+            'rules' => 'required|is_natural_no_zero|min_length[1]|max_length[11]',
+            'errors' => array(
+               'required' => '%s tidak boleh kosong!',
+               'is_natural_no_zero' => '%s hanya berupa angka 1-9!',
+               'min_length' => '%s minimal 3 huruf!',
+               'max_length' => '%s maksimal 11 huruf!'
+            )
+         )
+
+      );
+      $this->form_validation->set_error_delimiters('<div class="alert alert-danger"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>  ', '</div>');
+      $this->form_validation->set_rules($config);
+
+      if ($this->form_validation->run() == FALSE) {
+         $id = $_POST['no_btko'];
+         $this->isi_edit_btko($id);
+      } else {
+
+         $data = array(
+            'jumlah_pgw' => $_POST['jumlah_pgw'],
+            'tarif' => $_POST['tarif']
          );
-         $this->form_validation->set_error_delimiters('<div class="alert alert-danger"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>  ', '</div>');
-         $this->form_validation->set_rules($config);
-         
-         if ($this->form_validation->run() == FALSE) {
-            $id = $_POST['no_btko'];
-            $this->isi_edit_btko($id);
-         } else {
-          
-            $data = array(
-               'jumlah_pgw' => $_POST['jumlah_pgw'],
-               'tarif' => $_POST['tarif']
-            );
-            
-            $this->db->where('no_btko', $_POST['no_btko']);
-            $this->M_masterdata->update_data('btko', $data);
-            redirect('c_masterdata/lihat_btko');
-            
-         }
-         
-       
+
+         $this->db->where('no_btko', $_POST['no_btko']);
+         $this->M_masterdata->update_data('btko', $data);
+         redirect('c_masterdata/lihat_btko');
+      }
    }
 
 
-    //Konsumen IPS
+   //Konsumen IPS
 
-    public function lihat_ips()
+   public function lihat_ips()
    {
-      
-         
-         $data['result'] = $this->db->get('konsumen_ips')->result_array();
-         $this->template->load('template', 'ips/view', $data);
-       
+
+
+      $data['result'] = $this->db->get('konsumen_ips')->result_array();
+      $this->template->load('template', 'ips/view', $data);
    }
    public function form_ips()
    {
-      
-         
-         $query1   = "SELECT  MAX(RIGHT(no_ips,3)) as kode FROM konsumen_ips";
-         $abc      = $this->db->query($query1);
-         $no_trans = "";
-         if ($abc->num_rows() > 0) {
-            foreach ($abc->result() as $k) {
-               $tmp = ((int) $k->kode) + 1;
-               $kd  = sprintf("%03s", $tmp);
-            }
-         } else {
-            $kd = "001";
+
+
+      $query1   = "SELECT  MAX(RIGHT(no_ips,3)) as kode FROM konsumen_ips";
+      $abc      = $this->db->query($query1);
+      $no_trans = "";
+      if ($abc->num_rows() > 0) {
+         foreach ($abc->result() as $k) {
+            $tmp = ((int) $k->kode) + 1;
+            $kd  = sprintf("%03s", $tmp);
          }
-         $no_trans   = "IPS_" . $kd;
-         $data['id'] = $no_trans;
-         $this->template->load('template', 'ips/form', $data);
-       
+      } else {
+         $kd = "001";
+      }
+      $no_trans   = "IPS_" . $kd;
+      $data['id'] = $no_trans;
+      $this->template->load('template', 'ips/form', $data);
    }
-   
+
    public function tambah_ips()
    {
-      
-         
-         $config = array(
-            
-            array(
-               'field' => 'nama_ips',
-               'label' => 'Nama Konsumen IPS',
-               'rules' => 'required|min_length[3]|max_length[30]|is_unique[konsumen_ips.nama_ips]',
-               'errors' => array(
-                  'required' => '%s tidak boleh kosong!',
-                  'min_length' => '%s minimal 3 huruf!',
-                  'max_length' => '%s maksimal 30 huruf!',
-                  'customAlpha' => '%s hanya boleh berupa huruf!',
-                  'is_unique' => '%s sudah ada di database!'
-               )
-            ),
-            array(
-               'field' => 'notel',
-               'label' => 'No. Telepon',
-               'rules' => 'required',
-               'errors' => array(
-                  'required' => '%s tidak boleh kosong!'
-               )
-            ),
-            array(
-               'field' => 'alamat',
-               'label' => 'Alamat',
-               'rules' => 'required',
-               'errors' => array(
-                  'required' => '%s tidak boleh kosong!'
-               )
+
+
+      $config = array(
+
+         array(
+            'field' => 'nama_ips',
+            'label' => 'Nama Konsumen IPS',
+            'rules' => 'required|min_length[3]|max_length[30]|is_unique[konsumen_ips.nama_ips]',
+            'errors' => array(
+               'required' => '%s tidak boleh kosong!',
+               'min_length' => '%s minimal 3 huruf!',
+               'max_length' => '%s maksimal 30 huruf!',
+               'customAlpha' => '%s hanya boleh berupa huruf!',
+               'is_unique' => '%s sudah ada di database!'
             )
+         ),
+         array(
+            'field' => 'notel',
+            'label' => 'No. Telepon',
+            'rules' => 'required',
+            'errors' => array(
+               'required' => '%s tidak boleh kosong!'
+            )
+         ),
+         array(
+            'field' => 'alamat',
+            'label' => 'Alamat',
+            'rules' => 'required',
+            'errors' => array(
+               'required' => '%s tidak boleh kosong!'
+            )
+         )
+      );
+      $this->form_validation->set_error_delimiters('<div class="alert alert-danger"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>  ', '</div>');
+      $this->form_validation->set_rules($config);
+
+      if ($this->form_validation->run() == FALSE) {
+         $this->form_ips();
+      } else {
+         $data = array(
+            'no_ips' => $_POST['no_ips'],
+            'nama_ips' => $_POST['nama_ips'],
+            'notel' => $_POST['notel'],
+            'alamat' => $_POST['alamat']
          );
-         $this->form_validation->set_error_delimiters('<div class="alert alert-danger"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>  ', '</div>');
-         $this->form_validation->set_rules($config);
-         
-         if ($this->form_validation->run() == FALSE) {
-            $this->form_ips();
-         } else {
-            $data = array(
-               'no_ips' => $_POST['no_ips'],
-               'nama_ips' => $_POST['nama_ips'],
-               'notel' => $_POST['notel'],
-               'alamat' => $_POST['alamat']
-            );
-            $this->db->insert('konsumen_ips', $data);
-           
-            redirect('c_masterdata/lihat_ips');
-         }
-       
-      
+         $this->db->insert('konsumen_ips', $data);
+
+         redirect('c_masterdata/lihat_ips');
+      }
    }
-   
+
    public function isi_edit_ips($id)
    {
-      
-         
-         
-         $x['data'] = $this->M_masterdata->edit_data('konsumen_ips', "no_ips = '$id'")->row_array();
-         $this->template->load('template', 'ips/update', $x);
-       
-      
+
+
+
+      $x['data'] = $this->M_masterdata->edit_data('konsumen_ips', "no_ips = '$id'")->row_array();
+      $this->template->load('template', 'ips/update', $x);
    }
    public function edit_ips()
    {
-      
-         $config = array(
-            
-           array(
-               'field' => 'nama_ips',
-               'label' => 'Nama Konsumen IPS',
-               'rules' => 'required|min_length[3]|max_length[30]',
-               'errors' => array(
-                  'required' => '%s tidak boleh kosong!',
-                  'min_length' => '%s minimal 3 huruf!',
-                  'max_length' => '%s maksimal 30 huruf!'
-               )
-            ),
-            array(
-               'field' => 'notel',
-               'label' => 'No. Telepon',
-               'rules' => 'required',
-               'errors' => array(
-                  'required' => '%s tidak boleh kosong!'
-               )
-            ),
-            array(
-               'field' => 'alamat',
-               'label' => 'Alamat',
-               'rules' => 'required',
-               'errors' => array(
-                  'required' => '%s tidak boleh kosong!'
-               )
+
+      $config = array(
+
+         array(
+            'field' => 'nama_ips',
+            'label' => 'Nama Konsumen IPS',
+            'rules' => 'required|min_length[3]|max_length[30]',
+            'errors' => array(
+               'required' => '%s tidak boleh kosong!',
+               'min_length' => '%s minimal 3 huruf!',
+               'max_length' => '%s maksimal 30 huruf!'
             )
+         ),
+         array(
+            'field' => 'notel',
+            'label' => 'No. Telepon',
+            'rules' => 'required',
+            'errors' => array(
+               'required' => '%s tidak boleh kosong!'
+            )
+         ),
+         array(
+            'field' => 'alamat',
+            'label' => 'Alamat',
+            'rules' => 'required',
+            'errors' => array(
+               'required' => '%s tidak boleh kosong!'
+            )
+         )
+      );
+      $this->form_validation->set_error_delimiters('<div class="alert alert-danger"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>  ', '</div>');
+      $this->form_validation->set_rules($config);
+
+      if ($this->form_validation->run() == FALSE) {
+         $id = $_POST['no_ips'];
+         $this->isi_edit_ips($id);
+      } else {
+         $no_bp   = $_POST['no_ips'];
+         $nama_bp = $_POST['nama_ips'];
+         $notel   = $_POST['notel'];
+         $alamat  = $_POST['alamat'];
+
+         $data = array(
+            'nama_ips' => $nama_bp,
+            'notel' => $notel,
+            'alamat' => $alamat
          );
-         $this->form_validation->set_error_delimiters('<div class="alert alert-danger"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>  ', '</div>');
-         $this->form_validation->set_rules($config);
-         
-         if ($this->form_validation->run() == FALSE) {
-            $id = $_POST['no_ips'];
-            $this->isi_edit_ips($id);
-         } else {
-            $no_bp   = $_POST['no_ips'];
-            $nama_bp = $_POST['nama_ips'];
-            $notel   = $_POST['notel'];
-            $alamat  = $_POST['alamat'];
-            
-            $data = array(
-               'nama_ips' => $nama_bp,
-               'notel' => $notel,
-               'alamat' => $alamat
-            );
-            
-            $this->db->where('no_ips', $no_bp);
-            $this->M_masterdata->update_data('konsumen_ips', $data);
-            redirect('c_masterdata/lihat_ips');
-            
-         }
-         
-       
+
+         $this->db->where('no_ips', $no_bp);
+         $this->M_masterdata->update_data('konsumen_ips', $data);
+         redirect('c_masterdata/lihat_ips');
+      }
    }
 
-     //BOM
+   //BOM
 
-    public function lihat_bom()
+   public function lihat_bom()
    {
-      
-         
-         $data['result'] = $this->db->get('produk')->result_array();
-         $this->template->load('template', 'bom/view', $data);
-       
+
+
+      $data['result'] = $this->db->get('produk')->result_array();
+      $this->template->load('template', 'bom/view', $data);
    }
-   
-   
+
+
    public function isi_edit_bom($id)
    {
-      
-         $query = "(SELECT no_bb as no_bbp, nama_bb as nama_bbp, satuan FROM bahan_baku)
+
+      $query = "(SELECT no_bb as no_bbp, nama_bb as nama_bbp, satuan FROM bahan_baku)
                   UNION
                   (SELECT no_bp, nama_bp, satuan FROM bahan_penolong)
                   ORDER BY no_bbp";
-         $x['result'] = $this->db->query($query)->result_array();
-         $query1 = "SELECT no_produk, no_bb as no_bbp, nama_bb as nama_bbp, satuan, jumlah
+      $x['result'] = $this->db->query($query)->result_array();
+      $query1 = "SELECT no_produk, no_bb as no_bbp, nama_bb as nama_bbp, satuan, jumlah
                      FROM bahan_baku a
                      JOIN bom b
                      ON a.no_bb = b.no_bbp
-                     WHERE no_produk LIKE '".$id."'
+                     WHERE no_produk LIKE '" . $id . "'
                      UNION
                      SELECT no_produk, no_bp, nama_bp, satuan , jumlah
                      FROM bahan_penolong a
                      JOIN bom b
                      ON a.no_bp = b.no_bbp
-                     WHERE no_produk LIKE '".$id."'
+                     WHERE no_produk LIKE '" . $id . "'
                     
                      ORDER BY no_bbp";
-         $x['result1'] = $this->db->query($query1)->result_array();
-         
-         $x['data'] = $this->M_masterdata->edit_data('produk', "no_produk = '$id'")->row_array();
-         $this->template->load('template', 'bom/update', $x);
-       
-      
+      $x['result1'] = $this->db->query($query1)->result_array();
+
+      $x['data'] = $this->M_masterdata->edit_data('produk', "no_produk = '$id'")->row_array();
+      $this->template->load('template', 'bom/update', $x);
    }
    public function edit_bom()
    {
-      
-         $config = array(
-            
-            array(
-               'field' => 'no_bbp',
-               'label' => 'Nama Bahan Baku / Penolong',
-               'rules' => 'required',
-               'errors' => array(
-                  'required' => '%s tidak boleh kosong!'
-               )
-            ),
-            
-            array(
-               'field' => 'jumlah',
-               'label' => 'Jumlah Bahan',
-               'rules' => 'required',
-               'errors' => array(
-                  'required' => 'Inputan Salah'
-               )
+
+      $config = array(
+
+         array(
+            'field' => 'no_bbp',
+            'label' => 'Nama Bahan Baku / Penolong',
+            'rules' => 'required',
+            'errors' => array(
+               'required' => '%s tidak boleh kosong!'
             )
+         ),
+
+         array(
+            'field' => 'jumlah',
+            'label' => 'Jumlah Bahan',
+            'rules' => 'required',
+            'errors' => array(
+               'required' => 'Inputan Salah'
+            )
+         )
+      );
+      $this->form_validation->set_error_delimiters('<div class="alert alert-danger"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>  ', '</div>');
+      $this->form_validation->set_rules($config);
+
+      if ($this->form_validation->run() == FALSE) {
+         $id = $_POST['no_produk'];
+         $this->isi_edit_bom($id);
+      } else {
+         $no_produk   = $_POST['no_produk'];
+         $no_bbp = $_POST['no_bbp'];
+         $jumlah   = $_POST['jumlah'];
+
+         $data = array(
+            'no_produk' => $no_produk,
+            'no_bbp' => $no_bbp,
+            'jumlah' => $jumlah
          );
-         $this->form_validation->set_error_delimiters('<div class="alert alert-danger"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>  ', '</div>');
-         $this->form_validation->set_rules($config);
-         
-         if ($this->form_validation->run() == FALSE) {
-            $id = $_POST['no_produk'];
-            $this->isi_edit_bom($id);
-         } else {
-            $no_produk   = $_POST['no_produk'];
-            $no_bbp = $_POST['no_bbp'];
-            $jumlah   = $_POST['jumlah'];
-            
-            $data = array(
-               'no_produk' => $no_produk,
-               'no_bbp' => $no_bbp,
-               'jumlah' => $jumlah
-            );
 
 
-            $this->db->where(array('no_bbp' => $_POST['no_bbp'], 'no_produk' => $_POST['no_produk']));
-            $cek =  $this->db->get('bom')->num_rows();
-            if($cek == 0 ){
+         $this->db->where(array('no_bbp' => $_POST['no_bbp'], 'no_produk' => $_POST['no_produk']));
+         $cek =  $this->db->get('bom')->num_rows();
+         if ($cek == 0) {
             $this->db->insert('bom', $data);
-            }else{
-            $this->db->set('jumlah', "jumlah + ".$_POST['jumlah']."", FALSE);
+         } else {
+            $this->db->set('jumlah', "jumlah + " . $_POST['jumlah'] . "", FALSE);
             $this->db->where(array('no_bbp' => $_POST['no_bbp'], 'no_produk' => $_POST['no_produk']));
             $this->db->update('bom');
-
-           
-            
          }
-         
-        redirect('c_masterdata/isi_edit_bom/'.$no_produk.'');
+
+         redirect('c_masterdata/isi_edit_bom/' . $no_produk . '');
+      }
    }
-}
 
 
-   
-      public function hapus_bom($id,$id2){
+
+   public function hapus_bom($id, $id2)
+   {
       $this->db->query("SET GLOBAL FOREIGN_KEY_CHECKS=0");
-         $this->db->where('no_produk',$id);
-         $this->db->where('no_bbp', $id2);
-         $this->db->delete('bom');
-         $this->db->query("SET GLOBAL FOREIGN_KEY_CHECKS=1");
-      
-            redirect('c_masterdata/isi_edit_bom/'.$id.'');
+      $this->db->where('no_produk', $id);
+      $this->db->where('no_bbp', $id2);
+      $this->db->delete('bom');
+      $this->db->query("SET GLOBAL FOREIGN_KEY_CHECKS=1");
+
+      redirect('c_masterdata/isi_edit_bom/' . $id . '');
    }
 
 
    //Jenis BOP
 
-    public function lihat_jbop()
+   public function lihat_jbop()
    {
-      
-         
-         $data['result'] = $this->db->get('jenis_bop')->result_array();
-         $this->template->load('template', 'jenis_bop/view', $data);
-       
+
+
+      $data['result'] = $this->db->get('jenis_bop')->result_array();
+      $this->template->load('template', 'jenis_bop/view', $data);
    }
    public function form_jbop()
    {
-      
-         
-         $query1   = "SELECT  MAX(RIGHT(no_jbop,3)) as kode FROM jenis_bop";
-         $abc      = $this->db->query($query1);
-         $no_trans = "";
-         if ($abc->num_rows() > 0) {
-            foreach ($abc->result() as $k) {
-               $tmp = ((int) $k->kode) + 1;
-               $kd  = sprintf("%03s", $tmp);
-            }
-         } else {
-            $kd = "001";
+
+
+      $query1   = "SELECT  MAX(RIGHT(no_jbop,3)) as kode FROM jenis_bop";
+      $abc      = $this->db->query($query1);
+      $no_trans = "";
+      if ($abc->num_rows() > 0) {
+         foreach ($abc->result() as $k) {
+            $tmp = ((int) $k->kode) + 1;
+            $kd  = sprintf("%03s", $tmp);
          }
-         $no_trans   = "JBOP_" . $kd;
-         $data['id'] = $no_trans;
-         $this->template->load('template', 'jenis_bop/form', $data);
-       
+      } else {
+         $kd = "001";
+      }
+      $no_trans   = "JBOP_" . $kd;
+      $data['id'] = $no_trans;
+      $this->template->load('template', 'jenis_bop/form', $data);
    }
-   
+
    public function tambah_jbop()
    {
-      
-         
-         $config = array(
-            
-            array(
-               'field' => 'nama_jbop',
-               'label' => 'Nama Bahan Baku',
-               'rules' => 'required|callback_customAlpha|min_length[3]|max_length[30]|is_unique[jenis_bop.nama_jbop]',
-               'errors' => array(
-                  'required' => '%s tidak boleh kosong!',
-                  'min_length' => '%s minimal 3 huruf!',
-                  'max_length' => '%s maksimal 30 huruf!',
-                  'customAlpha' => '%s hanya boleh berupa huruf!',
-                  'is_unique' => '%s sudah ada di database!'
-               )
+
+
+      $config = array(
+
+         array(
+            'field' => 'nama_jbop',
+            'label' => 'Nama Bahan Baku',
+            'rules' => 'required|callback_customAlpha|min_length[3]|max_length[30]|is_unique[jenis_bop.nama_jbop]',
+            'errors' => array(
+               'required' => '%s tidak boleh kosong!',
+               'min_length' => '%s minimal 3 huruf!',
+               'max_length' => '%s maksimal 30 huruf!',
+               'customAlpha' => '%s hanya boleh berupa huruf!',
+               'is_unique' => '%s sudah ada di database!'
             )
+         )
+      );
+      $this->form_validation->set_error_delimiters('<div class="alert alert-danger"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>  ', '</div>');
+      $this->form_validation->set_rules($config);
+
+      if ($this->form_validation->run() == FALSE) {
+         $this->form_jbop();
+      } else {
+         $data = array(
+            'no_jbop' => $_POST['no_jbop'],
+            'nama_jbop' => $_POST['nama_jbop']
          );
-         $this->form_validation->set_error_delimiters('<div class="alert alert-danger"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>  ', '</div>');
-         $this->form_validation->set_rules($config);
-         
-         if ($this->form_validation->run() == FALSE) {
-            $this->form_jbop();
-         } else {
-            $data = array(
-               'no_jbop' => $_POST['no_jbop'],
-               'nama_jbop' => $_POST['nama_jbop']
-            );
-            $this->db->insert('jenis_bop', $data);
-           
-            redirect('c_masterdata/lihat_jbop');
-         }
-       
-      
+         $this->db->insert('jenis_bop', $data);
+
+         redirect('c_masterdata/lihat_jbop');
+      }
    }
-   
+
    public function isi_edit_jbop($id)
    {
-      
-         
-         
-         $x['data'] = $this->M_masterdata->edit_data('jenis_bop', "no_jbop = '$id'")->row_array();
-         $this->template->load('template', 'jenis_bop/update', $x);
-       
-      
+
+
+
+      $x['data'] = $this->M_masterdata->edit_data('jenis_bop', "no_jbop = '$id'")->row_array();
+      $this->template->load('template', 'jenis_bop/update', $x);
    }
    public function edit_jbop()
    {
-      
-         $config = array(
-            
-            array(
-               'field' => 'nama_jbop',
-               'label' => 'Nama Bahan Baku',
-               'rules' => 'required|callback_customAlpha|min_length[3]|max_length[30]|is_unique[jenis_bop.nama_jbop]',
-               'errors' => array(
-                  'required' => '%s tidak boleh kosong!',
-                  'min_length' => '%s minimal 3 huruf!',
-                  'max_length' => '%s maksimal 30 huruf!',
-                  'customAlpha' => '%s hanya boleh berupa huruf!',
-                  'is_unique' => '%s sudah ada di database!'
-               )
+
+      $config = array(
+
+         array(
+            'field' => 'nama_jbop',
+            'label' => 'Nama Bahan Baku',
+            'rules' => 'required|callback_customAlpha|min_length[3]|max_length[30]|is_unique[jenis_bop.nama_jbop]',
+            'errors' => array(
+               'required' => '%s tidak boleh kosong!',
+               'min_length' => '%s minimal 3 huruf!',
+               'max_length' => '%s maksimal 30 huruf!',
+               'customAlpha' => '%s hanya boleh berupa huruf!',
+               'is_unique' => '%s sudah ada di database!'
             )
+         )
+      );
+      $this->form_validation->set_error_delimiters('<div class="alert alert-danger"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>  ', '</div>');
+      $this->form_validation->set_rules($config);
+
+      if ($this->form_validation->run() == FALSE) {
+         $id = $_POST['no_jbop'];
+         $this->isi_edit_jbop($id);
+      } else {
+         $no_jbop   = $_POST['no_jbop'];
+         $nama_jbop = $_POST['nama_jbop'];
+
+
+         $data = array(
+            'nama_jbop' => $nama_jbop
          );
-         $this->form_validation->set_error_delimiters('<div class="alert alert-danger"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>  ', '</div>');
-         $this->form_validation->set_rules($config);
-         
-         if ($this->form_validation->run() == FALSE) {
-            $id = $_POST['no_jbop'];
-            $this->isi_edit_jbop($id);
-         } else {
-            $no_jbop   = $_POST['no_jbop'];
-            $nama_jbop = $_POST['nama_jbop'];
-            
-            
-            $data = array(
-               'nama_jbop' => $nama_jbop
-            );
-            
-            $this->db->where('no_jbop', $no_jbop);
-            $this->M_masterdata->update_data('jenis_bop', $data);
-            redirect('c_masterdata/lihat_jbop');
-            
-         }
-         
-       
+
+         $this->db->where('no_jbop', $no_jbop);
+         $this->M_masterdata->update_data('jenis_bop', $data);
+         redirect('c_masterdata/lihat_jbop');
+      }
    }
 
    // index simpanan
@@ -2166,11 +2047,11 @@ class c_masterdata extends CI_controller{
       );
       $this->form_validation->set_error_delimiters('<div class="alert alert-danger"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>  ', '</div>');
       $this->form_validation->set_rules($config);
-         
+
       if ($this->form_validation->run() == FALSE) {
          $this->form_simpanan();
       } else {
-         $data = array (
+         $data = array(
             "kode_simpanan" => $this->input->post("kode_simpanan"),
             "simpanan" => $this->input->post("simpanan"),
             "biaya" => $this->input->post("biaya"),
@@ -2185,7 +2066,7 @@ class c_masterdata extends CI_controller{
       $x['data'] = $this->M_masterdata->edit_data('simpanan', "kode_simpanan = '$kode_simpanan'")->row();
       // print_r($x['data']);exit;
       $x['supplier'] = $this->db->get("supplier_aset")->result();
-      $this->template->load('template', 'simpanan/form_edit', $x); 
+      $this->template->load('template', 'simpanan/form_edit', $x);
    }
 
    public function updateSimpanan()
@@ -2211,7 +2092,7 @@ class c_masterdata extends CI_controller{
       );
       $this->form_validation->set_error_delimiters('<div class="alert alert-danger"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>  ', '</div>');
       $this->form_validation->set_rules($config);
-         
+
       if ($this->form_validation->run() == FALSE) {
          $id = $_POST['kode_simpanan'];
          $this->editSimpanan($id);
@@ -2219,18 +2100,17 @@ class c_masterdata extends CI_controller{
          $id   = $_POST['kode_simpanan'];
          $simpanan = $_POST['simpanan'];
          $biaya    = $_POST['biaya'];
-         
+
          $data = array(
             'kode_simpanan' => $id,
             'simpanan' => $simpanan,
             'biaya' => $biaya
          );
          // print_r($data);exit;
-         
+
          $this->db->where('kode_simpanan', $id);
          $this->M_masterdata->update_data('simpanan', $data);
          redirect('c_masterdata/simpanan');
-         
       }
    }
 
@@ -2239,7 +2119,7 @@ class c_masterdata extends CI_controller{
       $x['data'] = $this->M_masterdata->edit_data('supplier_aset', "id = '$id'")->row();
       // print_r($x['data']);exit;
       $x['supplier'] = $this->db->get("supplier_aset")->result();
-      $this->template->load('template', 'supplier_aset/update', $x); 
+      $this->template->load('template', 'supplier_aset/update', $x);
    }
 
    public function update_supplier()
@@ -2273,7 +2153,7 @@ class c_masterdata extends CI_controller{
       );
       $this->form_validation->set_error_delimiters('<div class="alert alert-danger"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>  ', '</div>');
       $this->form_validation->set_rules($config);
-         
+
       if ($this->form_validation->run() == FALSE) {
          $id = $_POST['id_supplier_aset'];
          $this->editSimpanan($id);
@@ -2282,7 +2162,7 @@ class c_masterdata extends CI_controller{
          $nama_supplier = $_POST['nama_supplier'];
          $alamat    = $_POST['alamat'];
          $no_telepon    = $_POST['no_telepon'];
-         
+
          $data = array(
             'nama_supplier' => $nama_supplier,
             'alamat' => $alamat,
@@ -2292,7 +2172,6 @@ class c_masterdata extends CI_controller{
          $this->db->where('id', $id);
          $this->M_masterdata->update_data('supplier_aset', $data);
          redirect('c_masterdata/supplier_aset');
-         
       }
    }
 
@@ -2300,7 +2179,7 @@ class c_masterdata extends CI_controller{
    {
       # code...
       $where = array("id" => $id);
-      $this->M_masterdata->hapus_data("supplier_aset" ,$where);
+      $this->M_masterdata->hapus_data("supplier_aset", $where);
       redirect("c_masterdata/supplier_aset");
    }
 
@@ -2341,44 +2220,44 @@ class c_masterdata extends CI_controller{
    {
       # code...
       $config = array(
-            array(
-               'field' => 'aset',
-               'label' => 'Aset',
-               'rules' => 'required',
-               'errors' => array(
-                  'required' => '%s tidak boleh kosong!'
-               )
-            ),
-            array(
-               'field' => 'umur_aset',
-               'label' => 'Umur Aset',
-               'rules' => 'required|is_natural_no_zero',
-               'errors' => array(
-                  'required' => '%s tidak boleh kosong!',
-                  'is_natural_no_zero' => '%s minimal 1 tahun atau 12 bulan !'
-               )
-            ),
-         );
+         array(
+            'field' => 'aset',
+            'label' => 'Aset',
+            'rules' => 'required',
+            'errors' => array(
+               'required' => '%s tidak boleh kosong!'
+            )
+         ),
+         array(
+            'field' => 'umur_aset',
+            'label' => 'Umur Aset',
+            'rules' => 'required|is_natural_no_zero',
+            'errors' => array(
+               'required' => '%s tidak boleh kosong!',
+               'is_natural_no_zero' => '%s minimal 1 tahun atau 12 bulan !'
+            )
+         ),
+      );
 
-         $this->form_validation->set_error_delimiters('<div class="alert alert-danger"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>  ', '</div>');
-         $this->form_validation->set_rules($config);
-         
-         if ($this->form_validation->run() == FALSE) {
-            $this->form_aset();
-         } else {
-            $data = array(
-               'id' => $this->input->post('id_aset'),
-               'aset' => $this->input->post('aset'),
-               'umur_aset' => $this->input->post('umur_aset'),
-               'id_supplier' => $this->input->post('supplier'), 
-               'kel_akun' => $this->input->post('kel_akun'),
-               'kel_akun_peny_d' => $this->input->post('kel_akun_d'),
-               'kel_akun_peny_k' => $this->input->post('kel_akun_k'),
-            );
-            // print_r($data);exit;
-            $this->db->insert('aset', $data);
-            redirect('c_masterdata/aset');
-         }
+      $this->form_validation->set_error_delimiters('<div class="alert alert-danger"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>  ', '</div>');
+      $this->form_validation->set_rules($config);
+
+      if ($this->form_validation->run() == FALSE) {
+         $this->form_aset();
+      } else {
+         $data = array(
+            'id' => $this->input->post('id_aset'),
+            'aset' => $this->input->post('aset'),
+            'umur_aset' => $this->input->post('umur_aset'),
+            'id_supplier' => $this->input->post('supplier'),
+            'kel_akun' => $this->input->post('kel_akun'),
+            'kel_akun_peny_d' => $this->input->post('kel_akun_d'),
+            'kel_akun_peny_k' => $this->input->post('kel_akun_k'),
+         );
+         // print_r($data);exit;
+         $this->db->insert('aset', $data);
+         redirect('c_masterdata/aset');
+      }
    }
 
    public function isi_edit_aset($id)
@@ -2386,7 +2265,7 @@ class c_masterdata extends CI_controller{
       $x['data'] = $this->M_masterdata->edit_data('aset', "id = '$id'")->row_array();
       // print_r($x['data']);exit;
       $x['supplier'] = $this->db->get("supplier_aset")->result();
-      $this->template->load('template', 'aset/update', $x); 
+      $this->template->load('template', 'aset/update', $x);
    }
 
    public function edit_aset()
@@ -2412,7 +2291,7 @@ class c_masterdata extends CI_controller{
       );
       $this->form_validation->set_error_delimiters('<div class="alert alert-danger"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>  ', '</div>');
       $this->form_validation->set_rules($config);
-         
+
       if ($this->form_validation->run() == FALSE) {
          $id = $_POST['id_aset'];
          $this->isi_edit_aset($id);
@@ -2420,18 +2299,17 @@ class c_masterdata extends CI_controller{
          $id   = $_POST['id_aset'];
          $aset = $_POST['aset'];
          $umur_aset    = $_POST['umur_aset'];
-         
+
          $data = array(
             'id' => $id,
             'aset' => $aset,
             'umur_aset' => $umur_aset
          );
          // print_r($data);exit;
-         
+
          $this->db->where('id', $id);
          $this->M_masterdata->update_data('aset', $data);
          redirect('c_masterdata/aset');
-         
       }
    }
 
@@ -2439,7 +2317,7 @@ class c_masterdata extends CI_controller{
    {
       # code...
       $where = array("id" => $id);
-      $this->M_masterdata->hapus_data("aset" ,$where);
+      $this->M_masterdata->hapus_data("aset", $where);
       redirect("c_masterdata/aset");
    }
 
@@ -2477,58 +2355,58 @@ class c_masterdata extends CI_controller{
    {
       # code...
       $config = array(
-            array(
-               'field' => 'nama_supplier',
-               'label' => 'Nama Supplier',
-               'rules' => 'required',
-               'errors' => array(
-                  'required' => '%s tidak boleh kosong!'
-                  // 'min_length' => '%s minimal 3 huruf!',
-                  // 'max_length' => '%s maksimal 30 huruf!',
-                  // 'customAlpha' => '%s hanya boleh berupa huruf!',
-                  // 'is_unique' => '%s sudah ada di database!'
-               )
-            ),
-            array(
-               'field' => 'alamat',
-               'label' => 'Alamat',
-               'rules' => 'required',
-               'errors' => array(
-                  'required' => '%s tidak boleh kosong!'
-                  // 'max_length' => '%s maksimal 30 huruf!',
-                  // 'customAlpha' => '%s hanya boleh berupa huruf!',
-                  // 'is_unique' => '%s sudah ada di database!'
-               )
-            ),
-            array(
-               'field' => 'no_telepon',
-               'label' => 'No Telepon',
-               'rules' => 'required',
-               'errors' => array(
-                  'required' => '%s tidak boleh kosong!'
-                  // 'max_length' => '%s maksimal 30 huruf!',
-                  // 'customAlpha' => '%s hanya boleh berupa huruf!',
-                  // 'is_unique' => '%s sudah ada di database!'
-               )
-            ),
-         );
+         array(
+            'field' => 'nama_supplier',
+            'label' => 'Nama Supplier',
+            'rules' => 'required',
+            'errors' => array(
+               'required' => '%s tidak boleh kosong!'
+               // 'min_length' => '%s minimal 3 huruf!',
+               // 'max_length' => '%s maksimal 30 huruf!',
+               // 'customAlpha' => '%s hanya boleh berupa huruf!',
+               // 'is_unique' => '%s sudah ada di database!'
+            )
+         ),
+         array(
+            'field' => 'alamat',
+            'label' => 'Alamat',
+            'rules' => 'required',
+            'errors' => array(
+               'required' => '%s tidak boleh kosong!'
+               // 'max_length' => '%s maksimal 30 huruf!',
+               // 'customAlpha' => '%s hanya boleh berupa huruf!',
+               // 'is_unique' => '%s sudah ada di database!'
+            )
+         ),
+         array(
+            'field' => 'no_telepon',
+            'label' => 'No Telepon',
+            'rules' => 'required',
+            'errors' => array(
+               'required' => '%s tidak boleh kosong!'
+               // 'max_length' => '%s maksimal 30 huruf!',
+               // 'customAlpha' => '%s hanya boleh berupa huruf!',
+               // 'is_unique' => '%s sudah ada di database!'
+            )
+         ),
+      );
 
-         $this->form_validation->set_error_delimiters('<div class="alert alert-danger"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>  ', '</div>');
-         $this->form_validation->set_rules($config);
-         
-         if ($this->form_validation->run() == FALSE) {
-            $this->form_supplier_aset();
-         } else {
-            $data = array(
-               'id' => $this->input->post('id_aset'),
-               'nama_supplier' => $this->input->post('nama_supplier'),
-               'alamat' => $this->input->post('alamat'),
-               'no_telepon' => $this->input->post('no_telepon')
-            );
-            // print_r($data);exit;
-            $this->db->insert('supplier_aset', $data);
-            redirect('c_masterdata/supplier_aset');
-         }
+      $this->form_validation->set_error_delimiters('<div class="alert alert-danger"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>  ', '</div>');
+      $this->form_validation->set_rules($config);
+
+      if ($this->form_validation->run() == FALSE) {
+         $this->form_supplier_aset();
+      } else {
+         $data = array(
+            'id' => $this->input->post('id_aset'),
+            'nama_supplier' => $this->input->post('nama_supplier'),
+            'alamat' => $this->input->post('alamat'),
+            'no_telepon' => $this->input->post('no_telepon')
+         );
+         // print_r($data);exit;
+         $this->db->insert('supplier_aset', $data);
+         redirect('c_masterdata/supplier_aset');
+      }
    }
 
    // public function isi_edit_aset($id)
@@ -2568,7 +2446,7 @@ class c_masterdata extends CI_controller{
    //    );
    //    $this->form_validation->set_error_delimiters('<div class="alert alert-danger"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>  ', '</div>');
    //    $this->form_validation->set_rules($config);
-         
+
    //    if ($this->form_validation->run() == FALSE) {
    //       $id = $_POST['id_aset'];
    //       $this->isi_edit_aset($id);
@@ -2576,18 +2454,18 @@ class c_masterdata extends CI_controller{
    //       $id   = $_POST['id_aset'];
    //       $aset = $_POST['aset'];
    //       $umur_aset    = $_POST['umur_aset'];
-         
+
    //       $data = array(
    //          'id' => $id,
    //          'aset' => $aset,
    //          'umur_aset' => $umur_aset
    //       );
    //       // print_r($data);exit;
-         
+
    //       $this->db->where('id', $id);
    //       $this->M_masterdata->update_data('aset', $data);
    //       redirect('c_masterdata/aset');
-         
+
    //    }
    // }
 
@@ -2612,7 +2490,7 @@ class c_masterdata extends CI_controller{
          $kd = "001";
       }
       $kd_tps   = "TPS_" . $kd;
-      
+
       $data = [
          'id' => $kd_tps
       ];
@@ -2628,14 +2506,14 @@ class c_masterdata extends CI_controller{
             'label' => 'Kordinator',
             'rules' => 'required|alpha',
             'errors' => array(
-               'required' => '%s tidak boleh kosong!', 
+               'required' => '%s tidak boleh kosong!',
                'alpha' => '%s tidak bisa menggunakan angka',
             )
          )
       );
       $this->form_validation->set_error_delimiters('<div class="alert alert-danger"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>  ', '</div>');
       $this->form_validation->set_rules($config);
-         
+
       if ($this->form_validation->run() == FALSE) {
          $this->tambah_tps();
       } else {

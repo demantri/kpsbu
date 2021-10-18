@@ -12,6 +12,11 @@ class crud_model extends ci_model
 	// function update_data(){
 	// 	return $this->db->get('user');
 	// }
+
+	function update($where, $data, $table){
+		$this->db->where($where);
+		$this->db->update($table, $data);
+	} 
  
 	function delete($where, $table){
 		$this->db->where($where);

@@ -1,7 +1,7 @@
-<?php 
+<?php
 class simpanan_model extends CI_model
 {
-	
+
 	public function getDetails($id_peternak)
 	{
 		# code...
@@ -87,6 +87,18 @@ class simpanan_model extends CI_model
 	{
 		$sql = "SELECT SUM(simpanan_masuka) AS total
 		FROM log_pembayaran_susu
+		WHERE id_anggota = '$id_peternak'
+		";
+		return $this->db->query($sql);
+	}
+
+	public function _laporan_kartu_simpanan($id_peternak)
+	{
+		$sql = "SELECT a.*, b.tgl_transaksi, c.nama_peternak
+		FROM log_pembayaran_susu a
+		JOIN pembayaran_susu b ON b.kode_pembayaran = a.id_pembayaran
+		JOIN peternak c ON c.no_peternak = a.id_anggota
+		-- JOIN log_simpanan_hr d ON d.id_anggota = a.id_anggota
 		WHERE id_anggota = '$id_peternak'
 		";
 		return $this->db->query($sql);

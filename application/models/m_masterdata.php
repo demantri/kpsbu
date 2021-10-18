@@ -24,6 +24,39 @@ class m_masterdata extends CI_Model {
 		return $this->db->query($sql);
 	}
 
-	
+	public function kategori_code()
+	{
+		# code...
+		$query1   = "SELECT MAX(RIGHT(kode,3)) as kode FROM waserda_kategori";
+        $abc      = $this->db->query($query1);
+        $kode = "";
+        if ($abc->num_rows() > 0) {
+            foreach ($abc->result() as $k) {
+                $tmp = ((int) $k->kode) + 1;
+                $kd  = sprintf("%03s", $tmp);
+            }
+        } else {
+            $kd = "001";
+        }
+        $kode   = "WKS".$kd;
+        return $kode;
+	}
+
+	public function kode_produk()
+	{
+		$query1   = "SELECT MAX(RIGHT(kode,3)) as kode FROM waserda_produk";
+        $abc      = $this->db->query($query1);
+        $kode = "";
+        if ($abc->num_rows() > 0) {
+            foreach ($abc->result() as $k) {
+                $tmp = ((int) $k->kode) + 1;
+                $kd  = sprintf("%03s", $tmp);
+            }
+        } else {
+            $kd = "001";
+        }
+        $kode   = "WSP".$kd;
+        return $kode;
+	}
 	
 }

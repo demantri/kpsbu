@@ -60,7 +60,7 @@
 							<input type="text" name="pinjaman" class="form-control" id="pinjaman" readonly>
 						</div>
 
-						<!-- <input type="text" id="sp"> -->
+						<input type="text" id="sp" name="sp">
 						<input type="text" id="sisa_pinjaman" name="sisa_pinjaman">
 
 						<div id="byr_tunai">
@@ -216,7 +216,7 @@
 									$("#piutang").val(0);
 								} else if (pinjaman != 0 && sisa_pinjaman != 0) {
 									$("#kalo_ngutang").show();
-									// $("#sp").val(sisa_pinjaman)
+									$("#sp").val(sisa_pinjaman)
 									$("#sisa_pinjaman").val(sisa_pinjaman - pinjaman_1)
 									$("#pinjaman").val(pinjaman_1);
 									

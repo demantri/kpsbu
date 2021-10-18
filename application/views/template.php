@@ -466,6 +466,8 @@
    <!-- Custom Theme Scripts -->
    <script src="<?php echo base_url(); ?>assets/build/js/custom.min.js"></script>
 
+   <script src="<?= base_url('assets/format.js')?>"></script>
+
    <!-- <script type="text/javascript">
           $(document).ready(function () {
             $("#no_nota").click(function () {

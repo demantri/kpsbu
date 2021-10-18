@@ -1,13 +1,14 @@
 -- phpMyAdmin SQL Dump
--- version 5.0.4
+-- version 4.8.5
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: Jul 22, 2021 at 04:50 PM
--- Server version: 10.4.17-MariaDB
--- PHP Version: 7.2.34
+-- Host: localhost:3306
+-- Generation Time: Oct 18, 2021 at 12:04 PM
+-- Server version: 5.7.32
+-- PHP Version: 7.3.27
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -18,7 +19,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `kpsbu`
+-- Database: `kpsbu_v3`
 --
 
 -- --------------------------------------------------------
@@ -32,9 +33,9 @@ CREATE TABLE `aset` (
   `aset` varchar(255) NOT NULL,
   `umur_aset` int(11) NOT NULL,
   `id_supplier` varchar(233) NOT NULL,
-  `kel_akun` int(11) NOT NULL DEFAULT 0,
-  `kel_akun_peny_d` int(11) NOT NULL DEFAULT 0,
-  `kel_akun_peny_k` int(11) NOT NULL DEFAULT 0
+  `kel_akun` int(11) NOT NULL DEFAULT '0',
+  `kel_akun_peny_d` int(11) NOT NULL DEFAULT '0',
+  `kel_akun_peny_k` int(11) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -451,7 +452,7 @@ CREATE TABLE `detail_pembelian` (
   `cek_bulan_peny` varchar(11) NOT NULL DEFAULT '0000-00',
   `cek_bulan_perb` varchar(11) DEFAULT NULL,
   `id_detail_aset` varchar(255) NOT NULL,
-  `is_rev` tinyint(1) NOT NULL DEFAULT 0
+  `is_rev` tinyint(1) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -1219,7 +1220,7 @@ INSERT INTO `konsumen_ips` (`no_ips`, `nama_ips`, `notel`, `alamat`) VALUES
 CREATE TABLE `log_bayar_pinjaman` (
   `id` int(11) NOT NULL,
   `id_ref_pinjaman` varchar(255) DEFAULT NULL,
-  `waktu_bayar` timestamp NULL DEFAULT current_timestamp(),
+  `waktu_bayar` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `id_anggota` varchar(255) DEFAULT NULL,
   `nominal` int(11) DEFAULT NULL,
   `kd_coa` int(11) DEFAULT NULL
@@ -1264,8 +1265,8 @@ CREATE TABLE `log_confirm_truck` (
   `tgl_confirm` date DEFAULT NULL,
   `nama_aset` varchar(255) DEFAULT NULL,
   `id_detail_truck` varchar(255) DEFAULT NULL,
-  `status` tinyint(1) DEFAULT 0,
-  `tgl_pengajuan` timestamp NULL DEFAULT current_timestamp()
+  `status` tinyint(1) DEFAULT '0',
+  `tgl_pengajuan` timestamp NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -1304,7 +1305,7 @@ CREATE TABLE `log_pembayaran_susu` (
   `jumlah_harga_susu` int(30) NOT NULL,
   `simpanan_masuka` int(30) NOT NULL,
   `simpanan_wajib` int(30) NOT NULL,
-  `pinjaman_anggota` int(30) NOT NULL DEFAULT 0,
+  `pinjaman_anggota` int(30) NOT NULL DEFAULT '0',
   `bayar_tunai` int(255) NOT NULL,
   `subtotal` int(30) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -1420,9 +1421,9 @@ CREATE TABLE `log_pinjaman` (
   `kode_pinjaman` varchar(255) NOT NULL,
   `id_anggota` varchar(255) NOT NULL,
   `tanggal_pinjaman` date NOT NULL,
-  `nominal` int(255) NOT NULL DEFAULT 0,
+  `nominal` int(255) NOT NULL DEFAULT '0',
   `status` varchar(1) NOT NULL DEFAULT '1',
-  `sisa_pinjaman` int(11) DEFAULT 0
+  `sisa_pinjaman` int(11) DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -1519,7 +1520,7 @@ CREATE TABLE `pembayaran_susu` (
   `kode_pembayaran` varchar(255) NOT NULL,
   `total_bayar` int(20) NOT NULL,
   `tgl_transaksi` date NOT NULL,
-  `is_paid` tinyint(1) DEFAULT 0
+  `is_paid` tinyint(1) DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -1627,7 +1628,7 @@ CREATE TABLE `pembelian_bb` (
   `tgl_trans` date NOT NULL,
   `total` int(100) NOT NULL,
   `status` varchar(100) NOT NULL,
-  `id_detail_truck` int(11) DEFAULT 0
+  `id_detail_truck` int(11) DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -1822,11 +1823,11 @@ CREATE TABLE `peternak` (
   `notel` varchar(50) NOT NULL,
   `alamat` varchar(50) NOT NULL,
   `deposit` varchar(233) DEFAULT NULL,
-  `pinjaman` int(255) NOT NULL DEFAULT 0,
+  `pinjaman` int(255) NOT NULL DEFAULT '0',
   `kd_tps` varchar(255) DEFAULT NULL,
   `nm_peternakan` varchar(255) NOT NULL,
-  `is_deactive` tinyint(1) NOT NULL DEFAULT 0,
-  `create_date` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+  `is_deactive` tinyint(1) NOT NULL DEFAULT '0',
+  `create_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -1949,7 +1950,7 @@ CREATE TABLE `produksi_ke2` (
 CREATE TABLE `revaluasi` (
   `id` int(11) NOT NULL,
   `id_revaluasi` varchar(255) DEFAULT NULL,
-  `tgl_input` timestamp NULL DEFAULT current_timestamp(),
+  `tgl_input` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `id_detail` varchar(255) DEFAULT NULL,
   `bulan_revaluasi` varchar(255) DEFAULT NULL,
   `tarif_revaluasi` int(20) DEFAULT NULL,
@@ -2082,13 +2083,13 @@ INSERT INTO `tps` (`id`, `kode_tps`, `alamat`, `kordinator`) VALUES
 CREATE TABLE `trans_peny_rev` (
   `id` int(11) NOT NULL,
   `id_trans` varchar(50) DEFAULT NULL,
-  `tgl_trans` timestamp NULL DEFAULT current_timestamp(),
+  `tgl_trans` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `total_peny` int(20) DEFAULT NULL,
   `total_akum` int(20) DEFAULT NULL,
   `nilai_peny` int(20) DEFAULT NULL,
-  `tarif_rev` int(20) DEFAULT 0,
-  `nilai_bk_perbaikan` int(20) DEFAULT 0,
-  `nilai_bk_baru` int(20) DEFAULT 0,
+  `tarif_rev` int(20) DEFAULT '0',
+  `nilai_bk_perbaikan` int(20) DEFAULT '0',
+  `nilai_bk_baru` int(20) DEFAULT '0',
   `id_detail` varchar(50) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -2115,8 +2116,8 @@ CREATE TABLE `truck_information` (
   `id_aset` varchar(255) NOT NULL,
   `nama_aset` varchar(255) DEFAULT NULL,
   `id_detail_pembelian` varchar(255) DEFAULT NULL,
-  `is_deleted` tinyint(1) DEFAULT 0,
-  `is_confirm` tinyint(1) DEFAULT 0
+  `is_deleted` tinyint(1) DEFAULT '0',
+  `is_confirm` tinyint(1) DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -2174,6 +2175,8 @@ CREATE TABLE `user` (
 
 INSERT INTO `user` (`nama_lengkap`, `username`, `password`, `level`) VALUES
 ('Super Admin', 'admin', 'admin', 'admin'),
+('Admin Waserda', 'admin_waserda', '123', 'admin_waserda'),
+('Kasir Waserda', 'kasir_waserda', '123', 'kasir_waserda'),
 ('Keuangan', 'keuangan1', 'keuangan1', 'keuangan1'),
 ('Keuangan', 'keuangan2', 'keuangan2', 'keuangan2'),
 ('Keuangan', 'keuangan3', 'keuangan3', 'keuangan3'),
@@ -2184,6 +2187,87 @@ INSERT INTO `user` (`nama_lengkap`, `username`, `password`, `level`) VALUES
 ('Produksi', 'produksi1', 'produksi1', 'produksi1'),
 ('Produksi', 'produksi2', 'produksi2', 'produksi2'),
 ('Izmi', 'staffsimpanpinjam', '123', 'staffadministrasisimpanpinjam');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `waserda_kategori`
+--
+
+CREATE TABLE `waserda_kategori` (
+  `id` int(11) NOT NULL,
+  `kode` varchar(50) DEFAULT NULL,
+  `deskripsi` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `waserda_kategori`
+--
+
+INSERT INTO `waserda_kategori` (`id`, `kode`, `deskripsi`) VALUES
+(1, 'WSK001', 'Makanan'),
+(2, 'WSK002', 'Minuman'),
+(3, 'WSK003', 'ATK'),
+(4, 'WKS004', 'Peralatan'),
+(5, 'WKS005', 'Elektronik');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `waserda_produk`
+--
+
+CREATE TABLE `waserda_produk` (
+  `id` int(11) NOT NULL,
+  `kode` varchar(255) DEFAULT NULL,
+  `id_kategori` varchar(255) DEFAULT NULL,
+  `id_supplier_produk` varchar(255) DEFAULT NULL,
+  `nama_produk` varchar(255) DEFAULT NULL,
+  `harga_satuan` int(11) DEFAULT NULL,
+  `satuan_produk` varchar(50) DEFAULT NULL,
+  `jml` int(11) DEFAULT '0',
+  `status` tinyint(4) DEFAULT '1',
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `waserda_produk`
+--
+
+INSERT INTO `waserda_produk` (`id`, `kode`, `id_kategori`, `id_supplier_produk`, `nama_produk`, `harga_satuan`, `satuan_produk`, `jml`, `status`, `created_at`) VALUES
+(1, 'WSP001', 'WSK001', 'WSS001', 'Indomie Goreng', 1500, 'pcs', 0, 1, '2021-10-15 15:38:31'),
+(2, 'WSP002', 'WSK001', 'WSS001', 'Indomie Goreng Ayam Bawang', 1500, 'pcs', 0, 1, '2021-10-15 15:38:31'),
+(3, 'WSP003', 'WSK001', 'WSS002', 'Indomie Goreng Rendang', 1500, 'pcs', 0, 1, '2021-10-15 15:38:31'),
+(4, 'WSP004', 'WSK001', 'WSS003', 'Indomie Goreng Aceh', 1500, 'pcs', 0, 1, '2021-10-15 15:38:31'),
+(5, 'WSP005', 'WSK001', 'WSS001', 'Indomie Rebus', 1500, 'pcs', 0, 1, '2021-10-15 15:38:31'),
+(6, 'WSP006', 'WSK002', 'WSS004', 'teh sisri', 15000, 'kilo', 0, 1, '2021-10-16 16:02:42');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `waserda_supplier`
+--
+
+CREATE TABLE `waserda_supplier` (
+  `id` int(11) NOT NULL,
+  `kode` varchar(50) DEFAULT NULL,
+  `nama` varchar(255) DEFAULT NULL,
+  `alamat` varchar(255) DEFAULT NULL,
+  `no_telp` varchar(20) DEFAULT NULL,
+  `status` tinyint(4) DEFAULT '1',
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `waserda_supplier`
+--
+
+INSERT INTO `waserda_supplier` (`id`, `kode`, `nama`, `alamat`, `no_telp`, `status`, `created_at`) VALUES
+(1, 'WSS001', 'Kpsbu', 'bandung', '123123123', 1, '2021-10-16 04:15:14'),
+(2, 'WSS002', 'Cv Anugerah', 'bekasi', '2131222', 1, '2021-10-16 04:15:27'),
+(3, 'WSS003', 'Pt Sejahtera Selalu', 'lembang timur', '1231231', 1, '2021-10-16 04:15:44'),
+(4, 'WSS004', 'Test', 'aasd', '33321', 1, '2021-10-16 04:19:12'),
+(5, 'WSS005', 'Test 212', 'test 21', '1122334455', 1, '2021-10-16 04:19:17');
 
 --
 -- Indexes for dumped tables
@@ -2484,6 +2568,24 @@ ALTER TABLE `user`
   ADD PRIMARY KEY (`username`);
 
 --
+-- Indexes for table `waserda_kategori`
+--
+ALTER TABLE `waserda_kategori`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `waserda_produk`
+--
+ALTER TABLE `waserda_produk`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `waserda_supplier`
+--
+ALTER TABLE `waserda_supplier`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -2654,6 +2756,24 @@ ALTER TABLE `truck_information`
 --
 ALTER TABLE `update_stok_penj`
   MODIFY `no` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `waserda_kategori`
+--
+ALTER TABLE `waserda_kategori`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT for table `waserda_produk`
+--
+ALTER TABLE `waserda_produk`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
+-- AUTO_INCREMENT for table `waserda_supplier`
+--
+ALTER TABLE `waserda_supplier`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

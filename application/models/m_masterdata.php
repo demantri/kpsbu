@@ -58,5 +58,23 @@ class m_masterdata extends CI_Model {
         $kode   = "WSP".$kd;
         return $kode;
 	}
+
+	public function invoice()
+	{
+		$query1   = "SELECT MAX(RIGHT(invoice,3)) as kode FROM pos_penjualan";
+        $abc      = $this->db->query($query1);
+        $kode = "";
+        if ($abc->num_rows() > 0) {
+            foreach ($abc->result() as $k) {
+                $tmp = ((int) $k->kode) + 1;
+                $kd  = sprintf("%03s", $tmp);
+            }
+        } else {
+            $kd = "001";
+        }
+		$date = date('dmy');
+        $kode   = "KPSBU".$date.$kd;
+        return $kode;
+	}
 	
 }

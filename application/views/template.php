@@ -48,7 +48,7 @@
    <link href="<?php echo base_url(); ?>assets/vendors/mjolnic-bootstrap-colorpicker/dist/css/bootstrap-colorpicker.min.css" rel="stylesheet">
 
    <link href="<?php echo base_url(); ?>assets/vendors/cropper/dist/cropper.min.css" rel="stylesheet">
-
+   <link rel="stylesheet" href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
 
    <script src="<?php echo base_url(); ?>assets/vendors/jquery/dist/jquery.min.js"></script>
    <!-- <script src="<?php echo base_url(); ?>assets/vendors/bootstrap/dist/js/bootstrap.min.js"></script> -->
@@ -467,6 +467,8 @@
    <script src="<?php echo base_url(); ?>assets/build/js/custom.min.js"></script>
 
    <script src="<?= base_url('assets/format.js')?>"></script>
+
+   <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
 
    <!-- <script type="text/javascript">
           $(document).ready(function () {

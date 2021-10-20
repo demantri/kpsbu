@@ -101,8 +101,6 @@
         </div>
     </div>
 </div>
-<!-- asjhdajkhsdkjahsdkjahsdd -->
-<!-- TESTING LAGI YANG KE DUA -->
 <?php $this->load->view('script');?>
 <?php $this->load->view('Kasir/show');?>
 <script type="text/javascript">

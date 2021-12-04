@@ -517,6 +517,7 @@ class c_masterdata extends CI_controller
       }
       $no_trans   = "PR_" . $kd;
       $data['id'] = $no_trans;
+      $data['jenis_penjualan'] = $this->db->get('jenis_penjualan')->result();
       $this->template->load('template', 'produk/form', $data);
    }
 
@@ -557,7 +558,8 @@ class c_masterdata extends CI_controller
             'no_produk' => $_POST['no_produk'],
             'nama_produk' => $_POST['nama_produk'],
             'stok' => 0,
-            'satuan' => $_POST['satuan']
+            'satuan' => $_POST['satuan'],
+            'id_jenis' => $_POST['jenis_penjualan'],
          );
          $this->db->insert('produk', $data);
 
@@ -2530,6 +2532,113 @@ class c_masterdata extends CI_controller
          $this->db->insert('tps', $data);
          redirect('c_masterdata/tps');
       }
+   }
+
+   // masterdata arles
+   public function pegawai()
+   {
+      $jabatan = $this->db->get('tb_jabatan')->result();
+      $ptkp = $this->db->get('tb_ptkp')->result();
+      $jp = $this->db->get('tb_jenis_pegawai')->result();
+      $list = $this->db->get('pegawai')->result();
+      $data = [
+         'jabatan' => $jabatan,
+         'ptkp' => $ptkp,
+         'jp' => $jp,
+         'list' => $list,
+      ];
+      $this->template->load('template', 'pegawai/index', $data);
+   }
+
+   public function save_pegawai()
+   {
+      $data = [
+         'id_jabatan' => $this->input->post('jabatan'),
+         'id_ptkp' => $this->input->post('ptkp'),
+         'id_jenis_pegawai' => $this->input->post('jp'),
+         'rfid' => $this->input->post('rfid'),
+         'nip' => $this->input->post('nip'),
+         'npwp' => $this->input->post('npwp'),
+         'nama' => $this->input->post('nama'),
+         'alamat' => $this->input->post('alamat'),
+         'no_telp' => $this->input->post('no_telp'),
+         'tempat_lahir' => $this->input->post('tempat_lahir'),
+         'tgl_lahir' => $this->input->post('ttl'),
+         'no_rek' => $this->input->post('no_rek'),
+      ];
+      // print_r($data);exit;
+      $this->db->insert('pegawai', $data);
+      redirect('c_masterdata/pegawai');
+   }
+
+   public function ptkp()
+   {
+      $ptkp = $this->db->get('tb_ptkp')->result();
+      $data = [
+         'ptkp' => $ptkp
+      ];
+      $this->template->load('template', 'pegawai/ptkp/index', $data);
+   }
+
+   public function save_ptkp()
+   {
+      $desc = $this->input->post('desc');
+      $nominal = $this->input->post('nominal');
+
+      $data = [
+         'desc' => $desc,
+         'nominal' => $nominal,
+      ];
+      $this->db->insert('tb_ptkp', $data);
+      redirect('c_masterdata/ptkp');
+   }
+
+   public function jenis_pegawai()
+   {
+      $jp = $this->db->get('tb_jenis_pegawai')->result();
+      $data = [
+         'jp' => $jp
+      ];
+      $this->template->load('template', 'pegawai/jenis_pegawai/index', $data);
+   }
+
+   public function save_jenis_pegawai()
+   {
+      $desc = $this->input->post('desc');
+      $pendidikan = $this->input->post('pendidikan');
+      $gaji_pokok = $this->input->post('gaji_pokok');
+
+      $data = [
+         'desc' => $desc,
+         'pendidikan' => $pendidikan,
+         'gaji_pokok' => $gaji_pokok,
+      ];
+      $this->db->insert('tb_jenis_pegawai', $data);
+      redirect('c_masterdata/jenis_pegawai');
+   }
+
+   public function jabatan()
+   {
+      $jabatan = $this->db->get('tb_jabatan')->result();
+      $data = [
+         'list' => $jabatan
+      ];
+      $this->template->load('template', 'pegawai/jabatan/index', $data);
+   }
+
+   public function save_jabatan()
+   {
+      $desc = $this->input->post('desc');
+      $jabatan = $this->input->post('t_jabatan');
+      $kesehatan = $this->input->post('t_kesehatan');
+
+      $data = [
+         'desc' => $desc,
+         'tunjangan_jabatan' => $jabatan,
+         'tunjangan_kesehatan' => $kesehatan,
+      ];
+      $this->db->insert('tb_jabatan', $data);
+      redirect('c_masterdata/jabatan');
    }
 
 

@@ -80,10 +80,11 @@
                                     <td><?= $value->nama_produk ?></td>
                                     <td><?= format_rp($value->harga) ?></td>
                                     <td style="width:50px;">
-                                        <input style="width:50px;" type="number" value="<?= $value->jml?>" min="0" name="qty_update">
+                                        <input style="width:50px;" id="qty_update_<?= $value->kode?>" type="number" value="<?= $value->jml?>" min="0">
                                     </td>
                                     <td class="text-center" style="width: 15%;">
-                                        <a href="<?= base_url('Kasir/update_qty/'.$value->kode.'/'.$value->invoice) ?>" class="btn btn-xs btn-warning">Update</a>
+                                        <!-- <a href="<?= base_url('Kasir/update_qty/'.$value->kode.'/'.$value->invoice) ?>" class="btn btn-xs btn-warning">Update</a> -->
+                                        <button class="btn btn-xs btn-warning btn-update" data-kode = "<?= $value->kode?>" data-invoice = "<?= $value->invoice?>">Update</button>
                                         <button class="btn btn-xs btn-danger">Hapus</button>
                                     </td>
                                 </tr>
@@ -95,7 +96,17 @@
                 <h3>Grand Total : <?= $total = (empty($total)) ? '-' : format_rp($total) ?></h3>
                 <hr>
                 <div class="text-left">
-                    <button class="btn btn-sm btn-primary">Bayar</button>
+                    <!-- <button class="btn btn-sm btn-primary" data-toggle="modal" data-target="#bayar">Bayar</button> -->
+                    <?php 
+                        // print_r(count($detail));
+                        $cek_detail = count($detail);
+                        if ($cek_detail > 0) { ?>
+                            <button class="btn btn-sm btn-primary" data-toggle="modal" data-target="#bayar">Bayar</button>
+
+                        <?php } else { ?>
+                            <button class="btn btn-sm btn-danger">Bayar</button>
+                        <?php }
+                    ?>
                 </div>
             </div>
         </div>
@@ -103,11 +114,18 @@
 </div>
 <?php $this->load->view('script');?>
 <?php $this->load->view('Kasir/show');?>
+<?php $this->load->view('Kasir/bayar');?>
 <script type="text/javascript">
 	$(document).ready(function(){
         time()
         show()
         autocomplete()
+
+        $('#umum').hide()
+        $('#selain-umum').hide()
+        $('.info').hide()
+        $('.anggota').hide()
+        // $('.pembeli').hide()
 
 
 		$("#myForm").submit(function(e){
@@ -124,6 +142,112 @@
 				}
 			});
 		});
+
+        $('.btn-update').on('click', function() {
+            var kode = $(this).data('kode')
+            var invoice = $(this).data('invoice')
+            var qty = $('#qty_update_'+kode).val()
+            $.ajax({
+                method : 'POST', 
+                url : "<?= base_url('Kasir/update_qty/')?>"+kode+"/"+invoice+"/"+qty,
+                success:function(e) {
+                    data = JSON.parse(e);
+                    console.log(data)
+                    location.reload();
+                }
+            })
+        })
+
+        $('#jenis').on('change', function() {
+            var jenis = $('#jenis').val()
+            $('.btn-checkout').prop('disabled', true)
+            $("#kembalian").val(0)
+            // alert(this.value)
+            if (!this.value) {
+                // alert('value kosong')
+                $('#umum').hide()
+                $('#selain-umum').hide()
+            } else {
+                if (jenis === '2') {
+                    // non anggota
+                    $('#umum').show()
+                    // $('.pembeli').show()
+                    $('#selain-umum').hide()
+                    $('.anggota').hide()
+                    var coba = '<input type="text" class="form-control" name="pembeli">';
+                    $('#pembeli').html(coba)
+                } else {
+                    // anggota
+                    $('#umum').hide()
+                    $('#selain-umum').show()
+                    $('.anggota').show()
+                    var coba = '<select name="pembeli" class="form-control pilih_pembeli">'+
+                            '</select>';
+                    $('#pembeli').html(coba)
+                }
+            }
+        })
+
+        
+        $('#anggota').on('change', function() {
+            var val = $(this).val()
+
+            if (val != '') {
+                $.ajax({
+                    url : "<?= base_url('Kasir/jenis/')?>"+val,
+                    method : "post",
+                    data: {val : val},
+                    success:function(e) {
+                        // var obj = JSON.parse(e)
+                        // console.log(obj)
+                        $('.pilih_pembeli').html(e)
+                    }
+                })   
+            }
+        })
+            
+
+        $("#tipe").on('change', function() {
+            var tipe = $('#tipe').val()
+            $('#umum').show()
+            if (tipe === 'kredit') {
+                $(".form-kembalian").hide()
+            } else {
+                $(".form-kembalian").show()
+            }
+            
+        })
+
+        $("input[name='pembayaran']").keyup(function() {
+            var typing = $(this).val()
+            console.log(typing)
+        })
+
+        var total = $("#total").data('total')
+        $('.btn-checkout').prop('disabled', true)
+
+        $("input[name='pembayaran']").focusout(function() {
+            var typing = $(this).val()
+            var total = $("#total").val()
+            var kembalian = typing - total
+            console.log(typing)
+
+            if (typing) {
+                if (kembalian >= 0) {
+                    // console.log("lunas atau ada kembalian")
+                    $("#kembalian").val(kembalian)
+                    $(".info").hide()
+                    $('.btn-checkout').prop('disabled', false)
+
+                } else {
+                    // console.log("minus")
+                    $("#kembalian").val(kembalian)
+                    $(".info").show()
+                    $('.btn-checkout').prop('disabled', true)
+
+                }
+            }
+        })
 	})
 </script>
 <script>

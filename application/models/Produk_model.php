@@ -38,7 +38,7 @@
         JOIN waserda_produk b ON a.id_produk = b.kode
         WHERE invoice = '$inv' AND a.status = 'dalam proses' 
         GROUP BY kode
-        ORDER BY a.id desc
+        -- ORDER BY a.id desc
         ";
         return $this->db->query($q);
     }
@@ -50,8 +50,77 @@
         JOIN waserda_produk b ON a.id_produk = b.kode
         WHERE invoice = '$inv' AND a.status = 'dalam proses' 
         -- GROUP BY kode
-        ORDER BY a.id desc";
+        -- ORDER BY a.id desc
+        ";
         return $this->db->query($sql);
+    }
+
+    public function total_pembelian($inv)
+    {
+        $sql = "SELECT SUM(a.jml * harga_satuan) AS total
+        FROM pos_detail_pembelian a
+        WHERE invoice = '$inv' AND a.status = 'dalam proses' 
+        -- GROUP BY kode
+        -- ORDER BY a.id desc
+        ";
+        return $this->db->query($sql);
+    }
+
+    public function get_produk_by_supplier($id_supplier)
+    {
+        $this->db->where('id_supplier_produk', $id_supplier);
+		$this->db->order_by('nama_produk', 'ASC');
+
+		$query = $this->db->get("waserda_produk");
+		// print_r($query);exit;
+		$output = '<option value="">-</option>';
+		foreach ($query->result() as $row) {
+			$output .= '<option value="' . $row->kode . '">' . $row->nama_produk . '</option>';
+		}
+		return $output;
+    }
+
+    public function detail_pembelian($kode)
+    {
+        $q = "SELECT a.*, b.nama_produk, c.nama
+        FROM pos_detail_pembelian a
+        JOIN waserda_produk b ON  a.id_produk = b.kode
+        JOIN waserda_supplier c ON a.id_supplier = c.kode
+        WHERE invoice = '$kode'
+        GROUP BY b.kode
+        ";
+        return $this->db->query($q);
+    }
+
+    public function list()
+    {
+        $q = " SELECT * FROM pos_pembelian";
+        return $this->db->query($q);
+    }
+
+    public function jenis_anggota($tipe='')
+    {
+        if ($tipe != '') {
+            if ($tipe == 'peternak') {
+                # code...
+                $this->db->where('is_deactive', 0);
+                $data = $this->db->get($tipe)->result();
+
+                $output = '';
+                foreach ($data as $row) {
+                    $output .= '<option value="'.$row->nama_peternak.'">'.$row->nama_peternak.'</option>';
+                }
+            } else {
+                # code...
+                $data = $this->db->get($tipe)->result();
+                $output = '';
+                foreach ($data as $row) {
+                    $output .= '<option value="'.$row->nama.'">'.$row->nama.'</option>';
+                }
+            }
+            // $data = $this->db->get($tipe)->result();
+        }
+        return $output;
     }
 }
 ?>

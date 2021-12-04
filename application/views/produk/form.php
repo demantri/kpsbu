@@ -17,13 +17,23 @@
 			  <input type = "text" name = "no_produk" class = "form-control" value="<?php echo $id?>" readonly>
 			
 			</div>
+
+			<div class="form-group">
+				<label for="jenis_penjualan">Jenis Produk</label>
+				<select name="jenis_penjualan" id="jenis_penjualan" class="form-control" required>
+					<option value="">-</option>
+					<?php foreach ($jenis_penjualan as $key => $value) { ?>
+					<option value="<?= $value->id?>"><?= $value->desc?></option>
+					<?php } ?>
+				</select>
+			</div>
+
 			<div class="form-group">
 			  <label>Nama Produk</label>
 			  <input type = "text" name = "nama_produk" class = "form-control">
-			  
 			  <?php echo form_error('nama_produk'); ?>
-			
 			</div>
+
 			
 			<div class="form-group">
 			  <label>Satuan</label>

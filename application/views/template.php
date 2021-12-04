@@ -53,6 +53,7 @@
    <script src="<?php echo base_url(); ?>assets/vendors/jquery/dist/jquery.min.js"></script>
    <!-- <script src="<?php echo base_url(); ?>assets/vendors/bootstrap/dist/js/bootstrap.min.js"></script> -->
    <!-- <script src="<?php echo base_url(); ?>assets/build/js/custom.min.js"></script> -->
+   <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 
 
    <!-- <script src="https://code.jquery.com/jquery-3.5.1.js"></script> -->
@@ -90,6 +91,30 @@
                      <h3>List Menu</h3>
                      <ul class="nav side-menu">
                         <li><a href="<?php echo site_url(); ?>c_masterdata/beranda"><i class="fa fa-home"></i> Home </a>
+                        </li>
+                     </ul>
+                     <ul class="nav side-menu">
+                        <li><a href="<?= base_url('Absensi')?>"><i class="fa fa-home"></i> Absensi </a>
+                        </li>
+                     </ul>
+                     <ul class="nav side-menu">
+                        <li><a href="<?= base_url('Penggajian')?>"><i class="fa fa-home"></i> Penggajian </a>
+                        </li>
+                     </ul>
+                     <ul class="nav side-menu">
+                        <li><a href="<?= base_url('Shift')?>"><i class="fa fa-home"></i> Jadwal Shift </a>
+                        </li>
+                     </ul>
+                     <ul class="nav side-menu">
+                        <li>
+                           <a><i class="fa fa-table"></i> MD Arles <span class="fa fa-chevron-down"></span></a>
+                           <ul class="nav child_menu">
+                              <li><a href="<?= base_url('c_masterdata/pegawai')?>"> Pegawai </a></li>
+                              <li><a href="<?= base_url('c_masterdata/ptkp')?>"> PTKP </a></li>
+                              <li><a href="<?= base_url('c_masterdata/jabatan')?>"> Jabatan </a></li>
+                              <li><a href="<?= base_url('c_masterdata/jenis_pegawai')?>"> Jenis Pegawai </a></li>
+                              <li><a href="<?= base_url('c_masterdata/shift')?>"> Shift </a></li>
+                           </ul>
                         </li>
                      </ul>
                      <?php if ($this->session->userdata('level') == "admin" or $this->session->userdata('level') == "produksi1" or $this->session->userdata('level') == "produksi2" or $this->session->userdata('level') == "penjualan" or $this->session->userdata('level') == "keuangan3" or $this->session->userdata('level') == "keuangan1" or $this->session->userdata('level') == "keuangan2") : ?>
@@ -201,6 +226,9 @@
                                        <li><a href="<?php echo site_url(); ?>c_transaksi/lihat_pembyv">Pembayaran Beban Variabel</a></li>
                                        <li><a href="<?php echo site_url(); ?>c_transaksi/simpanan_hr">Simpanan Hari Raya</a></li>
                                        <li><a href="<?php echo site_url(); ?>c_transaksi/pinjaman">Pinjaman</a></li>
+                                       <li><a href="<?= base_url('penjualan/susu')?>">Penjualan Susu</a></li>
+                                       <li><a href="<?= base_url('penjualan/pakan_konsentrat')?>">Penjualan Pakan Konsentrat</a></li>
+                                       <li><a href="<?= base_url('penjualan/pengolahan_susu')?>">Penjualan Pengolahan Susu</a></li>
                                     <?php
                                     elseif ($this->session->userdata('level') == "produksi1") :
                                     ?>
@@ -353,6 +381,27 @@
                            </ul>
                         <?php endif ?>
                      <?php endif ?>
+
+                     <?php if (!empty($this->session->userdata('level'))) : ?>
+                        <?php if ($this->session->userdata('level') == "admin" or $this->session->userdata('level') == "produksi1" or $this->session->userdata('level') == "produksi2" or $this->session->userdata('level') == "penjualan" or $this->session->userdata('level') == "keuangan1" or $this->session->userdata('level') == "keuangan2" or $this->session->userdata('level') == "keuangan3") : ?>
+                           <ul class="nav side-menu">
+                              <li>
+                                 <a>
+                                    <i class="fa fa-bar-chart-o"></i>Waserda <span class="fa fa-chevron-down"></span>
+                                 </a>
+                                 <ul class="nav child_menu">
+                                    <?php if ($this->session->userdata('level') == "keuangan" or $this->session->userdata('level') == "admin") : ?>
+                                       <li><a href="<?= base_url('Kasir')?>">Kasir</a></li>
+                                       <li><a href="<?= base_url('Pembelian')?>">Pembelian</a></li>
+                                       <li><a href="#">Pengeluaran Beban</a></li>
+                                    <?php
+                                    endif
+                                    ?>
+                                 </ul>
+                              </li>
+                           </ul>
+                        <?php endif ?>
+                     <?php endif ?>
                   </div>
                </div>
                <!-- /sidebar menu -->
@@ -469,6 +518,7 @@
    <script src="<?= base_url('assets/format.js')?>"></script>
 
    <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
+   <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
    <!-- <script type="text/javascript">
           $(document).ready(function () {

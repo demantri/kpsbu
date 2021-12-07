@@ -193,6 +193,13 @@
         $this->db->where('invoice', $kode);
         $this->db->update('pos_penjualan', $data);
 
+        $tb_kredit = [
+            'invoice' => $kode,
+            'nama' => $pembeli,
+            'nominal' => $pembayaran,
+        ];
+        $this->db->insert('waserda_pembayaran_kredit', $tb_kredit);
+
         $this->session->set_flashdata('notif', '<div class="alert alert-success">Pembayaran berhasil.</div>');
 
         redirect('Kasir');
@@ -203,6 +210,47 @@
         if ($tipe) {
             echo $this->produk->jenis_anggota($tipe);
         }
+    }
+
+    public function pos_penjualan()
+    {
+        $this->template->load('template', 'waserda/penjualan/index');
+    }
+
+    public function pmb_kredit()
+    {
+        $kredit = $this->db->get('waserda_pembayaran_kredit')->result();
+        $kode = $this->produk->kd_pembayaran_kredit();
+        // print_r($kode);exit;
+        $data = [
+            'kode' => $kode,
+            'list' => $kredit,
+        ];
+        $this->template->load('template', 'waserda/pmb_kredit/index', $data);
+    }
+
+    public function save_pmb_kredit()
+    {
+        $kd_pembayaran = $this->input->post('kd_pembayaran');
+        $tgl_pembayaran = $this->input->post('tgl_pembayaran');
+        $invoice = $this->input->post('invoice');
+        $nm_pembeli = $this->input->post('nm_pembeli');
+        $total = $this->input->post('total');
+
+        $data = [
+            'id_pembayaran' => $kd_pembayaran, 
+            'tanggal' => $tgl_pembayaran, 
+        ];
+        $this->db->where('invoice', $invoice);
+        $this->db->update('waserda_pembayaran_kredit', $data);
+
+        $status = [
+            'status_kredit' => 'lunas',
+        ];
+        $this->db->where('invoice', $invoice);
+        $this->db->update('pos_penjualan', $status);
+
+        redirect('Kasir/pmb_kredit');
     }
 }
 ?>

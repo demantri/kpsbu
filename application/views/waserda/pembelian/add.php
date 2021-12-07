@@ -40,7 +40,7 @@
                         <div class="form-group row">
                             <label for="produk" class="col-sm-3 col-form-label">Produk</label>
                             <div class="col-sm-9">
-                                <select name="produk" id="produk" class="form-control" required>
+                                <select name="produk[]" id="produk" class="form-control" required>
                                     <option value="">-</option>
                                 </select>
                             </div>

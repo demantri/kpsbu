@@ -122,5 +122,22 @@
         }
         return $output;
     }
+
+    public function kd_pembayaran_kredit()
+    {
+        $query1   = "SELECT MAX(RIGHT(id_pembayaran,3)) as kode FROM waserda_pembayaran_kredit";
+        $abc      = $this->db->query($query1);
+        $kode = "";
+        if ($abc->num_rows() > 0) {
+            foreach ($abc->result() as $k) {
+                $tmp = ((int) $k->kode) + 1;
+                $kd  = sprintf("%03s", $tmp);
+            }
+        } else {
+            $kd = "001";
+        }
+        $kode   = "PMB-KR-".date('Ymd').$kd;
+        return $kode;
+    }
 }
 ?>

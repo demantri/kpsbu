@@ -9,6 +9,7 @@
             </div>
             <form method="POST" action="<?= base_url("kasir/save_pmb_kredit")?>">
                 <div class="modal-body">
+                    <input type="hidden" value="" name="anggota" id="anggota">
                     <div class="form-group row">
                         <label for="kd_pembayaran" class="col-sm-4 col-form-label">Kode Pembayaran</label>
                         <div class="col-sm-6">
@@ -43,7 +44,7 @@
                 </div>
                 <div class="modal-footer">
                     <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->
-                    <button type="submit" class="btn btn-primary">Simpan</button>
+                    <button type="submit" class="btn btn-primary">BUAYARRRRRRR</button>
                 </div>
             </form>
         </div>

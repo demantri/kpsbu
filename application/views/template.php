@@ -396,8 +396,9 @@
                                  <ul class="nav child_menu">
                                     <?php if ($this->session->userdata('level') == "keuangan" or $this->session->userdata('level') == "admin") : ?>
                                        <li><a href="<?= base_url('Kasir')?>">Kasir</a></li>
+                                       <li><a href="<?= base_url('Kasir/list_penjualan')?>">Data Penjualan</a></li>
+                                       <li><a href="<?= base_url('Pembelian')?>">Data Pembelian</a></li>
                                        <li><a href="<?= base_url('Kasir/pmb_kredit')?>">Pembayaran Kredit</a></li>
-                                       <li><a href="<?= base_url('Pembelian')?>">Pembelian</a></li>
                                        <li><a href="#">Pengeluaran Beban</a></li>
                                     <?php
                                     endif

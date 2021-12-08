@@ -42,10 +42,11 @@
                                 <td><?= $value->nama ?></td>
                                 <td><?= format_rp($value->nominal) ?></td>
                                 <td class="text-center">
-                                    <?php if (date('d') == '28') { ?>
+                                    <?php if (date('d') >= '8' AND is_null($value->id_pembayaran)) { ?>
                                         <a href="#bayar" data-toggle="modal" class="btn btn-md btn-primary bayar" 
                                         data-invoice="<?= $value->invoice?>"
                                         data-pembeli="<?= $value->nama?>"
+                                        data-anggota="<?= $value->jenis_anggota?>"
                                         data-total="<?= $value->nominal?>"
                                         >Bayar</a>
                                     <?php } ?>
@@ -65,9 +66,11 @@
     $(document).on("click", ".bayar", function () {
         var invoice = $(this).data('invoice');
         var pembeli = $(this).data('pembeli');
+        var anggota = $(this).data('anggota');
         var total = $(this).data('total');
         $(".modal-body #invoice").val( invoice );
         $(".modal-body #nm_pembeli").val( pembeli );
+        $(".modal-body #anggota").val( anggota );
         $(".modal-body #total").val( total );
     });
 </script>

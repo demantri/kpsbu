@@ -9,6 +9,9 @@
             </div>
             <form action="<?= base_url('Kasir/checkout')?>" method="post">
                 <div class="modal-body">
+                    <?php foreach ($id_bb as $key => $value) { ?>
+                        <input type="hidden" name="id_bb[]" value="<?= $value->id_produk?>">
+                    <?php } ?>
                     <div class="form-group row">
                         <label for="kode" class="col-sm-3 col-form-label">Kode</label>
                         <div class="col-sm-9">
@@ -71,7 +74,9 @@
                     <div class="form-group row">
                         <label for="total" class="col-sm-3 col-form-label">Total</label>
                         <div class="col-sm-5">
-                            <input type="text" name="total" id="total" class="form-control" placeholder="Total Pembayaran" value="<?= $total ?>" readonly>
+                            <input type="text" name="total" id="total" class="form-control" placeholder="Total Pembayaran" value="<?= $gtot ?>" readonly>
+                            <input type="hidden" value="<?= $ppn ?>" name="ppn">
+                            <input type="hidden" value="<?= $total ?>" name="total_trans">
                         </div>
                     </div>
                     <div class="info">

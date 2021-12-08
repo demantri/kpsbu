@@ -14,14 +14,23 @@
         $user = $this->session->nama_lengkap;
         // print_r($user);exit;
         $inv = $this->master->invoice();
+        $id_bb = $this->db->query("select id_produk from pos_detail_penjualan where invoice = '$inv'
+        and id_produk is not null")->result();
+        $total = $this->produk->get_total_detail($inv)->row()->total;
+        $ppn = $total * 0.1;
+        $gtot = $total + $ppn;
+        // print_r($id_bb);exit;
         $data = [
             'kode' => $inv,
             'user' => $user, 
             'produk' => $this->db->get('waserda_produk')->result(),
             'detail' => $this->produk->detail_pos($inv)->result(),
-            'total' => $this->produk->get_total_detail($inv)->row()->total, 
+            'total' => $total,
+            'ppn' => $ppn,
+            'gtot' => $gtot,
             'jenis_anggota' => $this->db->get('waserda_jenis_anggota')->result(), 
-            'anggota' => $this->db->get('peternak')->result()
+            'anggota' => $this->db->get('peternak')->result(),
+            'id_bb' => $id_bb,
         ];
         // print_r($data['total']);exit;
         $this->template->load('template', 'kasir/index', $data);
@@ -47,10 +56,11 @@
         $barang = $this->input->post('barang');
         $qty = $this->input->post('qty');
 
+        
         if (is_numeric($barang)) {
             # code...
             $produk = $this->db->query("SELECT * FROM waserda_produk WHERE barcode_id = '$barang' ")->row();
-
+            
             if(empty($produk->barcode_id)) 
             {
                 $info = [
@@ -61,13 +71,16 @@
         } else {
             # code...
             $produk = $this->db->query("SELECT * FROM waserda_produk WHERE nama_produk = '$barang' ")->row();
-
+            // print_r($produk);exit;
         }
 
         $this->db->where('invoice', $invoice);
         $this->db->where('id_produk', $produk->kode);
         $cek = $this->db->get('pos_detail_penjualan')->row();
-        // print_r($cek);exit;
+        // print_r($cek->id_produk);exit;
+        // if (empty($cek->id_produk)) {
+        //     $this->session->set_flashdata('notif', '<div class="alert alert-warning">Data tidak ditemukan.</div>');
+        // }
 
         $this->db->where('status', 'dalam proses');
         $cek_penjualan = $this->db->get('pos_penjualan')->num_rows();
@@ -90,7 +103,7 @@
             ];
             $this->db->insert('pos_detail_penjualan', $data);
         } else {
-            if ($cek->id_produk != $produk->kode) {
+            if (empty($cek->id_produk)) {
                 # code...
                 $data = [
                     'invoice' => $invoice,
@@ -111,11 +124,9 @@
                 $this->db->where('id_produk', $produk->kode);
                 $this->db->update('pos_detail_penjualan', $arr);
             }
+            $this->session->set_flashdata('notif', '<div class="alert alert-success">Data berhasil ditambahkan.</div>');
         }
-        $this->session->set_flashdata('notif', '<div class="alert alert-success">Data berhasil ditambahkan.</div>');
-        
         redirect('Kasir');
-        
         // print_r($data);exit;
     }
 
@@ -172,6 +183,7 @@
 
     public function checkout()
     {
+        $id_bb = $this->input->post('id_bb');
         $kode = $this->input->post('kode');
         $jenis = $this->input->post('jenis');
         $pembeli = $this->input->post('pembeli');
@@ -180,12 +192,22 @@
         $kembalian = $this->input->post('kembalian');
         $total = $this->input->post('total');
         $status = ($tipe == 'kredit') ? 'kredit' : 'terbayar';
+
+        $anggota = $this->input->post('anggota');
+        // print_r($jenis);exit;
+
+        $ppn = $this->input->post('ppn');
+        $total_trans = $this->input->post('total_trans');
+
+
         $data = [
             'total' => $total,
             'nama_pembeli' => $pembeli,
             'jenis_pembayaran' => $tipe,
             'kembalian' => $kembalian,
             'pembayaran' => $pembayaran,
+            'ppn' => $ppn,
+            'total_trans' => $total_trans,
             'id_detail_jenis_anggota' => $jenis,
             'status' => $status
         ];
@@ -193,12 +215,61 @@
         $this->db->where('invoice', $kode);
         $this->db->update('pos_penjualan', $data);
 
-        $tb_kredit = [
-            'invoice' => $kode,
-            'nama' => $pembeli,
-            'nominal' => $pembayaran,
-        ];
-        $this->db->insert('waserda_pembayaran_kredit', $tb_kredit);
+        // print_r($tipe);exit;
+        if ($jenis == 1 && $tipe == 'kredit') {
+
+            if ($anggota == 'pegawai') {
+                $status_kredit = [
+                    'status_kredit' => 1
+                ];
+                $this->db->where('nama', $pembeli);
+                $this->db->update('pegawai', $status_kredit);
+            } else {
+                $status_kredit = [
+                    'status_kredit' => 1
+                ];
+                $this->db->where('nama_peternak', $pembeli);
+                $this->db->update('peternak', $status_kredit);
+            }
+
+            $tb_kredit = [
+                'invoice' => $kode,
+                'nama' => $pembeli,
+                'jenis_anggota' => $anggota,
+                'nominal' => $pembayaran,
+            ];
+            $this->db->insert('waserda_pembayaran_kredit', $tb_kredit);
+        }
+        // if ($tipe == 'kredit') {
+        //     # code...
+        //     $tb_kredit = [
+        //         'invoice' => $kode,
+        //         'nama' => $pembeli,
+        //         'nominal' => $pembayaran,
+        //     ];
+        //     $this->db->insert('waserda_pembayaran_kredit', $tb_kredit);
+        // }
+
+        $this->db->where('invoice', $kode);
+        $this->db->where('id_produk !=', NULL);
+        $cek_invoice = $this->db->get('pos_detail_penjualan')->result();
+
+        $where = [];
+        $bb = [];
+        foreach ($id_bb as $key => $value) {
+            $where = array(
+                'kode' => $value
+            );
+            // ambil stok akhir
+            $this->db->where(['kode' => $value]);
+            $jumlah = $this->db->get('waserda_produk')->row()->jml;
+
+            $bb = array(
+                'jml' => $jumlah - $cek_invoice[$key]->jml,
+            );
+            $this->db->where($where);
+            $this->db->update('waserda_produk', $bb);
+        }
 
         $this->session->set_flashdata('notif', '<div class="alert alert-success">Pembayaran berhasil.</div>');
 
@@ -237,6 +308,21 @@
         $nm_pembeli = $this->input->post('nm_pembeli');
         $total = $this->input->post('total');
 
+        $anggota = $this->input->post('anggota');
+        if ($anggota == 'pegawai') {
+            $status_kredit = [
+                'status_kredit' => 0
+            ];
+            $this->db->where('nama', $nm_pembeli);
+            $this->db->update('pegawai', $status_kredit);
+        } else {
+            $status_kredit = [
+                'status_kredit' => 0
+            ];
+            $this->db->where('nama_peternak', $nm_pembeli);
+            $this->db->update('peternak', $status_kredit);
+        }
+
         $data = [
             'id_pembayaran' => $kd_pembayaran, 
             'tanggal' => $tgl_pembayaran, 
@@ -251,6 +337,16 @@
         $this->db->update('pos_penjualan', $status);
 
         redirect('Kasir/pmb_kredit');
+    }
+
+    public function list_penjualan()
+    {
+        $this->db->order_by('date_payment', 'DESC');
+        $list = $this->db->get('pos_penjualan')->result();
+        $data = [
+            'list' => $list,
+        ];
+        $this->template->load('template', 'waserda/penjualan/index', $data);
     }
 }
 ?>

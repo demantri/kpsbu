@@ -21,17 +21,38 @@
                     <table class="table table-bordered" id="datatable">
                         <thead>
                             <tr>
-                                <th style="width: 5%;">No</th>
-                                <th>Tanggal</th>
-                                <th>Kode Pembayaran</th>
+                                <th style="width: 5%;">#</th>
+                                <th>Waktu Transaksi</th>
                                 <th>Invoice</th>
-                                <th>Total</th>
-                                <th class="text-center">Status</th>
-                                <th style="width: 10px;">Action</th>
+                                <th>Nama Pembeli</th>
+                                <th>Jenis Pembayaran</th>
+                                <th>Total Transaksi</th>
+                                <th>PPN</th>
+                                <th>Grand Total</th>
                             </tr>
                         </thead>
                         <tbody>
-
+                        <?php
+                        $no = 1;
+                        foreach ($list as $key => $value) { ?>
+                        <?php 
+                        $jenis = $value->jenis_pembayaran;
+                        if (empty($jenis)) {
+                            # code...
+                            $jenis = 'Tunai';
+                        }
+                        ?>
+                            <tr>
+                                <td><?= $no++ ?></td>
+                                <td><?= $value->date_payment ?></td>
+                                <td><?= $value->invoice ?></td>
+                                <td><?= $value->nama_pembeli ?></td>
+                                <td><?= ucwords($jenis) ?></td>
+                                <td class="text-right"><?= format_rp($value->total_trans) ?></td>
+                                <td class="text-right"><?= format_rp($value->ppn) ?></td>
+                                <td class="text-right"><?= format_rp($value->total) ?></td>
+                            </tr>
+                        <?php } ?>
                         </tbody>
                     </table>
                 </div>

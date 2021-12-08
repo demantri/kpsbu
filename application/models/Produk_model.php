@@ -18,6 +18,7 @@
             # code...
             $this->db->select('*');
             $this->db->where('nama_produk like "%'.$post['search'].'%"');
+            $this->db->where('jml !=', 0);
             $record = $this->db->get('waserda_produk')->result();
 
             foreach ($record as $key => $value) {
@@ -104,6 +105,7 @@
             if ($tipe == 'peternak') {
                 # code...
                 $this->db->where('is_deactive', 0);
+                $this->db->where('status_kredit', 0);
                 $data = $this->db->get($tipe)->result();
 
                 $output = '';
@@ -112,6 +114,7 @@
                 }
             } else {
                 # code...
+                $this->db->where('status_kredit', 0);
                 $data = $this->db->get($tipe)->result();
                 $output = '';
                 foreach ($data as $row) {

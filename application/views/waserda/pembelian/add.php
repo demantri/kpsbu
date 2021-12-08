@@ -40,7 +40,7 @@
                         <div class="form-group row">
                             <label for="produk" class="col-sm-3 col-form-label">Produk</label>
                             <div class="col-sm-9">
-                                <select name="produk[]" id="produk" class="form-control" required>
+                                <select name="produk" id="produk" class="form-control" required>
                                     <option value="">-</option>
                                 </select>
                             </div>
@@ -126,19 +126,21 @@
                         </div>
                     </div>
 
+                    <form action="<?= base_url('Pembelian/simpan_produk')?>" method="post">
+                    <input type="hidden" name="id" value="<?= $kode ?>">
                     <input type="hidden" name="total" value="<?= $total ?>">
                     <input type="hidden" name="ppn" value="<?= $ppn ?>">
                     <input type="hidden" name="grandtotal" value="<?= $grandtotal ?>">
+                    <?php foreach ($id_bb as $key => $value) { ?>
+                        <input type="hidden" name="id_bb[]" value="<?= $value->id_produk?>">
+                    <?php } ?>
                     <br>
 
                     <?php if (count($detail) > 0) { ?>
-                        <a href="<?= base_url('Pembelian/simpan_produk/'.$total.'/'.$ppn.'/'.$grandtotal.'/'.$kode)?>" class="btn btn-sm btn-primary">Simpan</a>
-                    <?php } else { ?>
-                        <a href="<?= base_url('Pembelian')?>" class="btn btn-sm btn-default">Kembali</a>
-                        <button class="btn btn-sm btn-danger">Simpan</button>
-                    <?php }
-                    ?>
-                    
+                        <button type="submit" class="btn btn-sm btn-primary">Simpan</button>
+                    <?php } ?>
+                    <a href="" class="btn btn-sm btn-default">Kembali</a>
+                    </form>
             </div>
         </div>
     </div>

@@ -83,7 +83,6 @@
                                         <input style="width:50px;" id="qty_update_<?= $value->kode?>" type="number" value="<?= $value->jml?>" min="0">
                                     </td>
                                     <td class="text-center" style="width: 15%;">
-                                        <!-- <a href="<?= base_url('Kasir/update_qty/'.$value->kode.'/'.$value->invoice) ?>" class="btn btn-xs btn-warning">Update</a> -->
                                         <button class="btn btn-xs btn-warning btn-update" data-kode = "<?= $value->kode?>" data-invoice = "<?= $value->invoice?>">Update</button>
                                         <button class="btn btn-xs btn-danger">Hapus</button>
                                     </td>
@@ -92,8 +91,15 @@
                     </tbody>
                     <input type="hidden" value="<?= $total?>" name="total">
                 </table>
-
-                <h3>Grand Total : <?= $total = (empty($total)) ? '-' : format_rp($total) ?></h3>
+                <hr>
+                <?php 
+                // rumus
+                $ppn = $total * 0.1;
+                $gtot = $ppn + $total;
+                ?>
+                <h5>Total : <?= $total = (empty($total)) ? '-' : format_rp($total) ?></h5>
+                <h5>PPN (10%) : <?= $ppn = (empty($ppn)) ? '-' : format_rp($ppn) ?></h5>
+                <h5>Grand Total : <?= $gtot = (empty($gtot)) ? '-' : format_rp($gtot) ?></h5>
                 <hr>
                 <div class="text-left">
                     <!-- <button class="btn btn-sm btn-primary" data-toggle="modal" data-target="#bayar">Bayar</button> -->

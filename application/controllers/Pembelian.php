@@ -24,6 +24,7 @@
         $total = $this->produk->total_pembelian($inv)->row()->total;
         $ppn = $total * 0.1;
         $grand = $total + $ppn;
+        $id_bb = $this->db->query("select id_produk from pos_detail_pembelian where invoice = '$inv'")->result();
         // print_r($total);exit;
         $data = [
             'kode' => $inv,
@@ -32,6 +33,7 @@
             'total' => $total,
             'ppn' => $ppn,
             'grandtotal' => $grand,
+            'id_bb' => $id_bb,
         ];
         $this->template->load('template', 'waserda/pembelian/add', $data);
     }
@@ -58,6 +60,7 @@
         $produk = $this->input->post('produk');
         $jml = $this->input->post('jml');
         $harga = $this->input->post('harga');
+        // print_r($produk);exit;
 
         $this->db->where('invoice', $kode);
         $this->db->where('id_produk', $produk);
@@ -85,7 +88,7 @@
             ];
             $this->db->insert('pos_pembelian', $pembelian);
         } else {
-            if ($cek->id_produk != $produk) {
+            if (empty($cek->id_produk)) {
                 # code...
                 $data = [
                     'invoice' => $kode,
@@ -109,8 +112,14 @@
         redirect('Pembelian/add');
     }
 
-    public function simpan_produk($total, $ppn, $grand, $id)
+    public function simpan_produk()
     {
+        $id = $this->input->post('id');
+        $total = $this->input->post('total');
+        $ppn = $this->input->post('ppn');
+        $grand = $this->input->post('grandtotal');
+        $id_bb = $this->input->post('id_bb');
+
         $arr = [
             'total' => $total,
             'ppn' => $ppn,
@@ -126,18 +135,26 @@
         $this->db->where('invoice', $id);
         $this->db->update('pos_detail_pembelian', $arr2);
 
-        // $this->db->where('invoice', $id);
-        // $cek_detail = $this->db->get('pos_detail_pembelian')->result();
-        // print_r($cek_detail);exit;
+        $this->db->where('invoice', $id);
+        $cek_invoice = $this->db->get('pos_detail_pembelian')->result();
 
-        // $res = [];
-        // for ($i=0; $i < count($cek_detail); $i++) { 
-        //     # code...
-        //     $res[] = array(
-        //         'jml' => $cek_detail[$i]
-        //     );
-        // }
-        // $this->db->update_batch('waserda_produk', $res); 
+        $where = [];
+        $bb = [];
+        foreach ($id_bb as $key => $value) {
+            $where = array(
+                'kode' => $value
+            );
+            // ambil stok akhir
+            $this->db->where(['kode' => $value]);
+            $jumlah = $this->db->get('waserda_produk')->row()->jml;
+
+            $bb = array(
+                'jml' => $jumlah + $cek_invoice[$key]->jml,
+            );
+            $this->db->where($where);
+            $this->db->update('waserda_produk', $bb);
+        }
+ 
 
         redirect('Pembelian');
     }

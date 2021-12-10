@@ -7,7 +7,7 @@
                         <h3>POS Penjualan</h3>
                     </div>
                     <div class="col-sm-2">
-                        <h5 class="clock"></h5>
+                        <h5 class=""></h5>
                     </div>
                 </div>
             </div>

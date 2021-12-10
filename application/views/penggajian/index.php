@@ -29,26 +29,14 @@
                                 <th>Jumlah Presensi</th>
                                 <th style="width: 15%;" class="text-center">Aksi</th>
                             </tr>
-                            <!-- <tr>
-                                <th rowspan="2" class="text-center">Nama Pegawai</th>
-                                <th rowspan="2" class="text-center">Gaji Pokok</th>
-                                <th colspan="4" class="text-center">Presensi</th>
-                                <th rowspan="2" class="text-center">Tunjangan Pegawai</th>
-                                <th rowspan="2" style="text-align: center;">Action</th>
-                            </tr>
-                            <tr>
-                                <th class="text-center">Masuk</th>
-                                <th class="text-center">Sakit</th>
-                                <th class="text-center">Izin</th>
-                                <th class="text-center">Alfa</th>
-                            </tr> -->
                         </thead>
                         <tbody>
                         <?php 
                         $no = 1;
                         foreach ($pegawai as $key => $value) { ?>
                         <?php 
-                        $detail = $this->Absensi_model->getDetailPegawai($value->rfid)->result();
+                        $this->db->where('nm_pegawai', $value->nama);
+                        $detail = $this->db->get('tb_penggajian')->result();
                         // print_r($detail);exit;
                         ?>
                             <tr>
@@ -58,7 +46,9 @@
                                 <td><b><?= $value->rfid ?></b>-<?= $value->nama ?></td>
                                 <td><?= $value->total ?? '0' ?></td>
                                 <td class="text-center">
-                                    <a href="" class="btn btn-md btn-primary">Pembayaran Gaji</a>
+                                    <?php if ($value->total >= 2) { ?>
+                                        <a href="<?= base_url('Penggajian/slip_gaji/'.$value->nip)?>" class="btn btn-md btn-primary">Pembayaran Gaji</a>
+                                    <?php } ?>
                                     <a href="" class="btn btn-md btn-default">Detail</a>
                                 </td>
                             </tr>

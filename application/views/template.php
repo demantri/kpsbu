@@ -385,7 +385,7 @@
                            </ul>
                         <?php endif ?>
                      <?php endif ?>
-
+                     
                      <?php if (!empty($this->session->userdata('level'))) : ?>
                         <?php if ($this->session->userdata('level') == "admin" or $this->session->userdata('level') == "produksi1" or $this->session->userdata('level') == "produksi2" or $this->session->userdata('level') == "penjualan" or $this->session->userdata('level') == "keuangan1" or $this->session->userdata('level') == "keuangan2" or $this->session->userdata('level') == "keuangan3") : ?>
                            <ul class="nav side-menu">

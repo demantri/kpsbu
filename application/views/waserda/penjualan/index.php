@@ -38,7 +38,6 @@
                         <?php 
                         $jenis = $value->jenis_pembayaran;
                         if (empty($jenis)) {
-                            # code...
                             $jenis = 'Tunai';
                         }
                         ?>

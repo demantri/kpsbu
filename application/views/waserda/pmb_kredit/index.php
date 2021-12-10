@@ -42,7 +42,7 @@
                                 <td><?= $value->nama ?></td>
                                 <td><?= format_rp($value->nominal) ?></td>
                                 <td class="text-center">
-                                    <?php if (date('d') >= '8' AND is_null($value->id_pembayaran)) { ?>
+                                    <?php if (date('d') >= '28' AND is_null($value->id_pembayaran)) { ?>
                                         <a href="#bayar" data-toggle="modal" class="btn btn-md btn-primary bayar" 
                                         data-invoice="<?= $value->invoice?>"
                                         data-pembeli="<?= $value->nama?>"

@@ -47,18 +47,22 @@
         }
     }
 
-    public function getDetailPegawai($rfid)
+    public function getDetailPegawai($nip)
     {
-        // $month = date('m');
-        // print_r($month);exit;
-        $q = "SELECT a.rfid, tanggal, nama, COUNT(b.rfid) AS total
+        $month = date('m');
+        $q = "SELECT a.id, b.nip, npwp, a.rfid, nama, total, tanggal
         FROM pegawai a
-        JOIN detail_absen_rfid b ON a.rfid = b.rfid
-        JOIN absensi c ON c.id = b.id_absensi
-        WHERE MONTH(tanggal) = '11'
-        AND keterangan LIKE '%Keluar%'
-        AND a.rfid = '$rfid'
-        GROUP BY b.rfid ";
+        LEFT JOIN (
+            SELECT COUNT(z.rfid) AS total, tanggal, z.rfid, x.nip
+            FROM detail_absen_rfid z
+            JOIN pegawai x ON z.rfid = x.rfid
+            LEFT JOIN absensi s ON s.id = z.id_absensi
+            WHERE keterangan LIKE '%Masuk%'
+            AND MONTH(tanggal) = '$month'
+            AND x.nip = '$nip'
+            GROUP BY z.rfid
+        ) as b ON b.rfid = a.rfid
+        ORDER BY nama ASC ";
         return $this->db->query($q);
     }
 
@@ -78,6 +82,28 @@
         ) as b ON b.rfid = a.rfid
         ORDER BY nama ASC ";
         return $this->db->query($q);
+    }
+
+    // public function cel_gaji()
+    // {
+    //     # code...
+    // }
+
+    public function id_gaji()
+    {
+        $query1   = "SELECT MAX(RIGHT(id_penggajian,3)) as kode FROM tb_penggajian";
+        $abc      = $this->db->query($query1);
+        $kode = "";
+        if ($abc->num_rows() > 0) {
+            foreach ($abc->result() as $k) {
+                $tmp = ((int) $k->kode) + 1;
+                $kd  = sprintf("%03s", $tmp);
+            }
+        } else {
+            $kd = "001";
+        }
+        $kode   = "GAJI-".$kd;
+        return $kode;
     }
 }
 ?>

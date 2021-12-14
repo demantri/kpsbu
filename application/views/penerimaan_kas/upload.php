@@ -3,12 +3,12 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
         <div class="modal-header">
-            <h4 class="modal-title" id="exampleModalLabel">Pengeluaran Kas</h4>
+            <h4 class="modal-title" id="exampleModalLabel">Penerimaan Kas</h4>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
             </button>
         </div>
-        <form action="<?= base_url('Pengeluaran_kas/upload')?>" method="post" enctype="multipart/form-data">
+        <form action="<?= base_url('Penerimaan_kas/upload')?>" method="post" enctype="multipart/form-data">
             <div class="modal-body">
                 <input type="hidden" value="" id="id" name="id">
                 

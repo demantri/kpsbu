@@ -48,7 +48,8 @@
                                         <button><i class="fa fa-check"></i> Selesai</button>
                                     <?php } else { ?>
                                         <?php if (!is_null($value->bukti_trf)) { ?>
-                                        <button data-target="#detail" data-id="<?= $value->id?>" data-toggle="modal"><i class="fa fa-camera"></i> Detail</button>
+                                        <!-- <button data-target="#detail" data-id="<?= $value->id?>" data-toggle="modal"><i class="fa fa-camera"></i> Detail</button> -->
+                                        <button data-target="#detail_<?= $value->id?>" data-toggle="modal" class="btn btn-default btn-detail"><i class="fa fa-camera"></i> Detail</button>
                                         <?php } else { ?> 
                                             <button data-target="#upload" data-id="<?= $value->id?>" data-toggle="modal" class="upload"><i class="fa fa-cloud-upload"></i> Upload</button>
                                         <?php } ?>
@@ -65,6 +66,7 @@
 </div>
 <?php $this->load->view('pengeluaran_kas/add'); ?>
 <?php $this->load->view('pengeluaran_kas/upload'); ?>
+<?php $this->load->view('pengeluaran_kas/detail'); ?>
 <script>
     $(document).on("click", ".upload", function () {
      var id = $(this).data('id');

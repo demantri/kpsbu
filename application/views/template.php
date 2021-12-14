@@ -232,7 +232,7 @@
                                        <li><a href="<?= base_url('penjualan/pengolahan_susu')?>">Penjualan Pengolahan Susu</a></li>
 
                                        <!-- trans salma -->
-                                       <li><a href="<?= base_url('Penerimaan_kas')?>">Penerimaan Kas Kas</a></li>
+                                       <li><a href="<?= base_url('Penerimaan_kas')?>">Penerimaan Kas</a></li>
                                        <li><a href="<?= base_url('Pengeluaran_kas')?>">Pengeluaran Kas</a></li>
 
                                     <?php

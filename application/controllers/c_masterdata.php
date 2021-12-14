@@ -2641,6 +2641,36 @@ class c_masterdata extends CI_controller
       redirect('c_masterdata/jabatan');
    }
 
+   public function alokasi_shu()
+   {
+      $persentase = 100;
+      $total_shu = $this->db->query('SELECT SUM(persentase) AS total 
+      FROM alokasi_shu')->row()->total;
+      $sisa = $persentase - $total_shu;
+      $list = $this->db->get('alokasi_shu')->result();
+      // print_r($sisa);exit;
+      $data = [
+         'percent' => $persentase,
+         'sisa' => $sisa,
+         'list' => $list,
+      ];
+      $this->template->load('template', 'shu/index', $data);
+   }
+
+   public function save_alokasi_shu()
+   {
+      $desc = $this->input->post('desc');
+      $persentase = $this->input->post('persentase');
+
+      $data = [
+         'deskripsi' => $desc,
+         'persentase' => $persentase,
+      ];
+      $this->db->insert('alokasi_shu', $data);
+
+      redirect('c_masterdata/alokasi_shu');
+   }
+
 
 
 

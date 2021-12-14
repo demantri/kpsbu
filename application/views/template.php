@@ -146,6 +146,7 @@
                                     <li><a href="<?php echo site_url(); ?>c_masterdata/lihat_btko">BTKL</a></li>
                                     <li><a href="<?php echo site_url(); ?>c_masterdata/lihat_ips">Konsumen IPS</a></li>
                                     <li><a href="<?php echo site_url(); ?>c_masterdata/tps">TPS</a></li>
+                                    <li><a href="<?php echo site_url(); ?>c_masterdata/alokasi_shu">Alokasi SHU</a></li>
 
 
                                  <?php
@@ -231,7 +232,8 @@
                                        <li><a href="<?= base_url('penjualan/pengolahan_susu')?>">Penjualan Pengolahan Susu</a></li>
 
                                        <!-- trans salma -->
-                                       <li><a href="<?= base_url('PengeluaranKas')?>">Pengeluaran Kas</a></li>
+                                       <li><a href="<?= base_url('Penerimaan_kas')?>">Penerimaan Kas Kas</a></li>
+                                       <li><a href="<?= base_url('Pengeluaran_kas')?>">Pengeluaran Kas</a></li>
 
                                     <?php
                                     elseif ($this->session->userdata('level') == "produksi1") :
@@ -282,6 +284,10 @@
                                        <li><a href="<?php echo site_url(); ?>c_keuangan/bukubesar">Buku Besar</a></li>
                                        <!-- <li><a href="<?php echo site_url(); ?>c_keuangan/view_bukubesar">Kartu Simpanan Wajib</a></li> -->
                                        <!-- <li><a href="<?php echo site_url(); ?>c_keuangan/view_bukubesar">Kartu Simpanan Manasuka</a></li> -->
+
+                                       <!-- laporan sarah -->
+                                       <li><a href="<?php echo site_url(); ?>shu/laporan">Laporan SHU</a></li>
+
                                        <li><a href="<?php echo site_url(); ?>simpanan/laporan_setoran_anggota">Laporan Setoran Susu Anggota</a></li>
                                        <li><a href="<?php echo site_url(); ?>c_transaksi/kartu_aset">Kartu Penyusutan Aset</a></li>
                                        <li><a href="<?php echo site_url(); ?>c_transaksi/buku_pinjaman">Buku Pembantu Pinjaman</a></li>

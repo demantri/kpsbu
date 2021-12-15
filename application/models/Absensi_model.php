@@ -69,18 +69,31 @@
     public function detailPegawai()
     {
         $month = date('m');
-        $q = "SELECT a.id, nip, npwp, a.rfid, nama, total, tanggal
+        // $q = "SELECT a.id, nip, npwp, a.rfid, nama, total, tanggal
+        // FROM pegawai a
+        // LEFT JOIN (
+        //     SELECT COUNT(z.rfid) AS total, tanggal, z.rfid
+        //     FROM detail_absen_rfid z
+        //     JOIN pegawai x ON z.rfid = x.rfid
+        //     LEFT JOIN absensi s ON s.id = z.id_absensi
+        //     WHERE keterangan LIKE '%Masuk%'
+        //     AND MONTH(tanggal) = '$month'
+        //     GROUP BY z.rfid
+        // ) as b ON b.rfid = a.rfid
+        // ORDER BY nama ASC ";
+        $q = "SELECT a.id, nip, npwp, a.rfid, nama, b.total, tanggal, b.tgl_gaji
         FROM pegawai a
         LEFT JOIN (
-            SELECT COUNT(z.rfid) AS total, tanggal, z.rfid
+            SELECT COUNT(z.rfid) AS total, s.tanggal, z.rfid, v.tanggal as tgl_gaji
             FROM detail_absen_rfid z
             JOIN pegawai x ON z.rfid = x.rfid
             LEFT JOIN absensi s ON s.id = z.id_absensi
+            LEFT JOIN tb_penggajian v ON v.nm_pegawai = x.nama
             WHERE keterangan LIKE '%Masuk%'
-            AND MONTH(tanggal) = '$month'
+            AND MONTH(s.tanggal) = '$month'
             GROUP BY z.rfid
         ) as b ON b.rfid = a.rfid
-        ORDER BY nama ASC ";
+        ORDER BY nama ASC";
         return $this->db->query($q);
     }
 

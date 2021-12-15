@@ -46,7 +46,7 @@
                                 <td><b><?= $value->rfid ?></b>-<?= $value->nama ?></td>
                                 <td><?= $value->total ?? '0' ?></td>
                                 <td class="text-center">
-                                    <?php if ($value->total >= 2) { ?>
+                                    <?php if ($value->total >= 2 AND is_null($value->tgl_gaji)) { ?>
                                         <a href="<?= base_url('Penggajian/slip_gaji/'.$value->nip)?>" class="btn btn-md btn-primary">Pembayaran Gaji</a>
                                     <?php } ?>
                                     <a href="" class="btn btn-md btn-default">Detail</a>

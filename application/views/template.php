@@ -80,7 +80,7 @@
                   </div>
                   <div class="profile_info">
                      <span>Welcome,</span>
-                     <h2><?php echo $this->session->userdata('nama_lengkap'); ?></h2>
+                     <h2><?php echo ucwords($this->session->userdata('nama_lengkap')); ?></h2>
                   </div>
                </div>
                <!-- /menu profile quick info -->
@@ -414,6 +414,16 @@
                            </ul>
                         <?php endif ?>
                      <?php endif ?>
+
+                     <?php if (!empty($this->session->userdata('level'))) : ?>
+                        <?php if ($this->session->userdata('level') == "pegawai") : ?>
+                           <ul class="nav side-menu">
+                              <li><a href="<?= base_url('Profile')?>"><i class="fa fa-home"></i> Profile </a>
+                              </li>
+                           </ul>
+                        <?php endif ?>
+                     <?php endif ?>
+                           
                   </div>
                </div>
                <!-- /sidebar menu -->
@@ -431,7 +441,7 @@
                   <ul class="nav navbar-nav navbar-right">
                      <li class="">
                         <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                           <img src="<?php echo base_url(); ?>assets/images/sapi.png" alt=""><?php echo $this->session->userdata('nama_lengkap'); ?>
+                           <img src="<?php echo base_url(); ?>assets/images/sapi.png" alt=""><?php echo ucwords($this->session->userdata('nama_lengkap')); ?>
                            <span class=" fa fa-angle-down"></span>
                         </a>
                         <ul class="dropdown-menu dropdown-usermenu pull-right">

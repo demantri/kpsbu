@@ -2566,8 +2566,16 @@ class c_masterdata extends CI_controller
          'tgl_lahir' => $this->input->post('ttl'),
          'no_rek' => $this->input->post('no_rek'),
       ];
-      // print_r($data);exit;
       $this->db->insert('pegawai', $data);
+
+      $user = [
+         'nama_lengkap' => $this->input->post('nama'),
+         'username' => $this->input->post('username'),
+         'password' => $this->input->post('password'),
+         'level'  => 'pegawai',
+      ];
+      $this->db->insert('user', $user);
+
       redirect('c_masterdata/pegawai');
    }
 

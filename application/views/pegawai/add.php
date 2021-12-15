@@ -10,6 +10,19 @@
             <form action="<?= base_url('c_masterdata/save_pegawai')?>" method="post">
             <div class="modal-body">
                 <div class="form-group row">
+                    <label for="username" class="col-sm-2 col-form-label">Username</label>
+                    <div class="col-sm-6">
+                        <input type="text" name="username" class="form-control" id="username" placeholder="Username" required>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="password" class="col-sm-2 col-form-label">Password</label>
+                    <div class="col-sm-6">
+                        <input type="password" name="password" class="form-control" id="password" placeholder="Password" required>
+                    </div>
+                </div>
+                <hr>
+                <div class="form-group row">
                     <label for="nip" class="col-sm-2 col-form-label">NIP</label>
                     <div class="col-sm-6">
                         <input type="text" name="nip" class="form-control" id="nip" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" placeholder="NIP" required>

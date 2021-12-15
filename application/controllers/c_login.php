@@ -38,6 +38,8 @@ class c_login extends CI_Controller{
                     redirect('c_masterdata/beranda');
                 }elseif($level == "keuangan3"){
                     redirect('c_masterdata/beranda');
+                }elseif($level == "pegawai"){
+                    redirect('profile');
                 }
             
             }else{

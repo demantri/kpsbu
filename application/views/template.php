@@ -405,6 +405,7 @@
                                        <li><a href="<?= base_url('Kasir/list_penjualan')?>">Data Penjualan</a></li>
                                        <li><a href="<?= base_url('Pembelian')?>">Data Pembelian</a></li>
                                        <li><a href="<?= base_url('Kasir/pmb_kredit')?>">Pembayaran Kredit</a></li>
+                                       <li><a href="<?= base_url('Pengajuan')?>">Pengajuan Barang</a></li>
                                        <li><a href="#">Pengeluaran Beban</a></li>
                                     <?php
                                     endif

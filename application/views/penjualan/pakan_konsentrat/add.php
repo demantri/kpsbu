@@ -111,7 +111,7 @@
                                     <select name="pelanggan" id="pelanggan" class="form-control">
                                         <option value="">-</option>
                                         <?php foreach ($anggota as $key => $value) { ?>
-                                        <option value="<?= $value->id?>"><?= $value->nama?></option>
+                                        <option value="<?= $value->nama_peternak?>"><?= $value->nama_peternak?></option>
                                         <?php } ?>
                                     </select>
                                 </div>

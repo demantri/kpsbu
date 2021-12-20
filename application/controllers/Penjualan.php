@@ -148,11 +148,46 @@ class Penjualan extends CI_Controller
         $this->db->update('pnj_susu', $data);
 
         if ($jenis == 'susu_olahan') {
+            $kas = [
+                'id_jurnal' => $id,
+                'tgl_jurnal' => date('Y-m-d'),
+                'no_coa' => 1111,
+                'posisi_dr_cr' => 'd',
+                'nominal' => $total,
+            ];
+            $this->db->insert('jurnal', $kas);
+
+            $pnj = [
+                'id_jurnal' => $id,
+                'tgl_jurnal' => date('Y-m-d'),
+                'no_coa' => 4115,
+                'posisi_dr_cr' => 'k',
+                'nominal' => $total,
+            ];
+            $this->db->insert('jurnal', $pnj);
+
             redirect('penjualan/pengolahan_susu');
         } else if ($jenis == 'pakan_konsentrat') {
+            $kas = [
+                'id_jurnal' => $id,
+                'tgl_jurnal' => date('Y-m-d'),
+                'no_coa' => 1111,
+                'posisi_dr_cr' => 'd',
+                'nominal' => $total,
+            ];
+            $this->db->insert('jurnal', $kas);
+
+            $pnj = [
+                'id_jurnal' => $id,
+                'tgl_jurnal' => date('Y-m-d'),
+                'no_coa' => 4114,
+                'posisi_dr_cr' => 'k',
+                'nominal' => $total,
+            ];
+            $this->db->insert('jurnal', $pnj);
+
             redirect('penjualan/pakan_konsentrat');
         } else {
-
             $kas = [
                 'id_jurnal' => $id,
                 'tgl_jurnal' => date('Y-m-d'),
@@ -170,6 +205,7 @@ class Penjualan extends CI_Controller
                 'nominal' => $total,
             ];
             $this->db->insert('jurnal', $pnj);
+
             redirect('penjualan/susu');
         }
     }
@@ -286,7 +322,7 @@ class Penjualan extends CI_Controller
         $data = [
             'list' => $list,
         ];
-        $this->template->load('template', 'penjualan/pakan_konsentrat/index');
+        $this->template->load('template', 'penjualan/pakan_konsentrat/index', $data);
     }
     
     public function form_pakan_konsentrat()
@@ -298,7 +334,8 @@ class Penjualan extends CI_Controller
         $detail = $this->db->get('detail_pnj_susu')->result();
         $total = $this->Penjualan_model->total_detail_pnj($kode)->row()->total;
         // print_r($prod_susu);exit;
-        $anggota = $this->db->get('pegawai')->result();
+        $this->db->where('is_deactive', 0);
+        $anggota = $this->db->get('peternak')->result();
         $data = [
             'produk' => $prod_susu, 
             'kode' => $kode, 

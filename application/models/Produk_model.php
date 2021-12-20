@@ -34,7 +34,7 @@
 
     public function detail_pos($inv)
     {
-        $q = "SELECT b.kode, b.barcode_id, b.nama_produk, a.invoice, sum(a.jml) AS jml, a.harga, a.status
+        $q = "SELECT a.id, b.kode, b.barcode_id, b.nama_produk, a.invoice, sum(a.jml) AS jml, a.harga, a.status
         FROM pos_detail_penjualan a 
         JOIN waserda_produk b ON a.id_produk = b.kode
         WHERE invoice = '$inv' AND a.status = 'dalam proses' 

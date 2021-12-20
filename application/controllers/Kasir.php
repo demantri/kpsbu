@@ -348,5 +348,15 @@
         ];
         $this->template->load('template', 'waserda/penjualan/index', $data);
     }
+
+    public function hapus_detail($id)
+    {
+        $this->db->where('id', $id);
+        $data = $this->db->delete('pos_detail_penjualan');
+
+        if ($data) {
+            echo json_encode($data);
+        }
+    }
 }
 ?>

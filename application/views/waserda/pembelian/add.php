@@ -139,7 +139,7 @@
                     <?php if (count($detail) > 0) { ?>
                         <button type="submit" class="btn btn-sm btn-primary">Simpan</button>
                     <?php } ?>
-                    <a href="" class="btn btn-sm btn-default">Kembali</a>
+                    <a href="<?= base_url('Pembelian')?>" class="btn btn-sm btn-default">Kembali</a>
                     </form>
             </div>
         </div>

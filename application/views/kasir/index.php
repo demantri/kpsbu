@@ -84,7 +84,7 @@
                                     </td>
                                     <td class="text-center" style="width: 15%;">
                                         <button class="btn btn-xs btn-warning btn-update" data-kode = "<?= $value->kode?>" data-invoice = "<?= $value->invoice?>">Update</button>
-                                        <button class="btn btn-xs btn-danger">Hapus</button>
+                                        <button class="btn btn-xs btn-danger" onclick="hapus(<?= $value->id?>)">Hapus</button>
                                     </td>
                                 </tr>
                         <?php } ?>
@@ -121,6 +121,19 @@
 <?php $this->load->view('script');?>
 <?php $this->load->view('Kasir/show');?>
 <?php $this->load->view('Kasir/bayar');?>
+<script>
+    function hapus(id) {
+        // alert(id)
+        $.ajax({
+            url : "<?= base_url('Kasir/hapus_detail/')?>"+id, 
+            method : "POST", 
+            success:function(e){
+                var obj = JSON.parse(e)
+                location.reload()
+            }
+        })
+    }
+</script>
 <script type="text/javascript">
 	$(document).ready(function(){
         time()
@@ -215,45 +228,94 @@
 
         $("#tipe").on('change', function() {
             var tipe = $('#tipe').val()
+            console.log(tipe)
             $('#umum').show()
             if (tipe === 'kredit') {
                 $(".form-kembalian").hide()
+
+                $("input[name='pembayaran']").keyup(function() {
+                    var typing = $(this).val()
+                    console.log(typing)
+                })
+
+                var total = $("#total").data('total')
+
+                $("input[name='pembayaran']").focusout(function() {
+                    var typing = $(this).val()
+                    var total = $("#total").val()
+                    if (total !== typing) {
+                        alert('Input pembayaran harus sama dengan total')
+                        $('.btn-checkout').prop('disabled', true)
+                    } else {
+                        $('.btn-checkout').prop('disabled', false)
+                    }
+                })
             } else {
                 $(".form-kembalian").show()
+                $("input[name='pembayaran']").keyup(function() {
+                    var typing = $(this).val()
+                    console.log(typing)
+                })
+
+                var total = $("#total").data('total')
+                $('.btn-checkout').prop('disabled', true)
+
+                $("input[name='pembayaran']").focusout(function() {
+                    var typing = $(this).val()
+                    var total = $("#total").val()
+                    var kembalian = typing - total
+                    console.log(typing)
+
+                    if (typing) {
+                        if (kembalian >= 0) {
+                            // console.log("lunas atau ada kembalian")
+                            $("#kembalian").val(kembalian)
+                            $(".info").hide()
+                            $('.btn-checkout').prop('disabled', false)
+
+                        } else {
+                            // console.log("minus")
+                            $("#kembalian").val(kembalian)
+                            $(".info").show()
+                            $('.btn-checkout').prop('disabled', true)
+
+                        }
+                    }
+                })
             }
             
         })
 
-        $("input[name='pembayaran']").keyup(function() {
-            var typing = $(this).val()
-            console.log(typing)
-        })
+        // $("input[name='pembayaran']").keyup(function() {
+        //     var typing = $(this).val()
+        //     console.log(typing)
+        // })
 
-        var total = $("#total").data('total')
-        $('.btn-checkout').prop('disabled', true)
+        // var total = $("#total").data('total')
+        // $('.btn-checkout').prop('disabled', true)
 
-        $("input[name='pembayaran']").focusout(function() {
-            var typing = $(this).val()
-            var total = $("#total").val()
-            var kembalian = typing - total
-            console.log(typing)
+        // $("input[name='pembayaran']").focusout(function() {
+        //     var typing = $(this).val()
+        //     var total = $("#total").val()
+        //     var kembalian = typing - total
+        //     console.log(typing)
 
-            if (typing) {
-                if (kembalian >= 0) {
-                    // console.log("lunas atau ada kembalian")
-                    $("#kembalian").val(kembalian)
-                    $(".info").hide()
-                    $('.btn-checkout').prop('disabled', false)
+        //     if (typing) {
+        //         if (kembalian >= 0) {
+        //             // console.log("lunas atau ada kembalian")
+        //             $("#kembalian").val(kembalian)
+        //             $(".info").hide()
+        //             $('.btn-checkout').prop('disabled', false)
 
-                } else {
-                    // console.log("minus")
-                    $("#kembalian").val(kembalian)
-                    $(".info").show()
-                    $('.btn-checkout').prop('disabled', true)
+        //         } else {
+        //             // console.log("minus")
+        //             $("#kembalian").val(kembalian)
+        //             $(".info").show()
+        //             $('.btn-checkout').prop('disabled', true)
 
-                }
-            }
-        })
+        //         }
+        //     }
+        // })
 	})
 </script>
 <script>

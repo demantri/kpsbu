@@ -40,23 +40,33 @@ class Penerimaan_kas extends CI_Controller
         // print_r($data);exit;
         $this->db->insert('penerimaan_kas', $data);
 
-        // $j_d = [
-        //     'id_jurnal' => $id_pengeluaran,
-        //     'tgl_jurnal' => date('Y-m-d'),
-        //     'no_coa' => $get_no_coa,
-        //     'posisi_dr_cr' => 'd',
-        //     'nominal' => $nominal,
-        // ];
-        // $this->db->insert('jurnal', $j_d);
+        $j_d = [
+            'id_jurnal' => $id_penerimaan,
+            'tgl_jurnal' => date('Y-m-d'),
+            'no_coa' => 1111,
+            'posisi_dr_cr' => 'd',
+            'nominal' => $nominal,
+        ];
+        $this->db->insert('jurnal', $j_d);
 
-        // $j_k = [
-        //     'id_jurnal' => $id_pengeluaran,
-        //     'tgl_jurnal' => date('Y-m-d'),
-        //     'no_coa' => 1111,
-        //     'posisi_dr_cr' => 'k',
-        //     'nominal' => $nominal,
-        // ];
-        // $this->db->insert('jurnal', $j_k);
+        $j_k = [
+            'id_jurnal' => $id_penerimaan,
+            'tgl_jurnal' => date('Y-m-d'),
+            'no_coa' => $get_no_coa,
+            'posisi_dr_cr' => 'k',
+            'nominal' => $nominal,
+        ];
+        $this->db->insert('jurnal', $j_k);
+
+        // insert ke buku pembantu kas
+        $bpk = [
+            'id_ref' => $id_penerimaan,
+            'tanggal' => date('Y-m-d'),
+            'nominal' => $nominal,
+            'kd_coa' => 1111,
+            'posisi_dr_cr' => 'd'
+        ];
+        $this->db->insert('buku_pembantu_kas', $bpk);
 
         redirect('Penerimaan_kas');
     }

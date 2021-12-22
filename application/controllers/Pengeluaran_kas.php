@@ -57,6 +57,16 @@ class Pengeluaran_kas extends CI_Controller
         ];
         $this->db->insert('jurnal', $j_k);
 
+        // insert ke buku pembantu kas
+        $bpk = [
+            'id_ref' => $id_pengeluaran,
+            'tanggal' => date('Y-m-d'),
+            'nominal' => $nominal,
+            'kd_coa' => 1111,
+            'posisi_dr_cr' => 'k'
+        ];
+        $this->db->insert('buku_pembantu_kas', $bpk);
+
         redirect('Pengeluaran_kas');
     }
 

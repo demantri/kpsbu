@@ -16,8 +16,7 @@ class Laporan extends CI_Controller
         $total_k = $this->db->query("select sum(nominal) as total from buku_pembantu_kas where posisi_dr_cr = 'k' ")->row()->total;
         $kas_diterima = $total_d - $total_k;
 
-        $pmb = $this->db->query("SELECT 
-        -- a.*, b.nama_coa, b.header
+        $pmb = $this->db->query("SELECT
         SUM(nominal) as total
         FROM jurnal a
         JOIN coa b ON a.no_coa = b.no_coa

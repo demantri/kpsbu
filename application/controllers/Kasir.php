@@ -349,6 +349,7 @@
         $this->template->load('template', 'waserda/penjualan/index', $data);
     }
 
+    // test
     public function hapus_detail($id)
     {
         $this->db->where('id', $id);

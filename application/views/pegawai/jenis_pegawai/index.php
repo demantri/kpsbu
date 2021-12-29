@@ -8,7 +8,6 @@
                     </div>
                     <div class="col-sm-2 col-12">
                         <h3 id="quote">
-                            <!-- <button class="btn pull-right btn-primary" data-target="#add" data-toggle="modal">Tambah data</button> -->
                             <a href="#add" data-toggle="modal" class="btn pull-right btn-primary">Tambah data</a>
                         </h3>
                     </div>
@@ -26,7 +25,7 @@
                                 <th>Deskripsi</th>
                                 <th>Pendidikan Terakhir</th>
                                 <th>Gaji Pokok</th>
-                                <th style="width: 7%;" class="text-center">Aksi</th>
+                                <th class="text-center">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -38,8 +37,8 @@
                                 <td><?= $value->desc?></td>
                                 <td><?= $value->pendidikan?></td>
                                 <td><?= format_rp($value->gaji_pokok)?></td>
-                                <td>
-                                    <a href="" class="btn btn-default btn-md">Detail</a>
+                                <td class="text-center">
+                                    <a href="#edit_<?= $value->id ?>" data-toggle="modal" class="btn btn-default btn-sm">Edit</a>
                                 </td>
                             </tr>
                             <?php } ?>
@@ -51,3 +50,4 @@
     </div>
 </div>
 <?php $this->load->view('pegawai/jenis_pegawai/add');?>
+<?php $this->load->view('pegawai/jenis_pegawai/edit');?>

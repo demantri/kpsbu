@@ -2674,6 +2674,19 @@ class c_masterdata extends CI_controller
       $this->template->load('template', 'pegawai/jenis_pegawai/index', $data);
    }
 
+   public function edit_jp()
+   {
+      $id = $this->input->post('id');
+      $data = [
+         'desc' => $this->input->post('desc'),
+         'pendidikan' => $this->input->post('pendidikan'),
+         'gaji_pokok' => $this->input->post('gaji_pokok'),
+      ];
+      $this->db->where('id', $id);
+      $this->db->update('tb_jenis_pegawai', $data);
+      redirect('c_masterdata/jenis_pegawai');
+   }
+
    public function save_jenis_pegawai()
    {
       $desc = $this->input->post('desc');

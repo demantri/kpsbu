@@ -21,7 +21,7 @@
                                 <th>Nama</th>
                                 <th>Alamat</th>
                                 <th>No Telp</th>
-                                <th>Status</th>
+                                <!-- <th>Status</th> -->
                                 <th class="text-center">Aksi</th>
                             </tr>
                         </thead>
@@ -35,16 +35,16 @@
                                 <td><?= $value->nama?></td>
                                 <td><?= $value->alamat?></td>
                                 <td><?= $value->no_telp?></td>
-                                <td class="text-center">
+                                <!-- <td class="text-center">
                                     <?php if ($value->status == 1) { ?>
                                         <button style="width: 80%;" class="btn btn-round btn-sm btn-success">Aktif</button>
                                     <?php } else { ?>
                                         '<button style="width: 80%;" class="btn btn-round btn-sm btn-warning">Tidak Aktif</button>
                                     <?php } ?>
-                                </td>
-                                <td style="width: 13%;">
+                                </td> -->
+                                <td style="width: 13%;" class="text-center">
                                    <div class="btn-group">
-                                    <button class="btn btn-sm btn-default" onclick="alert('Under Maintenance')">Detail</button>
+                                    <!-- <button class="btn btn-sm btn-default" onclick="alert('Under Maintenance')">Detail</button> -->
                                     <button class="btn btn-sm btn-warning btn-edit" 
                                     data-toggle="modal" 
                                     data-target="#edit"

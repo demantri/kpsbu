@@ -35,5 +35,37 @@
         $this->session->set_flashdata('notif', '<div class="alert alert-success">Data berhasil disimpan.</div>');
         redirect('Produk');
     }
+
+    public function edit_produk()
+    {
+        $id = $this->input->post('id');
+        $kode = $this->input->post('kode');
+        $barcode = $this->input->post('barcode');
+        $produk = $this->input->post('produk');
+        $harga = $this->input->post('harga');
+        $harga_jual = $this->input->post('harga_jual');
+
+        $data = [
+            'barcode_id' => $barcode, 
+            'nama_produk' => $produk, 
+            'harga_satuan' => $harga, 
+            'harga_jual' => $harga_jual, 
+        ];
+        $this->db->where('id', $id);
+        $this->db->update('waserda_produk', $data);
+        redirect('Produk');
+    }
+
+    public function ubah_status()
+    {
+        $id = $this->input->post('id');
+        $data = [
+            'status' => 0
+        ];
+        $this->db->where('id', $id);
+        $data = $this->db->update('waserda_produk', $data);
+
+        echo json_encode($data);
+    }
 }
 ?>

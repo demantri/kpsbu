@@ -16,7 +16,7 @@
 
 				<div class="form-group">
 					<label>No COA</label>
-					<input type="text" name="no_coa" class="form-control" length="11">
+					<input type="text" name="no_coa" class="form-control" length="11" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');">
 					<?php echo form_error('no_coa'); ?>
 				</div>
 				<div class="form-group">
@@ -28,12 +28,17 @@
 				</div>
 				<div class="form-group">
 					<label>Saldo Awal</label>
-					<input type="text" name="saldo_awal" class="form-control">
-
+						<input type="text" name="saldo_awal" class="form-control" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');">
 					<?php echo form_error('saldo_awal'); ?>
-
 				</div>
-
+				<div class="form-group">
+					<label>Posisi debit/kredit</label>
+						<select name="posisi_dr_cr" id="posisi_dr_cr" class="form-control">
+							<option value="d">Debit</option>
+							<option value="k">Kredit</option>
+						</select>
+					<?php echo form_error('saldo_awal'); ?>
+				</div>
 				<hr>
 				<button type="submit" class="btn btn-default btn-primary">Simpan</button>
 				<a href="<?php echo site_url() . "/c_masterdata/lihat_coa" ?>" type="button" class="btn btn-default">Kembali</a>

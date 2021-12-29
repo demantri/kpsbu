@@ -32,7 +32,7 @@
                                 <td><?= $value->deskripsi?></td>
                                 <td class="text-center" style="width: 15%;">
                                     <div class="btn-group">
-                                        <button class="btn btn-sm btn-default">Detail</button>
+                                        <!-- <button class="btn btn-sm btn-default">Detail</button> -->
                                         <button class="btn btn-sm btn-warning btn-edit" data-target="#edit" data-toggle="modal" data-id="<?= $value->kode?>" data-desc="<?= $value->deskripsi?>">Edit</button>
                                     </div>
                                 </td>

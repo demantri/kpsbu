@@ -30,10 +30,17 @@
 
 				<div class="form-group">
 					<label>Saldo Awal</label>
-					<input type="text" name="saldo_awal" id="rupiah" class="form-control" value="<?= $coa->saldo_awal ?>">
-
+					<input type="text" name="saldo_awal" class="form-control" value="<?= $coa->saldo_awal ?>" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');">
 					<?php echo form_error('saldo_awal'); ?>
 
+				</div>
+				<div class="form-group">
+					<label>Posisi debit/kredit</label>
+						<select name="posisi_dr_cr" id="posisi_dr_cr" class="form-control">
+							<option value="d"<?= $coa->saldo_normal == 'd' ? 'selected' : '' ?>>Debit</option>
+							<option value="k"<?= $coa->saldo_normal == 'k' ? 'selected' : '' ?>>Kredit</option>
+						</select>
+					<?php echo form_error('saldo_awal'); ?>
 				</div>
 				<hr>
 				<a href="<?php echo site_url() . "/c_masterdata/lihat_coa" ?>" type="button" class="btn btn-default">Kembali</a>

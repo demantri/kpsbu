@@ -48,11 +48,14 @@ class c_masterdata extends CI_controller
 
       $no_coa = $this->input->post('no_coa');
       $nama_coa = $this->input->post('nama_coa');
-      $saldo_awal = str_replace('.', '', $this->input->post('saldo_awal'));;
+      $posisi_dr_cr = $this->input->post('posisi_dr_cr');
+      // $saldo_awal = str_replace('.', '', $this->input->post('saldo_awal'));
+      $saldo_awal = $this->input->post('saldo_awal');
       $data = [
          'no_coa' => $no_coa,
          'nama_coa' => $nama_coa,
-         'saldo_awal' => $saldo_awal
+         'saldo_awal' => $saldo_awal,
+         'saldo_normal' => $posisi_dr_cr,
       ];
       // print_r($data);exit;
       $this->db->where('no_coa', $no_coa);
@@ -99,7 +102,9 @@ class c_masterdata extends CI_controller
          $data = array(
             'no_coa' => $_POST['no_coa'],
             'nama_coa' => $_POST['nama_coa'],
-            'saldo_awal' => ''
+            'saldo_awal' => $_POST['saldo_awal'],
+            'header' => substr($_POST['no_coa'], 0, 1),
+            'saldo_normal' => $_POST['posisi_dr_cr'],
          );
 
          $this->M_masterdata->tambah_data('coa', $data);

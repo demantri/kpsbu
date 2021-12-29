@@ -93,6 +93,7 @@
             AND MONTH(s.tanggal) = '$month'
             GROUP BY z.rfid
         ) as b ON b.rfid = a.rfid
+        where status = 1
         ORDER BY nama ASC";
         return $this->db->query($q);
     }

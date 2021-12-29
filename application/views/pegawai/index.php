@@ -8,8 +8,7 @@
                     </div>
                     <div class="col-sm-2 col-12">
                         <h3 id="quote">
-                            <!-- <button class="btn pull-right btn-primary" data-target="#add" data-toggle="modal">Tambah data</button> -->
-                            <a href="#add" data-toggle="modal" data-target=".bd-example-modal-lg" class="btn pull-right btn-primary">Tambah Data</a>
+                            <a href="#add" data-toggle="modal" class="btn pull-right btn-primary">Tambah Data</a>
                         </h3>
                     </div>
                 </div>
@@ -30,7 +29,7 @@
                                 <th>Alamat</th>
                                 <th>TTL</th>
                                 <th>Status</th>
-                                <th style="width: 7%;" class="text-center">Aksi</th>
+                                <th class="text-center">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -45,9 +44,18 @@
                                 <td><?= $value->no_telp ?></td>
                                 <td><?= $value->alamat ?></td>
                                 <td><?= $value->tgl_lahir ?></td>
-                                <td><?= $value->status ? 'aktif' : 'tidak aktif'; ?></td>
                                 <td>
-                                    <a href="" class="btn btn-md btn-default">Detail</a>
+                                    <?php if ($value->status==1) { ?>
+                                        <button class="btn btn-xs btn-success status" data-id="<?= $value->id?>">Aktif</button>
+                                    <?php } else { ?>
+                                        <button class="btn btn-xs btn-danger">Tidak aktif</button>
+                                    <?php } ?>
+                                </td>
+                                <td class="text-center">
+                                    <?php if ($value->status==1) { ?>
+                                        <a href="#edit_<?= $value->id?>" data-target="#edit_<?= $value->id?>" data-toggle="modal" class="btn btn-sm btn-default">Edit</a>
+                                        <a href="#detail_<?= $value->id?>" data-toggle="modal" class="btn btn-sm btn-default">Detail</a>
+                                    <?php } ?>
                                 </td>
                             </tr>
                         <?php } ?>
@@ -59,6 +67,8 @@
     </div>
 </div>
 <?php $this->load->view('pegawai/add');?>
+<?php $this->load->view('pegawai/edit');?>
+<?php $this->load->view('pegawai/detail');?>
 <script>
     $(document).ready(function() {
         $("#hide_ptkp").hide()
@@ -69,6 +79,24 @@
                 $("#hide_ptkp").show() 
             }
             console.log(val)
+        })
+
+        $(".status").click(function (e) {
+            var id = $(this).data("id")
+            // console.log(id)
+            if (confirm('Status yang dirubah tidak dapat dikembalikan, anda yakin?')) {
+                $.ajax({
+                url: "<?= base_url('c_masterdata/ubah_status_peg')?>",
+                type: "POST",
+                data: {
+                    id : id
+                },
+                success: function () {
+                    alert('Status berhasil diubah')
+                    location.reload()
+                }
+            });
+            }
         })
     })
 </script>

@@ -523,8 +523,6 @@ class c_masterdata extends CI_controller
 
    public function tambah_produk()
    {
-
-
       $config = array(
 
          array(
@@ -2579,6 +2577,48 @@ class c_masterdata extends CI_controller
       redirect('c_masterdata/pegawai');
    }
 
+   public function edit_peg()
+   {
+      $id = $this->input->post('id');
+      $nama = $this->input->post('nama');
+      $alamat = $this->input->post('alamat');
+      $no_telp = $this->input->post('no_telp');
+      $tempat_lahir = $this->input->post('tempat_lahir');
+      $ttl = $this->input->post('ttl');
+      $jabatan = $this->input->post('jabatan');
+      $jp = $this->input->post('jp');
+      $ptkp = $this->input->post('ptkp');
+      $no_rek = $this->input->post('no_rek');
+
+      $data = [
+         'id_jabatan' => $jabatan, 
+         'id_ptkp' => $ptkp, 
+         'id_jenis_pegawai' => $jp, 
+         'nama' => $nama, 
+         'alamat' => $alamat, 
+         'no_telp' => $no_telp, 
+         'tempat_lahir' => $tempat_lahir, 
+         'tgl_lahir' => $ttl, 
+         'no_rek' => $no_rek, 
+      ];
+
+      $this->db->where('id', $id);
+      $this->db->update('pegawai', $data);
+      redirect('c_masterdata/pegawai');
+   }
+
+   public function ubah_status_peg()
+   {
+      $id = $this->input->post("id");
+      $data = [
+         'status' => 0
+      ];
+      $this->db->where('id', $id);
+      $data = $this->db->update('pegawai', $data);
+
+      echo json_encode($data);
+   }
+
    public function ptkp()
    {
       $ptkp = $this->db->get('tb_ptkp')->result();
@@ -2588,17 +2628,41 @@ class c_masterdata extends CI_controller
       $this->template->load('template', 'pegawai/ptkp/index', $data);
    }
 
+   
    public function save_ptkp()
    {
       $desc = $this->input->post('desc');
       $nominal = $this->input->post('nominal');
-
+      
       $data = [
          'desc' => $desc,
          'nominal' => $nominal,
       ];
       $this->db->insert('tb_ptkp', $data);
       redirect('c_masterdata/ptkp');
+   }
+
+   public function shift()
+   {
+      $shift = $this->db->get('shift')->result();
+      $data = [
+         'list' => $shift
+      ];
+      $this->template->load('template', 'shift/master_shift/index', $data);
+   }
+
+   public function save_shift()
+   {
+      $desc = $this->input->post('desc');
+      $jam_masuk = $this->input->post('jam_masuk');
+      $jam_keluar = $this->input->post('jam_keluar');
+      $data = [
+         'desc'=> $desc,
+         'time_in'=> $jam_masuk,
+         'time_out'=> $jam_keluar,
+      ];
+      $this->db->insert('shift', $data);
+      redirect('c_masterdata/shift');
    }
 
    public function jenis_pegawai()

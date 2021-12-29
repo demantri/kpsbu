@@ -29,6 +29,7 @@ class m_masterdata extends CI_Model {
         $q = "SELECT a.*
         -- , is_complete
         FROM pegawai a
+        WHERE status = 1
         -- left JOIN jadwal_shift b ON a.nip = b.id_pegawai
         -- WHERE is_complete = 1
         -- GROUP BY rfid

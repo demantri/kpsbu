@@ -12,6 +12,7 @@
                 <div class="modal-body">
                     <div class="row">
                         <input type="hidden" value="<?= $item->id?>" name="id">
+                        <!-- <input type="text" value="<?= $item->username?>" name="username"> -->
                         <div class="col-sm-6">
                             <div class="form-group row">
                                 <label for="nama" class="col-sm-4 col-form-label">Nama Pegawai</label>

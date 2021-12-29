@@ -93,10 +93,10 @@
                         <li><a href="<?php echo site_url(); ?>c_masterdata/beranda"><i class="fa fa-home"></i> Home </a>
                         </li>
                      </ul>
-                     <ul class="nav side-menu">
+                     <!-- <ul class="nav side-menu">
                         <li><a href="<?= base_url('Absensi')?>"><i class="fa fa-home"></i> Absensi </a>
                         </li>
-                     </ul>
+                     </ul> -->
                      <ul class="nav side-menu">
                         <li><a href="<?= base_url('Penggajian')?>"><i class="fa fa-home"></i> Penggajian </a>
                         </li>

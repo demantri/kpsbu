@@ -8,7 +8,6 @@
     </div>
     <div class="x_content">
         <div class="col-lg-12" id="notif-row">
-               <!--<h1 class="page-header"><?php echo $this->session->flashdata('page'); ?></h1>-->
                <?php $this->form_validation->set_error_delimiters('<div class="alert alert-danger">','</div>')?>
                <?php echo validation_errors();?>
                <?php echo $this->session->flashdata('notif'); ?>

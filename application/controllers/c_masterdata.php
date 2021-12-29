@@ -2539,6 +2539,9 @@ class c_masterdata extends CI_controller
       $ptkp = $this->db->get('tb_ptkp')->result();
       $jp = $this->db->get('tb_jenis_pegawai')->result();
       $list = $this->db->get('pegawai')->result();
+
+      // $this->db->join('user as b', 'a.nama = b.nama_lengkap');
+      // $list2 = $this->db->get('pegawai as a')->result();
       $data = [
          'jabatan' => $jabatan,
          'ptkp' => $ptkp,
@@ -2604,6 +2607,13 @@ class c_masterdata extends CI_controller
 
       $this->db->where('id', $id);
       $this->db->update('pegawai', $data);
+
+      $tb_user = [
+         'nama' => $nama,
+      ];
+
+      $this->db->where('id', $id);
+      $this->db->update('pegawai', $tb_user);
       redirect('c_masterdata/pegawai');
    }
 

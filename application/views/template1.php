@@ -50,8 +50,8 @@
                 <input type="password" class="form-control" placeholder="Password" required="" name="password" autocomplete="off" />
               </div>
               <div>
+                <button class="btn btn-default" onclick="location.href='<?= base_url('Absensi') ?>'">Presensi Kehadiran</button>
                 <button type="submit" class="btn btn-default btn-primary">Log in</button>
-
               </div>
 
               <div class="clearfix"></div>

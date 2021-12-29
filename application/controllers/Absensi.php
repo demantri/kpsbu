@@ -10,7 +10,8 @@
         $jam = $this->jam_sekarang;
         // var_dump($jam);exit;
 
-        $this->template->load('template', 'absensi/index');
+        // $this->template->load('template', 'absensi/index');
+        $this->template->load('template_presensi', 'absensi/index');
     }
 
     public function save($rfid)

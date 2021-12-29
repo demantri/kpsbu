@@ -2713,7 +2713,7 @@ class c_masterdata extends CI_controller
 
    public function save_jabatan()
    {
-      $desc = $this->input->post('desc');
+      $desc = ucwords($this->input->post('desc'));
       $jabatan = $this->input->post('t_jabatan');
       $kesehatan = $this->input->post('t_kesehatan');
 
@@ -2723,6 +2723,22 @@ class c_masterdata extends CI_controller
          'tunjangan_kesehatan' => $kesehatan,
       ];
       $this->db->insert('tb_jabatan', $data);
+      redirect('c_masterdata/jabatan');
+   }
+
+   public function edit_jabatan()
+   {
+      $id = $this->input->post('id');
+      $desc = ucwords($this->input->post('desc'));
+      $jabatan = $this->input->post('t_jabatan');
+      $kesehatan = $this->input->post('t_kesehatan');
+      $data = [
+         'desc' => $desc,
+         'tunjangan_jabatan' => $jabatan,
+         'tunjangan_kesehatan' => $kesehatan,
+      ];
+      $this->db->where('id', $id);
+      $this->db->update('tb_jabatan', $data);
       redirect('c_masterdata/jabatan');
    }
 

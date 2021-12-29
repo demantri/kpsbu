@@ -26,7 +26,7 @@
                                 <th>Deskripsi</th>
                                 <th>Tunjangan Jabatan</th>
                                 <th>Tunjangan Kesehatan</th>
-                                <th style="width: 7%;" class="text-center">Aksi</th>
+                                <th class="text-center">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -38,8 +38,8 @@
                                 <td><?= $value->desc?></td>
                                 <td><?= format_rp($value->tunjangan_jabatan)?></td>
                                 <td><?= format_rp($value->tunjangan_kesehatan)?></td>
-                                <td>
-                                    <a href="" class="btn btn-default btn-md">Detail</a>
+                                <td class="text-center">
+                                    <a href="#edit_<?= $value->id ?>" data-toggle="modal" class="btn btn-default btn-sm">Edit</a>
                                 </td>
                             </tr>
                             <?php } ?>
@@ -51,3 +51,4 @@
     </div>
 </div>
 <?php $this->load->view('pegawai/jabatan/add');?>
+<?php $this->load->view('pegawai/jabatan/edit');?>

@@ -4,10 +4,10 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Tambah Jenis Pegawai</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
+                    <span aria-hidden="true">&times;</span>
                 </button>
+                <h5 class="modal-title" id="exampleModalLabel">Tambah Jabatan</h5>
             </div>
             <form action="<?= base_url('c_masterdata/save_jabatan')?>" method="post">
             <div class="modal-body">

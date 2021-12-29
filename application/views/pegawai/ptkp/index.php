@@ -25,7 +25,7 @@
                                 <th style="width: 5%;">#</th>
                                 <th>Deskripsi</th>
                                 <th>Nominal</th>
-                                <th style="width: 7%;" class="text-center">Aksi</th>
+                                <th class="text-center">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -36,8 +36,8 @@
                                 <td><?= $no++ ?></td>
                                 <td><?= $value->desc?></td>
                                 <td><?= format_rp($value->nominal)?></td>
-                                <td>
-                                    <a href="" class="btn btn-default btn-md">Detail</a>
+                                <td class="text-center">
+                                    <a href="#edit_<?= $value->id ?>" data-toggle="modal" class="btn btn-default btn-sm">Edit</a>
                                 </td>
                             </tr>
                             <?php } ?>
@@ -49,3 +49,4 @@
     </div>
 </div>
 <?php $this->load->view('pegawai/ptkp/add');?>
+<?php $this->load->view('pegawai/ptkp/edit');?>

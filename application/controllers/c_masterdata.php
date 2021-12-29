@@ -2627,7 +2627,6 @@ class c_masterdata extends CI_controller
       ];
       $this->template->load('template', 'pegawai/ptkp/index', $data);
    }
-
    
    public function save_ptkp()
    {
@@ -2639,6 +2638,21 @@ class c_masterdata extends CI_controller
          'nominal' => $nominal,
       ];
       $this->db->insert('tb_ptkp', $data);
+      redirect('c_masterdata/ptkp');
+   }
+
+   public function edit_ptkp()
+   {
+      $id = $this->input->post('id');
+      $desc = $this->input->post('desc');
+      $nominal = $this->input->post('nominal');
+
+      $data = [
+         'desc' => $desc,
+         'nominal' => $nominal,
+      ];
+      $this->db->where('id', $id);
+      $this->db->update('tb_ptkp', $data);
       redirect('c_masterdata/ptkp');
    }
 

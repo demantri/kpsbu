@@ -11,7 +11,7 @@
         // var_dump($jam);exit;
 
         // $this->template->load('template', 'absensi/index');
-        $this->template->load('template_presensi', 'absensi/index');
+        $this->template->load('template_presensi', 'absensi/index2');
     }
 
     public function save($rfid)
@@ -24,7 +24,9 @@
         JOIN `shift` ON `shift`.`id` = `jadwal_shift`.`id_shift` 
         JOIN `pegawai` ON `pegawai`.`nip` = `jadwal_shift`.`id_pegawai` 
         WHERE `rfid` = '$rfid' 
-        AND CURRENT_DATE BETWEEN `tgl_awal` and `tgl_akhir`";
+        AND CURRENT_DATE BETWEEN `tgl_awal` and `tgl_akhir`
+        AND pegawai.status = 1
+        ";
 
         // $peg = $this->db->query("SELECT * FROM pegawai WHERE rfid = '$rfid'")->row();
         $peg = $this->db->query($q)->row();
@@ -55,7 +57,7 @@
                         if($this->db->insert('detail_absen_rfid',$data)){
                             $absen = array(
                                 'status' => true,
-                                'info' => 'Berhasil Melakukan Presensi Shift Malam');
+                                'info' => 'Berhasil Melakukan Presensi');
                         }else{
                             $absen = array(
                                 'status' => false,
@@ -74,7 +76,8 @@
                         if($this->db->insert('detail_absen_rfid',$data)){
                             $absen = array(
                                 'status' => true,
-                                'info' => 'Berhasil Melakukan Presensi Shift Pagi');
+                                // 'info' => 'Berhasil Melakukan Presensi Shift Pagi');
+                                'info' => 'Berhasil Melakukan Presensi');
                         }else{
                             $absen = array(
                                 'status' => false,

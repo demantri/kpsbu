@@ -305,6 +305,9 @@
                                        <li><a href="<?php echo site_url(); ?>c_keuangan/lap_ks_prod1">Kartu Persediaan Produk IPS</a></li>
                                        <li><a href="<?php echo site_url(); ?>c_keuangan/lap_ks_prod">Kartu Persediaan Produk Toko</a></li>
                                        <li><a href="<?php echo site_url(); ?>c_keuangan/lr1">Laporan Laba Rugi</a></li>
+
+                                       <!-- laporan arles -->
+                                       <li><a href="<?= base_url('Absensi/laporan_kehadiran')?>">Laporan Kehadiran</a></li>
                                     <?php
                                     elseif ($this->session->userdata('level') == "produksi1") :
                                     ?>

@@ -117,5 +117,26 @@ class m_masterdata extends CI_Model {
         $kode   = "KPSBUPMB".$date.$kd;
         return $kode;
 	}
+
+    public function nip_otomatis()
+	{
+		$query1   = "SELECT MAX(RIGHT(nip,3)) as kode 
+        FROM pegawai
+        ";
+        $abc    = $this->db->query($query1);
+        $kode   = "";
+        if ($abc->num_rows() > 0) {
+            foreach ($abc->result() as $k) {
+                $tmp = ((int) $k->kode) + 1;
+                $kd  = sprintf("%03s", $tmp);
+            }
+        } else {
+            $kd = "001";
+        }
+        $random = rand(0, 10000);
+		$date = date('dmy');
+        $kode   = $random.$date.$kd;
+        return $kode;
+	}
 	
 }

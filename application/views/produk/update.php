@@ -25,6 +25,13 @@
 
 	<div class="form-group">
 	
+				<label>Jumlah Liter</label>
+				<input type="text" class="form-control" name="stok" value="<?php echo $data['stok'] ; ?>"  oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');">
+		<?php echo form_error('stok'); ?>
+	</div>
+
+	<div class="form-group">
+	
 				<label>Harga Jual</label>
 				<input readonly type="text" class="form-control" value="<?php echo format_rp($data['harga_jual']) ; ?>"  >
 				<input readonly type="hidden" class="form-control" name="harga_jual" value="<?php echo ($data['harga_jual']) ; ?>"  >

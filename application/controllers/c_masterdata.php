@@ -500,15 +500,11 @@ class c_masterdata extends CI_controller
 
    public function lihat_produk()
    {
-
-
       $data['result'] = $this->db->get('produk')->result_array();
       $this->template->load('template', 'produk/view', $data);
    }
    public function form_produk()
    {
-
-
       $query1   = "SELECT  MAX(RIGHT(no_produk,3)) as kode FROM produk";
       $abc      = $this->db->query($query1);
       $no_trans = "";
@@ -560,7 +556,8 @@ class c_masterdata extends CI_controller
          $data = array(
             'no_produk' => $_POST['no_produk'],
             'nama_produk' => $_POST['nama_produk'],
-            'stok' => 0,
+            'stok' => $_POST['stok'],
+            'harga_jual' => $_POST['harga_jual'],
             'satuan' => $_POST['satuan'],
             'id_jenis' => $_POST['jenis_penjualan'],
          );
@@ -609,6 +606,7 @@ class c_masterdata extends CI_controller
       } else {
          $no_bb   = $_POST['no_produk'];
          $nama_bb = $_POST['nama_produk'];
+         $stok = $_POST['stok'];
 
 
          $data = array(
@@ -618,7 +616,8 @@ class c_masterdata extends CI_controller
          );
 
          $this->db->where('no_produk', $no_bb);
-         $this->M_masterdata->update_data('produk', $data);
+         $this->db->update('produk', $data);
+         // $this->M_masterdata->update_data('produk', $data);
          redirect('c_masterdata/lihat_produk');
       }
    }
@@ -2544,6 +2543,8 @@ class c_masterdata extends CI_controller
       $ptkp = $this->db->get('tb_ptkp')->result();
       $jp = $this->db->get('tb_jenis_pegawai')->result();
       $list = $this->db->get('pegawai')->result();
+      $nip = $this->M_masterdata->nip_otomatis();
+      // print_r($nip);exit;
 
       // $this->db->join('user as b', 'a.nama = b.nama_lengkap');
       // $list2 = $this->db->get('pegawai as a')->result();
@@ -2552,6 +2553,7 @@ class c_masterdata extends CI_controller
          'ptkp' => $ptkp,
          'jp' => $jp,
          'list' => $list,
+         'nip' => $nip,
       ];
       $this->template->load('template', 'pegawai/index', $data);
    }
@@ -2579,6 +2581,7 @@ class c_masterdata extends CI_controller
          'username' => $this->input->post('username'),
          'password' => $this->input->post('password'),
          'level'  => 'pegawai',
+         'nip'  => $this->input->post('nip'),
       ];
       $this->db->insert('user', $user);
 
@@ -2588,6 +2591,7 @@ class c_masterdata extends CI_controller
    public function edit_peg()
    {
       $id = $this->input->post('id');
+      $nip = $this->input->post('nip');
       $nama = $this->input->post('nama');
       $alamat = $this->input->post('alamat');
       $no_telp = $this->input->post('no_telp');
@@ -2613,12 +2617,14 @@ class c_masterdata extends CI_controller
       $this->db->where('id', $id);
       $this->db->update('pegawai', $data);
 
+      // update data user
       $tb_user = [
-         'nama' => $nama,
+         'nama_lengkap' => $nama,
       ];
 
-      $this->db->where('id', $id);
-      $this->db->update('pegawai', $tb_user);
+      $this->db->where('nip', $nip);
+      $this->db->update('user', $tb_user);
+
       redirect('c_masterdata/pegawai');
    }
 

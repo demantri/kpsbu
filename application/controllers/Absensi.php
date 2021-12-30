@@ -8,7 +8,6 @@
     public function index()
     {
         $jam = $this->jam_sekarang;
-        // var_dump($jam);exit;
 
         // $this->template->load('template', 'absensi/index');
         $this->template->load('template_presensi', 'absensi/index2');
@@ -104,6 +103,20 @@
             );
         }
         echo json_encode($absen);
+    }
+
+    public function laporan_kehadiran($tgl_awal = '', $tgl_akhir = '')
+    {
+        $detail = $this->db->query("SELECT a.*, b.tanggal, c.nama
+        FROM detail_absen_rfid a 
+        JOIN absensi b ON a.id_absensi = b.id
+        JOIN pegawai c ON a.rfid = c.rfid
+        ORDER BY a.id DESC")->result();
+
+        $data = [
+            'list' => $detail, 
+        ];
+        $this->template->load('template', 'absensi/laporan_absensi', $data);
     }
 }
 ?>

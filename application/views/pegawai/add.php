@@ -25,7 +25,7 @@
                 <div class="form-group row">
                     <label for="nip" class="col-sm-2 col-form-label">NIP</label>
                     <div class="col-sm-6">
-                        <input type="text" name="nip" class="form-control" id="nip" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" placeholder="NIP" required>
+                        <input type="text" name="nip" class="form-control" value="<?= $nip ?>" id="nip" placeholder="NIP" required readonly>
                     </div>
                 </div>
                 <div class="form-group row">
@@ -58,7 +58,7 @@
                         <div class="form-group row">
                             <label for="no_telp" class="col-sm-4 col-form-label">No Telp</label>
                             <div class="col-sm-8">
-                                <input type="text" name="no_telp" class="form-control" id="no_telp" placeholder="No Telp" required>
+                                <input type="text" name="no_telp" class="form-control" id="no_telp" placeholder="No Telp" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" required>
                             </div>
                         </div>
                         <div class="form-group row">

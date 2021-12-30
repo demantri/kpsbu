@@ -3,16 +3,16 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Edit Pegawai</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
+                        <span aria-hidden="true">&times;</span>
                     </button>
+                    <h5 class="modal-title" id="exampleModalLabel">Edit Pegawai</h5>
                 </div>
                 <form action="<?= base_url('c_masterdata/edit_peg')?>" method="post">
                 <div class="modal-body">
                     <div class="row">
                         <input type="hidden" value="<?= $item->id?>" name="id">
-                        <!-- <input type="text" value="<?= $item->username?>" name="username"> -->
+                        <input type="hidden" value="<?= $item->nip?>" name="nip">
                         <div class="col-sm-6">
                             <div class="form-group row">
                                 <label for="nama" class="col-sm-4 col-form-label">Nama Pegawai</label>
@@ -29,7 +29,7 @@
                             <div class="form-group row">
                                 <label for="no_telp" class="col-sm-4 col-form-label">No Telp</label>
                                 <div class="col-sm-8">
-                                    <input type="text" name="no_telp" class="form-control" id="no_telp" placeholder="No Telp" value="<?= $item->no_telp?>" required>
+                                    <input type="text" name="no_telp" class="form-control" id="no_telp" placeholder="No Telp" value="<?= $item->no_telp?>" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" required>
                                 </div>
                             </div>
                             <div class="form-group row">

@@ -23,7 +23,7 @@
                                 <td><?= $item->tempat_lahir?></td>
                                 <td><?= $item->tgl_lahir?></td>
                                 <td><?= $item->id_jabatan?></td>
-                                <td><?= $item->id_ptkp?></td>
+                                <td><?= $item->id_ptkp ? $item->id_ptkp : '-'?></td>
                                 <td><?= $item->id_jenis_pegawai?></td>
                             </tr>
                         </table>

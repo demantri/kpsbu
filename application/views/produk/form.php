@@ -29,20 +29,33 @@
 			</div>
 
 			<div class="form-group">
-			  <label>Nama Produk</label>
-			  <input type = "text" name = "nama_produk" class = "form-control">
-			  <?php echo form_error('nama_produk'); ?>
+				<label>Nama Produk</label>
+				<input type = "text" name = "nama_produk" class = "form-control">
+				<?php echo form_error('nama_produk'); ?>
+			</div>
+
+			<div class="form-group">
+				<label>Harga jual</label>
+				<input type = "text" name = "harga_jual" class = "form-control" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" required>
+				<?php echo form_error('harga_jual'); ?>
+			</div>
+
+			<div class="form-group">
+				<label>Jumlah Liter</label>
+				<input type = "text" name = "stok" class = "form-control" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" required>
+				<?php echo form_error('stok'); ?>
 			</div>
 
 			
 			<div class="form-group">
 			  <label>Satuan</label>
-			   <input type = "text" name = "satuan" class = "form-control" value="liter" readonly="">
-			 <!--  <select name="satuan" class="form-control">
-			  	<option disabled selected>Pilih Satuan</option>
-			  	<option value="liter">liter</option>
-			  	
-			  </select> -->
+			   	<!-- <input type = "text" name = "satuan" class = "form-control" value="liter" readonly=""> -->
+				<select name="satuan" class="form-control" required>
+					<option value="">Pilih Satuan</option>
+					<option value="liter">Liter</option>
+					<option value="pcs">Pcs</option>
+					<option value="kilo">Kilo</option>
+				</select>
 			
 			  <?php echo form_error('satuan'); ?>
 			</div>

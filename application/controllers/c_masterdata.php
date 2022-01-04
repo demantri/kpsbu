@@ -2807,7 +2807,24 @@ class c_masterdata extends CI_controller
       redirect('c_masterdata/alokasi_shu');
    }
 
+   public function aktivitas()
+   {
+      $aktivitas = $this->db->get('aktivitas')->result();
+      $data = [
+         'aktivitas' => $aktivitas, 
+      ];
+      $this->template->load('template', 'aktivitas/index', $data);
+   }
 
+   public function save_aktivitas()
+   {
+      $nama_aktivitas = $this->input->post('nama_aktivitas');
+      $data = [
+         'nama_aktivitas' => ucwords($nama_aktivitas),
+      ];
+      $this->db->insert('aktivitas', $data);
+      redirect('c_masterdata/aktivitas');
+   }
 
 
    public function customAlpha($str)

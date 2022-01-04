@@ -26,7 +26,13 @@
                 <div class="form-group row">
                     <label for="sumber" class="col-sm-4 col-form-label">Sumber Penerimaan</label>
                     <div class="col-sm-8">
-                   <input type="text" class="form-control" name="sumber" id="sumber" placeholder="Sumber Penerimaan" required>
+                    <!-- <input type="text" class="form-control" name="sumber" id="sumber" placeholder="Sumber Penerimaan" required> -->
+                    <select name="sumber" id="sumber" class="form-control" required>
+                        <option value="">-</option>
+                        <?php foreach ($aktivitas as $key => $value) { ?>
+                        <option value="<?= $value->nama_aktivitas?>"><?= $value->nama_aktivitas?></option>
+                        <?php } ?>
+                    </select>
                     </div>
                 </div>
                 <div class="form-group row">

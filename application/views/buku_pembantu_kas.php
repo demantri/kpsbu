@@ -33,7 +33,9 @@
             <table class="table table-striped table-bordered table-hover jambo_table">
                 <thead>
                     <tr>
+                        <th rowspan="2" class="text-center">#</th>
                         <th rowspan="2" class="text-center">Tanggal</th>
+                        <th rowspan="2" class="text-center">ID Ref</th>
                         <th rowspan="2" class="text-center">Keterangan</th>
                         <th colspan="2" class="text-center">Mutasi</th>
                         <th rowspan="2" class="text-center">Saldo</th>
@@ -46,10 +48,13 @@
                 <tbody>
                     <?php 
                     $saldo = 0;
+                    $no = 1;
                     foreach ($list as $key => $value) { ?>
                     <tr>
+                        <td><?= $no++ ?></td>
                         <td><?= $value->tanggal ?></td>
                         <td><?= $value->id_ref ?></td>
+                        <td><?= $value->keterangan ?></td>
 
                         <?php if ($value->posisi_dr_cr == 'd') { ?>
                             <?php $saldo += $value->nominal ?>

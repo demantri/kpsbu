@@ -286,36 +286,36 @@
             
         })
 
-        // $("input[name='pembayaran']").keyup(function() {
-        //     var typing = $(this).val()
-        //     console.log(typing)
-        // })
+        $("input[name='pembayaran']").keyup(function() {
+            var typing = $(this).val()
+            console.log(typing)
+        })
 
-        // var total = $("#total").data('total')
-        // $('.btn-checkout').prop('disabled', true)
+        var total = $("#total").data('total')
+        $('.btn-checkout').prop('disabled', true)
 
-        // $("input[name='pembayaran']").focusout(function() {
-        //     var typing = $(this).val()
-        //     var total = $("#total").val()
-        //     var kembalian = typing - total
-        //     console.log(typing)
+        $("input[name='pembayaran']").focusout(function() {
+            var typing = $(this).val()
+            var total = $("#total").val()
+            var kembalian = typing - total
+            console.log(typing)
 
-        //     if (typing) {
-        //         if (kembalian >= 0) {
-        //             // console.log("lunas atau ada kembalian")
-        //             $("#kembalian").val(kembalian)
-        //             $(".info").hide()
-        //             $('.btn-checkout').prop('disabled', false)
+            if (typing) {
+                if (kembalian >= 0) {
+                    // console.log("lunas atau ada kembalian")
+                    $("#kembalian").val(kembalian)
+                    $(".info").hide()
+                    $('.btn-checkout').prop('disabled', false)
 
-        //         } else {
-        //             // console.log("minus")
-        //             $("#kembalian").val(kembalian)
-        //             $(".info").show()
-        //             $('.btn-checkout').prop('disabled', true)
+                } else {
+                    // console.log("minus")
+                    $("#kembalian").val(kembalian)
+                    $(".info").show()
+                    $('.btn-checkout').prop('disabled', true)
 
-        //         }
-        //     }
-        // })
+                }
+            }
+        })
 	})
 </script>
 <script>

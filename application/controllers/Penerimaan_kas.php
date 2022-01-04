@@ -5,6 +5,7 @@ class Penerimaan_kas extends CI_Controller
     {
         $kode = $this->kode();
         $list = $this->db->get('penerimaan_kas')->result();
+        $aktivitas = $this->db->get('aktivitas')->result();
 
         $this->db->where('header', 4);
         $coa = $this->db->get('coa')->result();
@@ -13,6 +14,7 @@ class Penerimaan_kas extends CI_Controller
             'kode' => $kode,
             'list' => $list,
             'coa' => $coa,
+            'aktivitas' => $aktivitas
         ];
         $this->template->load('template', 'penerimaan_kas/index', $data);
     }
@@ -64,7 +66,8 @@ class Penerimaan_kas extends CI_Controller
             'tanggal' => date('Y-m-d'),
             'nominal' => $nominal,
             'kd_coa' => 1111,
-            'posisi_dr_cr' => 'd'
+            'posisi_dr_cr' => 'd',
+            'keterangan' => $sumber,
         ];
         $this->db->insert('buku_pembantu_kas', $bpk);
 

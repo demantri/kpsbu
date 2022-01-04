@@ -292,6 +292,8 @@
                                        <li><a href="<?php echo site_url(); ?>simpanan/laporan_setoran_anggota">Laporan Setoran Susu Anggota</a></li>
                                        <li><a href="<?php echo site_url(); ?>c_transaksi/kartu_aset">Kartu Penyusutan Aset</a></li>
                                        <li><a href="<?php echo site_url(); ?>c_transaksi/buku_pinjaman">Buku Pembantu Pinjaman</a></li>
+                                       <li><a href="<?= base_url('laporan/buku_pembantu_kas')?>">Buku Pembantu Kas</a></li>
+                                       <li><a href="<?= base_url('laporan/laporan_arus_kas')?>">Laporan Arus Kas</a></li>
                                        <li><a href="<?php echo site_url(); ?>c_keuangan/lap_pemb">Laporan Pembelian Bahan Baku</a></li>
                                        <li><a href="<?php echo site_url(); ?>c_keuangan/lap_pembp">Laporan Pembelian Bahan Penolong</a></li>
                                        <li><a href="<?php echo site_url(); ?>c_keuangan/lap_pemby">Laporan Pembayaran Beban</a></li>

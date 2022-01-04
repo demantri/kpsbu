@@ -3,7 +3,7 @@
 <body>
     <div class="x_panel">
         <div class="x_title">
-            <h3 class="panel-title"><b>Buku Pembantu Pinjaman</b></h3>
+            <h3 class="panel-title"><b>Buku Pembantu Kas</b></h3>
         </div>
 
         <div class="x_content">

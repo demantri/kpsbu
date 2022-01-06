@@ -8,7 +8,6 @@
 				<div class="row">
 					<div class="col-sm-7">
 						<form method="post" action="<?php echo site_url().'c_transaksi/kartu_aset' ?> " class="form-inline">
-							
                             <label>Pilih Aset</label>
                             &nbsp&nbsp&nbsp&nbsp
 							<select name="aset" class="form-control" required>

@@ -42,15 +42,17 @@
                                 <td><?= $value->nama ?></td>
                                 <td><?= format_rp($value->nominal) ?></td>
                                 <td class="text-center">
-                                    <?php if (date('d') >= '28' AND is_null($value->id_pembayaran)) { ?>
-                                        <a href="#bayar" data-toggle="modal" class="btn btn-md btn-primary bayar" 
+                                    <?php if (date('d') >= '06' AND is_null($value->id_pembayaran)) { ?>
+                                        <a href="#bayar" data-toggle="modal" class="btn btn-xs btn-primary bayar" 
                                         data-invoice="<?= $value->invoice?>"
                                         data-pembeli="<?= $value->nama?>"
                                         data-anggota="<?= $value->jenis_anggota?>"
                                         data-total="<?= $value->nominal?>"
                                         >Bayar</a>
                                     <?php } ?>
-                                    <a href="" class="btn btn-md btn-default">Detail</a>
+                                    <?php if (!is_null($value->id_pembayaran)) { ?>
+                                        <a href="" class="btn btn-xs btn-success">Pembayaran selesai (<?= date('d-m-Y', strtotime($value->tanggal))?>)</a>
+                                    <?php } ?>
                                 </td>
                             </tr>
                         <?php } ?>

@@ -106,6 +106,14 @@
                         </li>
                      </ul>
                      <ul class="nav side-menu">
+                        <li><a href="<?= base_url('Cuti')?>"><i class="fa fa-home"></i> Cuti </a>
+                        </li>
+                     </ul>
+                     <ul class="nav side-menu">
+                        <li><a href="<?= base_url('Lembur')?>"><i class="fa fa-home"></i> Lembur </a>
+                        </li>
+                     </ul>
+                     <ul class="nav side-menu">
                         <li>
                            <a><i class="fa fa-table"></i> MD Arles <span class="fa fa-chevron-down"></span></a>
                            <ul class="nav child_menu">
@@ -233,6 +241,7 @@
                                        <li><a href="<?= base_url('penjualan/pengolahan_susu')?>">Penjualan Pengolahan Susu</a></li>
 
                                        <!-- trans salma -->
+                                       <li><a href="<?= base_url('c_transaksi/pengajuan_jurnal')?>">Pengajuan Jurnal</a></li>
                                        <li><a href="<?= base_url('Penerimaan_kas')?>">Penerimaan Kas</a></li>
                                        <li><a href="<?= base_url('Pengeluaran_kas')?>">Pengeluaran Kas</a></li>
 
@@ -287,7 +296,9 @@
                                        <!-- <li><a href="<?php echo site_url(); ?>c_keuangan/view_bukubesar">Kartu Simpanan Manasuka</a></li> -->
 
                                        <!-- laporan sarah -->
+                                       <li><a href="<?php echo site_url(); ?>laporan/laporan_simpanan">Laporan Simpanan</a></li>
                                        <li><a href="<?php echo site_url(); ?>shu/laporan">Laporan SHU</a></li>
+                                       <!--  -->
 
                                        <li><a href="<?php echo site_url(); ?>simpanan/laporan_setoran_anggota">Laporan Setoran Susu Anggota</a></li>
                                        <li><a href="<?php echo site_url(); ?>c_transaksi/kartu_aset">Kartu Penyusutan Aset</a></li>

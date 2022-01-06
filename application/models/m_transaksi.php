@@ -188,33 +188,19 @@ class m_transaksi extends CI_Model
 
 	function coba($id_peternak)
 	{
-		// $query = "SELECT SUM(jumlah) as total_jumlah, 
-		// SUM(subtotal) as total_trans_susu, 
-		// pinjaman, 
-		// sisa_pinjaman,
-		// tgl_trans, 
-		// tgl_trans + INTERVAL 14 DAY as nextPayment
-		// FROM detail_pembelian_bb
-		// JOIN pembelian_bb ON (pembelian_bb.no_trans = detail_pembelian_bb.no_trans)
-		// JOIN peternak ON (peternak.no_peternak = detail_pembelian_bb.no_peternak)
-		// left JOIN log_pinjaman ON log_pinjaman.id_anggota = detail_pembelian_bb.no_peternak
-		// WHERE tgl_trans BETWEEN (LEFT(SYSDATE(),10) - INTERVAL 14 DAY) AND LEFT(SYSDATE(),10) 
-		// AND detail_pembelian_bb.no_peternak = '$id_peternak'
-		// AND log_pinjaman.status = 1
-		// ";
 		$query = "SELECT 
-			SUM(jumlah) as total_jumlah, 
-			SUM(subtotal) as total_trans_susu, 
-			pinjaman, 
-			-- sisa_pinjaman,
-			(
-				SELECT sisa_pinjaman 
-				FROM log_pinjaman
-				WHERE id_anggota = '$id_peternak' 
-				AND status = 1
-			) AS sisa_pinjaman,
-			tgl_trans, 
-			tgl_trans + INTERVAL 14 DAY as nextPayment
+		SUM(jumlah) as total_jumlah, 
+		SUM(subtotal) as total_trans_susu, 
+		pinjaman, 
+		-- sisa_pinjaman,
+		(
+			SELECT sisa_pinjaman 
+			FROM log_pinjaman
+			WHERE id_anggota = '$id_peternak' 
+			AND status = 1
+		) AS sisa_pinjaman,
+		tgl_trans, 
+		tgl_trans + INTERVAL 14 DAY as nextPayment
 		FROM detail_pembelian_bb
 		JOIN pembelian_bb ON (pembelian_bb.no_trans = detail_pembelian_bb.no_trans)
 		JOIN peternak ON (peternak.no_peternak = detail_pembelian_bb.no_peternak)
@@ -326,7 +312,7 @@ class m_transaksi extends CI_Model
 	function id_otomatis($value = '')
 	{
 		# code...
-		$this->db->select('RIGHT(pembayaran_susu.kode_pembayaran,  4) as kode', FALSE);
+		$this->db->select('MAX(RIGHT(pembayaran_susu.kode_pembayaran,  4)) as kode', FALSE);
 		$this->db->order_by('kode_pembayaran', 'DESC');
 		$this->db->limit(1);
 		$query = $this->db->get('pembayaran_susu'); //cek dulu apakah ada sudah ada kode di tabel.    

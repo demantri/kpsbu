@@ -14,6 +14,7 @@
                     <label for="nama_aktivitas" class="col-sm-4 col-form-label">Nama Aktivitas</label>
                     <div class="col-sm-8">
                     <input type="text" class="form-control" id="nama_aktivitas" name="nama_aktivitas">
+                    <?php echo form_error('nama_aktivitas'); ?>
                     </div>
                 </div>
             </div>

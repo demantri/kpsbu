@@ -18,24 +18,24 @@
       //PEMBELIAN BAHAN BAKU
       public function lihat_pemb()
       {
-
          $this->db->where('tgl_trans', date('Y-m-d'));
          $cek_kualitas = $this->db->get('cek_kualitas')->result();
          $data['cek'] = $cek_kualitas;
          $data['error'] = "Pembelian hari ini sudah selesai!";
 
-         $this->db->join('truck_information', 'truck_information.id_pembelian = pembelian_bb.no_trans', 'LEFT');
+         // $this->db->join('truck_information', 'truck_information.id_pembelian = pembelian_bb.no_trans', 'LEFT');
          // $this->db->where('is_deleted =',0);
+         $this->db->order_by('id', 'desc');
          $data['result'] = $this->db->get('pembelian_bb')->result_array();
          // print_r($data['result']);exit;
 
          $data['aset'] = $this->db->get('aset')->result();
 
          $_truck = "SELECT a.id, aset, id_detail_aset, id_aset
-      FROM detail_pembelian a
-      INNER JOIN aset b ON a.id_aset = b.id
-      WHERE aset LIKE '%Truck%'
-      ";
+         FROM detail_pembelian a
+         INNER JOIN aset b ON a.id_aset = b.id
+         WHERE aset LIKE '%Truck%'
+         ";
 
          $truck = $this->db->query($_truck)->result();
          $data['truck'] = $truck;
@@ -4681,17 +4681,13 @@ group by no_bbp";
       {
          # code...
          $id_peternak = $this->input->post("id_peternak", TRUE);
-         // print_r($id);exit;
          $data = $this->model->get_jumlah($id_peternak)->result();
-         // print_r($data);exit;
          echo json_encode($data);
       }
 
       function coba()
       {
-         # code...
          $id_peternak = $this->input->post("id_peternak", TRUE);
-         // print_r($id);exit;
          $data = $this->model->coba($id_peternak)->row();
          // print_r($data);exit;
          echo json_encode($data);
@@ -5023,5 +5019,11 @@ group by no_bbp";
          $this->db->insert("jurnal", $jurnal_k);
          // berhasil direct ke index
          redirect("c_transaksi/simpanan_hr");
+      }
+
+      // pengajuan jurnal 
+      public function pengajuan_jurnal()
+      {
+         $this->template->load('template', 'laporan/pengajuan_jurnal');
       }
    }//end

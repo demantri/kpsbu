@@ -199,6 +199,21 @@
         $ppn = $this->input->post('ppn');
         $total_trans = $this->input->post('total_trans');
 
+        $data = [
+            'total' => $total,
+            'nama_pembeli' => $pembeli,
+            'jenis_pembayaran' => $tipe,
+            'kembalian' => $kembalian,
+            'pembayaran' => $pembayaran,
+            'ppn' => $ppn,
+            'total_trans' => $total_trans,
+            'id_detail_jenis_anggota' => $jenis,
+            'status' => $status
+        ];
+        // print_r($kode);exit;
+        $this->db->where('invoice', $kode);
+        $this->db->update('pos_penjualan', $data);
+
         if ($jenis == 1 && $tipe == 'kredit') {
 
             if ($anggota == 'pegawai') {
@@ -225,20 +240,20 @@
         }
 
         // masih belum bisa insert ke detail
-        $data = [
-            'total' => $total,
-            'nama_pembeli' => $pembeli,
-            'jenis_pembayaran' => $tipe,
-            'kembalian' => $kembalian,
-            'pembayaran' => $pembayaran,
-            'ppn' => $ppn,
-            'total_trans' => $total_trans,
-            'id_detail_jenis_anggota' => $jenis,
-            'status' => $status
-        ];
-        // print_r($data);exit;
-        $this->db->where('invoice', $kode);
-        $this->db->update('pos_penjualan', $data);
+        // $data = [
+        //     'total' => $total,
+        //     'nama_pembeli' => $pembeli,
+        //     'jenis_pembayaran' => $tipe,
+        //     'kembalian' => $kembalian,
+        //     'pembayaran' => $pembayaran,
+        //     'ppn' => $ppn,
+        //     'total_trans' => $total_trans,
+        //     'id_detail_jenis_anggota' => $jenis,
+        //     'status' => $status
+        // ];
+        // // print_r($data);exit;
+        // $this->db->where('invoice', $kode);
+        // $this->db->update('pos_penjualan', $data);
 
         // print_r($tipe);exit;
 

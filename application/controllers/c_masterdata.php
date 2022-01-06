@@ -2818,12 +2818,30 @@ class c_masterdata extends CI_controller
 
    public function save_aktivitas()
    {
-      $nama_aktivitas = $this->input->post('nama_aktivitas');
-      $data = [
-         'nama_aktivitas' => ucwords($nama_aktivitas),
-      ];
-      $this->db->insert('aktivitas', $data);
-      redirect('c_masterdata/aktivitas');
+      $config = array(
+         array(
+            'field'  => 'nama_aktivitas',
+            'label'  => 'Nama aktivitas',
+            'rules'  => 'alpha',
+            'errors' => array(
+               'alpha'  => '%s tidak boleh berupa angka.',
+            )
+         )
+      );
+      $this->form_validation->set_error_delimiters('<div class="error" style="font-size:12px; color:red;">', '</div>');
+      $this->form_validation->set_rules($config);
+
+      if ($this->form_validation->run() == FALSE) {
+         $this->aktivitas();
+      } else {
+         // $this->load->view('formsuccess');
+         $nama_aktivitas = $this->input->post('nama_aktivitas');
+         $data = [
+            'nama_aktivitas' => ucwords($nama_aktivitas),
+         ];
+         $this->db->insert('aktivitas', $data);
+         redirect('c_masterdata/aktivitas');
+      }
    }
 
 

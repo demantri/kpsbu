@@ -27,7 +27,8 @@
                                 <th>NPWP</th>
                                 <th>Nama Pegawai</th>
                                 <th>Jumlah Presensi</th>
-                                <th style="width: 15%;" class="text-center">Aksi</th>
+                                <th style="width: 15%;" class="text-center">Status</th>
+                                <th style="width: 15%;" class="text-center">Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -46,10 +47,23 @@
                                 <td><b><?= $value->rfid ?></b>-<?= $value->nama ?></td>
                                 <td><?= $value->total ?? '0' ?></td>
                                 <td class="text-center">
-                                    <?php if ($value->total >= 2 AND is_null($value->tgl_gaji)) { ?>
-                                        <a href="<?= base_url('Penggajian/slip_gaji/'.$value->nip)?>" class="btn btn-md btn-primary">Pembayaran Gaji</a>
+                                    <?php if (!is_null($value->tgl_gaji)) { ?>
+                                        <a href="#" class="btn btn-xs btn-success">Sudah melakukan penggajian</a>
+                                    <?php } else { ?>
+                                        <a href="#" class="btn btn-xs btn-warning">Belum melakukan penggajian</a>
                                     <?php } ?>
-                                    <a href="" class="btn btn-md btn-default">Detail</a>
+                                    <!-- <a href="" class="btn btn-md btn-default">Detail</a> -->
+                                </td>
+                                <td class="text-center">
+                                    <?php 
+                                    $today = date('d'); 
+                                    $start = 25;
+                                    $end = 28;
+                                    if (($today >= $start) && ($today <= $end)){ ?>
+                                        <?php if ($value->total >= 0 AND is_null($value->tgl_gaji)) { ?>
+                                            <a href="<?= base_url('Penggajian/slip_gaji/'.$value->nip)?>" class="btn btn-xs btn-primary">Pembayaran Gaji</a>
+                                        <?php } ?>
+                                    <?php } ?>
                                 </td>
                             </tr>
                         <?php } ?>

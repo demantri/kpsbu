@@ -119,7 +119,8 @@
                     </table>
                     <hr>
                     <div class="text-right">
-                        <a href="<?= base_url('Penggajian/bayar_gaji/'.$peg->nip.'/'.$total) ?>" class="btn btn-primary btn-md">Bayar Gaji</a>
+                        <a href="<?= base_url('Penggajian') ?>" class="btn btn-default btn-md">Kembali</a>
+                        <a href="<?= base_url('Penggajian/bayar_gaji/'.$peg->nip.'/'.$total.'/'.date('Y-m-d')) ?>" class="btn btn-primary btn-md">Bayar Gaji</a>
                     </div>
                 </div>
             </div>

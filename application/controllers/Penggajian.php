@@ -79,7 +79,7 @@ class Penggajian extends CI_Controller
         }
     }
 
-    public function bayar_gaji($nip, $total)
+    public function bayar_gaji($nip, $total, $tanggal)
     {
         $id_gaji = $this->Absensi_model->id_gaji();
         $this->db->where('nip', $nip);
@@ -94,23 +94,32 @@ class Penggajian extends CI_Controller
         // print_r($tb_penggajian);exit;
         $this->db->insert('tb_penggajian', $tb_penggajian);
 
-        $debit = [
-            'id_jurnal' => $id_gaji,
-            'tgl_jurnal' => date('Y-m-d'),
-            'no_coa' => 5311,
-            'posisi_dr_cr' => 'd',
+        // kirim ke db pengajuan jurnal 
+        $pengajuan = [
+            'kode' => $id_gaji,
+            'tanggal' => $tanggal,
             'nominal' => $total,
+            'jenis' => 'penggajian',
         ];
-        $this->db->insert('jurnal', $debit);
+        $this->db->insert("pengajuan_jurnal", $pengajuan);
 
-        $kredit = [
-            'id_jurnal' => $id_gaji,
-            'tgl_jurnal' => date('Y-m-d'),
-            'no_coa' => 1111,
-            'posisi_dr_cr' => 'k',
-            'nominal' => $total,
-        ];
-        $this->db->insert('jurnal', $kredit);
+        // $debit = [
+        //     'id_jurnal' => $id_gaji,
+        //     'tgl_jurnal' => date('Y-m-d'),
+        //     'no_coa' => 5311,
+        //     'posisi_dr_cr' => 'd',
+        //     'nominal' => $total,
+        // ];
+        // $this->db->insert('jurnal', $debit);
+
+        // $kredit = [
+        //     'id_jurnal' => $id_gaji,
+        //     'tgl_jurnal' => date('Y-m-d'),
+        //     'no_coa' => 1111,
+        //     'posisi_dr_cr' => 'k',
+        //     'nominal' => $total,
+        // ];
+        // $this->db->insert('jurnal', $kredit);
 
         redirect('Penggajian');
     }

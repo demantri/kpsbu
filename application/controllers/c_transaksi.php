@@ -5033,48 +5033,84 @@ group by no_bbp";
 
       public function status_pengajuan($kode, $tanggal, $nominal)
       {
-         $data = [
-            'status' => 1
-         ];
-         $this->db->where('id_pembayaran', $kode);
-         $this->db->update('waserda_pembayaran_kredit', $data);
+         if (strpos($kode, 'GAJI') !== false) {
+            $pengajuan_jurnal = [
+               'status' => 'selesai'
+            ];
+            $this->db->where('kode', $kode);
+            $this->db->update('pengajuan_jurnal', $pengajuan_jurnal);
 
-         $pengajuan_jurnal = [
-            'status' => 'selesai'
-         ];
-         $this->db->where('kode', $kode);
-         $this->db->update('pengajuan_jurnal', $pengajuan_jurnal);
+            $debit = [
+               'id_jurnal' => $kode,
+               'tgl_jurnal' => $tanggal,
+               'no_coa' => 5311,
+               'posisi_dr_cr' => 'd',
+               'nominal' => $nominal,
+            ];
+            $this->db->insert('jurnal', $debit);
 
-         // jurnal
-         $kas = [
-            'id_jurnal' => $kode, 
-            'tgl_jurnal' => $tanggal, 
-            'no_coa' => 1111, 
-            'posisi_dr_cr' => 'd', 
-            'nominal' => $nominal, 
-         ];
-         $this->db->insert('jurnal', $kas);
+            $kredit = [
+               'id_jurnal' => $kode,
+               'tgl_jurnal' => $tanggal,
+               'no_coa' => 1111,
+               'posisi_dr_cr' => 'k',
+               'nominal' => $nominal,
+            ];
+            $this->db->insert('jurnal', $kredit);
 
-         $piutang = [
-            'id_jurnal' => $kode, 
-            'tgl_jurnal' => $tanggal, 
-            'no_coa' => 1998, 
-            'posisi_dr_cr' => 'k', 
-            'nominal' => $nominal, 
-         ];
-         $this->db->insert('jurnal', $piutang);
-
-         // buku pembantu kas
-         $bpk = [
-            'id_ref' => $kode, 
-            'tanggal' => $tanggal, 
-            'nominal' => $nominal, 
-            'kd_coa' => 1111, 
-            'posisi_dr_cr' => 'd', 
-            'keterangan' => 'Pembayaran Waserda Kredit', 
-         ];
-         $this->db->insert('buku_pembantu_kas', $bpk);
-
-         redirect('Kasir/pmb_kredit');
+            // buku pembantu kas
+            $bpk = [
+               'id_ref' => $kode, 
+               'tanggal' => $tanggal, 
+               'nominal' => $nominal, 
+               'kd_coa' => 1111, 
+               'posisi_dr_cr' => 'k', 
+               'keterangan' => 'Pembayaran Gaji', 
+            ];
+            $this->db->insert('buku_pembantu_kas', $bpk);
+         } else if (strpos($kode, 'PMB-KR') !== false ) {
+            $data = [
+               'status' => 1
+            ];
+            $this->db->where('id_pembayaran', $kode);
+            $this->db->update('waserda_pembayaran_kredit', $data);
+   
+            $pengajuan_jurnal = [
+               'status' => 'selesai'
+            ];
+            $this->db->where('kode', $kode);
+            $this->db->update('pengajuan_jurnal', $pengajuan_jurnal);
+   
+            // jurnal
+            $kas = [
+               'id_jurnal' => $kode, 
+               'tgl_jurnal' => $tanggal, 
+               'no_coa' => 1111, 
+               'posisi_dr_cr' => 'd', 
+               'nominal' => $nominal, 
+            ];
+            $this->db->insert('jurnal', $kas);
+   
+            $piutang = [
+               'id_jurnal' => $kode, 
+               'tgl_jurnal' => $tanggal, 
+               'no_coa' => 1998, 
+               'posisi_dr_cr' => 'k', 
+               'nominal' => $nominal, 
+            ];
+            $this->db->insert('jurnal', $piutang);
+   
+            // buku pembantu kas
+            $bpk = [
+               'id_ref' => $kode, 
+               'tanggal' => $tanggal, 
+               'nominal' => $nominal, 
+               'kd_coa' => 1111, 
+               'posisi_dr_cr' => 'd', 
+               'keterangan' => 'Pembayaran Waserda Kredit', 
+            ];
+            $this->db->insert('buku_pembantu_kas', $bpk);
+         }
+         redirect('c_transaksi/pengajuan_jurnal');
       }
    }//end

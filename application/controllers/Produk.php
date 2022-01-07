@@ -25,10 +25,12 @@
     {
         $data = [
             'kode' => $this->input->post('kode'),
+            'barcode_id' => $this->input->post('barcode'),
             'id_supplier_produk' => $this->input->post('supplier'),
             'id_kategori' => $this->input->post('kategori'),
             'nama_produk' => $this->input->post('produk'),
             'harga_satuan' => $this->input->post('harga'),
+            'harga_jual' => $this->input->post('harga_jual'),
             'satuan_produk' => $this->input->post('satuan'),
         ];
         $this->crud->input_data($data, 'waserda_produk');

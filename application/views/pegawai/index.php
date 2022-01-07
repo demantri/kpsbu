@@ -24,6 +24,7 @@
                                 <th style="width: 5%;">No</th>
                                 <th>NIP</th>
                                 <th>NPWP</th>
+                                <th>No. RFID</th>
                                 <th>Pegawai</th>
                                 <th>No Telp</th>
                                 <th>Alamat</th>
@@ -40,6 +41,7 @@
                                 <td><?= $no++ ?></td>
                                 <td><?= $value->nip ?></td>
                                 <td><?= $value->npwp ?></td>
+                                <td><?= $value->rfid ?></td>
                                 <td><?= $value->nama ?></td>
                                 <td><?= $value->no_telp ?></td>
                                 <td><?= $value->alamat ?></td>

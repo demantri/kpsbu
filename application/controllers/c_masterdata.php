@@ -2844,6 +2844,20 @@ class c_masterdata extends CI_controller
       }
    }
 
+   public function edit_aktivitas()
+   {
+      $id = $this->input->post('id');
+      $aktivitas = $this->input->post('nama_aktivitas');
+      // data ini data yang akan diubah
+      $data = [
+         'nama_aktivitas' => $aktivitas,
+      ];
+      $this->db->where('id', $id);
+      $this->db->update('aktivitas', $data);
+
+      redirect('c_masterdata/aktivitas');
+   }
+
 
    public function customAlpha($str)
    {

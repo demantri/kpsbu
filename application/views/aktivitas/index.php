@@ -23,6 +23,7 @@
                             <tr>
                                 <th style="width: 5%;">#</th>
                                 <th>Nama Aktivitas</th>
+                                <th style="width: 15%;" class="text-center">Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -32,6 +33,9 @@
                             <tr>
                                 <td><?= $no++ ?></td>
                                 <td><?= $item->nama_aktivitas ?></td>
+                                <td class="text-center">
+                                    <a href="#edit_<?= $item->id?>" data-toggle="modal" class="btn btn-sm btn-default">Edit</a>
+                                </td>
                             </tr>
                         <?php } ?>
                         </tbody>
@@ -42,3 +46,4 @@
     </div>
 </div>
 <?php $this->load->view('aktivitas/add'); ?>
+<?php $this->load->view('aktivitas/edit'); ?>

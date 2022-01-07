@@ -308,6 +308,7 @@
 
     public function pmb_kredit()
     {
+        $this->db->order_by('id', 'desc');
         $kredit = $this->db->get('waserda_pembayaran_kredit')->result();
         $kode = $this->produk->kd_pembayaran_kredit();
         // print_r($kode);exit;
@@ -327,6 +328,24 @@
         $total = $this->input->post('total');
 
         $anggota = $this->input->post('anggota');
+        
+        // kirim ke db pengajuan jurnal 
+        $pengajuan = [
+            'kode' => $kd_pembayaran,
+            'tanggal' => $tgl_pembayaran,
+            'nominal' => $total,
+            'jenis' => $anggota,
+        ];
+        $this->db->insert("pengajuan_jurnal", $pengajuan);
+
+        // ubah status pembayaran kredit 
+        $status = [
+            'status' => 2
+        ];
+        $this->db->where('invoice', $invoice);
+        $this->db->update('waserda_pembayaran_kredit', $status);
+
+        
         if ($anggota == 'pegawai') {
             $status_kredit = [
                 'status_kredit' => 0

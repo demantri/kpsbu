@@ -27,7 +27,7 @@
                                 <th>Invoice</th>
                                 <th>Nama Pembeli</th>
                                 <th>Total</th>
-                                <th style="width: 15%;" class="text-center">Action</th>
+                                <th style="width: 15%;" class="text-center">Status</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -42,7 +42,9 @@
                                 <td><?= $value->nama ?></td>
                                 <td><?= format_rp($value->nominal) ?></td>
                                 <td class="text-center">
-                                    <?php if (date('d') >= '06' AND is_null($value->id_pembayaran)) { ?>
+                                    <?php if ($value->status == 2) { ?>
+                                        <a href="" class="btn btn-xs btn-warning">Pengajuan Jurnal</a>
+                                    <?php } else if (date('d') >= '06' AND is_null($value->id_pembayaran) AND $value->status == 0) { ?>
                                         <a href="#bayar" data-toggle="modal" class="btn btn-xs btn-primary bayar" 
                                         data-invoice="<?= $value->invoice?>"
                                         data-pembeli="<?= $value->nama?>"

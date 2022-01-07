@@ -5021,9 +5021,60 @@ group by no_bbp";
          redirect("c_transaksi/simpanan_hr");
       }
 
-      // pengajuan jurnal 
+      // pengajuan jurnal
       public function pengajuan_jurnal()
       {
-         $this->template->load('template', 'laporan/pengajuan_jurnal');
+         $list = $this->db->get('pengajuan_jurnal')->result();
+         $data = [
+            'list' => $list,
+         ];
+         $this->template->load('template', 'laporan/pengajuan_jurnal', $data);
+      }
+
+      public function status_pengajuan($kode, $tanggal, $nominal)
+      {
+         $data = [
+            'status' => 1
+         ];
+         $this->db->where('id_pembayaran', $kode);
+         $this->db->update('waserda_pembayaran_kredit', $data);
+
+         $pengajuan_jurnal = [
+            'status' => 'selesai'
+         ];
+         $this->db->where('kode', $kode);
+         $this->db->update('pengajuan_jurnal', $pengajuan_jurnal);
+
+         // jurnal
+         $kas = [
+            'id_jurnal' => $kode, 
+            'tgl_jurnal' => $tanggal, 
+            'no_coa' => 1111, 
+            'posisi_dr_cr' => 'd', 
+            'nominal' => $nominal, 
+         ];
+         $this->db->insert('jurnal', $kas);
+
+         $piutang = [
+            'id_jurnal' => $kode, 
+            'tgl_jurnal' => $tanggal, 
+            'no_coa' => 1998, 
+            'posisi_dr_cr' => 'k', 
+            'nominal' => $nominal, 
+         ];
+         $this->db->insert('jurnal', $piutang);
+
+         // buku pembantu kas
+         $bpk = [
+            'id_ref' => $kode, 
+            'tanggal' => $tanggal, 
+            'nominal' => $nominal, 
+            'kd_coa' => 1111, 
+            'posisi_dr_cr' => 'd', 
+            'keterangan' => 'Pembayaran Waserda Kredit', 
+         ];
+         $this->db->insert('buku_pembantu_kas', $bpk);
+
+         redirect('Kasir/pmb_kredit');
       }
    }//end

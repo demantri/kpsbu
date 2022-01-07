@@ -4,7 +4,7 @@
             <div class="x_title">
                 <div class="row">
                     <div class="col-sm-10 col-12">
-                        <h4 id="quote">Pengajuan </h4>
+                        <h4 id="quote">Pengajuan Jurnal</h4>
                     </div>
                     <div class="col-sm-2 col-12">
                         <h3 id="quote">
@@ -29,9 +29,23 @@
                             </tr>
                         </thead>
                         <tbody>
+                            <?php 
+                            $no = 1;
+                            foreach ($list as $key => $value) { ?>
                             <tr>
-                                
+                                <td><?= $no++ ?></td>
+                                <td><?= $value->kode ?></td>
+                                <td><?= $value->tanggal ?></td>
+                                <td><?= format_rp($value->nominal) ?></td>
+                                <td>
+                                    <?php if ($value->status == 'pending') { ?>
+                                        <a href="<?= base_url('c_transaksi/status_pengajuan/'.$value->kode.'/'.$value->tanggal.'/'.$value->nominal)?>" class="btn btn-xs btn-warning"><?= $value->status?></a>
+                                    <?php } else { ?>
+                                        <a href="#" class="btn btn-xs btn-success"><?= $value->status?></a>
+                                    <?php } ?>
+                                </td>
                             </tr>
+                            <?php } ?>
                         </tbody>
                     </table>
                 </div>

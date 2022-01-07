@@ -365,4 +365,6 @@ class m_transaksi extends CI_Model
 		INNER JOIN aset d ON c.id_aset = d.id";
 		return $this->db->query($sql);
 	}
+
+	
 }

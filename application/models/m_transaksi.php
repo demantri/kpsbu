@@ -311,7 +311,6 @@ class m_transaksi extends CI_Model
 
 	function id_otomatis($value = '')
 	{
-		# code...
 		$this->db->select('MAX(RIGHT(pembayaran_susu.kode_pembayaran,  4)) as kode', FALSE);
 		$this->db->order_by('kode_pembayaran', 'DESC');
 		$this->db->limit(1);
@@ -366,5 +365,92 @@ class m_transaksi extends CI_Model
 		return $this->db->query($sql);
 	}
 
-	
+	// sarah
+	public function t_penjualan_shu()
+	{
+		$year = date("Y");
+		$q = "SELECT
+		SUM(nominal) AS total_penjualan
+		FROM jurnal a
+		LEFT JOIN (
+		   SELECT id, no_coa, nama_coa, header, is_shu
+		   FROM coa
+		) AS b ON a.no_coa = b.no_coa
+		WHERE b.is_shu = 1
+		AND b.header = 4
+		-- AND YEAR(tgl_jurnal) = '$year'
+		AND YEAR(tgl_jurnal) = 2021
+		AND posisi_dr_cr = 'k'";
+		return $this->db->query($q);
+	}
+
+	public function t_beban_shu()
+	{
+		$q = "SELECT
+		SUM(nominal) AS total, b.nama_coa, tgl_jurnal
+		FROM jurnal a
+		LEFT JOIN (
+		   SELECT id, no_coa, nama_coa, is_shu
+		   FROM coa
+		) AS b ON a.no_coa = b.no_coa
+		WHERE b.is_shu = 1
+		AND YEAR(tgl_jurnal) = 2021
+		AND posisi_dr_cr = 'd'
+		GROUP BY nama_coa";
+		return $this->db->query($q);
+	}
+
+	public function t_hpp()
+	{
+		$q = "SELECT kode_trans, tgl_jurnal, SUM(a.nominal) AS hpp
+		FROM jurnal a
+		JOIN transaksi_hpp b ON a.id_jurnal = b.kode_trans
+		JOIN coa c ON a.no_coa = c.no_coa
+		WHERE nama_coa = 'harga pokok penjualan'
+		AND YEAR(tgl_jurnal) = 2021
+		GROUP BY kode_trans";
+		return $this->db->query($q);
+	}
+
+	public function kode_shu()
+	{
+		$this->db->select('MAX(RIGHT(transaksi_shu.kode_shu,  4)) as kode', FALSE);
+		$this->db->order_by('kode_shu', 'DESC');
+		$this->db->limit(1);
+		$query = $this->db->get('transaksi_shu'); //cek dulu apakah ada sudah ada kode di tabel.    
+		if ($query->num_rows() <> 0) {
+			//jika kode ternyata sudah ada.      
+			$data = $query->row();
+			$kode = intval($data->kode) + 1;
+		} else {
+			//jika kode belum ada      
+			$kode = 1;
+		}
+
+		$datenow = date('Y');
+		$kodemax = str_pad($kode, 4, "0", STR_PAD_LEFT); // angka 4 menunjukkan jumlah digit angka 0
+		$kodejadi = "SHU".$datenow.$kodemax;    // hasilnya tgl sekarang + kode dst.
+		return $kodejadi;
+	}
+
+	public function kode_hpp()
+	{
+		$this->db->select('MAX(RIGHT(transaksi_hpp.kode_trans,  4)) as kode', FALSE);
+		$this->db->order_by('kode_trans', 'DESC');
+		$this->db->limit(1);
+		$query = $this->db->get('transaksi_hpp'); //cek dulu apakah ada sudah ada kode di tabel.    
+		if ($query->num_rows() <> 0) {
+			//jika kode ternyata sudah ada.      
+			$data = $query->row();
+			$kode = intval($data->kode) + 1;
+		} else {
+			//jika kode belum ada      
+			$kode = 1;
+		}
+
+		$datenow = date('dmY');
+		$kodemax = str_pad($kode, 4, "0", STR_PAD_LEFT); // angka 4 menunjukkan jumlah digit angka 0
+		$kodejadi = "HPP-".$kodemax;    // hasilnya tgl sekarang + kode dst.
+		return $kodejadi;
+	}
 }

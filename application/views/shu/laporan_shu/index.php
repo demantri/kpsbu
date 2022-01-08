@@ -21,7 +21,7 @@
                     <table class="table table-bordered">
                         <?php
                         $penj = $pnj;
-                        $hpp = 0;
+                        $hpp = $t_hpp;
                         $laba_kotor = $penj + $hpp;
                         $pend_lain = 0;
                         $t_pnj = $pend_lain + $laba_kotor;
@@ -38,7 +38,7 @@
                             <td></td>
                         </tr>
                         <tr>
-                            <td>Harga pokok penjualan</td>
+                            <td>Harga Pokok Penjualan</td>
                             <td class="text-right"><?= format_rp($hpp)?></td>
                             <td></td>
                         </tr>

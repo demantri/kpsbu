@@ -230,6 +230,9 @@
                                        <li><a href="<?= base_url('penjualan/pakan_konsentrat')?>">Penjualan Pakan Konsentrat</a></li>
                                        <li><a href="<?= base_url('penjualan/pengolahan_susu')?>">Penjualan Pengolahan Susu</a></li>
 
+                                       <!-- sarah -->
+                                       <li><a href="<?= base_url('shu')?>">SHU</a></li>
+
                                        <!-- trans salma -->
                                        <li><a href="<?= base_url('c_transaksi/pengajuan_jurnal')?>">Pengajuan Jurnal</a></li>
                                        <li><a href="<?= base_url('Penerimaan_kas')?>">Penerimaan Kas</a></li>

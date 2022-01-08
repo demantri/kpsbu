@@ -84,11 +84,11 @@ class c_masterdata extends CI_controller
          array(
             'field' => 'nama_coa',
             'label' => 'Nama Akun',
-            'rules' => 'required|min_length[3]|max_length[30]',
+            'rules' => 'required|min_length[3]|max_length[50]',
             'errors' => array(
                'required' => '%s tidak boleh kosong!',
                'min_length' => '%s minimal 3 huruf!',
-               'max_length' => '%s maksimal 30 huruf!'
+               'max_length' => '%s maksimal 50 huruf!'
             )
          )
       );

@@ -421,5 +421,92 @@ class Penjualan extends CI_Controller
         }
         redirect('penjualan/form_pakan_konsentrat');
     }
+
+    public function harga_pokok()
+    {
+        $kode = $this->M_transaksi->kode_hpp();
+        $list = $this->db->get('transaksi_hpp')->result();
+        $jenis_pnj = $this->db->get('jenis_penjualan')->result();
+        $data = [
+            'kode' => $kode,
+            'jenis' => $jenis_pnj,
+            'list' => $list,
+        ];
+        $this->template->load('template', 'penjualan/hpp/index', $data);
+    }
+
+    public function save_hpp()
+    {
+        $kode = $this->input->post('kode');
+        $hpp = $this->input->post('hpp');
+        $nominal = $this->input->post('nominal');
+        $data = [
+            'kode_trans' => $kode, 
+            'tanggal' => date('Y-m-d'), 
+            'deskripsi' => $hpp, 
+            'nominal' => $nominal, 
+        ];
+        // print_r($hpp);exit;
+        $this->db->insert('transaksi_hpp', $data);
+
+        // insert jurnal
+        if ($hpp == 'susu murni') {
+            $hpp = [
+                'id_jurnal' => $kode,
+                'tgl_jurnal' => date('Y-m-d'),
+                'no_coa' => 6113,
+                'posisi_dr_cr' => 'd',
+                'nominal' => $nominal,
+            ];
+            $this->db->insert('jurnal', $hpp);
+    
+            $pers_brg_dgng = [
+                'id_jurnal' => $kode,
+                'tgl_jurnal' => date('Y-m-d'),
+                'no_coa' => 1411,
+                'posisi_dr_cr' => 'k',
+                'nominal' => $nominal,
+            ];
+            $this->db->insert('jurnal', $pers_brg_dgng);
+        } else if ($hpp == 'pakan konsentrat') {
+            $hpp = [
+                'id_jurnal' => $kode,
+                'tgl_jurnal' => date('Y-m-d'),
+                'no_coa' => 6113,
+                'posisi_dr_cr' => 'd',
+                'nominal' => $nominal,
+            ];
+            $this->db->insert('jurnal', $hpp);
+    
+            $pers_brg_dgng = [
+                'id_jurnal' => $kode,
+                'tgl_jurnal' => date('Y-m-d'),
+                'no_coa' => 1412,
+                'posisi_dr_cr' => 'k',
+                'nominal' => $nominal,
+            ];
+            $this->db->insert('jurnal', $pers_brg_dgng);
+        } else {
+            $hpp = [
+                'id_jurnal' => $kode,
+                'tgl_jurnal' => date('Y-m-d'),
+                'no_coa' => 6113,
+                'posisi_dr_cr' => 'd',
+                'nominal' => $nominal,
+            ];
+            $this->db->insert('jurnal', $hpp);
+    
+            $pers_brg_dgng = [
+                'id_jurnal' => $kode,
+                'tgl_jurnal' => date('Y-m-d'),
+                'no_coa' => 1413,
+                'posisi_dr_cr' => 'k',
+                'nominal' => $nominal,
+            ];
+            $this->db->insert('jurnal', $pers_brg_dgng);
+        }
+
+        redirect('penjualan/harga_pokok');
+    }
 }
 ?>

@@ -5110,7 +5110,19 @@ group by no_bbp";
                'keterangan' => 'Pembayaran Waserda Kredit', 
             ];
             $this->db->insert('buku_pembantu_kas', $bpk);
-         }
+         } 
+         // else if (strpos($kode, 'SHU') !== false) {
+         //    // buku pembantu kas
+         //    $bpk = [
+         //       'id_ref' => $kode, 
+         //       'tanggal' => $tanggal, 
+         //       'nominal' => $nominal, 
+         //       'kd_coa' => 1111, 
+         //       'posisi_dr_cr' => 'd', 
+         //       'keterangan' => 'Transaksi SHU', 
+         //    ];
+         //    $this->db->insert('buku_pembantu_kas', $bpk);
+         // }
          redirect('c_transaksi/pengajuan_jurnal');
       }
    }//end

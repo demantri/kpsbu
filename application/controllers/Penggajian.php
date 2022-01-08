@@ -40,25 +40,25 @@ class Penggajian extends CI_Controller
                 $hasilptkp = $penghasilan_perbulan - $ptkp1;
                 if($hasilptkp < $atuatu){
                     $satu = $hasilptkp * 5/100;
-                    $akhir = round($satu);
+                    $akhir = round($satu)/12;
                 }
                 elseif($hasilptkp > $atuatu AND $hasilptkp < $duadua){
                     $satu = $atuatu *5/100;
                     $dua = ($hasilptkp - $atuatu) * 15/100;
-                    $akhir = round($satu + $dua);
+                    $akhir = round($satu + $dua)/12;
                 }
                 elseif($hasilptkp > $duadua AND $hasilptkp < $tigatiga){
                     $satu = $atuatu *5/100;
                     $dua = $duadua * 15/100;
                     $tiga = ($hasilptkp - $atuatu - $duadua) * 25/100;
-                    $akhir = round($satu + $dua + $tiga);
+                    $akhir = round($satu + $dua + $tiga)/12;
                 }
                 else{
                     $satu = $atuatu *5/100;
                     $dua = $duadua * 15/100;
                     $tiga = $tigatiga * 25/100;
                     $empat = ($hasilptkp - $satu - $dua - $tiga) * 30/100;
-                    $akhir = round($satu + $dua + $tiga + $empat);
+                    $akhir = round($satu + $dua + $tiga + $empat)/12;
                 }
             }else{
                 $akhir = 0;

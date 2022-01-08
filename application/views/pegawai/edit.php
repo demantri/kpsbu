@@ -90,9 +90,20 @@
                             </div>
                             </div>
                             <div class="form-group row">
+                                <label for="nama_bank" class="col-sm-3 col-form-label">Bank</label>
+                                <div class="col-sm-9">
+                                    <select name="nama_bank" id="nama_bank" class="form-control" required>
+                                        <option value="">-</option>
+                                        <option value="BCA"<?= ($item->nama_bank == 'BCA') ? 'selected' : ''; ?>>BCA</option>
+                                        <option value="Mandiri"<?= ($item->nama_bank == 'Mandiri') ? 'selected' : ''; ?>>Mandiri</option>
+                                        <option value="BRI"<?= ($item->nama_bank == 'BRI') ? 'selected' : ''; ?>>BRI</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group row">
                                 <label for="no_rek" class="col-sm-3 col-form-label">No Rek</label>
                                 <div class="col-sm-9">
-                                    <input type="text" name="no_rek" class="form-control" id="no_rek" placeholder="No Rekening" value="<?= $item->no_rek?>" required>
+                                    <input type="text" name="no_rek" class="form-control" id="no_rek" placeholder="No Rekening" value="<?= $item->no_rek?>" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" required>
                                 </div>
                             </div>
                         </div>

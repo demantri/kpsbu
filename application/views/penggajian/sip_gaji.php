@@ -55,7 +55,7 @@
                                     </tr>
                                     <tr class="detil">
                                         <td>Total Presensi</td>
-                                        <th>&nbsp : &nbsp<?= $detil->total?></th>
+                                        <th>&nbsp : &nbsp<?= $detil->total ?? 0 ?></th>
                                     </tr>
                                 </div>
                             </table>

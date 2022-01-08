@@ -2564,6 +2564,7 @@ class c_masterdata extends CI_controller
          'id_jabatan' => $this->input->post('jabatan'),
          'id_ptkp' => $this->input->post('ptkp'),
          'id_jenis_pegawai' => $this->input->post('jp'),
+         'pendidikan' => $this->input->post('pendidikan'),
          'rfid' => $this->input->post('rfid'),
          'nip' => $this->input->post('nip'),
          'npwp' => $this->input->post('npwp'),
@@ -2777,6 +2778,15 @@ class c_masterdata extends CI_controller
       redirect('c_masterdata/jabatan');
    }
 
+   public function pendidikan()
+   {
+      $value = $this->input->post('val');
+      if ($value) {
+         echo $this->M_masterdata->get_pendidikan($value);
+      }
+   }
+
+   // sarah
    public function alokasi_shu()
    {
       $persentase = 100;
@@ -2807,6 +2817,7 @@ class c_masterdata extends CI_controller
       redirect('c_masterdata/alokasi_shu');
    }
 
+   // salma
    public function aktivitas()
    {
       $aktivitas = $this->db->get('aktivitas')->result();

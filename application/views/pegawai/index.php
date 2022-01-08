@@ -21,7 +21,7 @@
                     <table class="table table-bordered" id="datatable">
                         <thead>
                             <tr>
-                                <th style="width: 5%;">No</th>
+                                <th>No</th>
                                 <th>NIP</th>
                                 <th>NPWP</th>
                                 <th>No. RFID</th>
@@ -79,6 +79,23 @@
             var val = $(this).val()
             if (val == 'Tetap') {
                 $("#hide_ptkp").show() 
+            }
+            if (val) {
+                $.ajax({
+                    url : "<?= base_url('c_masterdata/pendidikan')?>", 
+                    method : "post",
+                    data : {
+                        val : val
+                    },
+                    success : function (e) {
+                        // var obj = JSON.parse(e)
+                        // console.log(obj)
+                        $("#pendidikan").html(e)
+                    }
+                })
+            } else {
+                var html = '<option value="">-</option>';
+                $("#pendidikan").html(html)
             }
             console.log(val)
         })

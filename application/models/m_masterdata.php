@@ -138,5 +138,19 @@ class m_masterdata extends CI_Model {
         $kode   = $random.$date.$kd;
         return $kode;
 	}
+
+    public function get_pendidikan($value)
+    {
+        $this->db->where('desc', $value);
+		$this->db->order_by('pendidikan', 'ASC');
+
+        $query = $this->db->get("tb_jenis_pegawai");
+        $output = '<option value="">-</option>';
+		foreach ($query->result() as $row) {
+			$output .= '<option value="' . $row->id . '">' . $row->pendidikan . '</option>';
+		}
+		return $output;
+
+    }
 	
 }

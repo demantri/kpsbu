@@ -2,10 +2,10 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Tambah Pegawai</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
+                    <span aria-hidden="true">&times;</span>
                 </button>
+                <h5 class="modal-title" id="exampleModalLabel">Tambah Pegawai</h5>
             </div>
             <form action="<?= base_url('c_masterdata/save_pegawai')?>" method="post">
             <div class="modal-body">
@@ -78,7 +78,7 @@
                     <!-- kanan -->
                     <div class="col-sm-6">
                         <div class="form-group row">
-                            <label for="desc" class="col-sm-3 col-form-label">Jabatan</label>
+                            <label for="jabatan" class="col-sm-3 col-form-label">Jabatan</label>
                             <div class="col-sm-9">
                                 <select name="jabatan" id="jabatan" class="form-control">
                                     <option value="">-</option>
@@ -89,13 +89,20 @@
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label for="desc" class="col-sm-3 col-form-label">Jenis Pegawai</label>
+                            <label for="jp" class="col-sm-3 col-form-label">Jenis Pegawai</label>
                             <div class="col-sm-9">
                                 <select name="jp" id="jp" class="form-control">
                                     <option value="">-</option>
                                     <?php foreach ($jp as $key => $value) { ?>
                                     <option value="<?= $value->desc?>"><?= $value->desc?></option>
                                     <?php } ?>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="pendidikan" class="col-sm-3 col-form-label">Pendidikan</label>
+                            <div class="col-sm-9">
+                                <select name="pendidikan" id="pendidikan" class="form-control">
                                 </select>
                             </div>
                         </div>
@@ -113,9 +120,20 @@
                         </div>
                         </div>
                         <div class="form-group row">
+                            <label for="nama_bank" class="col-sm-3 col-form-label">Bank</label>
+                            <div class="col-sm-9">
+                                <select name="nama_bank" id="nama_bank" class="form-control" required>
+                                    <option value="">-</option>
+                                    <option value="BCA">BCA</option>
+                                    <option value="Mandiri">Mandiri</option>
+                                    <option value="BRI">BRI</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
                             <label for="no_rek" class="col-sm-3 col-form-label">No Rek</label>
                             <div class="col-sm-9">
-                                <input type="text" name="no_rek" class="form-control" id="no_rek" placeholder="No Rekening" required>
+                                <input type="text" name="no_rek" class="form-control" id="no_rek" placeholder="No Rekening" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" required>
                             </div>
                         </div>
                     </div>

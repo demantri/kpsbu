@@ -54,6 +54,10 @@
                                         <th>&nbsp : &nbsp<?= $peg->id_jenis_pegawai?></th>
                                     </tr>
                                     <tr class="detil">
+                                        <td>Pendidikan</td>
+                                        <th>&nbsp : &nbsp<?= $peg->pendidikan ?? '-' ?></th>
+                                    </tr>
+                                    <tr class="detil">
                                         <td>Total Presensi</td>
                                         <th>&nbsp : &nbsp<?= $detil->total ?? 0 ?></th>
                                     </tr>

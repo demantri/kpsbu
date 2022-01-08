@@ -20,14 +20,13 @@ class Penggajian extends CI_Controller
         FROM pegawai a
         LEFT JOIN tb_jenis_pegawai c ON c.desc = a.id_jenis_pegawai
         LEFT JOIN tb_jabatan d ON d.desc = a.id_jabatan
-        LEFT JOIN tb_ptkp b ON a.id_ptkp = b.id
+        LEFT JOIN tb_ptkp b ON a.id_ptkp = b.desc
         WHERE nip = '$nip'
         ORDER BY a.id ASC
         ";
         $result = $this->db->query($q)->result();
         foreach ($result as $data) {
-            # code...
-            $ptkp1 = $data->nominal ? $data->nominal : '0' ;
+            $ptkp1 = $data->nominal;
             $tambah = $data->gaji_pokok + $data->tunjangan_jabatan + $data->tunjangan_kesehatan;
             $pengurang = (5/100 * $tambah);
             $penghasilan_perbulan = ($tambah - $pengurang);
@@ -40,25 +39,25 @@ class Penggajian extends CI_Controller
                 $hasilptkp = $penghasilan_perbulan - $ptkp1;
                 if($hasilptkp < $atuatu){
                     $satu = $hasilptkp * 5/100;
-                    $akhir = round($satu)/12;
+                    $akhir = round($satu);
                 }
                 elseif($hasilptkp > $atuatu AND $hasilptkp < $duadua){
                     $satu = $atuatu *5/100;
                     $dua = ($hasilptkp - $atuatu) * 15/100;
-                    $akhir = round($satu + $dua)/12;
+                    $akhir = round($satu + $dua);
                 }
                 elseif($hasilptkp > $duadua AND $hasilptkp < $tigatiga){
                     $satu = $atuatu *5/100;
                     $dua = $duadua * 15/100;
                     $tiga = ($hasilptkp - $atuatu - $duadua) * 25/100;
-                    $akhir = round($satu + $dua + $tiga)/12;
+                    $akhir = round($satu + $dua + $tiga);
                 }
                 else{
                     $satu = $atuatu *5/100;
                     $dua = $duadua * 15/100;
                     $tiga = $tigatiga * 25/100;
                     $empat = ($hasilptkp - $satu - $dua - $tiga) * 30/100;
-                    $akhir = round($satu + $dua + $tiga + $empat)/12;
+                    $akhir = round($satu + $dua + $tiga + $empat);
                 }
             }else{
                 $akhir = 0;

@@ -113,26 +113,13 @@
                         <li><a href="<?= base_url('Lembur')?>"><i class="fa fa-home"></i> Lembur </a>
                         </li>
                      </ul>
-                     <ul class="nav side-menu">
-                        <li>
-                           <a><i class="fa fa-table"></i> MD Arles <span class="fa fa-chevron-down"></span></a>
-                           <ul class="nav child_menu">
-                              <li><a href="<?= base_url('c_masterdata/pegawai')?>"> Pegawai </a></li>
-                              <li><a href="<?= base_url('c_masterdata/ptkp')?>"> PTKP </a></li>
-                              <li><a href="<?= base_url('c_masterdata/jabatan')?>"> Jabatan </a></li>
-                              <li><a href="<?= base_url('c_masterdata/jenis_pegawai')?>"> Jenis Pegawai </a></li>
-                              <li><a href="<?= base_url('c_masterdata/shift')?>"> Shift </a></li>
-                           </ul>
-                        </li>
-                     </ul>
-                     <?php if ($this->session->userdata('level') == "admin" or $this->session->userdata('level') == "produksi1" or $this->session->userdata('level') == "produksi2" or $this->session->userdata('level') == "penjualan" or $this->session->userdata('level') == "keuangan3" or $this->session->userdata('level') == "keuangan1" or $this->session->userdata('level') == "keuangan2") : ?>
+                     
+                     <?php if ($this->session->userdata('level') == "admin" or $this->session->userdata('level') == "produksi1" or $this->session->userdata('level') == "produksi2" or $this->session->userdata('level') == "penjualan" or $this->session->userdata('level') == "keuangan3" or $this->session->userdata('level') == "keuangan1" or $this->session->userdata('level') == "keuangan2" or $this->session->userdata('level') == "arles") : ?>
                         <ul class="nav side-menu">
                            <li>
                               <a><i class="fa fa-table"></i> Master Data <span class="fa fa-chevron-down"></span></a>
                               <ul class="nav child_menu">
-                                 <?php
-                                 if ($this->session->userdata('level') == "admin") :
-                                 ?>
+                                 <?php if ($this->session->userdata('level') == "admin") : ?>
                                     <li><a href="<?php echo base_url('c_masterdata/aktivitas'); ?>">Aktivitas</a></li>
                                     <li><a href="<?php echo base_url('Produk'); ?>">Produk</a></li>
                                     <li><a href="<?php echo base_url('Kategori')?>">Kategori Produk</a></li>
@@ -156,20 +143,23 @@
                                     <li><a href="<?php echo site_url(); ?>c_masterdata/lihat_ips">Konsumen IPS</a></li>
                                     <li><a href="<?php echo site_url(); ?>c_masterdata/tps">TPS</a></li>
                                     <li><a href="<?php echo site_url(); ?>c_masterdata/alokasi_shu">Alokasi SHU</a></li>
+                                 
+                                    <!-- md arles -->
+                                 <?php elseif ($this->session->userdata('level') == "arles") : ?>
+                                    <li><a href="<?= base_url('c_masterdata/pegawai')?>"> Pegawai </a></li>
+                                    <li><a href="<?= base_url('c_masterdata/ptkp')?>"> PTKP </a></li>
+                                    <li><a href="<?= base_url('c_masterdata/jabatan')?>"> Jabatan </a></li>
+                                    <li><a href="<?= base_url('c_masterdata/jenis_pegawai')?>"> Jenis Pegawai </a></li>
+                                    <li><a href="<?= base_url('c_masterdata/shift')?>"> Shift </a></li>
 
-
-                                 <?php
-                                 elseif ($this->session->userdata('level') == "produksi1") :
-                                 ?>
+                                 <?php elseif ($this->session->userdata('level') == "produksi1") : ?>
                                     <li><a href="<?php echo site_url(); ?>c_masterdata/lihat_bb">Bahan Baku</a></li>
                                     <li><a href="<?php echo site_url(); ?>c_masterdata/lihat_peternak">Peternak</a></li>
                                     <li><a href="<?php echo site_url(); ?>c_masterdata/lihat_bom">BOM</a></li>
                                     <li><a href="<?php echo site_url(); ?>c_masterdata/lihat_jbop">Jenis BOP</a></li>
                                     <li><a href="<?php echo site_url(); ?>c_masterdata/lihat_bop">BOP</a></li>
                                     <li><a href="<?php echo site_url(); ?>c_masterdata/lihat_btk">BTKL</a></li>
-                                 <?php
-                                 elseif ($this->session->userdata('level') == "produksi2") :
-                                 ?>
+                                 <?php elseif ($this->session->userdata('level') == "produksi2") : ?>
                                     <li><a href="<?php echo site_url(); ?>c_masterdata/lihat_bp">Bahan Penolong</a></li>
                                     <li><a href="<?php echo site_url(); ?>c_masterdata/lihat_supp_bp">Supplier Bahan Penolong</a></li>
                                     <li><a href="<?php echo site_url(); ?>c_masterdata/lihat_bdp">Produk Dalam Proses</a></li>

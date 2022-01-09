@@ -232,6 +232,8 @@
 
                                        <!-- sarah -->
                                        <li><a href="<?= base_url('shu')?>">SHU</a></li>
+                                       <li><a href="<?= base_url('shu/jasa_anggota')?>">Jasa Anggota</a></li>
+                                       <li><a href="<?= base_url('shu/jasa_modal')?>">Jasa Modal</a></li>
 
                                        <!-- trans salma -->
                                        <li><a href="<?= base_url('c_transaksi/pengajuan_jurnal')?>">Pengajuan Jurnal</a></li>

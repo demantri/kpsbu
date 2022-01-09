@@ -379,7 +379,7 @@ class m_transaksi extends CI_Model
 		WHERE b.is_shu = 1
 		AND b.header = 4
 		-- AND YEAR(tgl_jurnal) = '$year'
-		AND YEAR(tgl_jurnal) = 2021
+		AND YEAR(tgl_jurnal) = '$year'
 		AND posisi_dr_cr = 'k'";
 		return $this->db->query($q);
 	}
@@ -409,6 +409,29 @@ class m_transaksi extends CI_Model
 		WHERE nama_coa = 'harga pokok penjualan'
 		AND YEAR(tgl_jurnal) = 2021
 		GROUP BY kode_trans";
+		return $this->db->query($q);
+	}
+
+	public function trans_susu($id_peternak)
+	{
+		$tahun_sekarang = date('Y');
+		$q = "SELECT 
+		SUM(subtotal) AS total_transaksi, x.tgl_trans
+		FROM detail_pembelian_bb z
+		JOIN pembelian_bb x ON z.no_trans = x.no_trans 
+		WHERE no_peternak = '$id_peternak'
+		AND YEAR(tgl_trans) = '$tahun_sekarang'";
+		return $this->db->query($q);
+	}
+
+	public function jasa_anggota()
+	{
+		$tahun_sekarang = date('Y');
+		$q = "SELECT b.nominal
+		FROM transaksi_shu a 
+		JOIN detail_transaksi_shu b ON a.kode_shu = b.kode_shu
+		WHERE YEAR(tanggal) = '$tahun_sekarang'
+		AND uraian = 'jasa anggota'";
 		return $this->db->query($q);
 	}
 

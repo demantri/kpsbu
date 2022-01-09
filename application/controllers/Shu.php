@@ -24,6 +24,8 @@ class Shu extends CI_Controller
         $pajak = round($shu_sblm_pajak * 0.01);
         $shu_setelah_pajak = ($shu_sblm_pajak - $pajak); 
 
+        $this->get_data_jasa_anggota($shu_setelah_pajak);
+
         $year = date('Y');
         $this->db->where('year(tanggal)', $year);
         $cek = $this->db->get('transaksi_shu')->row();
@@ -81,6 +83,35 @@ class Shu extends CI_Controller
         // ];
         // $this->db->insert("pengajuan_jurnal", $pengajuan);
         redirect('shu');
+    }
+
+    public function jasa_anggota()
+    {
+        $this->db->where('is_deactive', 0);
+        $anggota = $this->db->get('peternak')->result();
+        $data = [
+            'anggota' => $anggota
+        ];
+        $this->template->load('template', 'shu/jasa_anggota/index', $data);
+    }
+
+    public function get_data_jasa_anggota()
+    {
+        $id_peternak = $this->input->post('id');
+        $total_penjualan = $this->M_transaksi->t_penjualan_shu()->row()->total_penjualan;
+        $total_transaksi = $this->M_transaksi->trans_susu($id_peternak)->row()->total_transaksi;
+        $jasa_anggota = $this->M_transaksi->jasa_anggota()->row()->nominal;
+        $data = [
+            'total_penjualan' => $total_penjualan,
+            'total_transaksi' => $total_transaksi,
+            'jasa_anggota' => $jasa_anggota,
+        ];
+        echo json_encode($data);
+    }
+
+    public function save_jasa_anggota()
+    {
+        # code...
     }
 
     public function laporan()

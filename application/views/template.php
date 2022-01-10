@@ -143,6 +143,12 @@
                                     <li><a href="<?php echo site_url(); ?>c_masterdata/lihat_ips">Konsumen IPS</a></li>
                                     <li><a href="<?php echo site_url(); ?>c_masterdata/tps">TPS</a></li>
                                     <li><a href="<?php echo site_url(); ?>c_masterdata/alokasi_shu">Alokasi SHU</a></li>
+
+                                    <li><a href="<?= base_url('c_masterdata/pegawai')?>"> Pegawai </a></li>
+                                    <li><a href="<?= base_url('c_masterdata/ptkp')?>"> PTKP </a></li>
+                                    <li><a href="<?= base_url('c_masterdata/jabatan')?>"> Jabatan </a></li>
+                                    <li><a href="<?= base_url('c_masterdata/jenis_pegawai')?>"> Jenis Pegawai </a></li>
+                                    <li><a href="<?= base_url('c_masterdata/shift')?>"> Shift </a></li>
                                  
                                     <!-- md arles -->
                                  <?php elseif ($this->session->userdata('level') == "arles") : ?>

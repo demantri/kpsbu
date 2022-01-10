@@ -23,7 +23,7 @@
                             <tr>
                                 <th rowspan="2" class="text-center">Nama anggota</th>
                                 <th colspan="3" class="text-center">Laporan Simpanan</th>
-                                <th rowspan="2" class="text-center">Total</th>
+                                <th rowspan="2" class="text-center">Total Simpanan</th>
                             </tr>
                             <tr> 
                                 <th>Pokok</th>
@@ -32,15 +32,26 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <?php foreach ($list as $item) { ?>
+                            <?php
+                            $subtotal = 0;
+                            $total = 0; 
+                            foreach ($list as $item) { ?>
+                            <?php 
+                            $subtotal = ($item->deposit + $item->total_simpanan_wajib + $item->total_masuka);
+                            $total += $subtotal;
+                            ?>
                             <tr>
                                 <td><?= $item->nama_peternak?></td>
                                 <td><?= format_rp($item->deposit) ?? 0 ?></td>
                                 <td><?= format_rp($item->total_simpanan_wajib) ?? 0?></td>
                                 <td><?= format_rp($item->total_masuka) ?? 0?></td>
-                                <td><?= $item->nama_peternak?></td>
+                                <td><?= format_rp($subtotal)?></td>
                             </tr>
                             <?php } ?>
+                            <tr>
+                                <th colspan="4" class="text-center">Total</th>
+                                <th><?= format_rp($total) ?></th>
+                            </tr>
                         </tbody>
                     </table>
                 </div>

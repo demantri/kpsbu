@@ -1,6 +1,30 @@
 <div class="row">
     <div class="col-sm-12">
         <div class="x_panel">
+            <div class="x_content">
+                <div class="row">
+                    <div class="col-sm-1">
+                        <label for="">Filter Periode</label>
+                    </div>
+                    <div class="col-sm-3">
+                        <select name="" id="" class="form-control" required>
+                            <option value="">-</option>
+                            <?php for ($i=2021; $i <= 2025 ; $i++) { ?>
+                            <option value="<?= $i ?>"><?= $i ?></option>
+                            <?php } ?>
+                        </select>
+                    </div>
+                    <div class="col-sm-1">
+                        <button class="btn btn-md btn-default">Filter</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-12">
+        <div class="x_panel">
             <div class="x_title">
                 <div class="row">
                     <div class="col-sm-10 col-12">

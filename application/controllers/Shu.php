@@ -116,6 +116,7 @@ class Shu extends CI_Controller
 
     public function laporan()
     {
+        $tahun = date('Y');
         $pnj = $this->db->query("SELECT
         SUM(nominal) AS total
         FROM jurnal a
@@ -125,18 +126,19 @@ class Shu extends CI_Controller
         ) AS b ON a.no_coa = b.no_coa
         WHERE b.is_shu = 1
         AND b.header = 4
-        AND YEAR(tgl_jurnal) = 2021
+        AND YEAR(tgl_jurnal) = '$tahun'
         AND posisi_dr_cr = 'k'")->row()->total;
 
         $beban = $this->db->query("SELECT
         SUM(nominal) AS total, b.nama_coa, tgl_jurnal
         FROM jurnal a
         LEFT JOIN (
-            SELECT id, no_coa, nama_coa, is_shu
+            SELECT id, no_coa, nama_coa, is_shu, header
             FROM coa
         ) AS b ON a.no_coa = b.no_coa
         WHERE b.is_shu = 1
-        AND YEAR(tgl_jurnal) = 2021
+        AND b.header = 5
+        AND YEAR(tgl_jurnal) = '$tahun'
         AND posisi_dr_cr = 'd'
         GROUP BY nama_coa")->result();
 
@@ -151,6 +153,7 @@ class Shu extends CI_Controller
             'pnj' => $pnj,
             't_hpp' => $t_hpp,
         ];
+        // print_r($data);exit;
         $this->template->load('template', 'shu/laporan_shu/index', $data);
     }
 }

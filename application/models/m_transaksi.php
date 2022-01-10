@@ -386,6 +386,7 @@ class m_transaksi extends CI_Model
 
 	public function t_beban_shu()
 	{
+		$tahun = date('Y');
 		$q = "SELECT
 		SUM(nominal) AS total, b.nama_coa, tgl_jurnal
 		FROM jurnal a
@@ -394,7 +395,7 @@ class m_transaksi extends CI_Model
 		   FROM coa
 		) AS b ON a.no_coa = b.no_coa
 		WHERE b.is_shu = 1
-		AND YEAR(tgl_jurnal) = 2021
+		AND YEAR(tgl_jurnal) = '$tahun'
 		AND posisi_dr_cr = 'd'
 		GROUP BY nama_coa";
 		return $this->db->query($q);
@@ -402,12 +403,13 @@ class m_transaksi extends CI_Model
 
 	public function t_hpp()
 	{
+		$tahun = date('Y');
 		$q = "SELECT kode_trans, tgl_jurnal, SUM(a.nominal) AS hpp
 		FROM jurnal a
 		JOIN transaksi_hpp b ON a.id_jurnal = b.kode_trans
 		JOIN coa c ON a.no_coa = c.no_coa
 		WHERE nama_coa = 'harga pokok penjualan'
-		AND YEAR(tgl_jurnal) = 2021
+		AND YEAR(tgl_jurnal) = '$tahun'
 		GROUP BY kode_trans";
 		return $this->db->query($q);
 	}

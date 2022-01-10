@@ -7,7 +7,7 @@ class Penerimaan_kas extends CI_Controller
         $list = $this->db->get('penerimaan_kas')->result();
         $aktivitas = $this->db->get('aktivitas')->result();
 
-        $this->db->where('header', 4);
+        $this->db->where('is_penerimaan', 1);
         $coa = $this->db->get('coa')->result();
         // print_r($beban);exit;
         $data = [

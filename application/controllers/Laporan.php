@@ -43,33 +43,34 @@ class Laporan extends CI_Controller
     // sarah
     public function laporan_simpanan()
     {
-        $year = date('Y');
-        $list = $this->db->query("SELECT 
-        z.nama_peternak, 
-        z.no_peternak, 
-        z.deposit, 
-        x.total_liter, 
-        x.total_harga, 
-        x.total_masuka, 
-        x.total_simpanan_wajib
-        FROM peternak z
-        LEFT JOIN (
-            SELECT a.no_peternak, 
-            a.nama_peternak, 
-            a.deposit, 
-            sum(b.jumlah_liter_susu) AS total_liter, 
-            sum(b.jumlah_harga_susu) AS total_harga, 
-            sum(b.simpanan_masuka) AS total_masuka, 
-            sum(b.simpanan_wajib) AS total_simpanan_wajib, 
-            c.total_bayar, 
-            c.tgl_transaksi
-            FROM peternak a 
-            LEFT JOIN log_pembayaran_susu b ON a.no_peternak = b.id_anggota
-            LEFT JOIN pembayaran_susu c ON b.id_pembayaran = c.kode_pembayaran
-            WHERE left(tgl_transaksi, 4) = '$year'
-            GROUP BY nama_peternak
-        ) AS x ON z.no_peternak = x.no_peternak
-        WHERE z.is_deactive = 0")->result();
+        // $list = $this->db->query("SELECT 
+        // z.nama_peternak, 
+        // z.no_peternak, 
+        // z.deposit, 
+        // x.total_liter, 
+        // x.total_harga, 
+        // x.total_masuka, 
+        // x.total_simpanan_wajib
+        // FROM peternak z
+        // LEFT JOIN (
+        //     SELECT a.no_peternak, 
+        //     a.nama_peternak, 
+        //     a.deposit, 
+        //     sum(b.jumlah_liter_susu) AS total_liter, 
+        //     sum(b.jumlah_harga_susu) AS total_harga, 
+        //     sum(b.simpanan_masuka) AS total_masuka, 
+        //     sum(b.simpanan_wajib) AS total_simpanan_wajib, 
+        //     c.total_bayar, 
+        //     c.tgl_transaksi
+        //     FROM peternak a 
+        //     LEFT JOIN log_pembayaran_susu b ON a.no_peternak = b.id_anggota
+        //     LEFT JOIN pembayaran_susu c ON b.id_pembayaran = c.kode_pembayaran
+        //     WHERE left(tgl_transaksi, 4) = '$year'
+        //     GROUP BY nama_peternak
+        // ) AS x ON z.no_peternak = x.no_peternak
+        // WHERE z.is_deactive = 0")->result();
+        $list = $this->M_transaksi->data_laporan_shu()->result();
+        // print_r($list);exit;
         $data = [
             'list' => $list,
         ];

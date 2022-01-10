@@ -8,7 +8,16 @@
                     </div>
                     <div class="col-sm-2 col-12">
                         <h3 id="quote">
-                            <?php if (is_null($cek)) { ?>
+                            <?php 
+                            $datenow = date('Y-m-d');
+
+                            // hardcode tahun
+                            
+                            $tahun = date('Y');
+                            $format = $tahun.'-12-31';
+                            // $format = '2022-01-10';
+                            $cek = date('Y-m-d', strtotime($format));
+                            if ($datenow == $cek) { ?>
                                 <button class="btn pull-right btn-primary" data-target="#add" data-toggle="modal">Tambah</button>
                             <?php } ?>
                         </h3>

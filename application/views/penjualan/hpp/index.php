@@ -4,7 +4,7 @@
             <div class="x_title">
                 <div class="row">
                     <div class="col-sm-10 col-12">
-                        <h3 id="quote">Penjualan Susu</h3>
+                        <h3 id="quote">Harga Pokok Penjualan</h3>
                     </div>
                     <div class="col-sm-2 col-12">
                         <h3 id="quote">

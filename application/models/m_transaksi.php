@@ -388,15 +388,16 @@ class m_transaksi extends CI_Model
 	{
 		$tahun = date('Y');
 		$q = "SELECT
-		SUM(nominal) AS total, b.nama_coa, tgl_jurnal
+		SUM(nominal) AS total, b.nama_coa, tgl_jurnal, header
 		FROM jurnal a
 		LEFT JOIN (
-		   SELECT id, no_coa, nama_coa, is_shu
+		   SELECT id, no_coa, nama_coa, is_shu, header
 		   FROM coa
 		) AS b ON a.no_coa = b.no_coa
 		WHERE b.is_shu = 1
 		AND YEAR(tgl_jurnal) = '$tahun'
 		AND posisi_dr_cr = 'd'
+		AND header = 5
 		GROUP BY nama_coa";
 		return $this->db->query($q);
 	}
@@ -426,6 +427,55 @@ class m_transaksi extends CI_Model
 		return $this->db->query($q);
 	}
 
+	public function data_laporan_shu()
+	{
+		$year = date('Y');
+		$q = "SELECT 
+        z.nama_peternak, 
+        z.no_peternak, 
+        z.deposit, 
+        x.total_liter, 
+        x.total_harga, 
+        x.total_masuka, 
+        x.total_simpanan_wajib
+        FROM peternak z
+        LEFT JOIN (
+            SELECT a.no_peternak, 
+            a.nama_peternak, 
+            a.deposit, 
+            sum(b.jumlah_liter_susu) AS total_liter, 
+            sum(b.jumlah_harga_susu) AS total_harga, 
+            sum(b.simpanan_masuka) AS total_masuka, 
+            sum(b.simpanan_wajib) AS total_simpanan_wajib, 
+            c.total_bayar, 
+            c.tgl_transaksi
+            FROM peternak a 
+            LEFT JOIN log_pembayaran_susu b ON a.no_peternak = b.id_anggota
+            LEFT JOIN pembayaran_susu c ON b.id_pembayaran = c.kode_pembayaran
+            WHERE left(tgl_transaksi, 4) = '$year'
+            GROUP BY nama_peternak
+        ) AS x ON z.no_peternak = x.no_peternak
+        WHERE z.is_deactive = 0 ";
+		return $this->db->query($q);
+	}
+
+	public function simpanan_peranggota($id_anggota = null)
+	{
+		$tahun = date('Y');
+		$q = "SELECT SUM(deposit + total) AS total_simpanan_anggota
+		FROM 
+		(
+			SELECT id_anggota, c.tgl_transaksi, SUM(simpanan_masuka + simpanan_wajib) AS total, deposit 
+			FROM log_pembayaran_susu a 
+			JOIN peternak b ON a.id_anggota = b.no_peternak
+			JOIN pembayaran_susu c ON a.id_pembayaran = c.kode_pembayaran
+			WHERE b.is_deactive = 0
+			AND id_anggota = '$id_anggota'
+			AND YEAR(tgl_transaksi) = '$tahun'
+		) peternak ";
+		return $this->db->query($q);
+	}
+
 	public function jasa_anggota()
 	{
 		$tahun_sekarang = date('Y');
@@ -434,6 +484,17 @@ class m_transaksi extends CI_Model
 		JOIN detail_transaksi_shu b ON a.kode_shu = b.kode_shu
 		WHERE YEAR(tanggal) = '$tahun_sekarang'
 		AND uraian = 'jasa anggota'";
+		return $this->db->query($q);
+	}
+
+	public function jasa_modal()
+	{
+		$tahun_sekarang = date('Y');
+		$q = "SELECT b.nominal
+		FROM transaksi_shu a 
+		JOIN detail_transaksi_shu b ON a.kode_shu = b.kode_shu
+		WHERE YEAR(tanggal) = '$tahun_sekarang'
+		AND uraian = 'jasa modal'";
 		return $this->db->query($q);
 	}
 
@@ -476,6 +537,27 @@ class m_transaksi extends CI_Model
 		$datenow = date('dmY');
 		$kodemax = str_pad($kode, 4, "0", STR_PAD_LEFT); // angka 4 menunjukkan jumlah digit angka 0
 		$kodejadi = "HPP-".$kodemax;    // hasilnya tgl sekarang + kode dst.
+		return $kodejadi;
+	}
+
+	public function pembagian_kode()
+	{
+		$this->db->select('MAX(RIGHT(pembagian_shu.id_trans,  4)) as kode', FALSE);
+		$this->db->order_by('id_trans', 'DESC');
+		$this->db->limit(1);
+		$query = $this->db->get('pembagian_shu'); //cek dulu apakah ada sudah ada kode di tabel.    
+		if ($query->num_rows() <> 0) {
+			//jika kode ternyata sudah ada.      
+			$data = $query->row();
+			$kode = intval($data->kode) + 1;
+		} else {
+			//jika kode belum ada      
+			$kode = 1;
+		}
+
+		$datenow = date('Y');
+		$kodemax = str_pad($kode, 4, "0", STR_PAD_LEFT); // angka 4 menunjukkan jumlah digit angka 0
+		$kodejadi = "PMBG.SHU".$datenow.$kodemax;    // hasilnya tgl sekarang + kode dst.
 		return $kodejadi;
 	}
 }

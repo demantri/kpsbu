@@ -147,7 +147,7 @@ class m_masterdata extends CI_Model {
         $query = $this->db->get("tb_jenis_pegawai");
         $output = '<option value="">-</option>';
 		foreach ($query->result() as $row) {
-			$output .= '<option value="' . $row->id . '">' . $row->pendidikan . '</option>';
+			$output .= '<option value="' . $row->pendidikan . '">' . $row->pendidikan . '</option>';
 		}
 		return $output;
 

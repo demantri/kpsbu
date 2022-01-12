@@ -317,6 +317,7 @@
 
                                        <!-- laporan arles -->
                                        <li><a href="<?= base_url('Absensi/laporan_kehadiran')?>">Laporan Kehadiran</a></li>
+                                       <li><a href="<?= base_url('Penggajian/laporan_penggajian')?>">Laporan Penggajian</a></li>
                                     <?php
                                     elseif ($this->session->userdata('level') == "produksi1") :
                                     ?>
@@ -562,6 +563,14 @@
             });
           });
         </script> -->
+        <script>
+            $(function() {
+               $('#myDatepicker2').datetimepicker({
+                  // format: 'DD.MM.YYYY'
+                  format: 'YYYY-MM-DD'
+               });
+            })
+         </script>
 
 </body>
 

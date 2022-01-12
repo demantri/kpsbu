@@ -122,5 +122,26 @@ class Penggajian extends CI_Controller
 
         redirect('Penggajian');
     }
+
+    public function laporan_penggajian()
+    {
+        $bulan = $this->input->post('bulan');
+        $tahun = $this->input->post('tahun');
+        $periode = $tahun.'-'.$bulan;
+        if ($periode) {
+            $list = $this->db->query("select * from tb_penggajian where LEFT(tanggal, 7) = '$periode' order by tanggal asc")->result();
+            $data = [
+                'list' => $list,
+            ];
+            $this->template->load('template', 'penggajian/laporan_penggajian', $data);
+        } else {
+            $list = $this->db->query("select * from tb_penggajian where LEFT(tanggal, 7) = '$periode' order by tanggal asc")->result();
+            $data = [
+                'list' => $list,
+            ];
+            $this->template->load('template', 'penggajian/laporan_penggajian', $data);
+        }
+        
+    }
 }
 ?>

@@ -4,7 +4,7 @@
             <div class="x_title">
                 <div class="row">
                     <div class="col-sm-10 col-12">
-                        <h4 id="quote">Pengajuan Jurnal</h4>
+                        <h4 id="quote">Pengeluaran Beban</h4>
                     </div>
                     <div class="col-sm-2 col-12">
                         <h3 id="quote">
@@ -22,30 +22,24 @@
                         <thead>
                             <tr>
                                 <th style="width: 5%;">#</th>
-                                <th>Kode</th>
-                                <th>Tanggal</th>
+                                <th>ID Pengeluaran Beban</th>
+                                <th>Tgl. Pengeluaran Beban</th>
+                                <th>Nama Beban</th>
                                 <th>Nominal</th>
-                                <th>Status</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <?php 
-                            $no = 1;
-                            foreach ($list as $key => $value) { ?>
+                        <?php 
+                        $no = 1;
+                        foreach ($list as $key => $value) { ?>
                             <tr>
                                 <td><?= $no++ ?></td>
-                                <td><?= $value->kode ?></td>
-                                <td><?= $value->tanggal ?></td>
+                                <td><?= $value->id_pengeluaran ?></td>
+                                <td><?= $value->tgl_pengeluaran ?></td>
+                                <td><?= $value->nama_coa ?></td>
                                 <td><?= format_rp($value->nominal) ?></td>
-                                <td>
-                                    <?php if ($value->status == 'pending') { ?>
-                                        <a href="<?= base_url('c_transaksi/status_pengajuan/'.$value->kode.'/'.$value->tanggal.'/'.$value->nominal)?>" onclick="return confirm('Anda yakin?')" class="btn btn-xs btn-warning"><?= $value->status?></a>
-                                    <?php } else { ?>
-                                        <a href="#" class="btn btn-xs btn-success"><?= $value->status?></a>
-                                    <?php } ?>
-                                </td>
                             </tr>
-                            <?php } ?>
+                        <?php }?>
                         </tbody>
                     </table>
                 </div>
@@ -53,3 +47,4 @@
         </div>
     </div>
 </div>
+<?php $this->load->view('pengeluaran_beban/add'); ?>

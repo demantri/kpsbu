@@ -5143,8 +5143,44 @@ group by no_bbp";
                'tanggal' => $tanggal, 
                'nominal' => $nominal, 
                'kd_coa' => 1111, 
-               'posisi_dr_cr' => 'd', 
+               'posisi_dr_cr' => 'k', 
                'keterangan' => 'SHU', 
+            ];
+            $this->db->insert('buku_pembantu_kas', $bpk);
+         } else if (strpos($kode, 'PNGBBN') !== false) {
+            $pengajuan_jurnal = [
+               'status' => 'selesai'
+            ];
+            $this->db->where('kode', $kode);
+            $this->db->update('pengajuan_jurnal', $pengajuan_jurnal);
+   
+            // jurnal
+            $beban = [
+               'id_jurnal' => $kode, 
+               'tgl_jurnal' => $tanggal, 
+               'no_coa' => 5314, 
+               'posisi_dr_cr' => 'd', 
+               'nominal' => $nominal, 
+            ];
+            $this->db->insert('jurnal', $beban);
+
+            $kas = [
+               'id_jurnal' => $kode, 
+               'tgl_jurnal' => $tanggal, 
+               'no_coa' => 1111, 
+               'posisi_dr_cr' => 'k', 
+               'nominal' => $nominal, 
+            ];
+            $this->db->insert('jurnal', $kas);
+   
+            // buku pembantu kas
+            $bpk = [
+               'id_ref' => $kode, 
+               'tanggal' => $tanggal, 
+               'nominal' => $nominal, 
+               'kd_coa' => 1111, 
+               'posisi_dr_cr' => 'k', 
+               'keterangan' => 'Pengeluaran Beban', 
             ];
             $this->db->insert('buku_pembantu_kas', $bpk);
          }

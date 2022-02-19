@@ -324,6 +324,11 @@
                                        <!-- laporan arles -->
                                        <li><a href="<?= base_url('Absensi/laporan_kehadiran')?>">Laporan Kehadiran</a></li>
                                        <li><a href="<?= base_url('Penggajian/laporan_penggajian')?>">Laporan Penggajian</a></li>
+
+                                       <!-- laporan siti -->
+                                       <li><a href="<?= base_url('Laporan/laporan_penjualan_waserda')?>">Laporan Penjualan Waserda</a></li>
+                                       <li><a href="<?= base_url('Laporan/laporan_penjualan_waserda')?>">Laporan Pembelian Waserda</a></li>
+
                                     <?php
                                     elseif ($this->session->userdata('level') == "produksi1") :
                                     ?>
@@ -425,7 +430,7 @@
                                        <li><a href="<?= base_url('Pembelian')?>">Data Pembelian</a></li>
                                        <li><a href="<?= base_url('Kasir/pmb_kredit')?>">Pembayaran Kredit</a></li>
                                        <li><a href="<?= base_url('Pengajuan')?>">Pengajuan Barang</a></li>
-                                       <li><a href="#">Pengeluaran Beban</a></li>
+                                       <li><a href="<?= base_url('Pengeluaran_beban')?>">Pengeluaran Beban</a></li>
                                     <?php
                                     endif
                                     ?>

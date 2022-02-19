@@ -76,5 +76,33 @@ class Laporan extends CI_Controller
         ];
         $this->template->load('template', 'laporan_simpanan', $data);
     }
+
+    // siti 
+    public function laporan_penjualan_waserda()
+    {
+        $bulan = $this->input->post('bulan');
+        $tahun = $this->input->post('tahun');
+
+        $periode = $tahun.'-'.$bulan;
+
+        $show_all = $this->input->post('show_all');
+        // print_r($show_all);exit;
+
+        if (isset($periode)) {
+            $list = $this->db->query("SELECT * FROM pos_penjualan 
+            WHERE LEFT(tanggal, 7) = '$periode'")->result();
+            $data = [
+                'list' => $list, 
+            ];
+            $this->template->load('template', 'laporan/laporan_penjualan_waserda', $data);
+        } 
+        // if (isset($show_all)) {
+        //     $list = $this->db->query("SELECT * FROM pos_penjualan")->result();
+        //     $data = [
+        //         'list' => $list, 
+        //     ];
+        //     $this->template->load('template', 'laporan/laporan_penjualan_waserda', $data);
+        // }
+    }
 }
 ?>

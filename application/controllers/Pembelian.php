@@ -158,5 +158,16 @@
 
         redirect('Pembelian');
     }
+
+    // test
+    public function hapus_detail($id)
+    {
+        $this->db->where('id', $id);
+        $data = $this->db->delete('pos_detail_pembelian');
+
+        if ($data) {
+            echo json_encode($data);
+        }
+    }
 }
 ?>

@@ -88,7 +88,7 @@
                                     <td><?= $value->jml?></td>
                                     <td><?= format_rp($value->harga_satuan)?></td>
                                     <td class="text-center">
-                                        <a href="" class="btn btn-xs btn-danger"><i class="fa fa-trash"></i></a>
+                                        <button class="btn btn-xs btn-danger" onclick="hapus(<?= $value->id?>)"><i class="fa fa-trash"></i></button>
                                     </td>
                                 </tr>
                             <?php } ?>
@@ -176,4 +176,17 @@
             })
         })
     })
+</script>
+<script>
+    function hapus(id) {
+        // alert(id)
+        $.ajax({
+            url : "<?= base_url('Pembelian/hapus_detail/')?>"+id, 
+            method : "POST", 
+            success:function(e){
+                var obj = JSON.parse(e)
+                location.reload()
+            }
+        })
+    }
 </script>

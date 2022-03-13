@@ -85,6 +85,11 @@
                 </div>
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-success btn-checkout">Checkout</button>
+                    <!-- <a href="<?= base_url('Kasir/checkout')?>" class="btn btn-primary btn-checkout-print" onclick="print()">Print</a> -->
+                    <!-- <button type="submit" class="btn btn-primary btn-checkout-print" onclick="print()">Print</button> -->
+                    <!-- <a href="" class ="btn btn-primary" target="_blank">Print</a> -->
+                    <!-- <button name="btnPrint">test</button> -->
+                    <!-- <input type="submit" name="print" value=""> -->
                 </div>
             </form>
         </div>

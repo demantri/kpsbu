@@ -133,6 +133,11 @@
             }
         })
     }
+
+    // function print() {
+    //     var w = window.open()
+        
+    // }
 </script>
 <script type="text/javascript">
 	$(document).ready(function(){
@@ -180,6 +185,7 @@
         $('#jenis').on('change', function() {
             var jenis = $('#jenis').val()
             $('.btn-checkout').prop('disabled', true)
+            $('.btn-checkout-print').prop('disabled', true)
             $("#kembalian").val(0)
             // alert(this.value)
             if (!this.value) {
@@ -246,8 +252,10 @@
                     if (total !== typing) {
                         alert('Input pembayaran harus sama dengan total')
                         $('.btn-checkout').prop('disabled', true)
+                        $('.btn-checkout-print').prop('disabled', true)
                     } else {
                         $('.btn-checkout').prop('disabled', false)
+                        $('.btn-checkout-print').prop('disabled', false)
                     }
                 })
             } else {
@@ -259,6 +267,7 @@
 
                 var total = $("#total").data('total')
                 $('.btn-checkout').prop('disabled', true)
+                $('.btn-checkout-print').prop('disabled', true)
 
                 $("input[name='pembayaran']").focusout(function() {
                     var typing = $(this).val()
@@ -272,12 +281,14 @@
                             $("#kembalian").val(kembalian)
                             $(".info").hide()
                             $('.btn-checkout').prop('disabled', false)
+                            $('.btn-checkout-print').prop('disabled', false)
 
                         } else {
                             // console.log("minus")
                             $("#kembalian").val(kembalian)
                             $(".info").show()
                             $('.btn-checkout').prop('disabled', true)
+                            $('.btn-checkout-print').prop('disabled', true)
 
                         }
                     }
@@ -293,6 +304,7 @@
 
         var total = $("#total").data('total')
         $('.btn-checkout').prop('disabled', true)
+        $('.btn-checkout-print').prop('disabled', true)
 
         $("input[name='pembayaran']").focusout(function() {
             var typing = $(this).val()
@@ -306,12 +318,14 @@
                     $("#kembalian").val(kembalian)
                     $(".info").hide()
                     $('.btn-checkout').prop('disabled', false)
+                    $('.btn-checkout-print').prop('disabled', false)
 
                 } else {
                     // console.log("minus")
                     $("#kembalian").val(kembalian)
                     $(".info").show()
                     $('.btn-checkout').prop('disabled', true)
+                    $('.btn-checkout-print').prop('disabled', true)
 
                 }
             }

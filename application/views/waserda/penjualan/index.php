@@ -29,6 +29,7 @@
                                 <th>Total Transaksi</th>
                                 <th>PPN</th>
                                 <th>Grand Total</th>
+                                <th class="text-center">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -50,6 +51,9 @@
                                 <td class="text-right"><?= format_rp($value->total_trans) ?></td>
                                 <td class="text-right"><?= format_rp($value->ppn) ?></td>
                                 <td class="text-right"><?= format_rp($value->total) ?></td>
+                                <td class="text-center">
+                                    <a href="<?= base_url('Kasir/detail_print/'. $value->invoice ) ?>" class="btn btn-default"><i class="fa fa-print"></i></a>
+                                </td>
                             </tr>
                         <?php } ?>
                         </tbody>
@@ -59,3 +63,8 @@
         </div>
     </div>
 </div>
+<script>
+    function print() {
+        alert('ok')
+    }
+</script>

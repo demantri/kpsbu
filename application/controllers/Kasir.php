@@ -417,7 +417,7 @@
         // filename dari pdf ketika didownload
         $file_pdf = 'sample';
         // setting paper
-        $paper = 'a4';
+        $paper = 'a7';
         //orientasi paper potrait / landscape
         $orientation = "portrait";
         $detail = $this->db->query('select pdp.*, wp.nama_produk, pp.tanggal, pp.date_payment from pos_detail_penjualan pdp 
@@ -426,9 +426,12 @@
         where pp.nama_pembeli is not null
         and pdp.invoice = "'.$invoice.'"
         order by pp.date_payment desc')->result();
+        $pnj = $this->db->query('select * from pos_penjualan where invoice = "'.$invoice.'"')->row();
+        // print_r($pnj);exit;
         $data = [
             'title' => 'pdf', 
-            'detail' => $detail
+            'detail' => $detail,
+            'penjualan' => $pnj,
         ];
         
 		$html = $this->load->view('waserda/penjualan/laporan_pdf', $data, true);	    

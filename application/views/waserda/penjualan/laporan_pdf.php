@@ -1,10 +1,16 @@
 <link href="<?php echo base_url(); ?>assets/vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
-
+<style>
+    * {
+        font-size : 5pt;
+    }
+</style>
+<center>
 <p>Waserda KPSBU</p>
 <p>Jl. Kayu Ambon Dalam No. 5, Lembang. Kec. Lembang. Kab. Bandung Barat.</p>
-
-
-
+</center>
+<br>
+<p><strong>Invoice </strong> : <?= $detail[0]->invoice?></p>
+<p><strong>Date payment </strong> : <?= $penjualan->date_payment?></p>
 <table class="table">
     <tr>
         <th>no</th>
@@ -25,3 +31,9 @@
     </tr>
     <?php } ?>
 </table>
+<center>
+<p><strong>Penjualan</strong> : <?= format_rp($penjualan->total_trans) ?></p>
+<p><strong>PPN (10%)</strong> : <?= format_rp($penjualan->ppn) ?></p>
+<p><strong>Total</strong> : <?= format_rp($penjualan->total) ?></p>
+<p>Terimakasih :) </p>
+</center>

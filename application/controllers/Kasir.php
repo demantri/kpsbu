@@ -6,6 +6,7 @@
         $this->load->model(array(
             'm_masterdata' => 'master',
             'Produk_model' => 'produk',
+            'm_transaksi' => 'model'
         ));
     }
 
@@ -287,6 +288,12 @@
             );
             $this->db->where($where);
             $this->db->update('waserda_produk', $bb);
+        }
+
+        // insert ke buku kas kecil
+        if ($total_trans < 10000000) {
+            $date_now = date('Y-m-d');
+            $this->model->insert_buku_kas_kecil($kode, $date_now, $total_trans, 'Penjualan', 'd');
         }
 
         $this->session->set_flashdata('notif', '<div class="alert alert-success">Pembayaran berhasil.</div>');

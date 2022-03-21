@@ -560,4 +560,17 @@ class m_transaksi extends CI_Model
 		$kodejadi = "PMBG.SHU".$datenow.$kodemax;    // hasilnya tgl sekarang + kode dst.
 		return $kodejadi;
 	}
+
+	// model untuk buku kas kecil 
+	public function insert_buku_kas_kecil($id_ref, $tgl, $nominal, $keterangan, $posisi)
+	{
+		$data = [
+			'id_ref' => $id_ref,
+			'tgl_transaksi' => $tgl,
+			'nominal' => $nominal,
+			'keterangan' => $keterangan,
+			'posisi_d_c' => $posisi,
+		];
+		$this->db->insert('buku_kas_kecil', $data);
+	}
 }

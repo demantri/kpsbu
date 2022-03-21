@@ -104,5 +104,13 @@ class Laporan extends CI_Controller
         //     $this->template->load('template', 'laporan/laporan_penjualan_waserda', $data);
         // }
     }
+
+    // salma 
+    public function buku_kas_kecil()
+    {
+        $list = $this->db->get('buku_kas_kecil')->result();
+        $data = ['list' => $list];
+        $this->template->load('template', 'laporan/buku_kas_kecil', $data);
+    }
 }
 ?>

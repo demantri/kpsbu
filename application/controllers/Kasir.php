@@ -415,18 +415,36 @@
 
     public function pdf($invoice)
     {
-        // panggil library yang kita buat sebelumnya yang bernama pdfgenerator
-        $this->load->library('pdfgenerator');
+        // // panggil library yang kita buat sebelumnya yang bernama pdfgenerator
+        // $this->load->library('pdfgenerator');
         
-        // title dari pdf
-        // $this->data['title_pdf'] = 'Laporan Penjualan Toko Kita';
+        // // title dari pdf
+        // // $this->data['title_pdf'] = 'Laporan Penjualan Toko Kita';
         
-        // filename dari pdf ketika didownload
-        $file_pdf = 'sample';
-        // setting paper
-        $paper = 'a7';
-        //orientasi paper potrait / landscape
-        $orientation = "portrait";
+        // // filename dari pdf ketika didownload
+        // $file_pdf = 'sample';
+        // // setting paper
+        // $paper = 'a7';
+        // //orientasi paper potrait / landscape
+        // $orientation = "portrait";
+        // $detail = $this->db->query('select pdp.*, wp.nama_produk, pp.tanggal, pp.date_payment from pos_detail_penjualan pdp 
+        // join pos_penjualan pp on pdp.invoice = pp.invoice 
+        // join waserda_produk wp on pdp.id_produk = wp.kode 
+        // where pp.nama_pembeli is not null
+        // and pdp.invoice = "'.$invoice.'"
+        // order by pp.date_payment desc')->result();
+        // $pnj = $this->db->query('select * from pos_penjualan where invoice = "'.$invoice.'"')->row();
+        // // print_r($pnj);exit;
+        // $data = [
+        //     'title' => 'pdf', 
+        //     'detail' => $detail,
+        //     'penjualan' => $pnj,
+        // ];
+        
+		// $html = $this->load->view('waserda/penjualan/laporan_pdf', $data, true);	    
+        
+        // // run dompdf
+        // $this->pdfgenerator->generate($html, $file_pdf,$paper,$orientation);
         $detail = $this->db->query('select pdp.*, wp.nama_produk, pp.tanggal, pp.date_payment from pos_detail_penjualan pdp 
         join pos_penjualan pp on pdp.invoice = pp.invoice 
         join waserda_produk wp on pdp.id_produk = wp.kode 
@@ -434,17 +452,17 @@
         and pdp.invoice = "'.$invoice.'"
         order by pp.date_payment desc')->result();
         $pnj = $this->db->query('select * from pos_penjualan where invoice = "'.$invoice.'"')->row();
-        // print_r($pnj);exit;
         $data = [
             'title' => 'pdf', 
             'detail' => $detail,
             'penjualan' => $pnj,
         ];
-        
-		$html = $this->load->view('waserda/penjualan/laporan_pdf', $data, true);	    
-        
-        // run dompdf
-        $this->pdfgenerator->generate($html, $file_pdf,$paper,$orientation);
+    
+        $this->load->library('pdf');
+    
+        $this->pdf->setPaper('a7', 'potrait');
+        $this->pdf->filename = "laporan-petanikode.pdf";
+        $this->pdf->load_view('waserda/penjualan/laporan_pdf', $data);
     }
 
     // test

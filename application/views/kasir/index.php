@@ -144,6 +144,17 @@
         })
     }
 
+    function print_checkout() {
+        var win = window.open('http://localhost/kpsbu/Kasir', '_blank');
+        if (win) {
+            //Browser has allowed it to be opened
+            win.focus();
+        } else {
+            //Browser has blocked it
+            alert('Please allow popups for this website');
+        }
+    }
+
     // function print() {
     //     var w = window.open()
         

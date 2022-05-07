@@ -26,9 +26,11 @@
                                 <th>Invoice</th>
                                 <th>Nama Pembeli</th>
                                 <th>Jenis Pembayaran</th>
+                                <th>Jumlah Pembayaran</th>
                                 <th>Total Transaksi</th>
                                 <th>PPN</th>
                                 <th>Grand Total</th>
+                                <th>Kembalian</th>
                                 <th class="text-center">Aksi</th>
                             </tr>
                         </thead>
@@ -48,9 +50,11 @@
                                 <td><?= $value->invoice ?></td>
                                 <td><?= $value->nama_pembeli ?></td>
                                 <td><?= ucwords($jenis) ?></td>
+                                <td class="text-right"><?= format_rp($value->pembayaran) ?></td>
                                 <td class="text-right"><?= format_rp($value->total_trans) ?></td>
                                 <td class="text-right"><?= format_rp($value->ppn) ?></td>
                                 <td class="text-right"><?= format_rp($value->total) ?></td>
+                                <td class="text-right"><?= format_rp($value->kembalian) ?></td>
                                 <td class="text-center">
                                     <a href="<?= base_url('Kasir/detail_print/'. $value->invoice ) ?>" class="btn btn-default"><i class="fa fa-print"></i></a>
                                 </td>
@@ -63,8 +67,3 @@
         </div>
     </div>
 </div>
-<script>
-    function print() {
-        alert('ok')
-    }
-</script>

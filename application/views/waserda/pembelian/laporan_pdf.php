@@ -10,7 +10,7 @@
 <p>Jl. Kayu Ambon Dalam No. 5, Lembang. Kec. Lembang. Kab. Bandung Barat.</p>
 <br>
 <p><strong>Invoice </strong> : <?= $detail[0]->invoice?></p>
-<p><strong>Date payment </strong> : <?= $penjualan->date_payment?></p>
+<p><strong>Date payment </strong> : <?= $detail[0]->tanggal?></p>
 <br>
 </center>
 <table class="table">
@@ -21,26 +21,23 @@
         <th>subtotal</th>
     </tr>
     <?php 
-    $no =1;
-    $subtotal = 0;
+    $no = 1;
     foreach ($detail as $value) { ?>
-    <?php $subtotal = $value->jml * $value->harga ?> 
+    <?php $subtotal = $value->jml * $value->harga_satuan ?>
     <tr>
         <td><?= $no++ ?></td>
-        <td><?= $value->nama_produk ?></td>
-        <td><?= $value->jml.' '.'@'.$value->harga ?></td>
-        <td><?= format_rp($subtotal) ?></td>
+        <td><?= $value->nama_produk?></td>
+        <td><?= $value->jml.' '.'@'.$value->harga_satuan ?></td>
+        <td><?= format_rp($subtotal)?></td>
     </tr>
     <?php } ?>
 </table>
 <center>
 ======================================
-<p><strong>Penjualan</strong> : <?= format_rp($penjualan->total_trans) ?></p>
-<p><strong>PPN (10%)</strong> : <?= format_rp($penjualan->ppn) ?></p>
+<p><strong>Pembelian</strong> : <?= format_rp($detail[0]->total) ?></p>
+<p><strong>PPN (10%)</strong> : <?= format_rp($detail[0]->ppn) ?></p>
+<p><strong>Grand Total</strong> : <?= format_rp($detail[0]->grandtotal) ?></p>
 ======================================
-<p><strong>Pembayaran</strong> : <?= format_rp($penjualan->pembayaran) ?></p>
-<p><strong>Total</strong> : <?= format_rp($penjualan->total) ?></p>
-<p><strong>Kembalian</strong> : <?= format_rp($penjualan->kembalian) ?></p>
 <br>
 <p>Terimakasih :) </p>
 </center>

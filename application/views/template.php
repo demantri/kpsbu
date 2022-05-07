@@ -328,6 +328,7 @@
                                        <!-- laporan siti -->
                                        <li><a href="<?= base_url('Laporan/laporan_penjualan_waserda')?>">Laporan Penjualan Waserda</a></li>
                                        <li><a href="<?= base_url('Laporan/laporan_penjualan_waserda')?>">Laporan Pembelian Waserda</a></li>
+                                       <li><a href="<?= base_url('laporan/kartu_stok')?>">Kartu stok</a></li>
 
                                     <?php
                                     elseif ($this->session->userdata('level') == "produksi1") :

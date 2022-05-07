@@ -573,4 +573,31 @@ class m_transaksi extends CI_Model
 		];
 		$this->db->insert('buku_kas_kecil', $data);
 	}
+
+	public function insertKartuStok($id_trans, $id_produk)
+	{
+		$tbPosPembelian = $this->db->query("SELECT a.*, a.id_produk as kode, nama_produk, b.jml AS stok_produk, b.status 
+		FROM pos_detail_pembelian a
+		JOIN waserda_produk b ON a.id_produk = b.kode
+		WHERE invoice = '$id_trans'
+		GROUP BY id_produk")->result();
+		// print_r($tbPosPembelian);
+		foreach ($tbPosPembelian as $data) {
+			// $this->db->where('');
+			// $this->db->where('id_produk', $id_produk);
+			$detailPosPembelian = $this->db->query("SELECT  FROM pos_detail_pembelian WHERE stok_produk > 0");
+			// print_r($id_produk);
+		}
+	}
+
+	public function insertTblWaserdaLogTransaksi($id_produk, $jenis_transaksi, $jumlah, $stok_akhir)
+	{
+		$data = [
+			'id_produk' => $id_produk,
+			'jenis_transaksi' => $jenis_transaksi,
+			'jumlah' => $jumlah,
+			'stok_akhir' => $stok_akhir,
+		];
+		return $this->db->insert('waserda_log_transaksi', $data);
+	}
 }

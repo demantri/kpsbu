@@ -51,7 +51,7 @@
                                         <?php } ?>
                                     </td>
                                     <td>
-                                        <button class="btn btn-xs btn-default"><i class="fa fa-book"></i></button>
+                                        <a href="<?= base_url('Pembelian/detail_print/'. $value->invoice ) ?>" class="btn btn-default"><i class="fa fa-print"></i></a>
                                     </td>
                                 </tr>
                             <?php } ?>
@@ -63,13 +63,3 @@
     </div>
 </div>
 <?php $this->load->view('script');?>
-<!-- <?php $this->load->view('waserda/kategori/edit')?>
-<script>
-    $('.btn-edit').on('click', function() {
-        var id = $(this).data('id')
-        var desc = $(this).data('desc')
-
-        $('.modal-body #kode').val(id)
-        $('.modal-body #desc').val(desc)
-    })
-</script> -->

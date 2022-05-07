@@ -1,5 +1,18 @@
 <?php class Produk_model extends CI_Model
 {
+
+    public function getProdukWaserda()
+    {
+        $q = "SELECT * FROM waserda_produk";
+        return $this->db->query($q);
+    }
+
+    public function getKartuStok()
+    {
+        $q = "SELECT * FROM waserda_produk";
+        return $this->db->query($q);
+    }
+
     public function get_produk()
     {
         $sql = "SELECT a.*, deskripsi, c.nama AS supplier 

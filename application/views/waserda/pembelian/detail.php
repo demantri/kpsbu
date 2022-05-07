@@ -4,7 +4,7 @@
             <div class="x_title">
                 <div class="row">
                     <div class="col-sm-10 col-12">
-                        <h3 id="quote">Detail Penjualan Waserda</h3>
+                        <h3 id="quote">Detail Pembelian Waserda</h3>
                     </div>
                     <div class="col-sm-2 col-12">
                         <h3 id="quote">
@@ -22,34 +22,44 @@
                         <thead>
                             <tr>
                                 <th style="width: 5%;">#</th>
-                                <th>Invoice</th>
-                                <th>Tgl. Penjualan</th>
-                                <th>Nama Barang</th>
-                                <th>Qty</th>
-                                <th>Subtotal</th>
-                                <th>Grand Total</th>
+                                <th class="text-center">Invoice</th>
+                                <th class="text-center">Tgl. Pembelian</th>
+                                <th class="text-center">Nama Barang</th>
+                                <th class="text-center">Qty</th>
+                                <th class="text-center">Harga Satuan</th>
                             </tr>
                         </thead>
                         <tbody>
                             <?php 
                             $no = 1;
-                            $grandtot = 0;
                             foreach ($detail as $key => $value) { ?>
-                            <?php $grandtot += $value->jml * $value->harga ?>
                             <tr>
                                 <td><?= $no++ ?></td>
                                 <td><?= $value->invoice ?></td>
                                 <td><?= $value->tanggal ?></td>
                                 <td><?= $value->nama_produk ?></td>
                                 <td><?= $value->jml ?></td>
-                                <td><?= format_rp($value->harga) ?></td>
-                                <td><?= format_rp($grandtot) ?></td>
+                                <td class="text-right"><?= format_rp($value->harga_satuan) ?></td>
                             </tr>
                             <?php } ?>
                         </tbody>
+                        <tfoot>
+                            <tr>
+                                <th colspan="4">Total Pembelian</th>
+                                <td class="text-right" colspan="2"><?= format_rp($value->total)?></td>
+                            </tr>
+                            <tr> 
+                                <th colspan="4">PPN (10%)</th>
+                                <td class="text-right" colspan="2"><?= format_rp($value->ppn)?></td>
+                            </tr>
+                            <tr> 
+                                <th colspan="4">GrandTotal</th>
+                                <td class="text-right" colspan="2"><?= format_rp($value->grandtotal)?></td>
+                            </tr>
+                        </tfoot>
                     </table>
                 </div>
-                <a href="<?= base_url('Kasir/list_penjualan') ?>" class="btn btn-default">Kembali</a>
+                <a href="<?= base_url('Pembelian') ?>" class="btn btn-default">Kembali</a>
                 <button type="button" data-id="<?= $value->invoice?>" class="btn btn-primary" id="printPdf">Print</button>
             </div>
         </div>
@@ -59,7 +69,7 @@
     $(document).ready(function() {
         $("#printPdf").on('click', function(){
             var invoice = $(this).data('id');
-            var url = "<?= base_url('Kasir/pdf/')?>";
+            var url = "<?= base_url('Pembelian/pdf/')?>";
             var win = window.open(url + invoice, '_blank');
             if (win) {
                 window.focus();

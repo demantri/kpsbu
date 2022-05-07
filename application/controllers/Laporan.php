@@ -1,6 +1,12 @@
 <?php 
 class Laporan extends CI_Controller
 {
+
+    public function __construct() {
+        parent::__construct();
+        $this->load->model('Produk_model', 'produk');
+    }
+
     public function buku_pembantu_kas()
     {
         $list = $this->db->get('buku_pembantu_kas')->result();
@@ -103,6 +109,17 @@ class Laporan extends CI_Controller
         //     ];
         //     $this->template->load('template', 'laporan/laporan_penjualan_waserda', $data);
         // }
+    }
+
+    public function kartu_stok()
+    {
+        $getProduk = $this->produk->getProdukWaserda()->result();
+        $getKartuStok = $this->produk->getKartuStok()->result();
+        $data = [
+            'produk' => $getProduk, 
+            'kartu_stok' => $getKartuStok,
+        ];
+        $this->template->load('template', 'laporan/kartu_stok', $data);
     }
 
     // salma 

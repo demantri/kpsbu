@@ -15,17 +15,18 @@
         $user = $this->session->nama_lengkap;
         // print_r($user);exit;
         $inv = $this->master->invoice();
-        $id_bb = $this->db->query("select id_produk from pos_detail_penjualan where invoice = '$inv'
+        $id_bb = $this->db->query("select id_produk, jml from pos_detail_penjualan where invoice = '$inv'
         and id_produk is not null")->result();
         $total = $this->produk->get_total_detail($inv)->row()->total;
         $ppn = $total * 0.1;
         $gtot = $total + $ppn;
+        $detail = $this->produk->detail_pos($inv)->result();
         // print_r($id_bb);exit;
         $data = [
             'kode' => $inv,
             'user' => $user, 
             'produk' => $this->db->get('waserda_produk')->result(),
-            'detail' => $this->produk->detail_pos($inv)->result(),
+            'detail' => $detail,
             'total' => $total,
             'ppn' => $ppn,
             'gtot' => $gtot,
@@ -185,6 +186,7 @@
     public function checkout()
     {
         $id_bb = $this->input->post('id_bb');
+        $qty = $this->input->post('qty');
         $kode = $this->input->post('kode');
         $jenis = $this->input->post('jenis');
         $pembeli = $this->input->post('pembeli');
@@ -276,6 +278,22 @@
         $where = [];
         $bb = [];
         foreach ($id_bb as $key => $value) {
+
+            /** update kartu stok penjualan */
+            $pengurang = $cek_invoice[$key]->jml;
+            $id_produk = $value;
+
+            $cek_log = $this->db->query("SELECT * 
+            FROM waserda_log_transaksi 
+            WHERE jenis_transaksi = 'Stok Masuk' 
+            AND jumlah > 0 
+            AND id_produk = '$value'")->result();
+
+            foreach ($cek_log as $item) {
+                # code...
+            }
+
+
             $where = array(
                 'kode' => $value
             );

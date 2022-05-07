@@ -11,6 +11,7 @@
                 <div class="modal-body">
                     <?php foreach ($id_bb as $key => $value) { ?>
                         <input type="hidden" name="id_bb[]" value="<?= $value->id_produk?>">
+                        <input type="hidden" name="qty[]" value="<?= $value->jml?>">
                     <?php } ?>
                     <div class="form-group row">
                         <label for="kode" class="col-sm-3 col-form-label">Kode</label>

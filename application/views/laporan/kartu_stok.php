@@ -59,7 +59,20 @@
                     </tr>
                 </thead>
                 <tbody>
-
+                <?php foreach ($kartu_stok as $item) { ?>
+                    <tr>
+                        <td><?= $item->tgl_transaksi ?></td>
+                        <td><?= $item->unit_in ?></td>
+                        <td><?= ($item->harga_in == '-') ? '-' : format_rp($item->harga_in) ?></td>
+                        <td><?= ($item->total_in == '-') ? '-' : format_rp($item->total_in) ?></td>
+                        <td><?= $item->unit_out ?></td>
+                        <td><?= ($item->harga_out == '-') ? '-' : format_rp($item->harga_out) ?></td>
+                        <td><?= ($item->total_out == '-') ? '-' : format_rp($item->total_out) ?></td>
+                        <td><?= $item->unit_total ?></td>
+                        <td><?= ($item->harga_total == '-') ? '-' : format_rp($item->harga_total) ?></td>
+                        <td><?= ($item->total == '-') ? '-' : format_rp($item->total) ?></td>
+                    </tr>
+                <?php } ?>
                 </tbody>
                 <tfoot>
                     <tr>

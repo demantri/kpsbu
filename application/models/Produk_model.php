@@ -9,7 +9,7 @@
 
     public function getKartuStok()
     {
-        $q = "SELECT * FROM waserda_produk";
+        $q = "SELECT * FROM waserda_kartu_stok";
         return $this->db->query($q);
     }
 

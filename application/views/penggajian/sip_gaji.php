@@ -71,7 +71,7 @@
                         $gapok = $detail2[0]->gaji_pokok;
                         $tunjangan_jabatan = $detail2[0]->tunjangan_jabatan;
                         $tunjangan_kesehatan = $detail2[0]->tunjangan_kesehatan;
-                        $bonus = 0;
+                        $bonus_kerja = $bonus;
                         $lembur = 0;
                         $tot_penghasilan = $gapok + $tunjangan_jabatan + $tunjangan_kesehatan + $bonus + $lembur;
                         $tot_pengurang = $ptkp;
@@ -106,7 +106,7 @@
                         </tr>
                         <tr>
                             <th>Bonus Kerja</th>
-                            <td class="text-right"><?= format_rp($bonus)?></td>
+                            <td class="text-right"><?= format_rp($bonus_kerja)?></td>
                             <td></td>
                             <td></td>
                         </tr>

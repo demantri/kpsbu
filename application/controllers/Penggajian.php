@@ -26,6 +26,13 @@ class Penggajian extends CI_Controller
         ";
         $result = $this->db->query($q)->result();
         foreach ($result as $data) {
+            $month = date('Y-m');
+            $tbBonus = $this->db->query("select sum(nominal) as nominal, nip, periode from pengajuan_bonus where periode = '$month' and nip ='$data->nip'")->row();
+            if (is_null($tbBonus->nominal)) {
+                $bonus = 0;
+            } else {
+                $bonus = $tbBonus->nominal;
+            }
             $ptkp1 = $data->nominal;
             $tambah = $data->gaji_pokok + $data->tunjangan_jabatan + $data->tunjangan_kesehatan;
             $pengurang = (5/100 * $tambah);
@@ -64,7 +71,7 @@ class Penggajian extends CI_Controller
             }
             $hasil_ptkp = $akhir;
             
-            $bonus = 0;
+            $bonus = $bonus;
             $lembur = 0;
             $total = ($tambah + $bonus + $lembur) - ($hasil_ptkp);
             $data = [
@@ -73,6 +80,7 @@ class Penggajian extends CI_Controller
                 'ptkp' => $hasil_ptkp,
                 'detail2' => $result,
                 'total' => $total,
+                'bonus' => $bonus
             ];
             $this->template->load('template', 'penggajian/sip_gaji', $data);
         }

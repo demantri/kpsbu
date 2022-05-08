@@ -51,5 +51,15 @@
             echo json_encode($data);
         }
     }
+
+    /** untuk pengajuan bonus */
+    public function pengajuanBonus()
+    {
+        $pegawai = $this->db->query("select * from pegawai where status = '1'")->result();
+        $data = [
+            'pegawai' => $pegawai,
+        ];
+        $this->template->load('template', 'pengajuan/hrd/pengajuan_bonus/index', $data);
+    }
 }
 ?>

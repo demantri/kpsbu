@@ -242,6 +242,36 @@
             $this->db->insert('waserda_pembayaran_kredit', $tb_kredit);
         }
 
+        /** coba kartu stok penjualan */
+        $this->db->where('invoice', $kode);
+        $detailPnj = $this->db->get('pos_detail_penjualan')->result();
+        foreach ($detailPnj as $detail) {
+            $id_produk = $detail->id_produk;
+            $qty = $detail->jml;
+
+            $cekLog = $this->db->query("select * from waserda_log_transaksi where jenis_transaksi = 'Stok Masuk' and id_produk = '$id_produk' and stok_akhir > 0 order by id asc");
+
+            foreach ($cekLog->result() as $row) {
+                $stok = $row->stok_akhir;
+                if ($qty > 0) {
+                    $temp = $qty;
+                    $qty = $qty - $stok;
+                    
+                    if ($qty > 0) {
+                        $stok_update = 0;
+                    } else {
+                        $stok_update = $stok - $temp;
+                    }
+
+                    $this->db->set('stok_akhir', $stok_update);
+                    $this->db->where('id_produk', $id_produk);
+                    $this->db->where('jenis_transaksi', 'Stok Masuk');
+                    $this->db->where('id', $row->id);
+                    $this->db->update('waserda_log_transaksi');
+                }
+            }
+        }
+
         // masih belum bisa insert ke detail
         // $data = [
         //     'total' => $total,
@@ -280,18 +310,18 @@
         foreach ($id_bb as $key => $value) {
 
             /** update kartu stok penjualan */
-            $pengurang = $cek_invoice[$key]->jml;
-            $id_produk = $value;
+            // $pengurang = $cek_invoice[$key]->jml;
+            // $id_produk = $value;
 
-            $cek_log = $this->db->query("SELECT * 
-            FROM waserda_log_transaksi 
-            WHERE jenis_transaksi = 'Stok Masuk' 
-            AND jumlah > 0 
-            AND id_produk = '$value'")->result();
+            // $cek_log = $this->db->query("SELECT * 
+            // FROM waserda_log_transaksi 
+            // WHERE jenis_transaksi = 'Stok Masuk' 
+            // AND jumlah > 0 
+            // AND id_produk = '$value'")->result();
 
-            foreach ($cek_log as $item) {
-                # code...
-            }
+            // foreach ($cek_log as $item) {
+            //     # code...
+            // }
 
 
             $where = array(

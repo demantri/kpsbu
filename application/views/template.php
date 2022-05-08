@@ -197,28 +197,18 @@
    <script src="<?php echo base_url(); ?>assets/vendors/pdfmake/build/vfs_fonts.js"></script>
    <!-- Custom Theme Scripts -->
    <script src="<?php echo base_url(); ?>assets/build/js/custom.min.js"></script>
-
    <script src="<?= base_url('assets/format.js')?>"></script>
-
+   
    <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-
-   <!-- <script type="text/javascript">
-          $(document).ready(function () {
-            $("#no_nota").click(function () {
-              alert("holaaa")
-            });
-          });
-        </script> -->
-        <script>
-            $(function() {
-               $('#myDatepicker2').datetimepicker({
-                  // format: 'DD.MM.YYYY'
-                  format: 'YYYY-MM-DD'
-               });
-            })
-         </script>
-
+   <script>
+      $(function() {
+         $('#myDatepicker2').datetimepicker({
+            // format: 'DD.MM.YYYY'
+            format: 'YYYY-MM-DD'
+         });
+      })
+   </script>
 </body>
 
 </html>

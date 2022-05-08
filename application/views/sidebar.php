@@ -224,8 +224,9 @@
                     <?php if ($this->session->userdata('level') == "keuangan" or $this->session->userdata('level') == "admin") : ?>
                         <li><a href="<?php echo site_url(); ?>c_keuangan/view_jurnal">Jurnal</a></li>
                         <li><a href="<?php echo site_url(); ?>c_keuangan/bukubesar">Buku Besar</a></li>
-                        <!-- <li><a href="<?php echo site_url(); ?>c_keuangan/view_bukubesar">Kartu Simpanan Wajib</a></li> -->
-                        <!-- <li><a href="<?php echo site_url(); ?>c_keuangan/view_bukubesar">Kartu Simpanan Manasuka</a></li> -->
+
+                        <li><a href="<?php echo site_url(); ?>Laporan/neraca_saldo">Neraca Saldo</a></li>
+                        <li><a href="#">Laporan Neraca</a></li>
 
                         <!-- laporan sarah -->
                         <li><a href="<?php echo site_url(); ?>laporan/laporan_simpanan">Laporan Simpanan</a></li>
@@ -240,6 +241,7 @@
                         <li><a href="<?php echo site_url(); ?>c_keuangan/lap_pemb">Laporan Pembelian Bahan Baku</a></li>
                         <li><a href="<?php echo site_url(); ?>c_keuangan/lap_pembp">Laporan Pembelian Bahan Penolong</a></li>
                         <li><a href="<?php echo site_url(); ?>c_keuangan/lap_pemby">Laporan Pembayaran Beban</a></li>
+                        <li><a href="<?php echo site_url(); ?>Laporan/laporan_penjualan_shu">Laporan Penjualan SHU</a></li>
                         <li><a href="<?php echo site_url(); ?>c_keuangan/lap_penjs">Laporan Penjualan IPS</a></li>
                         <li><a href="<?php echo site_url(); ?>c_keuangan/lap_penjt">Laporan Penjualan Toko</a></li>
                         <li><a href="<?php echo site_url(); ?>c_keuangan/lap_bp_ips">Laporan Harga Pokok Produksi IPS</a></li>
@@ -286,7 +288,6 @@
                     elseif ($this->session->userdata('level') == "keuangan3") :
                     ?>
                         <li><a href="<?php echo site_url(); ?>c_keuangan/view_jurnal">Jurnal</a></li>
-                        <!-- <li><a href="<?php echo site_url(); ?>c_keuangan/view_bukubesar">Buku Besar</a></li> -->
                         <li><a href="<?php echo site_url(); ?>c_keuangan/bukubesar">Buku Besar</a></li>
                         <li><a href="<?php echo site_url(); ?>c_keuangan/lap_penjs">Laporan Penjualan IPS</a></li>
                         <li><a href="<?php echo site_url(); ?>c_keuangan/lap_penjt">Laporan Penjualan Toko</a></li>

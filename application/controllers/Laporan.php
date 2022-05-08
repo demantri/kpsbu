@@ -47,6 +47,27 @@ class Laporan extends CI_Controller
     }
 
     // sarah
+    public function laporan_penjualan_shu()
+    {
+        $susu_murni = $this->db->query("SELECT * FROM pnj_susu WHERE jenis_pnj_susu = 'susu_murni'")->result();
+        $pakan_konsentrat = $this->db->query("SELECT * FROM pnj_susu WHERE jenis_pnj_susu = 'pakan_konsentrat'")->result();
+        $susu_olahan = $this->db->query("SELECT * FROM pnj_susu WHERE jenis_pnj_susu = 'susu_olahan'")->result();
+        $total_pbj = $this->db->query("SELECT SUM(total) AS total_penjualan FROM pnj_susu")->row()->total_penjualan;
+        $data = [
+            'susu_murni' => $susu_murni,
+            'susu_olahan' => $susu_olahan,
+            'pakan_konsentrat' => $pakan_konsentrat,
+            'total' => $total_pbj
+        ];
+
+        $this->template->load('template', 'shu/laporan_penjualan_shu/index', $data);
+    }
+
+    public function neraca_saldo()
+    {
+        $this->template->load('template', 'laporan/neraca_saldo');
+    }
+
     public function laporan_simpanan()
     {
         // $list = $this->db->query("SELECT 

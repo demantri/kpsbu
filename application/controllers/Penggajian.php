@@ -33,6 +33,13 @@ class Penggajian extends CI_Controller
             } else {
                 $bonus = $tbBonus->nominal;
             }
+            $lembur = 0;
+            // $tbLembur = $this->db->query("select sum(total_nominal_lembur) as total from tb_lembur where left(tgl_pengajuan, 7) = '2022-05' and id_pegawai = '111'")->row();
+            // if (is_null($tbLembur->total)) {
+            //     $lembur = 0;
+            // } else {
+            //     $lembur = $tbLembur->total;
+            // }
             $ptkp1 = $data->nominal;
             $tambah = $data->gaji_pokok + $data->tunjangan_jabatan + $data->tunjangan_kesehatan;
             $pengurang = (5/100 * $tambah);
@@ -72,7 +79,7 @@ class Penggajian extends CI_Controller
             $hasil_ptkp = $akhir;
             
             $bonus = $bonus;
-            $lembur = 0;
+            $lemburfix = $lembur;
             $total = ($tambah + $bonus + $lembur) - ($hasil_ptkp);
             $data = [
                 'peg' => $peg,
@@ -80,7 +87,8 @@ class Penggajian extends CI_Controller
                 'ptkp' => $hasil_ptkp,
                 'detail2' => $result,
                 'total' => $total,
-                'bonus' => $bonus
+                'bonus' => $bonus, 
+                'lembur' => $lemburfix
             ];
             $this->template->load('template', 'penggajian/sip_gaji', $data);
         }

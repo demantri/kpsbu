@@ -56,103 +56,154 @@ class c_keuangan extends CI_Controller
 
 	public function bukubesar()
 	{
-		$periode = $this->input->get('bulan');
-		$akun = $this->input->get('no_coa');
-		if ($periode === null && $akun === null) {
-			$m = date('m');
-			$y = date('Y');
-		} else {
-			$m = date('m', strtotime($periode));
-			$y = date('Y', strtotime($periode));
-			$akun = $akun;
-		}
+		$akun = $this->db->get('coa')->result();
+		
+		/** query untuk ambil saldo akhir di jurnal */
+		$periode = $this->input->post('bulan');
+		$cek = date('m-Y', strtotime("-1 months", strtotime($periode)));
+		$bulan1 = substr($cek, 0, 2);
+		$tahun1 = substr($cek, 3, 7);
+		$query = $this->db->query("SELECT 
+		SUM(nominal) AS debit, 
+		(
+		   SELECT sum(nominal) 
+		   FROM jurnal 
+		   WHERE no_coa = '1111' 
+		   AND MONTH(tgl_jurnal) <= '$bulan1' 
+		   AND YEAR(tgl_jurnal) <= '$tahun1' 
+		   and posisi_dr_cr = 'k' 
+		) AS kredit
+		FROM jurnal
+		WHERE no_coa = '1111'
+		AND MONTH(tgl_jurnal) <= '$bulan1'
+		AND YEAR(tgl_jurnal) <= '$tahun1'
+		AND posisi_dr_cr = 'd'");
+		$debit = $query->row()->debit;
+		$kredit = $query->row()->kredit;
+		$pengurangan = $debit - $kredit;
+		/** cek saldo awal berdasarkan no coa */
+		$saldoByCoa = $this->db->query("select * from coa where no_coa = '1111'")->row()->saldo_awal;
+		$saldo_awal = $saldoByCoa + $pengurangan;
 
-		$coa = $this->db->get('coa')->result();
+		$query2 = $this->db->query("SELECT 
+		a.*, b.nama_coa, b.saldo_awal, b.header
+		FROM jurnal a
+		JOIN coa b ON a.no_coa = b.no_coa
+		WHERE b.no_coa = '1111' 
+		AND LEFT(a.tgl_jurnal, 7) = '$periode'
+		ORDER BY tgl_jurnal ASC");
+
+		$listBB = $query2->result();
+		$getSaldo = $query2->row()->saldo_awal ?? 0 ;
+		// print_r($getSaldo);exit;
+
 		$data = [
-			'coa' => $coa,
-			'periode' => '',
-			'nm_akun' => ''
+			'coa' => $akun,
+			'list' => $listBB, 
+			'saldo_awal' => $saldo_awal
 		];
-
-		$data["data_akuns"] = $this->M_keuangan->getAll();
-		$data["data_buku_besars"] = $this->M_keuangan->getDataBukuBesar2($m, $y, $akun);
-
 		$this->template->load('template', 'new_bukubesar', $data);
 	}
 
+	// public function bukubesar()
+	// {
+	// 	$periode = $this->input->get('bulan');
+	// 	$akun = $this->input->get('no_coa');
+	// 	if ($periode === null && $akun === null) {
+	// 		$m = date('m');
+	// 		$y = date('Y');
+	// 	} else {
+	// 		$m = date('m', strtotime($periode));
+	// 		$y = date('Y', strtotime($periode));
+	// 		$akun = $akun;
+	// 	}
 
-	public function view_bukubesar()
-	{
-		$periode = $this->input->get('bulan');
-		$akun = $this->input->get('no_coa');
-		if ($periode === null && $akun === null) {
-			$m = date('m');
-			$y = date('Y');
-		} else {
-			$m = date('m', strtotime($periode));
-			$y = date('Y', strtotime($periode));
-			$akun = $akun;
-		}
-		$coa = $this->db->get('coa')->result();
-		$data = [
-			'coa' 					=> $coa,
-			'row_buku_besar'        => $this->M_keuangan->get_row_buku_besar($y, $m, $akun),
-			'buku_besar'            => $this->M_keuangan->get_buku_besar($y, $m, $akun),
-			'periode'                 => $m,
-			'year'                  => $y,
-			'id_akun'               => $akun,
-			'nm_akun'             	=> $this->M_keuangan->get_nama_akun($akun),
-		];
-		$time = strtotime($periode);
-		$month = date("F", $time);
-		$year = date("Y", $time);
-		$data['year'] = $year;
-		$data['date'] = $month;
-		$this->session->set_userdata('periode', $periode);
-		$this->session->set_userdata('id_akun', $akun);
-		$data["data_akuns"] = $this->M_keuangan->getAll();
-		$data['data_buku_besars'] = $this->M_keuangan->getDataBukuBesar($m, $y, $akun);
+	// 	$coa = $this->db->get('coa')->result();
+	// 	$data = [
+	// 		'coa' => $coa,
+	// 		'periode' => '',
+	// 		'nm_akun' => ''
+	// 	];
 
-		$data['posisi_saldo_normal'] = $this->M_keuangan->getPosisiSaldoNormal($akun);
-		$data['saldo_awal'] = $this->M_keuangan->getSaldoAwalBukuBesar($y, $m, $akun);
+	// 	$data["data_akuns"] = $this->M_keuangan->getAll();
+	// 	$data["data_buku_besars"] = $this->M_keuangan->getDataBukuBesar2($m, $y, $akun);
 
-		$this->template->load('template', 'bukubesar', $data);
-	}
+	// 	$this->template->load('template', 'new_bukubesar', $data);
+	// }
 
-	public function bukubesar_pdf_filter($no_akun, $bulan5, $tahun5)
-	{
-		$bulan1 = $bulan5;
-		$tahun1 = date("Y", strtotime($tahun5));;
-		$cek = date('m-d-Y', mktime(0, 0, 0, 1, $bulan1 - 1, $tahun1));
-		$bulan = substr($cek, 3, 2);
-		$tahun = substr($cek, 6, 5);
-		$data['bulan'] = $bulan5;
-		$data['tahun'] = $tahun5;
-		$query = "SELECT sum(nominal) as debit , (SELECT sum(nominal) FROM jurnal WHERE no_coa = '$no_akun' AND MONTH(tgl_jurnal) <= '$bulan' AND YEAR(tgl_jurnal) <= '$tahun' and posisi_dr_cr = 'K' ) AS kredit FROM jurnal WHERE no_coa = '$no_akun' AND MONTH(tgl_jurnal) <= '$bulan' AND YEAR(tgl_jurnal) <= '$tahun' and posisi_dr_cr = 'd' ";
-		$data['saldoawal'] = $this->db->query($query)->row_array();
-		$data['akun'] = $this->M_keuangan->GetDataAkun();
-		$data['dataakun'] = $this->M_keuangan->GetSaldoAkun($no_akun);
-		$data['jurnal'] = $this->M_keuangan->getdatabukubesar($no_akun, $bulan5, $tahun5);
-		$this->template->load('template_pdf', 'bukubesar_pdf', $data);
-	}
 
-	public function bukubesar_excel_filter($no_akun, $bulan5, $tahun5)
-	{
-		header("Content-type=application/vnd.ms.excel");
-		header("Content-disposition: attachment; filename=Buku Besar.xls");
-		$bulan1 = $bulan5;
-		$tahun1 = date("Y", strtotime($tahun5));;
-		$cek = date('m-d-Y', mktime(0, 0, 0, 1, $bulan1 - 1, $tahun1));
-		$bulan = substr($cek, 3, 2);
-		$tahun = substr($cek, 6, 5);
-		$query = "SELECT sum(nominal) as debit , (SELECT sum(nominal) FROM jurnal WHERE no_coa = '$no_akun' AND MONTH(tgl_jurnal) <= '$bulan' AND YEAR(tgl_jurnal) <= '$tahun' and posisi_dr_cr = 'K' ) AS kredit FROM jurnal WHERE no_coa = '$no_akun' AND MONTH(tgl_jurnal) <= '$bulan' AND YEAR(tgl_jurnal) <= '$tahun' and posisi_dr_cr = 'd' ";
-		$data['saldoawal'] = $this->db->query($query)->row_array();
-		$data['akun'] = $this->M_keuangan->GetDataAkun();
-		$data['dataakun'] = $this->M_keuangan->GetSaldoAkun($no_akun);
-		$data['jurnal'] = $this->M_keuangan->getdatabukubesar($no_akun, $bulan5, $tahun5);
-		$this->load->view('bukubesar_excel', $data);
-		//$this->template->load('template','laporan_penj',$data);
-	}
+	// public function view_bukubesar()
+	// {
+	// 	$periode = $this->input->get('bulan');
+	// 	$akun = $this->input->get('no_coa');
+	// 	if ($periode === null && $akun === null) {
+	// 		$m = date('m');
+	// 		$y = date('Y');
+	// 	} else {
+	// 		$m = date('m', strtotime($periode));
+	// 		$y = date('Y', strtotime($periode));
+	// 		$akun = $akun;
+	// 	}
+	// 	$coa = $this->db->get('coa')->result();
+	// 	$data = [
+	// 		'coa' 					=> $coa,
+	// 		'row_buku_besar'        => $this->M_keuangan->get_row_buku_besar($y, $m, $akun),
+	// 		'buku_besar'            => $this->M_keuangan->get_buku_besar($y, $m, $akun),
+	// 		'periode'                 => $m,
+	// 		'year'                  => $y,
+	// 		'id_akun'               => $akun,
+	// 		'nm_akun'             	=> $this->M_keuangan->get_nama_akun($akun),
+	// 	];
+	// 	$time = strtotime($periode);
+	// 	$month = date("F", $time);
+	// 	$year = date("Y", $time);
+	// 	$data['year'] = $year;
+	// 	$data['date'] = $month;
+	// 	$this->session->set_userdata('periode', $periode);
+	// 	$this->session->set_userdata('id_akun', $akun);
+	// 	$data["data_akuns"] = $this->M_keuangan->getAll();
+	// 	$data['data_buku_besars'] = $this->M_keuangan->getDataBukuBesar($m, $y, $akun);
+
+	// 	$data['posisi_saldo_normal'] = $this->M_keuangan->getPosisiSaldoNormal($akun);
+	// 	$data['saldo_awal'] = $this->M_keuangan->getSaldoAwalBukuBesar($y, $m, $akun);
+
+	// 	$this->template->load('template', 'bukubesar', $data);
+	// }
+
+	// public function bukubesar_pdf_filter($no_akun, $bulan5, $tahun5)
+	// {
+	// 	$bulan1 = $bulan5;
+	// 	$tahun1 = date("Y", strtotime($tahun5));;
+	// 	$cek = date('m-d-Y', mktime(0, 0, 0, 1, $bulan1 - 1, $tahun1));
+	// 	$bulan = substr($cek, 3, 2);
+	// 	$tahun = substr($cek, 6, 5);
+	// 	$data['bulan'] = $bulan5;
+	// 	$data['tahun'] = $tahun5;
+	// 	$query = "SELECT sum(nominal) as debit , (SELECT sum(nominal) FROM jurnal WHERE no_coa = '$no_akun' AND MONTH(tgl_jurnal) <= '$bulan' AND YEAR(tgl_jurnal) <= '$tahun' and posisi_dr_cr = 'K' ) AS kredit FROM jurnal WHERE no_coa = '$no_akun' AND MONTH(tgl_jurnal) <= '$bulan' AND YEAR(tgl_jurnal) <= '$tahun' and posisi_dr_cr = 'd' ";
+	// 	$data['saldoawal'] = $this->db->query($query)->row_array();
+	// 	$data['akun'] = $this->M_keuangan->GetDataAkun();
+	// 	$data['dataakun'] = $this->M_keuangan->GetSaldoAkun($no_akun);
+	// 	$data['jurnal'] = $this->M_keuangan->getdatabukubesar($no_akun, $bulan5, $tahun5);
+	// 	$this->template->load('template_pdf', 'bukubesar_pdf', $data);
+	// }
+
+	// public function bukubesar_excel_filter($no_akun, $bulan5, $tahun5)
+	// {
+	// 	header("Content-type=application/vnd.ms.excel");
+	// 	header("Content-disposition: attachment; filename=Buku Besar.xls");
+	// 	$bulan1 = $bulan5;
+	// 	$tahun1 = date("Y", strtotime($tahun5));;
+	// 	$cek = date('m-d-Y', mktime(0, 0, 0, 1, $bulan1 - 1, $tahun1));
+	// 	$bulan = substr($cek, 3, 2);
+	// 	$tahun = substr($cek, 6, 5);
+	// 	$query = "SELECT sum(nominal) as debit , (SELECT sum(nominal) FROM jurnal WHERE no_coa = '$no_akun' AND MONTH(tgl_jurnal) <= '$bulan' AND YEAR(tgl_jurnal) <= '$tahun' and posisi_dr_cr = 'K' ) AS kredit FROM jurnal WHERE no_coa = '$no_akun' AND MONTH(tgl_jurnal) <= '$bulan' AND YEAR(tgl_jurnal) <= '$tahun' and posisi_dr_cr = 'd' ";
+	// 	$data['saldoawal'] = $this->db->query($query)->row_array();
+	// 	$data['akun'] = $this->M_keuangan->GetDataAkun();
+	// 	$data['dataakun'] = $this->M_keuangan->GetSaldoAkun($no_akun);
+	// 	$data['jurnal'] = $this->M_keuangan->getdatabukubesar($no_akun, $bulan5, $tahun5);
+	// 	$this->load->view('bukubesar_excel', $data);
+	// 	//$this->template->load('template','laporan_penj',$data);
+	// }
 
 
 	//laporan pembelihan bahan baku

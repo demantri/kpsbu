@@ -7,13 +7,12 @@
         <body>
             <div class="row">
                 <div class="col-sm">
-                    <form class='form-inline' method="get" class="form-inline" action="<?php echo site_url() . '/c_keuangan/view_bukubesar'; ?>">
-
+                    <form class='form-inline' method="post" class="form-inline" action="<?= base_url('c_keuangan/bukubesar')?>">
                         <label>Nama Akun </label>
                         <select name="no_coa" class="form-control" required>
-                            <option value="">Pilih Akun</option>
-                            <?php foreach ($coa as $key => $value) { ?>
-                                <option value="<?= $value->no_coa ?>"><?= $value->nama_coa ?></option>
+                            <option item="">Pilih Akun</option>
+                            <?php foreach ($coa as $key => $item) { ?>
+                                <option item="<?= $item->no_coa ?>"><?= $item->nama_coa ?></option>
                             <?php } ?>
                         </select>
                         &nbsp&nbsp&nbsp&nbsp
@@ -26,11 +25,13 @@
                 <hr>
 
                 <p>
-                    <center><b>
+                    <center>
+                        <b>
                             <div style="font-size: 25px">KPSBU</div>
-                            <div style="font-size: 20px">Buku Besar <?= $nm_akun ?></div>
-                            <div style="font-size: 15px">Periode <?= $periode ?></div>
-                        </b></center>
+                            <div style="font-size: 20px">Buku Besar </div>
+                            <div style="font-size: 15px">Periode </div>
+                        </b>
+                    </center>
                 </p>
 
                 <hr>
@@ -39,57 +40,50 @@
                         <tr>
                             <th rowspan="2">Tanggal</th>
                             <th rowspan="2">Nama Akun</th>
-                            
                             <th rowspan="2">Reff</th>
                             <th rowspan="2" class="text-center">Debet</th>
                             <th rowspan="2" class="text-center">Kredit</th>
-                            <th colspan="2" class="text-center">Saldo </th>
-                        </tr>
-                        <tr>
-                            <th class="text-center">Debet</th>
-                            <th class="text-center">Kredit</th>
+                            <th rowspan="2" class="text-center">Saldo </th>
                         </tr>
                     </thead>
-                    <tfoot>
-                        <tr>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th class="text-right"></th>
-                            <th class="text-right"></th>
-                        </tr>
-                    </tfoot>
                     <tbody>
-                        <?php foreach ((array)$data_buku_besars as $data_buku_besar) :
-                            $class = (($data_buku_besar->debet) ? 'DEBET' : (($data_buku_besar->kredit) ? 'KREDIT' : ""));
-                        ?>
-                            <tr>
-                                <td class="text-center" width="130">
-                                    <?php echo $data_buku_besar->id_jurnal ?>
-                                </td>
-                                <td class="text-center">
-                                    <?php echo $data_buku_besar->tanggal ?>
-                                </td>
-                                <td class="text <?= $class ?>">
-                                    <?php echo $data_buku_besar->nama_akun ?>
-                                </td>
-                                <td class=" text-center" width="100">
-                                    <?php echo $data_buku_besar->id_akun ?>
-                                </td>
-                                <td class="text-right">
-                                    <?php echo number_format($data_buku_besar->debet) ?>
-                                </td>
-                                <td class="text-right">
-                                    <?php echo number_format($data_buku_besar->kredit) ?>
-                                </td>
-                                <!-- <td>
-                                                <?php //$data_buku_besar['transaksi 
-                                                ?>
-                                            </td> -->
-                            </tr>
-                        <?php endforeach; ?>
-
+                    <tr>
+                        <td>0000-00-00</td>
+                        <td>Saldo Awal</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td class="text-right"><?= format_rp($saldo_awal) ?></td>
+                    </tr>
+                    <?php foreach ($list as $item) { ?>
+                        <tr>
+                            <td><?= $item->tgl_jurnal ?></td>
+                            <td><?= $item->nama_coa ?></td>
+                            <td><?= $item->no_coa ?></td>
+                            <?php if ($item->posisi_dr_cr =='d') { ?>
+								<?php if ($item->header == 1 OR $item->header == 5 OR $item->header == 6 ) { ?>
+									<?php $saldo_awal = $saldo_awal + $item->nominal; ?>
+								<?php } else { ?>
+									<?php $saldo_awal = $saldo_awal - $item->nominal; ?>
+								<?php } ?>
+								<td class="text-right"><?= format_rp($item->nominal)?></td>
+								<td></td>
+							<?php } else { ?>
+								<?php if ($item->header == 1 OR $item->header == 5 OR $item->header == 6 ) { ?>
+									<?php $saldo_awal = $saldo_awal - $item->nominal; ?>
+								<?php } else { ?>
+									<?php $saldo_awal = $saldo_awal + $item->nominal; ?>
+							<?php } ?>
+							<td></td>
+							<td class="text-right"><?= format_rp($item->nominal)?></td>
+							<?php }?>
+							<td class="text-right"><?= format_rp($saldo_awal)?></td>
+                        </tr>
+                    <?php } ?>
+                    <tr>
+						<td colspan="5"><b>Saldo Akhir</b></td>
+						<td class="text-right">123123</td>
+					</tr>
                     </tbody>
                 </table>
         </body>

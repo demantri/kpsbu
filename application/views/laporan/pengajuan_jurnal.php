@@ -8,7 +8,7 @@
                     </div>
                     <div class="col-sm-2 col-12">
                         <h3 id="quote">
-                            <a href="#add" data-toggle="modal" class="btn pull-right btn-primary">Tambah</a>
+                            <!-- <a href="#add" data-toggle="modal" class="btn pull-right btn-primary">Tambah</a> -->
                         </h3>
                     </div>
                 </div>

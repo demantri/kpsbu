@@ -44,7 +44,7 @@
                                 <td class="text-center">
                                     <?php if ($value->status == 2) { ?>
                                         <a href="" class="btn btn-xs btn-warning">Pengajuan Jurnal</a>
-                                    <?php } else if (date('d') >= '06' AND is_null($value->id_pembayaran) AND $value->status == 0) { ?>
+                                    <?php } else if (date('d') >= '15' AND is_null($value->id_pembayaran) AND $value->status == 0) { ?>
                                         <a href="#bayar" data-toggle="modal" class="btn btn-xs btn-primary bayar" 
                                         data-invoice="<?= $value->invoice?>"
                                         data-pembeli="<?= $value->nama?>"
@@ -53,7 +53,7 @@
                                         >Bayar</a>
                                     <?php } ?>
                                     <?php if (!is_null($value->id_pembayaran)) { ?>
-                                        <a href="" class="btn btn-xs btn-success">Pembayaran selesai (<?= date('d-m-Y', strtotime($value->tanggal))?>)</a>
+                                        <span class="label label-success">Pembayaran Selesai (<?= date('d-m-Y', strtotime($value->tanggal))?>)</span>
                                     <?php } ?>
                                 </td>
                             </tr>

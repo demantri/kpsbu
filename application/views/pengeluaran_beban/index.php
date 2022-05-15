@@ -26,6 +26,7 @@
                                 <th>Tgl. Pengeluaran Beban</th>
                                 <th>Nama Beban</th>
                                 <th>Nominal</th>
+                                <th>Keterangan</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -38,6 +39,7 @@
                                 <td><?= $value->tgl_pengeluaran ?></td>
                                 <td><?= $value->nama_coa ?></td>
                                 <td><?= format_rp($value->nominal) ?></td>
+                                <td><?= ucwords($value->keterangan) ?></td>
                             </tr>
                         <?php }?>
                         </tbody>

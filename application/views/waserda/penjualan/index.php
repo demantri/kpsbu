@@ -56,7 +56,12 @@
                                 <td class="text-right"><?= format_rp($value->total) ?></td>
                                 <td class="text-right"><?= format_rp($value->kembalian) ?></td>
                                 <td class="text-center">
-                                    <a href="<?= base_url('Kasir/detail_print/'. $value->invoice ) ?>" class="btn btn-default"><i class="fa fa-print"></i></a>
+                                    <?php 
+                                    if ($value->jenis_pembayaran == 'kredit' && !is_null($value->status_kredit)) { ?>
+                                        <a href="<?= base_url('Kasir/detail_print/'. $value->invoice ) ?>" class="btn btn-default"><i class="fa fa-print"></i></a>
+                                    <?php } else if ($value->jenis_pembayaran == 'tunai' || empty($value->jenis_pembayaran)) { ?>
+                                        <a href="<?= base_url('Kasir/detail_print/'. $value->invoice ) ?>" class="btn btn-default"><i class="fa fa-print"></i></a>
+                                    <?php } ?>
                                 </td>
                             </tr>
                         <?php } ?>

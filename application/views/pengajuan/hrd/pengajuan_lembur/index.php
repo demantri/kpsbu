@@ -17,6 +17,10 @@
                 <div id="notif">
                     <?php echo $this->session->flashdata('notif_ubah'); ?>
                 </div>
+                <div style="margin-bottom: 20px;">
+                    <strong>Note :<br></strong>
+                    <p>*untuk lembur pegawai, maksimal 6 jam <br></p>
+                </div>
                 <div class="table-responsive">
                     <table class="table table-bordered" id="datatable">
                         <thead>
@@ -26,20 +30,27 @@
                                 <th>Tanggal Pengajuan</th>
                                 <th>Nama Pegawai</th>
                                 <th>Jumlah Pengajuan (jam lembur)</th>
-                                <th>Status</th>
-                                <th>Aksi</th>
+                                <th class="text-center">Status</th>
+                                <th class="text-center">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
-                        <?php foreach ($variable as $key => $value) { ?>
+                        <?php 
+                        $no = 1;
+                        foreach ($lembur as $key => $value) { ?>
                             <tr>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
+                                <td><?= $no++?></td>
+                                <td><?= $value->id_pengajuan?></td>
+                                <td><?= $value->tgl_pengajuan?></td>
+                                <td><?= $value->nama?></td>
+                                <td><?= $value->total_jam?></td>
+                                <td class="text-center">
+                                    <?= $value->status == 0 ? '<span class="label label-warning">Menunggu persetujuan</span>' : (($value->status == 1) ? '<span class="label label-success">Sudah disetujui</span>' : '<span class="label label-danger">Ditolak</span>'); ?>
+                                </td>
+                                <td class="text-center">
+                                    <button class="btn btn-default btn-xs" id="setuju"><i class="fa fa-check"></i></button>
+                                    <button class="btn btn-default btn-xs" id="tolak"><i class="fa fa-times"></i></button>
+                                </td>
                             </tr>
                         <?php } ?>
                         </tbody>
@@ -49,3 +60,4 @@
         </div>
     </div>
 </div>
+<?php $this->load->view('pengajuan/hrd/pengajuan_lembur/add');?>

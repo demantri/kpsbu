@@ -4,7 +4,7 @@
             <div class="x_title">
                 <div class="row">
                     <div class="col-sm-10 col-12">
-                        <h4 id="quote">Lembur Pegawai</h4>
+                        <h4 id="quote">Pengajuan Barang</h4>
                     </div>
                     <div class="col-sm-2 col-12">
                         <h3 id="quote">
@@ -22,26 +22,15 @@
                         <thead>
                             <tr>
                                 <th style="width: 5%;">#</th>
-                                <th>ID Pengajuan</th>
                                 <th>Tanggal Pengajuan</th>
-                                <th>Nama Pegawai</th>
-                                <th>Jumlah Pengajuan (jam lembur)</th>
-                                <th>Status</th>
-                                <th>Aksi</th>
+                                <th>Nama Barang</th>
+                                <th>Jumlah Pengajuan</th>
+                                <th style="width: 12%;" class="text-center">Status</th>
+                                <th style="width: 7%;" class="text-center">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
-                        <?php foreach ($variable as $key => $value) { ?>
-                            <tr>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                            </tr>
-                        <?php } ?>
+                            
                         </tbody>
                     </table>
                 </div>
@@ -49,3 +38,4 @@
         </div>
     </div>
 </div>
+<!-- <?php $this->load->view('bonus/add'); ?> -->

@@ -38,6 +38,36 @@ class Lembur extends CI_Controller
         redirect('Lembur');
     }
 
+    public function accept()
+    {
+        $id_pengajuan = $this->input->post('id_pengajuan');
+        $total = $this->input->post('nominal');
+        
+        $this->db->set('status', 1);
+        $this->db->where('id_pengajuan', $id_pengajuan);
+        $this->db->update('tb_lembur');
+
+        // kirim ke db pengajuan jurnal 
+        $pengajuan = [
+            'kode' => $id_pengajuan,
+            'tanggal' => date('Ymd'),
+            'nominal' => $total,
+            'jenis' => 'pengajuan lembur',
+        ];
+        $this->db->insert("pengajuan_jurnal", $pengajuan);
+        
+    }
+
+    public function reject()
+    {
+        $id_pengajuan = $this->input->post('id_pengajuan');
+        
+        $this->db->set('status', 2);
+        $this->db->where('id_pengajuan', $id_pengajuan);
+        $this->db->update('tb_lembur');
+        
+    }
+
     public function id_pengajuan()
     {
         $query1   = "SELECT MAX(RIGHT(id_pengajuan,3)) as kode FROM tb_lembur";

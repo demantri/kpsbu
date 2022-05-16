@@ -5034,6 +5034,8 @@ group by no_bbp";
       public function status_pengajuan($kode, $tanggal, $nominal)
       {
          if (strpos($kode, 'GAJI') !== false) {
+            /** transaksi gaji */
+
             $pengajuan_jurnal = [
                'status' => 'selesai'
             ];
@@ -5069,6 +5071,8 @@ group by no_bbp";
             ];
             $this->db->insert('buku_pembantu_kas', $bpk);
          } else if (strpos($kode, 'PMB-KR') !== false ) {
+            /** transaksi pembelian kredit */
+
             $data = [
                'status' => 1
             ];
@@ -5111,6 +5115,8 @@ group by no_bbp";
             ];
             $this->db->insert('buku_pembantu_kas', $bpk);
          } else if (strpos($kode, 'PMBG.SHU') !== false) {
+            /** transaksi pembagian shu */
+
             $pengajuan_jurnal = [
                'status' => 'selesai'
             ];
@@ -5148,6 +5154,8 @@ group by no_bbp";
             ];
             $this->db->insert('buku_pembantu_kas', $bpk);
          } else if (strpos($kode, 'PNGBBN') !== false) {
+            /** transaksi pengeluaran beban */
+
             $pengajuan_jurnal = [
                'status' => 'selesai'
             ];
@@ -5181,6 +5189,30 @@ group by no_bbp";
                'kd_coa' => 1111, 
                'posisi_dr_cr' => 'k', 
                'keterangan' => 'Pengeluaran Beban', 
+            ];
+            $this->db->insert('buku_pembantu_kas', $bpk);
+         } else if (strpos($kode, 'LMBR') !== false) {
+
+            /** transaksi lembur */
+
+            $pengajuan_jurnal = [
+               'status' => 'selesai'
+            ];
+            $this->db->where('kode', $kode);
+            $this->db->update('pengajuan_jurnal', $pengajuan_jurnal);
+
+            /**jurnal lembur */
+            $this->m_keuangan->GenerateJurnal('5400', $kode, 'd', $nominal);
+            $this->m_keuangan->GenerateJurnal('1111', $kode, 'k', $nominal);
+
+            // buku pembantu kas
+            $bpk = [
+               'id_ref' => $kode, 
+               'tanggal' => $tanggal, 
+               'nominal' => $nominal, 
+               'kd_coa' => 1111, 
+               'posisi_dr_cr' => 'k', 
+               'keterangan' => 'Pengeluaran Lembur', 
             ];
             $this->db->insert('buku_pembantu_kas', $bpk);
          }

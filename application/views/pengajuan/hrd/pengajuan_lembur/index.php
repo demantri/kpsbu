@@ -48,8 +48,10 @@
                                     <?= $value->status == 0 ? '<span class="label label-warning">Menunggu persetujuan</span>' : (($value->status == 1) ? '<span class="label label-success">Sudah disetujui</span>' : '<span class="label label-danger">Ditolak</span>'); ?>
                                 </td>
                                 <td class="text-center">
-                                    <button class="btn btn-default btn-xs" id="setuju"><i class="fa fa-check"></i></button>
-                                    <button class="btn btn-default btn-xs" id="tolak"><i class="fa fa-times"></i></button>
+                                    <?php if ($value->status == 0) { ?>
+                                        <button type="button" class="btn btn-default btn-xs setuju" data-id="<?= $value->id_pengajuan?>" data-nominal="<?= $value->total_nominal_lembur?>" onclick="confirm('Anda yakin?')"><i class="fa fa-check"></i></button>
+                                        <button type="button" class="btn btn-default btn-xs tolak" data-id="<?= $value->id_pengajuan?>" onclick="confirm('Data yang ditolak tidak dapat dikembalikan, anda yakin?')"><i class="fa fa-times"></i></button>
+                                    <?php } ?>
                                 </td>
                             </tr>
                         <?php } ?>
@@ -61,3 +63,39 @@
     </div>
 </div>
 <?php $this->load->view('pengajuan/hrd/pengajuan_lembur/add');?>
+<script>
+
+    $(document).ready(function (){
+        $(".setuju").on('click', function() {
+            var id_pengajuan = $(this).data("id");
+            var nominal = $(this).data("nominal");
+            $.ajax({
+                url : "<?= base_url('Lembur/accept')?>", 
+                method : "post", 
+                data : {
+                    id_pengajuan : id_pengajuan,
+                    nominal : nominal,
+                },
+                success:function(response) {
+                    location.reload();
+                }
+            })
+        })
+
+        $(".tolak").on('click', function() {
+            var id_pengajuan = $(this).data("id");
+            $.ajax({
+                url : "<?= base_url('Lembur/reject')?>", 
+                method : "post", 
+                data : {
+                    id_pengajuan : id_pengajuan,
+                },
+                success:function(response) {
+                    location.reload();
+                    // console.log(response)
+                }
+            })
+        })
+    })
+
+</script>

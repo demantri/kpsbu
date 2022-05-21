@@ -8,7 +8,8 @@
                     </div>
                     <div class="col-sm-2 col-12">
                         <h3 id="quote">
-                            <a href="#add" data-toggle="modal" class="btn pull-right btn-primary">Tambah</a>
+                            <!-- <a href="#add" data-toggle="modal" class="btn pull-right btn-primary">Tambah</a> -->
+                            <?= $role == 'pegawai' ? '<a href="#add" data-toggle="modal" class="btn pull-right btn-primary">Tambah</a>' : '' ?>
                         </h3>
                     </div>
                 </div>
@@ -31,7 +32,9 @@
                                 <th>Nama Pegawai</th>
                                 <th>Jumlah Pengajuan (jam lembur)</th>
                                 <th class="text-center">Status</th>
-                                <th class="text-center">Aksi</th>
+                                <?php if ($role != 'pegawai') { ?>
+                                <th style="width: 12%;" class="text-center">Aksi</th>
+                                <?php } ?>
                             </tr>
                         </thead>
                         <tbody>
@@ -47,12 +50,14 @@
                                 <td class="text-center">
                                     <?= $value->status == 0 ? '<span class="label label-warning">Menunggu persetujuan</span>' : (($value->status == 1) ? '<span class="label label-success">Sudah disetujui</span>' : '<span class="label label-danger">Ditolak</span>'); ?>
                                 </td>
+                                <?php if ($role != 'pegawai') { ?>
                                 <td class="text-center">
                                     <?php if ($value->status == 0) { ?>
                                         <button type="button" class="btn btn-default btn-xs setuju" data-id="<?= $value->id_pengajuan?>" data-nominal="<?= $value->total_nominal_lembur?>" onclick="confirm('Anda yakin?')"><i class="fa fa-check"></i></button>
                                         <button type="button" class="btn btn-default btn-xs tolak" data-id="<?= $value->id_pengajuan?>" onclick="confirm('Data yang ditolak tidak dapat dikembalikan, anda yakin?')"><i class="fa fa-times"></i></button>
                                     <?php } ?>
                                 </td>
+                                <?php } ?>
                             </tr>
                         <?php } ?>
                         </tbody>

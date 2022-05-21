@@ -376,7 +376,24 @@
         <?php if (!empty($this->session->userdata('level'))) : ?>
         <?php if ($this->session->userdata('level') == "pegawai") : ?>
             <ul class="nav side-menu">
-                <li><a href="<?= base_url('Profile')?>"><i class="fa fa-home"></i> Profile </a>
+                <li>
+                    <a>
+                    <i class="fa fa-bar-chart-o"></i>Profile <span class="fa fa-chevron-down"></span>
+                    </a>
+                    <ul class="nav child_menu">
+                        <li><a href="<?= base_url('Profile')?>">Informasi Pegawai</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <ul class="nav side-menu">
+                <li>
+                    <a>
+                    <i class="fa fa-bar-chart-o"></i>Pengajuan <span class="fa fa-chevron-down"></span>
+                    </a>
+                    <ul class="nav child_menu">
+                        <li><a href="<?= base_url('Lembur')?>">Lembur</a></li>
+                        <li><a href="<?= base_url('Cuti')?>">Cuti</a></li>
+                    </ul>
                 </li>
             </ul>
         <?php endif ?>

@@ -11,10 +11,12 @@ class c_login extends CI_Controller{
                 $data_session = array('status'=>"login");
                 foreach($query->result_array() as $data)
                 {
+                    $sess_data['id'] = $data['id'];
                     $sess_data['username'] = $data['username'];
                     $sess_data['password'] = $data['password'];
                     $sess_data['level']    = $data['level'];
                     $sess_data['nama_lengkap']    = $data['nama_lengkap'];
+                    $sess_data['nip']    = $data['nip'];
                     $this->session->set_userdata($sess_data);
                 }
                 $this->session->set_userdata($data_session);

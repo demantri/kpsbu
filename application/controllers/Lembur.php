@@ -4,12 +4,18 @@ class Lembur extends CI_Controller
     public function index()
     {
         $id_pengajuan = $this->id_pengajuan();
-        $lembur = $this->db->query("select a.*, b.nama from tb_lembur a join pegawai b on a.id_pegawai = b.nip")->result();
+        $level = $this->session->userdata('level');
+        $nip = $this->session->userdata('nip');
+
+        $lembur = $this->db->query("select a.*, b.nama from tb_lembur a join pegawai b on a.id_pegawai = b.nip where id_pegawai ='$nip'")->result();
         $pgw = $this->db->query("select * from pegawai where status ='1'")->result();
+        $pegawai = $this->db->query("select * from pegawai where status = 1 and nip = '$nip'")->row();
         $data = [
             'kode' => $id_pengajuan,
             'lembur' => $lembur,
-            'pegawai' => $pgw,
+            'pgw' => $pgw,
+            'pegawai' => $pegawai,
+            'role' => $level
         ];
         $this->template->load('template', 'pengajuan/hrd/pengajuan_lembur/index', $data);
     }

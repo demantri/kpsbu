@@ -26,12 +26,8 @@
                 <div class="form-group row">
                     <label for="nama" class="col-sm-4 col-form-label">Nama Pegawai</label>
                     <div class="col-sm-8">
-                        <select name="nama" id="nama" class="form-control" required>
-                            <option value="">-</option>
-                            <?php foreach ($pegawai as $item) { ?>
-                            <option value="<?= $item->nip?>"><?= $item->nama?></option>
-                            <?php } ?>
-                        </select>
+                        <input type="hidden" name="nip" value="<?= $pegawai->nip ?>">
+                        <input type="text" name="nama" class="form-control" value="<?= $pegawai->nama ?>" readonly>
                     </div>
                 </div>
                 <div class="form-group row">

@@ -8,8 +8,6 @@
     public function index()
     {
         $jam = $this->jam_sekarang;
-
-        // $this->template->load('template', 'absensi/index');
         $this->template->load('template_presensi', 'absensi/index2');
     }
 

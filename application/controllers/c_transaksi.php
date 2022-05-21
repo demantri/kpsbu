@@ -5218,7 +5218,6 @@ group by no_bbp";
             ];
             $this->db->insert('buku_pembantu_kas', $bpk);
          }
-         
          redirect('c_transaksi/pengajuan_jurnal');
       }
    }//end

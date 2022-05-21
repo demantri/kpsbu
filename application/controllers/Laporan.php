@@ -122,25 +122,35 @@ class Laporan extends CI_Controller
                 'list' => $list, 
             ];
             $this->template->load('template', 'laporan/laporan_penjualan_waserda', $data);
-        } 
-        // if (isset($show_all)) {
-        //     $list = $this->db->query("SELECT * FROM pos_penjualan")->result();
-        //     $data = [
-        //         'list' => $list, 
-        //     ];
-        //     $this->template->load('template', 'laporan/laporan_penjualan_waserda', $data);
-        // }
+        }
     }
 
     public function kartu_stok()
     {
-        $getProduk = $this->produk->getProdukWaserda()->result();
-        $getKartuStok = $this->produk->getKartuStok()->result();
-        $data = [
-            'produk' => $getProduk, 
-            'kartu_stok' => $getKartuStok,
-        ];
-        $this->template->load('template', 'laporan/kartu_stok', $data);
+        $kode = $this->input->post('nama_brg');
+        $periode = $this->input->post('periode');
+        if (isset($kode, $periode)) {
+            $this->db->where('status', 1);
+            $getProduk = $this->db->get('waserda_produk')->result();
+
+            $getKartuStok = $this->db->query("select * from waserda_kartu_stok where kode = '$kode' and left(tgl_transaksi, 7) = '$periode'")->result();
+            $data = [
+                'produk' => $getProduk, 
+                'kartu_stok' => $getKartuStok,
+            ];
+            $this->template->load('template', 'laporan/kartu_stok', $data);
+        } else {
+            $this->db->where('status', 1);
+            $getProduk = $this->db->get('waserda_produk')->result();
+
+            $getKartuStok = $this->db->query("select * from waserda_kartu_stok where kode = '$kode' and left(tgl_transaksi, 7) = '$periode'")->result();
+            $data = [
+                'produk' => $getProduk, 
+                'kartu_stok' => $getKartuStok,
+            ];
+            $this->template->load('template', 'laporan/kartu_stok', $data);
+        }
+        
     }
 
     // salma 

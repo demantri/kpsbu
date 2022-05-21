@@ -10,11 +10,11 @@
         <div class="clearfix"><h3>Laporan Kartu Stok</h3></div>
         </div>
         <div class="x_content">
-            <form class="form-horizontal" method="post" action="">
+            <form class="form-horizontal" method="post" action="<?= base_url('Laporan/kartu_stok')?>">
                 <div class="form-group">
                     <div class="col-md-3 col-sm-6 col-xs-12">
                         <label for="id_barang">Nama Barang<i class="text-danger"> *</i></label>
-                        <select name="" id="" class="form-control" required>
+                        <select name="nama_brg" id="nama_brg" class="form-control" required>
                             <option value="">-</option>
                             <?php foreach ($produk as $key => $value) {
                                 echo '<option value='.$value->kode.'>'.$value->nama_produk.'</option>';

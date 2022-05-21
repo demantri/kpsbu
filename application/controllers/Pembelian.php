@@ -177,251 +177,79 @@
         // $kartuStok = array();
         foreach ($id_bb as $key => $value) {
 
-            $cekTblKartuStokById = $this->db->query("select * from waserda_kartu_stok where kode = '$value'");
+            // $cekTblKartuStokById = $this->db->query("select * from waserda_kartu_stok where kode = '$value'");
             $detailProduk = $this->db->query("select * from pos_detail_pembelian where invoice = '$id' AND id_produk ='$value'")->row();
-            // print_r($detailProduk);exit;
-            
-            $produk = $this->db->query("select * from waserda_produk where kode = '$value'")->row();
 
+            $logTrans = [
+                'id_produk' => $value, 
+                'jenis_transaksi' => 'Stok Masuk', 
+                'jumlah' => $detailProduk->jml,
+                'stok_akhir' => $detailProduk->jml
+            ];
+            $this->db->insert('waserda_log_transaksi', $logTrans);
 
-            /** cek log transaksi */
-            $log_trans = $this->db->query("select * from waserda_log_transaksi where id_produk = '$value' AND jenis_transaksi = 'Stok Masuk' AND stok_akhir > 0 
-            ");
-            /** insert log transaksi*/
-            if (count($log_trans) == 0) {
-                $this->transaksi->insertTblWaserdaLogTransaksi(
-                    $value,
-                    'Persediaan Awal',
-                    $detailProduk->jml, 
-                    $produk->jml
-                );
-            } else {
-                $this->transaksi->insertTblWaserdaLogTransaksi(
-                    $value,
-                    'Stok Masuk',
-                    $detailProduk->jml, 
-                    $produk->jml
-                );
-            }
+            $this->db->where('invoice', $id);
+            $this->db->where('id_produk', $value);
+            $detilPmb = $this->db->get('pos_detail_pembelian')->result_array();
+            foreach ($detilPmb as $data) {
+                $this->db->where('id_produk', $value);
+                $this->db->where('stok_akhir >', 0);
+                $this->db->where('jenis_transaksi', 'Stok Masuk');
+                $resPmb = $this->db->get('waserda_log_transaksi');
 
-            $this->db->where('id_produk', $produk->kode);
-            $this->db->where('jumlah >', 0);
-            $this->db->where('jenis_transaksi', "Stok Masuk");
-            $val1 = $this->db->get('waserda_log_transaksi');
-            // print_r($val1->result());exit;
+                if ($resPmb->num_rows() > 0) {
+                    foreach ($resPmb->result_array() as $data1) {
+                        # code...
+                        $id_produk = $value;
+                        $this->db->where('kode', $value);
+                        $harga = $this->db->get('waserda_produk')->row()->harga_satuan;
 
-            $cek = $this->db->get('waserda_log_transaksi');
-
-            $res = array();
-            if ($val1->num_rows() > 0) {
-                foreach ($val1->result() as $logtrans) {
-
-                    // $brg1 = $data1['id_barang'];
-
+                        $d1 = array(
+                            'no_transaksi' => $id,
+                            'kode' => $value,
+                            'tgl_transaksi' => date('Y-m-d H:i:s'),
+                            'unit_in' =>  0,
+                            'harga_in' => 0,
+                            'total_in' => 0,
+                            'unit_out' => 0,
+                            'harga_out' => 0,
+                            'total_out' => 0,
+                            'unit_total' => $data1['stok_akhir'],
+                            'harga_total' => $harga,
+                            'total' => $data1['stok_akhir'] * $harga,
+                        );
+                        $this->db->insert('waserda_kartu_stok', $d1);
+                    }
+                    //
+                    $this->db->where('no_transaksi', $id);
                     $this->db->where('kode', $value);
-                    $harga = $this->db->get('waserda_produk')->row()->harga_satuan;
-
+                    $this->db->order_by('no ASC');
+                    $cek_no = $this->db->get('waserda_kartu_stok')->row_array()['no'];
+                    // print_r($cek_no);exit;
+                    //
+                    $this->db->where('no', $cek_no);
+                    $this->db->set('unit_in', $data['jml']);
+                    $this->db->set('harga_in', $data['harga_satuan']);
+                    $this->db->set('total_in', $data['jml'] * $data['harga_satuan']);
+                    $this->db->update('waserda_kartu_stok');
+                } else {
                     $d1 = array(
                         'no_transaksi' => $id,
                         'kode' => $value,
                         'tgl_transaksi' => date('Y-m-d H:i:s'),
-                        'unit_in' =>  '-',
-                        'harga_in' => '-',
-                        'total_in' => '-',
-                        'unit_out' => '-',
-                        'harga_out' => '-',
-                        'total_out' => '-',
-                        'unit_total' => $logtrans->jumlah,
-                        'harga_total' => $harga,
-                        'total' => $logtrans->jumlah * $harga,
+                        'unit_in' =>  $data['jml'],
+                        'harga_in' => $data['harga_satuan'],
+                        'total_in' => $data['jml'] * $data['harga_satuan'],
+                        'unit_out' => 0,
+                        'harga_out' => 0,
+                        'total_out' => 0,
+                        'unit_total' => $data['jml'],
+                        'harga_total' => $data['harga_satuan'],
+                        'total' => $data['jml'] * $data['harga_satuan'],
                     );
                     $this->db->insert('waserda_kartu_stok', $d1);
                 }
-                //
-                $this->db->where('no_transaksi', $id);
-                $this->db->where('kode', $value);
-                $this->db->order_by('no ASC');
-                $cek_no = $this->db->get('waserda_kartu_stok')->row_array()['no'];
-                // print_r($cek_no);exit;
-                //
-                $this->db->where('no', $cek_no);
-                $this->db->set('unit_in', $detailProduk->jml);
-                $this->db->set('harga_in', $detailProduk->harga_satuan);
-                $this->db->set('total_in', $detailProduk->jml * $detailProduk->harga_satuan);
-                $this->db->update('waserda_kartu_stok');
-            } else {
-                $d1 = array(
-                    'no_transaksi' => $id,
-                    'kode' => $value,
-                    'tgl_transaksi' => date('Y-m-d H:i:s'),
-                    'unit_in' =>  $detailProduk->jml,
-                    'harga_in' => $detailProduk->harga_satuan,
-                    'total_in' => $detailProduk->jml * $detailProduk->harga_satuan,
-                    'unit_out' => '-',
-                    'harga_out' => '-',
-                    'total_out' => '-',
-                    'unit_total' => $detailProduk->jml,
-                    'harga_total' => $detailProduk->harga_satuan,
-                    'total' => $detailProduk->jml * $detailProduk->harga_satuan,
-                );
-                $this->db->insert('waserda_kartu_stok', $d1);
             }
-            
-
-            // if($val1->num_rows() > 0){
-            //     foreach ($val1->result_array() as $data1) {
-
-            //         $brg1 = $data1['id_barang'];
-
-            //         $this->db->where('kode', $value);
-            //         $harga = $this->db->get('waserda_produk')->row()->harga_satuan;
-
-            //         $d1 = array(
-            //             'no_transaksi' => $id,
-            //             'kode' => $value,
-            //             'tgl_transaksi' => date('Y-m-d H:i:s'),
-            //             'unit_in' =>  '',
-            //             'harga_in' => '',
-            //             'total_in' => '',
-            //             'unit_out' => '-',
-            //             'harga_out' => '-',
-            //             'total_out' => '-',
-            //             'unit_total' => $data1['stok_akhir'],
-            //             'harga_total' => $harga,
-            //             'total' => $data1['stok_akhir'] * $harga,
-            //         );
-            //         $this->db->insert('waserda_kartu_stok', $d1);
-            //     }
-            //     //
-            //     $this->db->where('no_transaksi', $id);
-            //     $this->db->where('kode', $value);
-            //     $this->db->order_by('no ASC');
-            //     $cek_no = $this->db->get('waserda_kartu_stok')->row_array()['no'];
-            //     //
-            //     $this->db->where('no', $cek_no);
-            //     $this->db->set('unit_in', $detailProduk->jml);
-            //     $this->db->set('harga_in', $detailProduk->harga_satuan);
-            //     $this->db->set('total_in', $detailProduk->jml * $detailProduk->harga_satuan);
-            //     $this->db->update('waserda_kartu_stok');
-                    
-            // } else {
-            //     $d1 = array(
-            //         'no_transaksi' => $id,
-            //         'kode' => $value,
-            //         'tgl_transaksi' => date('Y-m-d H:i:s'),
-            //         'unit_in' =>  $detailProduk->jml,
-            //         'harga_in' => $detailProduk->harga_satuan,
-            //         'total_in' => $detailProduk->jml * $detailProduk->harga_satuan,
-            //         'unit_out' => '-',
-            //         'harga_out' => '-',
-            //         'total_out' => '-',
-            //         'unit_total' => $detailProduk->jml,
-            //         'harga_total' => $detailProduk->harga_satuan,
-            //         'total' => $detailProduk->jml * $detailProduk->harga_satuan,
-            //     );
-            //     $this->db->insert('waserda_kartu_stok', $d1);
-            // }
-        // }
-
-            
-
-            // if ($log_trans->num_rows() > 0) {
-            //     foreach ($log_trans->result() as $log) {
-            //         $kartuStok = array(
-            //             'no_transaksi' => $id,
-            //             'kode' => $log->id_produk,
-            //             'tgl_transaksi' => date('Y-m-d H:i:s'),
-            //             'unit_in' =>  '',
-            //             'harga_in' => '',
-            //             'total_in' => '',
-            //             'unit_out' => '-',
-            //             'harga_out' => '-',
-            //             'total_out' => '-',
-            //             'unit_total' => $log->stok_akhir,
-            //             'harga_total' => $detailProduk->harga_satuan,
-            //             'total' => $log->stok_akhir * $detailProduk->harga_satuan,
-            //         );
-            //         $this->db->insert('waserda_kartu_stok', $kartuStok);
-            //     }
-            //     // update 
-            //     $this->db->where('no_transaksi', $id);
-            //     $this->db->where('kode', $value);
-            //     $this->db->order_by('no ASC');
-            //     $cek_no = $this->db->get('waserda_kartu_stok')->row_array()['no'];
-            //     // print_r($cek_no);exit;
-
-            //     $this->db->where('no', $cek_no);
-            //     $this->db->set('unit_in', $detailProduk->jml);
-            //     $this->db->set('harga_in', $detailProduk->harga_satuan);
-            //     $this->db->set('total_in', $detailProduk->harga_satuan * $detailProduk->jml);
-            //     $this->db->update('waserda_kartu_stok');
-            // } else {
-            //     # code...
-            //     $kartuStok = array(
-            //         'no_transaksi' => $id,
-            //         'kode' => $value,
-            //         'tgl_transaksi' => date('Y-m-d H:i:s'),
-            //         'unit_in' => $detailProduk->jml,
-            //         'harga_in' => $detailProduk->harga_satuan,
-            //         'total_in' => $detailProduk->harga_satuan * $detailProduk->jml,
-            //         'unit_out' => '-',
-            //         'harga_out' => '-',
-            //         'total_out' => '-',
-            //         'unit_total' => $detailProduk->jml,
-            //         'harga_total' => $detailProduk->harga_satuan,
-            //         'total' => $detailProduk->harga_satuan * $detailProduk->jml,
-            //     );
-            //     $this->db->insert('waserda_kartu_stok', $kartuStok);
-            // }
-            
-
-            // if ($cekTblKartuStokById->num_rows() > 0) {
-            //     $kartuStok = array(
-            //         'no_transaksi' => $id,
-            //         'kode' => $value,
-            //         'tgl_transaksi' => date('Y-m-d H:i:s'),
-            //         'unit_in' =>  '',
-            //         'harga_in' => '',
-            //         'total_in' => '',
-            //         'unit_out' => '-',
-            //         'harga_out' => '-',
-            //         'total_out' => '-',
-            //         'unit_total' => $produk->jml,
-            //         'harga_total' => $detailProduk->harga_satuan,
-            //         'total' => $detailProduk->harga_satuan * $detailProduk->jml,
-            //     );
-            //     $this->db->insert('waserda_kartu_stok', $kartuStok);
-
-            //     // update 
-            //     $this->db->where('no_transaksi', $id);
-            //     $this->db->where('kode', $value);
-            //     $this->db->order_by('no ASC');
-            //     $cek_no = $this->db->get('waserda_kartu_stok')->row_array()['no'];
-            //     // print_r($cek_no);exit;
-            //     //
-            //     $this->db->where('no', $cek_no);
-            //     $this->db->set('unit_in', $detailProduk->jml);
-            //     $this->db->set('harga_in', $detailProduk->harga_satuan);
-            //     $this->db->set('total_in', $detailProduk->harga_satuan * $detailProduk->jml);
-            //     $this->db->update('waserda_kartu_stok');
-
-            // } else {
-            //     $kartuStok = array(
-            //         'no_transaksi' => $id,
-            //         'kode' => $value,
-            //         'tgl_transaksi' => date('Y-m-d H:i:s'),
-            //         'unit_in' => $detailProduk->jml,
-            //         'harga_in' => $detailProduk->harga_satuan,
-            //         'total_in' => $detailProduk->harga_satuan * $detailProduk->jml,
-            //         'unit_out' => '-',
-            //         'harga_out' => '-',
-            //         'total_out' => '-',
-            //         'unit_total' => $detailProduk->jml,
-            //         'harga_total' => $detailProduk->harga_satuan,
-            //         'total' => $detailProduk->harga_satuan * $detailProduk->jml,
-            //     );
-            //     $this->db->insert('waserda_kartu_stok', $kartuStok);
-            // }
         }
         /** belum selesai */
 

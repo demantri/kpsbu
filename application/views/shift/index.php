@@ -59,15 +59,6 @@
 </div>
 <?php $this->load->view('script');?>
 <?php $this->load->view('shift/add')?>
-<!-- <script>
-    $('.btn-edit').on('click', function() {
-        var id = $(this).data('id')
-        var desc = $(this).data('desc')
-
-        $('.modal-body #kode').val(id)
-        $('.modal-body #desc').val(desc)
-    })
-</script> -->
 <script>
     $(document).ready(function() {
         $('.js-example-basic-multiple').select2();

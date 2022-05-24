@@ -9,7 +9,7 @@
                 <div class="col-sm">
                     <form class='form-inline' method="post" class="form-inline" action="<?= base_url('c_keuangan/bukubesar')?>">
                         <label>Nama Akun </label>
-                        <select name="no_coa" class="form-control" required>
+                        <select name="no_coa" class="form-control select2" required>
                             <option item="">Pilih Akun</option>
                             <?php foreach ($coa as $key => $item) { ?>
                                 <option value="<?= $item->no_coa ?>"><?= $item->nama_coa ?></option>
@@ -88,3 +88,9 @@
                 </table>
         </body>
     </div>
+</div>
+<script>
+    $(document).ready(function() {
+        $('.select2').select2();
+    })
+</script>

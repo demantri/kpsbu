@@ -80,10 +80,10 @@
 							<td class="text-right"><?= format_rp($saldo_awal)?></td>
                         </tr>
                     <?php } ?>
-                    <tr>
+                    <!-- <tr>
 						<td colspan="5"><b>Saldo Akhir</b></td>
 						<td class="text-right">123123</td>
-					</tr>
+					</tr> -->
                     </tbody>
                 </table>
         </body>

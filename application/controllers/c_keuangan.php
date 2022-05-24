@@ -56,53 +56,102 @@ class c_keuangan extends CI_Controller
 
 	public function bukubesar()
 	{
-		$akun = $this->db->get('coa')->result();
-		
-		/** query untuk ambil saldo akhir di jurnal */
+		$no_coa = $this->input->post('no_coa');
 		$periode = $this->input->post('bulan');
-		$cek = date('m-Y', strtotime("-1 months", strtotime($periode)));
-		$bulan1 = substr($cek, 0, 2);
-		$tahun1 = substr($cek, 3, 7);
-		$query = $this->db->query("SELECT 
-		SUM(nominal) AS debit, 
-		(
-		   SELECT sum(nominal) 
-		   FROM jurnal 
-		   WHERE no_coa = '1111' 
-		   AND MONTH(tgl_jurnal) <= '$bulan1' 
-		   AND YEAR(tgl_jurnal) <= '$tahun1' 
-		   and posisi_dr_cr = 'k' 
-		) AS kredit
-		FROM jurnal
-		WHERE no_coa = '1111'
-		AND MONTH(tgl_jurnal) <= '$bulan1'
-		AND YEAR(tgl_jurnal) <= '$tahun1'
-		AND posisi_dr_cr = 'd'");
-		$debit = $query->row()->debit;
-		$kredit = $query->row()->kredit;
-		$pengurangan = $debit - $kredit;
-		/** cek saldo awal berdasarkan no coa */
-		$saldoByCoa = $this->db->query("select * from coa where no_coa = '1111'")->row()->saldo_awal;
-		$saldo_awal = $saldoByCoa + $pengurangan;
 
-		$query2 = $this->db->query("SELECT 
-		a.*, b.nama_coa, b.saldo_awal, b.header
-		FROM jurnal a
-		JOIN coa b ON a.no_coa = b.no_coa
-		WHERE b.no_coa = '1111' 
-		AND LEFT(a.tgl_jurnal, 7) = '$periode'
-		ORDER BY tgl_jurnal ASC");
+		if (isset($no_coa, $periode)) {
+			// $periode = $this->input->post('bulan');
+			$akun = $this->db->get('coa')->result();
+			$cek = date('m-Y', strtotime("-1 months", strtotime($periode)));
+			$bulan1 = substr($cek, 0, 2);
+			$tahun1 = substr($cek, 3, 7);
+			$query = $this->db->query("SELECT 
+			SUM(nominal) AS debit, 
+			(
+			SELECT sum(nominal) 
+			FROM jurnal 
+			WHERE no_coa = '$no_coa' 
+			AND MONTH(tgl_jurnal) <= '$bulan1' 
+			AND YEAR(tgl_jurnal) <= '$tahun1' 
+			and posisi_dr_cr = 'k' 
+			) AS kredit
+			FROM jurnal
+			WHERE no_coa = '$no_coa'
+			AND MONTH(tgl_jurnal) <= '$bulan1'
+			AND YEAR(tgl_jurnal) <= '$tahun1'
+			AND posisi_dr_cr = 'd'");
+			$debit = $query->row()->debit;
+			$kredit = $query->row()->kredit;
+			$pengurangan = $debit - $kredit;
+			/** cek saldo awal berdasarkan no coa */
+			$saldoByCoa = $this->db->query("select * from coa where no_coa = '$no_coa'")->row()->saldo_awal;
+			$saldo_awal = $saldoByCoa + $pengurangan;
 
-		$listBB = $query2->result();
-		$getSaldo = $query2->row()->saldo_awal ?? 0 ;
-		// print_r($getSaldo);exit;
+			$query2 = $this->db->query("SELECT 
+			a.*, b.nama_coa, b.saldo_awal, b.header
+			FROM jurnal a
+			JOIN coa b ON a.no_coa = b.no_coa
+			WHERE b.no_coa = '$no_coa' 
+			AND LEFT(a.tgl_jurnal, 7) = '$periode'
+			ORDER BY tgl_jurnal ASC");
 
-		$data = [
-			'coa' => $akun,
-			'list' => $listBB, 
-			'saldo_awal' => $saldo_awal
-		];
-		$this->template->load('template', 'new_bukubesar', $data);
+			$listBB = $query2->result();
+			$getSaldo = $query2->row()->saldo_awal ?? 0 ;
+
+			$data = [
+				'coa' => $akun,
+				'list' => $listBB, 
+				'saldo_awal' => $saldo_awal
+			];
+			$this->template->load('template', 'new_bukubesar', $data);
+		} else {
+			// $no_coa = 999999;
+			$akun = $this->db->get('coa')->result();
+			// $periode = $this->input->post('bulan');
+			$cek = date('m-Y', strtotime("-1 months", strtotime($periode)));
+			$bulan1 = substr($cek, 0, 2);
+			$tahun1 = substr($cek, 3, 7);
+			$query = $this->db->query("SELECT 
+			SUM(nominal) AS debit, 
+			(
+			SELECT sum(nominal) 
+			FROM jurnal 
+			WHERE no_coa = '$no_coa' 
+			AND MONTH(tgl_jurnal) <= '$bulan1' 
+			AND YEAR(tgl_jurnal) <= '$tahun1' 
+			and posisi_dr_cr = 'k' 
+			) AS kredit
+			FROM jurnal
+			WHERE no_coa = '$no_coa'
+			AND MONTH(tgl_jurnal) <= '$bulan1'
+			AND YEAR(tgl_jurnal) <= '$tahun1'
+			AND posisi_dr_cr = 'd'");
+			$debit = $query->row()->debit;
+			$kredit = $query->row()->kredit;
+			$pengurangan = $debit - $kredit;
+			/** cek saldo awal berdasarkan no coa */
+			$saldoByCoa = $this->db->query("select * from coa where no_coa = ''")->row()->saldo_awal ?? 0;
+			$saldo_awal = $saldoByCoa + $pengurangan;
+			// print_r($saldo_awal);exit;
+
+			$query2 = $this->db->query("SELECT 
+			a.*, b.nama_coa, b.saldo_awal, b.header
+			FROM jurnal a
+			JOIN coa b ON a.no_coa = b.no_coa
+			WHERE b.no_coa = '$no_coa' 
+			AND LEFT(a.tgl_jurnal, 7) = '$periode'
+			ORDER BY tgl_jurnal ASC");
+
+			$listBB = $query2->result();
+			$getSaldo = $query2->row()->saldo_awal ?? 0 ;
+
+			$data = [
+				'coa' => $akun,
+				'list' => $listBB, 
+				'saldo_awal' => $saldo_awal
+			];
+			$this->template->load('template', 'new_bukubesar', $data);
+		}
 	}
 
 	// public function bukubesar()

@@ -12,7 +12,7 @@
                         <select name="no_coa" class="form-control" required>
                             <option item="">Pilih Akun</option>
                             <?php foreach ($coa as $key => $item) { ?>
-                                <option item="<?= $item->no_coa ?>"><?= $item->nama_coa ?></option>
+                                <option value="<?= $item->no_coa ?>"><?= $item->nama_coa ?></option>
                             <?php } ?>
                         </select>
                         &nbsp&nbsp&nbsp&nbsp

@@ -2,7 +2,6 @@
 class m_keuangan extends CI_model
 {
 	private $_table = "coa";
-
 	public function GenerateJurnal($no_akun, $no_transaksi, $posisi_dr_cr, $nominal)
 	{
 		date_default_timezone_set("Asia/Bangkok");
@@ -14,6 +13,19 @@ class m_keuangan extends CI_model
 			'nominal' => $nominal,
 		);
 		$this->db->insert('jurnal', $jurnal);
+	}
+
+	public function GenerateLaporanBPK($kode, $tanggal, $nominal, $nocoa, $poskas, $keterangan) 
+	{
+		$data = [
+			'id_ref' => $kode, 
+			'tanggal' => $tanggal, 
+			'nominal' => $nominal, 
+			'kd_coa' => $nocoa, 
+			'posisi_dr_cr' => $poskas, 
+			'keterangan' => $keterangan, 
+		];
+		$this->db->insert('buku_pembantu_kas', $data);
 	}
 
 	//pagination

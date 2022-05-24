@@ -5024,6 +5024,7 @@ group by no_bbp";
       // pengajuan jurnal
       public function pengajuan_jurnal()
       {
+         $this->db->order_by('tanggal', 'desc');
          $list = $this->db->get('pengajuan_jurnal')->result();
          $data = [
             'list' => $list,
@@ -5196,7 +5197,6 @@ group by no_bbp";
          } else if (strpos($kode, 'LMBR') !== false) {
 
             /** transaksi lembur */
-
             $pengajuan_jurnal = [
                'status' => 'selesai'
             ];
@@ -5216,7 +5216,22 @@ group by no_bbp";
                'posisi_dr_cr' => 'k', 
                'keterangan' => 'Pengeluaran Lembur', 
             ];
-            $this->db->insert('buku_pembantu_kas', $bpk);
+            $this->db->where('kode', $kode);
+            $this->db->update('pengajuan_jurnal', $pengajuan_jurnal);
+         } else if (strpos($kode, 'KPSBU') !== false) {
+            /** penjualan tunai */
+            $pengajuan_jurnal = [
+               'status' => 'selesai'
+            ];
+            $this->db->where('kode', $kode);
+            $this->db->update('pengajuan_jurnal', $pengajuan_jurnal);
+            
+            /** jurnal penjualan tunai */
+            $this->m_keuangan->GenerateJurnal('1111', $kode, 'd', $nominal);
+            $this->m_keuangan->GenerateJurnal('4116', $kode, 'k', $nominal);
+
+            /** generate ke bpk */
+            $this->m_keuangan->GenerateLaporanBPK($kode, $tanggal, $nominal, '1111', 'd', 'Penjualan Tunai');
          }
          redirect('c_transaksi/pengajuan_jurnal');
       }

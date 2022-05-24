@@ -2,25 +2,9 @@
 	<body>
 		<div class="x_panel">
 			<div class="x_title">
-				<h3 class="panel-title"><b>Kartu Penyusutan Aset</b></h3>
+				<h3 class="panel-title"><b>Buku Kas Kacil</b></h3>
 			</div>
 			<div class="x_content">
-				<!-- <div class="row">
-					<div class="col-sm-7">
-						<form method="post" action="<?php echo site_url().'c_transaksi/kartu_aset' ?> " class="form-inline">
-                            <label>Pilih Aset</label>
-                            &nbsp&nbsp&nbsp&nbsp
-							<select name="aset" class="form-control" required>
-								<option value="#" >Pilih Aset</option>
-								<?php foreach ($aset as $data ) { ?>
-								<option value="<?= $data->id_detail_aset?>"><?= $data->aset?> - <b><?= $data->id_detail_aset?></b></option>
-								<?php } ?>
-							</select>
-							<input type="submit" value="Filter" class="btn btn-info">
-						</form>
-					</div>
-				</div> -->
-				<!-- <hr> -->
 				<center>
 					<h3>Buku Kas Kecil</h3>
 				</center>
@@ -43,11 +27,9 @@
                         $saldo = 0;
                         foreach ($list as $key => $value) { ?>
                         <?php
-                            if ($value->posisi_d_c == 'd') { 
-                                # code...
+                            if ($value->posisi_d_c == 'd') {
                                 $saldo += $value->nominal;
                             } else {
-                                # code...
                                 $saldo -= $value->nominal;
                             }
                         ?>

@@ -156,6 +156,7 @@ class Laporan extends CI_Controller
     // salma 
     public function buku_kas_kecil()
     {
+        $this->db->order_by('tgl_transaksi', 'desc');
         $list = $this->db->get('buku_kas_kecil')->result();
         $data = ['list' => $list];
         $this->template->load('template', 'laporan/buku_kas_kecil', $data);

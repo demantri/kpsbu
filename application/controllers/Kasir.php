@@ -197,7 +197,6 @@
         $status = ($tipe == 'kredit') ? 'kredit' : 'terbayar';
 
         $anggota = $this->input->post('anggota');
-        // print_r($jenis);exit;
 
         $ppn = $this->input->post('ppn');
         $total_trans = $this->input->post('total_trans');
@@ -216,6 +215,15 @@
         // print_r($kode);exit;
         $this->db->where('invoice', $kode);
         $this->db->update('pos_penjualan', $data);
+
+        // kirim ke db pengajuan jurnal 
+        $pengajuan = [
+            'kode' => $kode,
+            'tanggal' => date('Y-m-d'),
+            'nominal' => $total,
+            'jenis' => 'pembelian waserda tunai',
+        ];
+        $this->db->insert("pengajuan_jurnal", $pengajuan);
 
         if ($jenis == 1 && $tipe == 'kredit') {
 

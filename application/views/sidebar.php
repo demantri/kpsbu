@@ -257,7 +257,7 @@
                         <li><a href="<?php echo site_url(); ?>c_keuangan/lap_ks_bp">Kartu Persediaan Bahan Penolong</a></li>
                         <li><a href="<?php echo site_url(); ?>c_keuangan/lap_ks_prod1">Kartu Persediaan Produk IPS</a></li>
                         <li><a href="<?php echo site_url(); ?>c_keuangan/lap_ks_prod">Kartu Persediaan Produk Toko</a></li>
-                        <li><a href="<?php echo site_url(); ?>c_keuangan/lr1">Laporan Laba Rugi</a></li>
+                        <!-- <li><a href="<?php echo site_url(); ?>c_keuangan/lr1">Laporan Laba Rugi</a></li> -->
 
                         <!-- laporan arles -->
                         <li><a href="<?= base_url('Absensi/laporan_kehadiran')?>">Laporan Kehadiran</a></li>
@@ -266,7 +266,8 @@
                         <!-- laporan siti -->
                         <li><a href="<?= base_url('Laporan/laporan_penjualan_waserda')?>">Laporan Penjualan Waserda</a></li>
                         <li><a href="<?= base_url('Laporan/laporan_penjualan_waserda')?>">Laporan Pembelian Waserda</a></li>
-                        <li><a href="<?= base_url('laporan/kartu_stok')?>">Kartu stok</a></li>
+                        <li><a href="<?= base_url('Laporan/kartu_stok')?>">Kartu Stok</a></li>
+                        <li><a href="<?= base_url('Laporan/laba_rugi')?>">Laporan Laba Rugi</a></li>
 
                     <?php
                     elseif ($this->session->userdata('level') == "produksi1") :

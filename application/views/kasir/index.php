@@ -1,13 +1,4 @@
 <div class="row">
-    <!-- <div class="col-sm-12">
-        <div class="x_panel">
-            <div class="x_content">
-                <h4>Catatan</h4>
-                <p>1. Transaksi di selesai kan hari ini.</p>
-                <p>2. Transaksi dapat di pending.</p>
-            </div>
-        </div>
-    </div> -->
     <div class="col-sm-5">
         <div class="x_panel">
             <div class="x_title">

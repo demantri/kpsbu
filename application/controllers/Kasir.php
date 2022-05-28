@@ -15,8 +15,11 @@
         $user = $this->session->nama_lengkap;
         // print_r($user);exit;
         $inv = $this->master->invoice();
-        $id_bb = $this->db->query("select id_produk, jml from pos_detail_penjualan where invoice = '$inv'
-        and id_produk is not null")->result();
+        $id_bb = $this->db->query("SELECT a.id_produk, a.jml, b.harga_satuan AS harga_beli, b.harga_jual
+        from pos_detail_penjualan a
+        JOIN waserda_produk b ON a.id_produk = b.kode
+        where invoice = '$inv'
+        and id_produk is NOT null")->result();
         $total = $this->produk->get_total_detail($inv)->row()->total;
         $ppn = $total * 0.1;
         $gtot = $total + $ppn;
@@ -187,6 +190,7 @@
     {
         $id_bb = $this->input->post('id_bb');
         $qty = $this->input->post('qty');
+        $harga_beli = $this->input->post('harga_beli');
         $kode = $this->input->post('kode');
         $jenis = $this->input->post('jenis');
         $pembeli = $this->input->post('pembeli');
@@ -200,6 +204,9 @@
 
         $ppn = $this->input->post('ppn');
         $total_trans = $this->input->post('total_trans');
+
+        // $total_harga_beli = $qty * $harga_beli;
+        // $total_unruk_pengajuan_jurnal = $total_harga_beli + $ppn + $total_trans;
 
         $data = [
             'total' => $total,
@@ -217,13 +224,13 @@
         $this->db->update('pos_penjualan', $data);
 
         // kirim ke db pengajuan jurnal 
-        $pengajuan = [
-            'kode' => $kode,
-            'tanggal' => date('Y-m-d'),
-            'nominal' => $total,
-            'jenis' => 'pembelian waserda tunai',
-        ];
-        $this->db->insert("pengajuan_jurnal", $pengajuan);
+        // $pengajuan = [
+        //     'kode' => $kode,
+        //     'tanggal' => date('Y-m-d'),
+        //     'nominal' => $total_unruk_pengajuan_jurnal,
+        //     'jenis' => 'Penjualan Tunai Waserda',
+        // ];
+        // $this->db->insert("pengajuan_jurnal", $pengajuan);
 
         if ($jenis == 1 && $tipe == 'kredit') {
 
@@ -257,6 +264,28 @@
         $where = [];
         $bb = [];
         foreach ($id_bb as $key => $value) {
+
+            /** blm selesai */
+            $produkByID = $this->db->query("SELECT a.id_produk, a.jml, b.harga_satuan AS harga_beli, b.harga_jual
+            from pos_detail_penjualan a
+            JOIN waserda_produk b ON a.id_produk = b.kode
+            where invoice = '$kode'
+            and id_produk = '$value'");
+            $qty = $produkByID->row()->jml;
+            $harga_beli_produk = $produkByID->row()->harga_beli;
+            $total_harga_beli_produk = $harga_beli_produk * $qty;
+            
+            $harga_jual_produk = $produkByID->row()->harga_jual;
+            $total_harga_jual_produk = $harga_jual_produk * $qty;
+            $ppn = $total_harga_jual_produk * 0.1;
+            $total = $ppn + $total_harga_jual_produk;
+
+            $total_pengajuan_jurnal = $total_harga_jual_produk + $ppn + $total_harga_beli_produk;
+
+            /** pengajuan jurnal */
+            $this->m_keuangan->pengajuanJurnal($kode, $total_harga_jual_produk, $ppn, $total, $total_harga_beli_produk, $total_pengajuan_jurnal, 'Penjualan Tunai Waserda');
+            /** end */
+
             /** coba kartu stok penjualan */
             $this->db->where('invoice', $kode);
             $this->db->where('id_produk', $value);

@@ -16,7 +16,7 @@
             </div>
             <div class="x_content">
                 <div id="notif">
-                    <?php echo $this->session->flashdata('notif_ubah'); ?>
+                    <?php echo validation_errors(); ?>
                 </div>
                 <div class="table-responsive">
                     <table class="table table-bordered" id="datatable">

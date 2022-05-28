@@ -125,6 +125,34 @@ class Laporan extends CI_Controller
         }
     }
 
+    public function laba_rugi()
+    {
+        $listPendapatan = $this->db->query('SELECT SUM(nominal) AS nominal, b.nama_coa, a.posisi_dr_cr
+        from jurnal a
+        JOIN coa b ON a.no_coa = b.no_coa
+        WHERE header = 4
+        AND is_waserda = 1')->result();
+        $listHPP = $this->db->query('SELECT SUM(nominal) AS nominal, b.nama_coa, a.posisi_dr_cr
+        from jurnal a
+        JOIN coa b ON a.no_coa = b.no_coa
+        WHERE header = 6
+        AND is_waserda = 1')->result();
+        $listBeban = $this->db->query('SELECT b.nama_coa, a.posisi_dr_cr, SUM(nominal) AS nominal
+        from jurnal a
+        JOIN coa b ON a.no_coa = b.no_coa
+        WHERE header = 5
+        AND is_waserda = 1 
+        AND posisi_dr_cr = "d"
+        GROUP BY nama_coa')->result();
+        $data = [
+            'pendapatan' => $listPendapatan,
+            'beban' => $listBeban,
+            'hpp' => $listHPP,
+        ];
+        // print_r($data);exit;
+        $this->template->load('template', 'laporan/laba_rugi', $data);
+    }
+
     public function kartu_stok()
     {
         $kode = $this->input->post('nama_brg');

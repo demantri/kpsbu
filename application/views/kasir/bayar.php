@@ -12,6 +12,7 @@
                     <?php foreach ($id_bb as $key => $value) { ?>
                         <input type="hidden" name="id_bb[]" value="<?= $value->id_produk?>">
                         <input type="hidden" name="qty[]" value="<?= $value->jml?>">
+                        <input type="hidden" name="harga_beli[]" value="<?= $value->harga_beli?>">
                     <?php } ?>
                     <div class="form-group row">
                         <label for="kode" class="col-sm-3 col-form-label">Kode</label>
@@ -39,7 +40,7 @@
                         </div>
                     </div>
                     <div class="form-group row" id="div-pembeli">
-                        <label for="pembeli" class="col-sm-3 col-form-label">Nama Pembeli</label>
+                        <label for="pembeli" class="col-sm-3 col-form-label" required>Nama Pembeli</label>
                         <div class="col-sm-9" id="pembeli">
                             <select name="pembeli" class="form-control pilih_pembeli">
                             </select>
@@ -67,13 +68,13 @@
                         </div>
                     </div>
                     <div class="form-group row form-kembalian">
-                        <label for="kembalian" class="col-sm-3 col-form-label">Kembalian</label>
+                        <label class="col-sm-3 col-form-label">Kembalian</label>
                         <div class="col-sm-5">
                             <input type="text" name="kembalian" id="kembalian" class="form-control" placeholder="Kembalian" value="0" readonly>
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="total" class="col-sm-3 col-form-label">Total</label>
+                        <label class="col-sm-3 col-form-label">Total</label>
                         <div class="col-sm-5">
                             <input type="text" name="total" id="total" class="form-control" placeholder="Total Pembayaran" value="<?= $gtot ?>" readonly>
                             <input type="hidden" value="<?= $ppn ?>" name="ppn">

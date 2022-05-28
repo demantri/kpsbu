@@ -6,7 +6,7 @@
         $level = $this->session->userdata('level');
         $nip = $this->session->userdata('nip');
         $pegawai = $this->db->query("select * from pegawai where status = 1 and nip = '$nip'")->row();
-        $listCuti = $this->db->query("select a.*, b.nama, b.status as status_pegawai from tb_cuti a join pegawai b on a.nip = b.nip where b.status = 1")->result();
+        $listCuti = $this->db->query("select a.*, b.nama, b.status as status_pegawai from tb_cuti a join pegawai b on a.nip = b.nip where b.status = 1 and b.nip ='$nip'")->result();
         $data = [
             'kode' => $kode,
             'role' => $level,

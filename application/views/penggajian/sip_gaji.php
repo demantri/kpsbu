@@ -4,7 +4,7 @@
             <div class="x_title">
                 <div class="row">
                     <div class="col-sm-10 col-12">
-                        <h4 id="quote" class="text-center">Slip Gaji bulan ke <?= date('m-Y')?>
+                        <h4 id="quote" class="text-center">Penggajian Periode <?= date('F Y')?>
                         </h4>
                     </div>
                     <div class="col-sm-2 col-12">
@@ -61,6 +61,10 @@
                                         <td>Total Presensi</td>
                                         <th>&nbsp : &nbsp<?= $detil->total ?? 0 ?></th>
                                     </tr>
+                                    <tr class="detil">
+                                        <td>Ket. PTKP</td>
+                                        <th>&nbsp : &nbsp<?= ($peg->id_ptkp == "") ? 'Tidak kena pajak' : $peg->id_ptkp ?></th>
+                                    </tr>
                                 </div>
                             </table>
                         </div>
@@ -72,7 +76,6 @@
                         $tunjangan_jabatan = $detail2[0]->tunjangan_jabatan;
                         $tunjangan_kesehatan = $detail2[0]->tunjangan_kesehatan;
                         $bonus_kerja = $bonus;
-                        // $bonus = 0;
                         $tot_penghasilan = $gapok + $tunjangan_jabatan + $tunjangan_kesehatan + $bonus + $lembur;
                         $tot_pengurang = $ptkp;
                         ?>
@@ -98,12 +101,6 @@
                             <td></td>
                             <td></td>
                         </tr>
-                        <!-- <tr>
-                            <th>Bonus Lembur</th>
-                            <td class="text-right"><?= format_rp($lembur)?></td>
-                            <td></td>
-                            <td></td>
-                        </tr> -->
                         <tr>
                             <th>Bonus Kerja</th>
                             <td class="text-right"><?= format_rp($bonus_kerja)?></td>
@@ -121,13 +118,54 @@
                             <th colspan="2" class="text-center"><?= format_rp($total)?></th>
                         </tr>
                     </table>
+                    <p style="color:red">
+                        <strong>Note : Pegawai kontrak tidak dikenakan PPH 21 PTKP.</strong>
+                    </p>
                     <hr>
                     <div class="text-right">
                         <a href="<?= base_url('Penggajian') ?>" class="btn btn-default btn-md">Kembali</a>
-                        <a href="<?= base_url('Penggajian/bayar_gaji/'.$peg->nip.'/'.$total.'/'.date('Y-m-d')) ?>" class="btn btn-primary btn-md">Bayar Gaji</a>
+                        <button type="button" class="btn btn-primary" id="bayar"
+                        data-nip="<?= $peg->nip?>"
+                        >Bayar Gaji</button>
                     </div>
+
+                    <input type="hidden" id="gaji_pokok" name="gaji_pokok" value="<?= $gapok?>">
+                    <input type="hidden" id="tunjangan_jabatan" name="tunjangan_jabatan" value="<?= $tunjangan_jabatan?>">
+                    <input type="hidden" id="tunjangan_kesehatan" name="tunjangan_kesehatan" value="<?= $tunjangan_kesehatan?>">
+                    <input type="hidden" id="bonus_kerja" name="bonus_kerja" value="<?= $bonus_kerja?>">
+                    <input type="hidden" id="ptkp" name="ptkp" value="<?= $ptkp?>">
+                    <input type="hidden" id="tot_penghasilan" name="tot_penghasilan" value="<?= $tot_penghasilan?>">
+                    <input type="hidden" id="tot_pengurang" name="tot_pengurang" value="<?= $tot_pengurang?>">
+                    <input type="hidden" id="total" name="total" value="<?= $total?>">
                 </div>
             </div>
         </div>
     </div>
 </div>
+<script>
+    $(document).ready(function() {
+
+        $(document).on("click", "#bayar", function() {
+            let params = {
+                nip : $(this).data("nip"),
+                gaji_pokok : $("#gaji_pokok").val() ,
+                tunjangan_jabatan : $("#tunjangan_jabatan").val() ,
+                tunjangan_kesehatan : $("#tunjangan_kesehatan").val() ,
+                bonus_kerja : $("#bonus_kerja").val() ,
+                ptkp : $("#ptkp").val() ,
+                tot_penghasilan : $("#tot_penghasilan").val() ,
+                tot_pengurang : $("#tot_pengurang").val() ,
+                total : $("#total").val() ,
+            };
+            $.ajax({
+                url : "<?= base_url('Penggajian/bayar_gaji')?>",
+                type : "post", 
+                data : params, 
+                dataType : "json",
+                success : function(e) {
+                    window.location.href = "<?= base_url('Penggajian')?>";
+                }
+            });
+        });
+    });
+</script>

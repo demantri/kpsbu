@@ -2541,6 +2541,7 @@ class c_masterdata extends CI_controller
    {
       $jabatan = $this->db->get('tb_jabatan')->result();
       $ptkp = $this->db->get('tb_ptkp')->result();
+      $this->db->group_by('desc');
       $jp = $this->db->get('tb_jenis_pegawai')->result();
       $list = $this->db->get('pegawai')->result();
       $nip = $this->M_masterdata->nip_otomatis();
@@ -2652,15 +2653,32 @@ class c_masterdata extends CI_controller
    
    public function save_ptkp()
    {
-      $desc = $this->input->post('desc');
-      $nominal = $this->input->post('nominal');
-      
-      $data = [
-         'desc' => $desc,
-         'nominal' => $nominal,
-      ];
-      $this->db->insert('tb_ptkp', $data);
-      redirect('c_masterdata/ptkp');
+      $config = array(
+         array(
+            'field' => 'desc',
+            'label' => 'Deskripsi PTKP',
+            'rules' => 'is_unique[tb_ptkp.desc]',
+            'errors' => array(
+               'is_unque' => '%s sudah terdaftar di database!',
+            )
+         )
+      );
+      $this->form_validation->set_error_delimiters('<div class="alert alert-danger"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>  ', '</div>');
+      $this->form_validation->set_rules($config);
+
+      if ($this->form_validation->run() == FALSE) {
+         $this->ptkp();
+      } else {
+         $desc = $this->input->post('desc');
+         $nominal = $this->input->post('nominal');
+         
+         $data = [
+            'desc' => $desc,
+            'nominal' => $nominal,
+         ];
+         $this->db->insert('tb_ptkp', $data);
+         redirect('c_masterdata/ptkp');
+      }
    }
 
    public function edit_ptkp()

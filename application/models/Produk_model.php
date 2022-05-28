@@ -32,6 +32,7 @@
             $this->db->select('*');
             $this->db->where('nama_produk like "%'.$post['search'].'%"');
             $this->db->where('jml !=', 0);
+            $this->db->where('status =', 1);
             $record = $this->db->get('waserda_produk')->result();
 
             foreach ($record as $key => $value) {

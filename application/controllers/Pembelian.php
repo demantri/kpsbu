@@ -179,6 +179,19 @@
 
             // $cekTblKartuStokById = $this->db->query("select * from waserda_kartu_stok where kode = '$value'");
             $detailProduk = $this->db->query("select * from pos_detail_pembelian where invoice = '$id' AND id_produk ='$value'")->row();
+            $pnj = $this->db->query("SELECT a.*, b.jml, b.status
+            FROM pos_pembelian a
+            JOIN pos_detail_pembelian b ON a.invoice = b.invoice
+            WHERE a.invoice = '$id'
+            AND b.id_produk = '$value'")->row();
+            $total = $pnj->total;
+            $ppn = $pnj->ppn;
+            $grandtot = $pnj->grandtotal;
+
+            /** generate jurnal pembelian */
+            $this->M_keuangan->GenerateJurnal('1414', $id, 'd', $total);
+            $this->M_keuangan->GenerateJurnal('2130', $id, 'd', $ppn);
+            $this->M_keuangan->GenerateJurnal('1111', $id, 'k', $grandtot);
 
             $logTrans = [
                 'id_produk' => $value, 

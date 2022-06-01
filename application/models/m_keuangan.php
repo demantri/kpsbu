@@ -28,13 +28,13 @@ class m_keuangan extends CI_model
 		$this->db->insert('buku_pembantu_kas', $data);
 	}
 
-	public function pengajuanJurnal($invoice, $hrg_jual, $ppn, $total_pnj, $hpp, $nominal, $jenis)
+	public function pengajuanJurnal($invoice, $nominal, $jenis)
 	{
 		$pengajuan = [
 			'kode' => $invoice,
 			'tanggal' => date('Y-m-d'),
 			'nominal' => $nominal,
-			'jenis' => 'Penjualan Tunai Waserda',
+			'jenis' => $jenis,
 		];
 		$this->db->insert("pengajuan_jurnal", $pengajuan);
 	}

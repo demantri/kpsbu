@@ -96,7 +96,7 @@ class m_masterdata extends CI_Model {
             $kd = "001";
         }
 		$date = date('dmy');
-        $kode   = "KPSBU".$date.$kd;
+        $kode   = "PNJWASERDA".$date.$kd;
         return $kode;
 	}
 
@@ -114,7 +114,7 @@ class m_masterdata extends CI_Model {
             $kd = "001";
         }
 		$date = date('dmy');
-        $kode   = "KPSBUPMB".$date.$kd;
+        $kode   = "PMBWASERDA".$date.$kd;
         return $kode;
 	}
 

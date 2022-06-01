@@ -7,7 +7,7 @@
          parent::__construct();
          $this->load->model(array(
             "m_transaksi" => "model",
-            "m_keuangan" => "m_keuangan",
+            "m_keuangan" => "M_keuangan",
             "crud_model" => "crud"
          ));
          date_default_timezone_set('Asia/Jakarta');
@@ -4445,8 +4445,8 @@ group by no_bbp";
          $this->db->update("detail_pembelian");
 
          // // jurnal
-         $this->m_keuangan->GenerateJurnal($kd_peny_d, $id, 'd', $tp_fix);
-         $this->m_keuangan->GenerateJurnal($kd_peny_k, $id, 'k', $tp_fix);
+         $this->M_keuangan->GenerateJurnal($kd_peny_d, $id, 'd', $tp_fix);
+         $this->M_keuangan->GenerateJurnal($kd_peny_k, $id, 'k', $tp_fix);
          redirect('c_transaksi/penyusutan');
       }
 
@@ -4584,8 +4584,8 @@ group by no_bbp";
          ];
          $this->db->insert('jurnal', $beban);
 
-         // // $this->m_keuangan->GenerateJurnal('1122',$id,'d',$tp_fix);
-         // // $this->m_keuangan->GenerateJurnal('1120',$id,'k',$tp_fix);
+         // // $this->M_keuangan->GenerateJurnal('1122',$id,'d',$tp_fix);
+         // // $this->M_keuangan->GenerateJurnal('1120',$id,'k',$tp_fix);
          redirect('c_transaksi/revaluasi');
       }
 
@@ -5034,6 +5034,31 @@ group by no_bbp";
 
       public function status_pengajuan($kode, $tanggal, $nominal)
       {
+         $pembelian = $this->db->query("SELECT b.*, a.total, a.ppn, a.grandtotal
+         FROM pos_pembelian a
+         JOIN pos_detail_pembelian b ON a.invoice = b.invoice
+         WHERE a.invoice = '$kode'")->row();
+         $total = $pembelian->total;
+         $ppn = $pembelian->ppn;
+         $grandtotal = $pembelian->grandtotal;
+
+
+         $penjualan = $this->db->query("SELECT a.*, b.id_produk, b.jml, b.harga
+         FROM pos_penjualan a 
+         JOIN pos_detail_penjualan b ON a.invoice = b.invoice
+         WHERE a.invoice = '$kode'");
+         // $jml = 0;
+         $harga_beli = 0;
+         foreach ($penjualan->result() as $row) {
+            $harga_beli += $row->jml * $row->harga;
+         }
+         $jenis_pmb = $penjualan->row()->jenis_pembayaran;
+         $kasPnj = $penjualan->row()->total_trans;
+         $ppnKeluar = $penjualan->row()->ppn;
+         $penjualanWaserda = $penjualan->row()->pembayaran;
+         $hpp_persbrg = $harga_beli;
+         // $persBrg
+
          if (strpos($kode, 'GAJI') !== false) {
             /** transaksi gaji */
 
@@ -5072,7 +5097,7 @@ group by no_bbp";
             ];
             $this->db->insert('buku_pembantu_kas', $bpk);
          } else if (strpos($kode, 'PMB-KR') !== false ) {
-            /** transaksi pembelian kredit */
+            /** transaksi pembayaran kredit */
 
             $data = [
                'status' => 1
@@ -5204,8 +5229,8 @@ group by no_bbp";
             $this->db->update('pengajuan_jurnal', $pengajuan_jurnal);
 
             /**jurnal lembur */
-            $this->m_keuangan->GenerateJurnal('5400', $kode, 'd', $nominal);
-            $this->m_keuangan->GenerateJurnal('1111', $kode, 'k', $nominal);
+            $this->M_keuangan->GenerateJurnal('5400', $kode, 'd', $nominal);
+            $this->M_keuangan->GenerateJurnal('1111', $kode, 'k', $nominal);
 
             // buku pembantu kas
             $bpk = [
@@ -5218,7 +5243,7 @@ group by no_bbp";
             ];
             $this->db->where('kode', $kode);
             $this->db->update('pengajuan_jurnal', $pengajuan_jurnal);
-         } else if (strpos($kode, 'KPSBU') !== false) {
+         } else if (strpos($kode, 'PNJWASERDA') !== false) {
             /** penjualan tunai */
             $pengajuan_jurnal = [
                'status' => 'selesai'
@@ -5226,12 +5251,40 @@ group by no_bbp";
             $this->db->where('kode', $kode);
             $this->db->update('pengajuan_jurnal', $pengajuan_jurnal);
             
-            /** jurnal penjualan tunai */
-            $this->m_keuangan->GenerateJurnal('1111', $kode, 'd', $nominal);
-            $this->m_keuangan->GenerateJurnal('4116', $kode, 'k', $nominal);
+            if ($jenis_pmb == 'kredit') {
+               /** jurnal penjualan tunai */
+               $this->M_keuangan->GenerateJurnal('1998', $kode, 'd', $kasPnj);
+               $this->M_keuangan->GenerateJurnal('2140', $kode, 'd', $ppnKeluar);
+               $this->M_keuangan->GenerateJurnal('4116', $kode, 'k', $penjualanWaserda);
 
+               $this->M_keuangan->GenerateJurnal('6113', $kode, 'd', $hpp_persbrg);
+               $this->M_keuangan->GenerateJurnal('1414', $kode, 'k', $hpp_persbrg);
+               
+            } else {
+               /** jurnal penjualan tunai */
+               $this->M_keuangan->GenerateJurnal('1111', $kode, 'd', $kasPnj);
+               $this->M_keuangan->GenerateJurnal('2140', $kode, 'd', $ppnKeluar);
+               $this->M_keuangan->GenerateJurnal('4116', $kode, 'k', $penjualanWaserda);
+
+               $this->M_keuangan->GenerateJurnal('6113', $kode, 'd', $hpp_persbrg);
+               $this->M_keuangan->GenerateJurnal('1414', $kode, 'k', $hpp_persbrg);
+               /** generate ke bpk */
+               $this->M_keuangan->GenerateLaporanBPK($kode, $tanggal, $kasPnj, '1111', 'd', 'Penjualan Tunai');
+            }
+         } else if (strpos($kode, 'PMBWASERDA') !== false) {
+            /** penjualan tunai */
+            $pengajuan_jurnal = [
+               'status' => 'selesai'
+            ];
+            $this->db->where('kode', $kode);
+            $this->db->update('pengajuan_jurnal', $pengajuan_jurnal);
+
+            /** jurnal pembelian */
+            $this->M_keuangan->GenerateJurnal('1414', $kode, 'd', $total);
+            $this->M_keuangan->GenerateJurnal('2130', $kode, 'd', $ppn);
+            $this->M_keuangan->GenerateJurnal('1111', $kode, 'k', $grandtotal);
             /** generate ke bpk */
-            $this->m_keuangan->GenerateLaporanBPK($kode, $tanggal, $nominal, '1111', 'd', 'Penjualan Tunai');
+            $this->M_keuangan->GenerateLaporanBPK($kode, $tanggal, $grandtotal, '1111', 'k', 'Pembelian Barang Waserda');
          }
          redirect('c_transaksi/pengajuan_jurnal');
       }

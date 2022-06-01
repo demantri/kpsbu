@@ -21,9 +21,9 @@
                         <thead>
                             <tr>
                                 <th>Pendapatan</th>
-                                <td></td>
-                                <td></td>
-                                <td></td>
+                                <td>Keterangan</td>
+                                <td>Debit</td>
+                                <td>Kredit</td>
                             </tr>
                             <?php 
                             foreach ($pendapatan as $item) { ?>

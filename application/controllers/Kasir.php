@@ -205,9 +205,6 @@
         $ppn = $this->input->post('ppn');
         $total_trans = $this->input->post('total_trans');
 
-        // $total_harga_beli = $qty * $harga_beli;
-        // $total_unruk_pengajuan_jurnal = $total_harga_beli + $ppn + $total_trans;
-
         $data = [
             'total' => $total,
             'nama_pembeli' => $pembeli,
@@ -222,15 +219,6 @@
         // print_r($kode);exit;
         $this->db->where('invoice', $kode);
         $this->db->update('pos_penjualan', $data);
-
-        // kirim ke db pengajuan jurnal 
-        // $pengajuan = [
-        //     'kode' => $kode,
-        //     'tanggal' => date('Y-m-d'),
-        //     'nominal' => $total_unruk_pengajuan_jurnal,
-        //     'jenis' => 'Penjualan Tunai Waserda',
-        // ];
-        // $this->db->insert("pengajuan_jurnal", $pengajuan);
 
         if ($jenis == 1 && $tipe == 'kredit') {
 
@@ -248,6 +236,9 @@
                 $this->db->update('peternak', $status_kredit);
             }
 
+            /** pengajuan jurnal kredit */
+            $this->M_keuangan->pengajuanJurnal($kode, $pembayaran, 'Penjualan Barang Kredit Waserda');
+
             $tb_kredit = [
                 'invoice' => $kode,
                 'nama' => $pembeli,
@@ -255,6 +246,8 @@
                 'nominal' => $pembayaran,
             ];
             $this->db->insert('waserda_pembayaran_kredit', $tb_kredit);
+        } else {
+            $this->M_keuangan->pengajuanJurnal($kode, $pembayaran, 'Penjualan Barang Tunai Waserda');
         }
 
         $this->db->where('invoice', $kode);
@@ -282,9 +275,6 @@
 
             $total_pengajuan_jurnal = $total_harga_jual_produk + $ppn + $total_harga_beli_produk;
 
-            /** pengajuan jurnal */
-            $this->m_keuangan->pengajuanJurnal($kode, $total_harga_jual_produk, $ppn, $total, $total_harga_beli_produk, $total_pengajuan_jurnal, 'Penjualan Tunai Waserda');
-            /** end */
 
             /** coba kartu stok penjualan */
             $this->db->where('invoice', $kode);

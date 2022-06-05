@@ -152,5 +152,24 @@ class m_masterdata extends CI_Model {
 		return $output;
 
     }
+
+    /** id pengajuan bonus */
+    public function id_pengajuan_bonus()
+	{
+		$query1   = "SELECT RIGHT(id_pengajuan,3) as kode FROM pengajuan_bonus";
+        $abc      = $this->db->query($query1);
+        $kode = "";
+        if ($abc->num_rows() > 0) {
+            foreach ($abc->result() as $k) {
+                $tmp = ((int) $k->kode) + 1;
+                $kd  = sprintf("%03s", $tmp);
+            }
+        } else {
+            $kd = "001";
+        }
+		$date = date('dmy');
+        $kode   = "PENGAJUANBONUS".$date.$kd;
+        return $kode;
+	}
 	
 }

@@ -9,8 +9,11 @@
     }
     public function index()
     {
+        /** buat query kategori */
+        // $this->db->order_by(''); // disini lu jelasin order by apa
+        $list = $this->db->get('waserda_kategori')->result();
         $data = [
-            'list' => $this->db->get('waserda_kategori')->result(),
+            'list' => $list, // terus disini lu panggil $list nya
             'kode' => $this->master->kategori_code(),
         ];
         $this->template->load('template', 'waserda/kategori/index', $data);

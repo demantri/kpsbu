@@ -11,6 +11,12 @@
         <form action="<?= base_url('Pengajuan/savePengajuanBonus')?>" method="post">
             <div class="modal-body">
                 <div class="form-group row">
+                    <label for="id_pengajuan" class="col-sm-4 col-form-label">ID Pengajuan</label>
+                    <div class="col-sm-8">
+                    <input type="text" class="form-control" id="id_pengajuan" name="id_pengajuan"  value="<?= $kode ?>" readonly>
+                    </div>
+                </div>
+                <div class="form-group row">
                     <label for="tgl" class="col-sm-4 col-form-label">Periode</label>
                     <div class="col-sm-8">
                     <input type="month" class="form-control" id="tgl" name="tgl" placeholder="Tanggal" value="<?= date('Y-m')?>">
@@ -20,7 +26,7 @@
                 <div class="form-group row">
                     <label for="nama" class="col-sm-4 col-form-label">Nama Pegawai</label>
                     <div class="col-sm-8">
-                        <select name="nama" id="nama" class="form-control" required>
+                        <select style="width: 100% !important;" name="nama[]" multiple="multiple" class="form-control js-example-basic-multiple" required>
                             <?php foreach ($pegawai as $item) { ?>
                             <option value="<?= $item->nip?>"><?= $item->nama?></option>
                             <?php } ?>

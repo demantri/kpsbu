@@ -27,7 +27,11 @@ class Penggajian extends CI_Controller
         $result = $this->db->query($q)->result();
         foreach ($result as $data) {
             $month = date('Y-m');
-            $tbBonus = $this->db->query("select sum(nominal) as nominal, nip, periode from pengajuan_bonus where periode = '$month' and nip ='$data->nip'")->row();
+            // $tbBonus = $this->db->query("select sum(nominal) as nominal, nip, periode from pengajuan_bonus where periode = '$month' and nip ='$data->nip'")->row();
+            $tbBonus = $this->db->query("select sum(nominal) as nominal, nip, periode 
+            from pengajuan_bonus a
+            JOIN tb_detail_pengajuan_bonus b ON a.id_pengajuan = b.id_pengajuan
+            where periode = '$month' and nip ='$data->nip'")->row();
             if (is_null($tbBonus->nominal)) {
                 $bonus = 0;
             } else {

@@ -1,3 +1,8 @@
+<style>
+    th {
+        text-align: center;
+    }
+</style>
 <div class="row">
     <div class="col-sm-12">
         <div class="x_panel">
@@ -22,15 +27,26 @@
                         <thead>
                             <tr>
                                 <th style="width: 5%;">#</th>
+                                <th>ID Pengajuan</th>
                                 <th>Tanggal Pengajuan</th>
-                                <th>Nama Pegawai</th>
-                                <th>Nominal</th>
                                 <th>Keterangan</th>
-                                <th style="width: 12%;" class="text-center">Status</th>
-                                <th style="width: 7%;" class="text-center">Aksi</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
+                            <?php 
+                            $no = 1;
+                            foreach ($list as $item) { ?>
+                            <tr>
+                                <td><?= $no++ ?></td>
+                                <td><?= $item->id_pengajuan?></td>
+                                <td><?= $item->periode?></td>
+                                <td><?= $item->keterangan?></td>
+                                <td class="text-center">
+                                    <button type="button" data-toggle="modal" data-target="detail" class="btn btn-default btn-xs detailtransaksi" data-id="<?= $item->id_pengajuan?>">Detail Transaksi</button>
+                                </td>
+                            </tr>
+                            <?php } ?>
                         </tbody>
                     </table>
                 </div>
@@ -39,3 +55,36 @@
     </div>
 </div>
 <?php $this->load->view('pengajuan/hrd/pengajuan_bonus/add'); ?>
+<?php $this->load->view('pengajuan/hrd/pengajuan_bonus/detail'); ?>
+<script>
+    function rupiah(input) {
+        return (input/1000).toFixed(3);
+    }
+    $(document).ready(function() {
+        $('.js-example-basic-multiple').select2();
+    });
+    $(document).on("click", ".detailtransaksi", function() {
+        var id = $(this).data('id');
+        $.ajax({
+            url : "<?= base_url('Pengajuan/detail_bonus')?>",
+            data : {
+                id_pengajuan : id
+            }, 
+            type : "post",
+            success :function(response) {
+                $(".modal-body #id").val( id );
+                $('#detail').modal('show');
+                var obj = JSON.parse(response);
+                var tableRow = '';
+                obj.forEach(element => {
+                    tableRow += `<tr>
+                            <td>${element.id_pengajuan}</td>
+                            <td>${element.nama}</td>
+                            <td>${'Rp. ' + rupiah(element.nominal)}</td>
+                        </tr>`;
+                });
+                $("#myTable tbody").html(tableRow);
+            }
+        });
+    })
+</script>

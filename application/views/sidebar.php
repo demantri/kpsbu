@@ -52,7 +52,7 @@
                 <ul class="nav child_menu">
                     <?php if ($this->session->userdata('level') == "admin") : ?>
                     <li><a href="<?php echo base_url('c_masterdata/aktivitas'); ?>">Aktivitas</a></li>
-                    <li><a href="<?php echo base_url('Produk'); ?>">Produk</a></li>
+                    <li><a href="<?php echo base_url('Produk'); ?>">Produk Waserda</a></li>
                     <li><a href="<?php echo base_url('Kategori')?>">Kategori Produk</a></li>
                     <li><a href="<?= base_url('Supplier_produk')?>">Supplier Produk</a></li>
                     <li><a href="<?php echo site_url(); ?>c_masterdata/lihat_coa">COA</a></li>

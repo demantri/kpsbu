@@ -5034,31 +5034,6 @@ group by no_bbp";
 
       public function status_pengajuan($kode, $tanggal, $nominal)
       {
-         $pembelian = $this->db->query("SELECT b.*, a.total, a.ppn, a.grandtotal
-         FROM pos_pembelian a
-         JOIN pos_detail_pembelian b ON a.invoice = b.invoice
-         WHERE a.invoice = '$kode'")->row();
-         $total = $pembelian->total;
-         $ppn = $pembelian->ppn;
-         $grandtotal = $pembelian->grandtotal;
-
-
-         $penjualan = $this->db->query("SELECT a.*, b.id_produk, b.jml, b.harga
-         FROM pos_penjualan a 
-         JOIN pos_detail_penjualan b ON a.invoice = b.invoice
-         WHERE a.invoice = '$kode'");
-         // $jml = 0;
-         $harga_beli = 0;
-         foreach ($penjualan->result() as $row) {
-            $harga_beli += $row->jml * $row->harga;
-         }
-         $jenis_pmb = $penjualan->row()->jenis_pembayaran;
-         $kasPnj = $penjualan->row()->total_trans;
-         $ppnKeluar = $penjualan->row()->ppn;
-         $penjualanWaserda = $penjualan->row()->pembayaran;
-         $hpp_persbrg = $harga_beli;
-         // $persBrg
-
          if (strpos($kode, 'GAJI') !== false) {
             /** transaksi gaji */
 
@@ -5244,6 +5219,20 @@ group by no_bbp";
             $this->db->where('kode', $kode);
             $this->db->update('pengajuan_jurnal', $pengajuan_jurnal);
          } else if (strpos($kode, 'PNJWASERDA') !== false) {
+            $penjualan = $this->db->query("SELECT a.*, b.id_produk, b.jml, b.harga
+            FROM pos_penjualan a 
+            JOIN pos_detail_penjualan b ON a.invoice = b.invoice
+            WHERE a.invoice = '$kode'");
+            // $jml = 0;
+            $harga_beli = 0;
+            foreach ($penjualan->result() as $row) {
+               $harga_beli += $row->jml * $row->harga;
+            }
+            $jenis_pmb = $penjualan->row()->jenis_pembayaran;
+            $kasPnj = $penjualan->row()->total_trans;
+            $ppnKeluar = $penjualan->row()->ppn;
+            $penjualanWaserda = $penjualan->row()->pembayaran;
+            $hpp_persbrg = $harga_beli;
             /** penjualan tunai */
             $pengajuan_jurnal = [
                'status' => 'selesai'
@@ -5272,7 +5261,14 @@ group by no_bbp";
                $this->M_keuangan->GenerateLaporanBPK($kode, $tanggal, $kasPnj, '1111', 'd', 'Penjualan Tunai');
             }
          } else if (strpos($kode, 'PMBWASERDA') !== false) {
-            /** penjualan tunai */
+            $pembelian = $this->db->query("SELECT b.*, a.total, a.ppn, a.grandtotal
+            FROM pos_pembelian a
+            JOIN pos_detail_pembelian b ON a.invoice = b.invoice
+            WHERE a.invoice = '$kode'")->row();
+            $total = $pembelian->total;
+            $ppn = $pembelian->ppn;
+            $grandtotal = $pembelian->grandtotal;
+            /** pembelian tunai */
             $pengajuan_jurnal = [
                'status' => 'selesai'
             ];

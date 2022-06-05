@@ -43,3 +43,47 @@
     </div>
   </div>
 </div>
+<script>
+  $(document).on("click", "#filer", function() {
+    var bulan = $("#bulan").val();
+    var tahun = $("#tahun").val();
+    let params = {
+      bulan : bulan, 
+      tahun : tahun
+    };
+    $.ajax({
+      url : "<?= base_url('Profile/detailSlipGaji')?>",
+      method : "post", 
+      data : params,
+      success : function(response) {
+        var obj = JSON.parse(response)
+        var tableRow = '';
+        obj.forEach(element => {
+          var i = 1;
+          tableRow += `<tr>
+              <td>${i++}</td>
+              <td>${element.id_penggajian}</td>
+              <td>${element.tanggal}</td>
+              <td>
+                  <a class="btn btn-default btn-xs slipgaji" data-id="${element.id_penggajian}")>Slip Gaji</a>
+              </td>
+          </tr>`;
+        });
+        $("#myTable tbody").html(tableRow);
+      }
+    });
+  });
+
+  $(document).on("click", ".slipgaji", function() {
+    var id = $(this).data("id")
+    var win = window.open('<?= base_url('Profile/slipgaji/')?>' + id, '_blank');
+    if (win) {
+        //Browser has allowed it to be opened
+        win.focus();
+    } else {
+        //Browser has blocked it
+        alert('Please allow popups for this website');
+    }
+
+  })
+</script>

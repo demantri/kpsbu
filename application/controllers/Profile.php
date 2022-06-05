@@ -3,6 +3,7 @@
     public function index()
     {
         $name = $this->session->userdata('nama_lengkap');
+
         $this->db->where('nama', $name);
         $pegawai = $this->db->get('pegawai')->row();
 
@@ -16,19 +17,19 @@
             'user' => $pegawai,
             'lembur' => $lembur,
             'penggajian' => $penggajian,
+            'nama' => $name
         ];
         $this->template->load('template', 'profile/index', $data);
     }
 
-    public function slipgaji($nama_pegawai, $id_gaji)
+    public function slipgaji($id_gaji)
     {
-        $query = $this->db->query("SELECT b.*, a.nm_pegawai, a.tanggal, c.nip
-        FROM tb_penggajian a
+        $query = $this->db->query("SELECT a.nm_pegawai, a.tanggal, c.nip, b.*
+        FROM tb_penggajian a 
         JOIN tb_detail_penggajian b ON a.id_penggajian = b.id_penggajian
-        JOIN pegawai c on a.nm_pegawai = c.nama
-        WHERE nm_pegawai = '$nama_pegawai'
-        AND b.id_penggajian = '$id_gaji'
-        AND LEFT(tanggal, 7) = left(sysdate(),7)")->row();
+        JOIN pegawai c ON c.nama = a.nm_pegawai
+        WHERE b.id_penggajian = '$id_gaji'
+        ")->row();
         $data = [
             'pegawai' => $query
         ];
@@ -36,6 +37,16 @@
         $this->pdf->setPaper('a4', 'potrait');
         $this->pdf->filename = "slip-gaji.pdf";
         $this->pdf->load_view('profile/slipgaji_pdf', $data);
+    }
+
+    public function detailSlipGaji()
+    {
+        $name = $this->session->userdata('nama_lengkap');
+        $bulan = $this->input->post('bulan');
+        $tahun = $this->input->post('tahun');
+        $periode = $tahun .'-'. $bulan;
+        $query = $this->db->query("select * from tb_penggajian where left(tanggal, 7) = '$periode' and nm_pegawai = '$name'")->result();
+        echo json_encode($query);
     }
 }
 ?>

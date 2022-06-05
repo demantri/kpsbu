@@ -2,7 +2,7 @@
     <div class="form-group row">
         <label for="pegawai" class="col-sm-1 col-form-label">Periode</label>
         <div class="col-sm-2">
-            <select name="" id="" class="form-control">
+            <select name="bulan" id="bulan" class="form-control">
                 <option value="">-</option>
                 <option value="01">Januari</option>
                 <option value="02">Februari</option>
@@ -19,7 +19,7 @@
             </select>
         </div>
         <div class="col-sm-2">
-            <select name="" id="" class="form-control">
+            <select name="tahun" id="tahun" class="form-control">
                 <option value="">-</option>
                 <?php for ($i=2019; $i <= date('Y-m-d'); $i++) { ?>
                     <option value="<?= $i ?>"><?= $i ?></option>
@@ -27,11 +27,11 @@
             </select>
         </div>
         <div class="col-sm-2">
-            <button type="button" class="btn btn-primary">Filter</button>
+            <button type="button" class="btn btn-primary" id="filer">Filter</button>
         </div>
     </div>
     <hr>
-    <table class="data table table-striped no-margin">
+    <table class="data table table-striped no-margin" id="myTable">
         <thead>
         <tr>
             <th>#</th>
@@ -41,18 +41,6 @@
         </tr>
         </thead>
         <tbody>
-        <?php 
-        $no = 1;
-        foreach ($penggajian as $item) { ?>
-        <tr>
-            <td><?= $no++ ?></td>
-            <td><?= $item->id_penggajian ?></td>
-            <td><?= date('F Y', strtotime($item->tanggal)) ?></td>
-            <td>
-                <a class="btn btn-default btn-xs" target="_blank" href="<?= base_url("Profile/slipgaji/" . $item->nm_pegawai . '/' . $item->id_penggajian) ?>">Slip Gaji</a>
-            </td>
-        </tr>
-        <?php } ?>
         </tbody>
     </table>
 </div>

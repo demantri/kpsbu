@@ -122,27 +122,29 @@
                         <strong>Note : Pegawai kontrak tidak dikenakan PPH 21 PTKP.</strong>
                     </p>
                     <hr>
-                    <div class="text-right">
-                        <a href="<?= base_url('Penggajian') ?>" class="btn btn-default btn-md">Kembali</a>
-                        <button type="button" class="btn btn-primary" id="bayar"
-                        data-nip="<?= $peg->nip?>"
-                        >Bayar Gaji</button>
-                    </div>
-
-                    <input type="hidden" id="gaji_pokok" name="gaji_pokok" value="<?= $gapok?>">
-                    <input type="hidden" id="tunjangan_jabatan" name="tunjangan_jabatan" value="<?= $tunjangan_jabatan?>">
-                    <input type="hidden" id="tunjangan_kesehatan" name="tunjangan_kesehatan" value="<?= $tunjangan_kesehatan?>">
-                    <input type="hidden" id="bonus_kerja" name="bonus_kerja" value="<?= $bonus_kerja?>">
-                    <input type="hidden" id="ptkp" name="ptkp" value="<?= $ptkp?>">
-                    <input type="hidden" id="tot_penghasilan" name="tot_penghasilan" value="<?= $tot_penghasilan?>">
-                    <input type="hidden" id="tot_pengurang" name="tot_pengurang" value="<?= $tot_pengurang?>">
-                    <input type="hidden" id="total" name="total" value="<?= $total?>">
+                    <form action="<?= base_url('Penggajian/bayar_gaji')?>" method="post">
+                        <input type="hidden" id="nip" name="nip" value="<?= $peg->nip?>">
+                        <input type="hidden" id="gaji_pokok" name="gaji_pokok" value="<?= $gapok?>">
+                        <input type="hidden" id="tunjangan_jabatan" name="tunjangan_jabatan" value="<?= $tunjangan_jabatan?>">
+                        <input type="hidden" id="tunjangan_kesehatan" name="tunjangan_kesehatan" value="<?= $tunjangan_kesehatan?>">
+                        <input type="hidden" id="bonus_kerja" name="bonus_kerja" value="<?= $bonus_kerja?>">
+                        <input type="hidden" id="ptkp" name="ptkp" value="<?= $ptkp?>">
+                        <input type="hidden" id="tot_penghasilan" name="tot_penghasilan" value="<?= $tot_penghasilan?>">
+                        <input type="hidden" id="tot_pengurang" name="tot_pengurang" value="<?= $tot_pengurang?>">
+                        <input type="hidden" id="total" name="total" value="<?= $total?>">
+                        <div class="text-right">
+                            <a href="<?= base_url('Penggajian') ?>" class="btn btn-default btn-md">Kembali</a>
+                            <button type="submit" class="btn btn-primary" id="bayar"
+                            data-nip="<?= $peg->nip?>"
+                            >Bayar Gaji</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
 </div>
-<script>
+<!-- <script>
     $(document).ready(function() {
 
         $(document).on("click", "#bayar", function() {
@@ -163,9 +165,10 @@
                 data : params, 
                 dataType : "json",
                 success : function(e) {
-                    window.location.href = "<?= base_url('Penggajian')?>";
+                    // window.location.href = "<?= base_url('Penggajian')?>";
+                    console.log(e)
                 }
             });
         });
     });
-</script>
+</script> -->

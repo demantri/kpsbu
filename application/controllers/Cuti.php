@@ -5,8 +5,15 @@
         $kode = $this->id_pengajuan();
         $level = $this->session->userdata('level');
         $nip = $this->session->userdata('nip');
+        $listCuti = '';
+        if ($level == 'admin') {
+            $listCuti = $this->db->query("SELECT a.*, b.nama 
+            FROM tb_cuti a
+            JOIN pegawai b ON a.nip = b.nip")->result();
+        } else {
+            $listCuti = $this->db->query("select a.*, b.nama, b.status as status_pegawai from tb_cuti a join pegawai b on a.nip = b.nip where b.status = 1 and b.nip ='$nip'")->result();
+        }
         $pegawai = $this->db->query("select * from pegawai where status = 1 and nip = '$nip'")->row();
-        $listCuti = $this->db->query("select a.*, b.nama, b.status as status_pegawai from tb_cuti a join pegawai b on a.nip = b.nip where b.status = 1 and b.nip ='$nip'")->result();
         $data = [
             'kode' => $kode,
             'role' => $level,

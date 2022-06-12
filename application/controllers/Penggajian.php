@@ -158,7 +158,8 @@ class Penggajian extends CI_Controller
         //     'msg' => 'success', 
         //     'url' => redirect('Penggajian')
         // ];
-        echo json_encode('Sukses');
+        // echo json_encode('Sukses');
+        redirect('Penggajian');
     }
 
     public function laporan_penggajian()
@@ -166,20 +167,16 @@ class Penggajian extends CI_Controller
         $bulan = $this->input->post('bulan');
         $tahun = $this->input->post('tahun');
         $periode = $tahun.'-'.$bulan;
-        if ($periode) {
-            $list = $this->db->query("select * from tb_penggajian where LEFT(tanggal, 7) = '$periode' order by tanggal asc")->result();
-            $data = [
-                'list' => $list,
-            ];
-            $this->template->load('template', 'penggajian/laporan_penggajian', $data);
-        } else {
-            $list = $this->db->query("select * from tb_penggajian where LEFT(tanggal, 7) = '$periode' order by tanggal asc")->result();
+        if (isset($periode)) {
+            $list = $this->db->query("SELECT b.*, a.tanggal, a.nm_pegawai
+            from tb_penggajian a
+            JOIN tb_detail_penggajian b ON a.id_penggajian = b.id_penggajian
+            where LEFT(tanggal, 7) = '$periode' order by tanggal asc")->result();
             $data = [
                 'list' => $list,
             ];
             $this->template->load('template', 'penggajian/laporan_penggajian', $data);
         }
-        
     }
 }
 ?>

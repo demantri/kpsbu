@@ -70,7 +70,12 @@
                                 <th>ID Penggajian</th>
                                 <th>Tanggal</th>
                                 <th>Nama Pegawai</th>
-                                <th>Nominal</th>
+                                <th>Gaji Pokok</th>
+                                <th>Tunjangan Jabatan</th>
+                                <th>Tunjangan Kesehatan</th>
+                                <th>Bonus Kerja</th>
+                                <th>PPH 21</th>
+                                <th>Gaji Bersih</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -82,7 +87,12 @@
                                 <td><?= $value->id_penggajian ?></td>
                                 <td><?= $value->tanggal ?></td>
                                 <td><?= $value->nm_pegawai ?></td>
-                                <td><?= format_rp($value->nominal) ?></td>
+                                <td class="text-right"><?= format_rp($value->gaji_pokok) ?></td>
+                                <td class="text-right"><?= format_rp($value->tunjangan_jabatan) ?></td>
+                                <td class="text-right"><?= format_rp($value->tunjangan_kesehatan) ?></td>
+                                <td class="text-right"><?= format_rp($value->bonus_kerja) ?></td>
+                                <td class="text-right"><?= format_rp($value->ptkp) ?></td>
+                                <td class="text-right"><?= format_rp($value->total) ?></td>
                             </tr>
                         <?php }?>
                         </tbody>

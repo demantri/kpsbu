@@ -30,7 +30,9 @@
                                 <th>Tgl. Selesai Cuti</th>
                                 <th>Alasan Cuti</th>
                                 <th style="width: 12%;" class="text-center">Status</th>
-                                
+                                <?php if ($role != 'pegawai') { ?>
+                                <th class="text-center">Aksi</th>
+                                <?php } ?>
                             </tr>
                         </thead>
                         <tbody>

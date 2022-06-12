@@ -6,8 +6,15 @@ class Lembur extends CI_Controller
         $id_pengajuan = $this->id_pengajuan();
         $level = $this->session->userdata('level');
         $nip = $this->session->userdata('nip');
-
-        $lembur = $this->db->query("select a.*, b.nama from tb_lembur a join pegawai b on a.id_pegawai = b.nip where id_pegawai ='$nip'")->result();
+        $lembur = '';
+        if ($level == 'admin') {
+            $lembur = $this->db->query("SELECT a.*, b.nama
+            FROM tb_lembur a 
+            left JOIN pegawai b ON b.nip = a.id_pegawai
+            ORDER BY id asc")->result();
+        } else {
+            $lembur = $this->db->query("select a.*, b.nama from tb_lembur a join pegawai b on a.id_pegawai = b.nip where id_pegawai ='$nip'")->result();
+        }
         $pgw = $this->db->query("select * from pegawai where status ='1'")->result();
         $pegawai = $this->db->query("select * from pegawai where status = 1 and nip = '$nip'")->row();
         $data = [
@@ -25,6 +32,7 @@ class Lembur extends CI_Controller
         $id_pengajuan = $this->input->post('id_pengajuan');
         $tgl = $this->input->post('tgl');
         $nama = $this->input->post('nama');
+        $nip = $this->input->post('nip');
         $jam = $this->input->post('jam');
 
         $perjam = 20000;
@@ -33,7 +41,7 @@ class Lembur extends CI_Controller
         $data = [
             'id_pengajuan' => $id_pengajuan,
             'tgl_pengajuan' => $tgl,
-            'id_pegawai' => $nama,
+            'id_pegawai' => $nip,
             'total_jam' => $jam,
             'nominal_perjam' => $perjam,
             'total_nominal_lembur' => $total_nominal_lembur,

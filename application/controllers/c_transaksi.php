@@ -5034,7 +5034,7 @@ group by no_bbp";
 
       public function status_pengajuan($kode, $tanggal, $nominal)
       {
-         if (strpos($kode, 'GAJI') !== false) {
+         if (strpos($kode, 'GAJI-') !== false) {
             /** transaksi gaji */
 
             $pengajuan_jurnal = [

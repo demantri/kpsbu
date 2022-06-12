@@ -112,7 +112,13 @@
             <td style="text-align:right"><?= format_rp($pegawai->total)?></td>
         </tr>
     </table>
-    <br><br><br>
+    <br><br>
+    <p style="font-size: 15px;">
+        <strong>
+            <i>
+                <?= 'Telah dibayarkan sejumlah ' . number_to_words($pegawai->total) . ', dan telah dibayarkan kebank yang terdaftar.' ?></strong>
+            </i>
+    </p>
     <p style="font-size: 12px;">
         Tanggal tercetak <?= date('d F Y H:i:s')?>
     </p>

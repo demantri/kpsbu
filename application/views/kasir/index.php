@@ -250,7 +250,7 @@
             $('#umum').show()
             if (tipe === 'kredit') {
                 $(".form-kembalian").hide()
-
+                $("#input_pembayaran").val($("#total").val()).prop('readonly', true);
                 $("input[name='pembayaran']").keyup(function() {
                     var typing = $(this).val()
                     console.log(typing)
@@ -272,6 +272,7 @@
                 })
             } else {
                 $(".form-kembalian").show()
+                $("#input_pembayaran").val(0).prop('readonly', false)
                 $("input[name='pembayaran']").keyup(function() {
                     var typing = $(this).val()
                     console.log(typing)

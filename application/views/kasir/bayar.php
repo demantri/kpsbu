@@ -40,7 +40,7 @@
                         </div>
                     </div>
                     <div class="form-group row" id="div-pembeli">
-                        <label for="pembeli" class="col-sm-3 col-form-label" required>Nama Pembeli</label>
+                        <label for="pembeli" class="col-sm-3 col-form-label">Nama Pembeli</label>
                         <div class="col-sm-9" id="pembeli">
                             <select name="pembeli" class="form-control pilih_pembeli">
                             </select>
@@ -63,7 +63,7 @@
                         <div class="form-group row">
                             <label for="pembayaran" class="col-sm-3 col-form-label">Input Pembayaran</label>
                             <div class="col-sm-5">
-                                <input type="number" name="pembayaran" class="form-control" placeholder="Input Pembayaran" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');">
+                                <input type="number" name="pembayaran" id="input_pembayaran" class="form-control" placeholder="Input Pembayaran" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');">
                             </div>
                         </div>
                     </div>

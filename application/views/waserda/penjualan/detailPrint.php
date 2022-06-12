@@ -25,28 +25,37 @@
                                 <th>Invoice</th>
                                 <th>Tgl. Penjualan</th>
                                 <th>Nama Barang</th>
+                                <th>Harga Jual</th>
                                 <th>Qty</th>
                                 <th>Subtotal</th>
-                                <th>Grand Total</th>
                             </tr>
                         </thead>
                         <tbody>
                             <?php 
                             $no = 1;
-                            $grandtot = 0;
+                            $subtotal = 0;
+                            $grandtotal = 0;
                             foreach ($detail as $key => $value) { ?>
-                            <?php $grandtot += $value->jml * $value->harga ?>
+                            <?php 
+                            $subtotal = $value->jml * $value->harga;
+                            $grandtotal += $subtotal ?>
                             <tr>
                                 <td><?= $no++ ?></td>
                                 <td><?= $value->invoice ?></td>
                                 <td><?= $value->tanggal ?></td>
                                 <td><?= $value->nama_produk ?></td>
+                                <td class="text-right"><?= format_rp($value->harga) ?></td>
                                 <td><?= $value->jml ?></td>
-                                <td><?= format_rp($value->harga) ?></td>
-                                <td><?= format_rp($grandtot) ?></td>
+                                <td class="text-right"><?= format_rp($subtotal) ?></td>
                             </tr>
                             <?php } ?>
                         </tbody>
+                        <tfoot>
+                            <tr>
+                                <th colspan="6" class="text-center">Grandtotal</th>
+                                <th class="text-right"><?= format_rp($grandtotal) ?></th>
+                            </tr>
+                        </tfoot>
                     </table>
                 </div>
                 <a href="<?= base_url('Kasir/list_penjualan') ?>" class="btn btn-default">Kembali</a>

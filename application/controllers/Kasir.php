@@ -205,6 +205,10 @@
         $ppn = $this->input->post('ppn');
         $total_trans = $this->input->post('total_trans');
 
+        if (empty($pembeli)) {
+            $pembeli = 'Guest';
+        }
+
         $data = [
             'total' => $total,
             'nama_pembeli' => $pembeli,
@@ -323,11 +327,17 @@
                 $this->db->where('jenis_transaksi', 'Stok Masuk');
                 $resWaserdaLogTrans = $this->db->get('waserda_log_transaksi');
 
-                $jmlBarisSebelumnya = $this->db->query("SELECT * FROM waserda_log_stok 
-                WHERE no_trans <> '$kode'
-                AND id_produk = '$value'
-                ORDER BY no_trans DESC  
-                LIMIT 1")->row()->jml_baris_sblmnya;
+                // $jmlBarisSebelumnya = $this->db->query("SELECT * FROM waserda_log_stok 
+                // WHERE no_trans <> '$kode'
+                // AND id_produk = '$value'
+                // ORDER BY no_trans DESC  
+                // LIMIT 1")->row()->jml_baris_sblmnya;
+
+                $jmlBarisSebelumnya = $this->db->query("SELECT COUNT(stok_akhir) as jml_baris
+                FROM waserda_log_transaksi
+                WHERE id_produk = '$value' AND
+                stok_akhir > 0  AND jenis_transaksi = 'Stok Masuk'
+                ")->row()->jml_baris;
 
                 $this->db->where('no_trans', $kode);
                 $this->db->where('id_produk', $value);
@@ -337,7 +347,7 @@
                 $jml_baris = $jml_baris_sblmnya - $jmlBarisSebelumnya;
 
                 $x = 1;
-                while($x < $jml_baris) {
+                while($x <= $jml_baris) {
                     $x++;
                     $d0 = array(
                         'no_transaksi' => $kode,
@@ -459,6 +469,7 @@
         $this->template->load('template', 'waserda/pmb_kredit/index', $data);
     }
 
+    /** pembayaran kredit */
     public function save_pmb_kredit()
     {
         $kd_pembayaran = $this->input->post('kd_pembayaran');

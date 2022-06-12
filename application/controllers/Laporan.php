@@ -125,6 +125,26 @@ class Laporan extends CI_Controller
         }
     }
 
+    public function laporan_pmb_waserda()
+    {
+        $bulan = $this->input->post('bulan');
+        $tahun = $this->input->post('tahun');
+
+        $periode = $tahun.'-'.$bulan;
+
+        $show_all = $this->input->post('show_all');
+        // print_r($show_all);exit;
+
+        if (isset($periode)) {
+            $list = $this->db->query("SELECT * FROM pos_pembelian 
+            WHERE LEFT(tanggal, 7) = '$periode'")->result();
+            $data = [
+                'list' => $list, 
+            ];
+            $this->template->load('template', 'laporan/laporan_pmb_waserda', $data);
+        }
+    }
+
     public function laba_rugi()
     {
         $listPendapatan = $this->db->query('SELECT SUM(nominal) AS nominal, b.nama_coa, a.posisi_dr_cr

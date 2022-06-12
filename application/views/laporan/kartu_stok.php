@@ -74,7 +74,7 @@
                     </tr>
                 <?php } ?>
                 </tbody>
-                <tfoot>
+                <!-- <tfoot>
                     <tr>
                     <th colspan="1">Total</th>
                     <th>0</th>
@@ -87,7 +87,7 @@
                     <th></th>
                     <th class="text-right">Rp 0</th>
                     </tr>
-                </tfoot>
+                </tfoot> -->
             </table>
         </div>
     </div>

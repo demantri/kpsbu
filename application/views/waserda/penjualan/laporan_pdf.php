@@ -4,13 +4,23 @@
     * {
         font-size : 5pt;
     }
+
+    table {
+        margin-left:auto;margin-right:auto;
+    }
+
+    #img {
+        background-image: url('brandlogo.jpg');
+    }
 </style>
 <center>
+<div id="img"></div>
 <p>Waserda KPSBU</p>
 <p>Jl. Kayu Ambon Dalam No. 5, Lembang. Kec. Lembang. Kab. Bandung Barat.</p>
 <br>
 <p><strong>Invoice </strong> : <?= $detail[0]->invoice?></p>
 <p><strong>Date payment </strong> : <?= $penjualan->date_payment?></p>
+<p><strong>Pembeli </strong> : <?= $penjualan->nama_pembeli?></p>
 <br>
 </center>
 <table class="table">

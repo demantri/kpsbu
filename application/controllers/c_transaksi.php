@@ -5219,19 +5219,20 @@ group by no_bbp";
             $this->db->where('kode', $kode);
             $this->db->update('pengajuan_jurnal', $pengajuan_jurnal);
          } else if (strpos($kode, 'PNJWASERDA') !== false) {
-            $penjualan = $this->db->query("SELECT a.*, b.id_produk, b.jml, b.harga
+            $penjualan = $this->db->query("SELECT a.*, b.id_produk, b.jml, b.harga, c.harga_satuan AS harga_beli
             FROM pos_penjualan a 
             JOIN pos_detail_penjualan b ON a.invoice = b.invoice
+            JOIN waserda_produk c ON c.kode = b.id_produk
             WHERE a.invoice = '$kode'");
             // $jml = 0;
             $harga_beli = 0;
             foreach ($penjualan->result() as $row) {
-               $harga_beli += $row->jml * $row->harga;
+               $harga_beli += $row->jml * $row->harga_beli;
             }
             $jenis_pmb = $penjualan->row()->jenis_pembayaran;
-            $kasPnj = $penjualan->row()->total_trans;
+            $kasPnj = $penjualan->row()->pembayaran;
             $ppnKeluar = $penjualan->row()->ppn;
-            $penjualanWaserda = $penjualan->row()->pembayaran;
+            $penjualanWaserda = $penjualan->row()->total_trans;
             $hpp_persbrg = $harga_beli;
             /** penjualan tunai */
             $pengajuan_jurnal = [
@@ -5241,9 +5242,9 @@ group by no_bbp";
             $this->db->update('pengajuan_jurnal', $pengajuan_jurnal);
             
             if ($jenis_pmb == 'kredit') {
-               /** jurnal penjualan tunai */
+               /** jurnal penjualan kredit */
                $this->M_keuangan->GenerateJurnal('1998', $kode, 'd', $kasPnj);
-               $this->M_keuangan->GenerateJurnal('2140', $kode, 'd', $ppnKeluar);
+               $this->M_keuangan->GenerateJurnal('2140', $kode, 'k', $ppnKeluar);
                $this->M_keuangan->GenerateJurnal('4116', $kode, 'k', $penjualanWaserda);
 
                $this->M_keuangan->GenerateJurnal('6113', $kode, 'd', $hpp_persbrg);
@@ -5252,7 +5253,7 @@ group by no_bbp";
             } else {
                /** jurnal penjualan tunai */
                $this->M_keuangan->GenerateJurnal('1111', $kode, 'd', $kasPnj);
-               $this->M_keuangan->GenerateJurnal('2140', $kode, 'd', $ppnKeluar);
+               $this->M_keuangan->GenerateJurnal('2140', $kode, 'k', $ppnKeluar);
                $this->M_keuangan->GenerateJurnal('4116', $kode, 'k', $penjualanWaserda);
 
                $this->M_keuangan->GenerateJurnal('6113', $kode, 'd', $hpp_persbrg);

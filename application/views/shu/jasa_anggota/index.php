@@ -30,23 +30,39 @@
                                 <th>Jasa Modal</th>
                                 <th>Jasa Anggota</th>
                                 <th>Sisa Hasil Usaha</th>
+                                <th>Pendekatan Kontribusi</th>
                             </tr>
                         </thead>
                         <tbody>
                         <?php 
                         $no = 1;
+                        $tot_shu = 0;
+                        $persen = 0;
+                        $sum_shu = $total_shu;
                         foreach ($list as $item) { ?>
+                            <?php 
+                            $tot_shu += $item->sisa_hasil_usaha;
+                            $persen += number_format(($item->sisa_hasil_usaha / $sum_shu * 100),0);
+                            ?>
                             <tr>
                                 <td><?= $no++ ?></td>
                                 <td><?= $item->id_trans ?></td>
                                 <td><?= $item->tanggal ?></td>
                                 <td><b><?= $item->id_anggota?></b> - <?= $item->nama_peternak ?></td>
-                                <td><?= format_rp($item->jasa_modal) ?></td>
-                                <td><?= format_rp($item->jasa_anggota) ?></td>
-                                <td><?= format_rp($item->sisa_hasil_usaha) ?></td>
+                                <td class="text-right"><?= format_rp($item->jasa_modal) ?></td>
+                                <td class="text-right"><?= format_rp($item->jasa_anggota) ?></td>
+                                <td class="text-right"><?= format_rp($item->sisa_hasil_usaha) ?></td>
+                                <td><?= number_format(($item->sisa_hasil_usaha / $sum_shu * 100),0) . "%"?></td>
                             </tr>
                         <?php } ?>
                         </tbody>
+                        <tfoot>
+                            <tr>
+                                <th colspan="6" class="text-center">Total SHU</th>
+                                <th class="text-right"><?= format_rp($tot_shu) ?></th>
+                                <th><?= $persen . "%" ?></th>
+                            </tr>
+                        </tfoot>
                     </table>
                 </div>
             </div>

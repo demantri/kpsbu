@@ -10,12 +10,10 @@
                         <h3 id="quote">
                             <?php 
                             $datenow = date('Y-m-d');
-
-                            // hardcode tahun
                             
                             $tahun = date('Y');
                             $format = $tahun.'-12-31';
-                            // $format = '2022-01-10';
+                            // $format = '2022-06-14';
                             $cek = date('Y-m-d', strtotime($format));
                             if ($datenow == $cek) { ?>
                                 <button class="btn pull-right btn-primary" data-target="#add" data-toggle="modal">Tambah</button>

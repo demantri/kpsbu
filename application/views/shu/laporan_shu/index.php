@@ -54,10 +54,17 @@
                         $t_pajak = 0;
                         ?>
                         <tr>
+                            <th class="text-center">Keterangan</th>
+                            <th class="text-center">Debit</th>
+                            <th class="text-center">Kredit</th>
+                            <th class="text-center">Saldo</th>
+                        </tr>
+                        <tr>
                             <th colspan="3">Pendapatan</th>
                         </tr>
                         <tr>
                             <td>Penjualan</td>
+                            <td></td>
                             <td class="text-right"><?= format_rp($penj) ?></td>
                             <td></td>
                         </tr>
@@ -65,19 +72,22 @@
                             <td>Harga Pokok Penjualan</td>
                             <td class="text-right"><?= format_rp($hpp)?></td>
                             <td></td>
+                            <td></td>
                         </tr>
                         <tr>
                             <th>Laba kotor</th>
-                            <th class="text-right"><?= format_rp($laba_kotor)?></th>
                             <td></td>
+                            <td></td>
+                            <th class="text-right"><?= format_rp($laba_kotor)?></th>
                         </tr>
-                        <tr>
+                        <!-- <tr>
                             <td>Pendapatan lain-lain</td>
                             <td class="text-right"><?= format_rp($pend_lain)?></td>
                             <td></td>
-                        </tr>
+                        </tr> -->
                         <tr>
                             <th>Total penjualan</th>
+                            <td></td>
                             <td></td>
                             <th class="text-right"><?= format_rp($t_pnj)?></th>
                         </tr>
@@ -91,25 +101,30 @@
                             <td><?= $item->nama_coa?></td>
                             <td class="text-right"><?= format_rp($item->total)?></td>
                             <td></td>
+                            <td></td>
                         </tr>
                         <?php } ?>
                         <tr>
                             <th>Total beban operasional</th>
-                            <td></td>
                             <th class="text-right"><?= format_rp($total_beban) ?></th>
+                            <td></td>
+                            <td></td>
                         </tr>
                         <tr>
                             <th>SHU sebelum pajak</th>
+                            <td></td>
                             <td></td>
                             <th class="text-right"><?= format_rp($sblm_pajak = $t_pnj - $total_beban) ?></th>
                         </tr>
                         <tr>
                             <th>Pajak (1%)</th>
                             <td></td>
-                            <th class="text-right"><?= format_rp($t_pajak = 0.01*($sblm_pajak))?></th>
+                            <td></td>
+                            <th class="text-right"><?= "(" . format_rp($t_pajak = 0.01*($sblm_pajak)) .")"?></th>
                         </tr>
                         <tr>
                             <th>SHU setelah pajak</th>
+                            <td></td>
                             <td></td>
                             <th class="text-right"><?= format_rp($sblm_pajak - $t_pajak)?></th>
                         </tr>

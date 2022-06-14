@@ -107,6 +107,10 @@ class Shu extends CI_Controller
         FROM pembagian_shu a
         JOIN peternak b ON a.id_anggota = b.no_peternak")->result();
 
+        $total_shu = $this->db->query("SELECT SUM(sisa_hasil_usaha) AS shu
+        FROM pembagian_shu a
+        JOIN peternak b ON a.id_anggota = b.no_peternak")->row()->shu;
+
         $cek = $this->db->get('transaksi_shu')->num_rows();
         // print_r($cek);exit;
         $data = [
@@ -114,6 +118,7 @@ class Shu extends CI_Controller
             'list' => $list,
             'anggota' => $anggota,
             'cek' => $cek,
+            'total_shu' => $total_shu
         ];
         $this->template->load('template', 'shu/jasa_anggota/index', $data);
     }

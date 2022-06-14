@@ -164,7 +164,7 @@
                         <li><a href="<?php echo site_url(); ?>c_transaksi/simpanan_hr">Simpanan Hari Raya</a></li>
                         <li><a href="<?php echo site_url(); ?>c_transaksi/pinjaman">Pinjaman</a></li>
                         <li><a href="<?= base_url('penjualan/susu')?>">Penjualan Susu</a></li>
-                        <li><a href="<?= base_url('penjualan/pakan_konsentrat')?>">Penjualan Pakan Konsentrat</a></li>
+                        <!-- <li><a href="<?= base_url('penjualan/pakan_konsentrat')?>">Penjualan Pakan Konsentrat</a></li> -->
                         <li><a href="<?= base_url('penjualan/pengolahan_susu')?>">Penjualan Pengolahan Susu</a></li>
 
                         <!-- sarah -->
@@ -174,8 +174,9 @@
 
                         <!-- trans salma -->
                         <li><a href="<?= base_url('c_transaksi/pengajuan_jurnal')?>">Pengajuan Jurnal</a></li>
-                        <li><a href="<?= base_url('Penerimaan_kas')?>">Penerimaan Kas</a></li>
+                        <!-- <li><a href="<?= base_url('Penerimaan_kas')?>">Penerimaan Kas</a></li> -->
                         <li><a href="<?= base_url('Pengeluaran_kas')?>">Pengeluaran Kas</a></li>
+                        <li><a href="<?= base_url('DaftarPenerimaanPengeluaranKas')?>">Daftar Penerimaan dan Pengeluaran Kas</a></li>
 
                     <?php
                     elseif ($this->session->userdata('level') == "produksi1") :
@@ -226,7 +227,7 @@
                         <li><a href="<?php echo site_url(); ?>c_keuangan/bukubesar">Buku Besar</a></li>
 
                         <li><a href="<?php echo site_url(); ?>Laporan/neraca_saldo">Neraca Saldo</a></li>
-                        <li><a href="#">Laporan Neraca</a></li>
+                        <li><a href="<?= base_url('Laporan/laporan_neraca')?>">Laporan Neraca</a></li>
 
                         <!-- laporan sarah -->
                         <li><a href="<?php echo site_url(); ?>laporan/laporan_simpanan">Laporan Simpanan</a></li>

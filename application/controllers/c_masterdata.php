@@ -651,16 +651,14 @@ class c_masterdata extends CI_controller
       $no_trans   = "PTRNK_" . $kd;
       $data['id'] = $no_trans;
 
-      // $this->db->select("biaya");
-      $this->db->where("kode_simpanan =", "JS-001");
-      $simpanan_wajib = $this->db->get("simpanan")->row()->biaya;
-      // $this->db->query($simpanan_wajib);
-      // print_r($simpanan_wajib);exit;
-
+      
       $data['tps'] = $this->db->get('tps')->result();
-
+      
+      /** tinggal di rubah berdasarkan kode yang mau di pake */
+      $this->db->where("kode_simpanan =", "JS-004");
+      $simpanan_wajib = $this->db->get("simpanan")->row()->biaya;
       $data['simpanan'] = $simpanan_wajib;
-      // print_r($simpanan_wajib);exit;
+
       $this->template->load('template', 'peternak/form', $data);
    }
 

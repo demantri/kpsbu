@@ -104,6 +104,7 @@
                                 </tr>
                             </tbody>
                         </table>
+                        <a href="<?= base_url('DaftarPenerimaanPengeluaranKas') ?>" class="btn btn-default">Kembali</a>
                         <button class="btn btn-primary">Simpan</button>
                     </div>
                 </form>

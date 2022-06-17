@@ -2,6 +2,21 @@
 
 <body>
     <div class="x_panel">
+        <div class="x_content">
+            <form action="<?= base_url('Laporan/buku_pembantu_kas')?>" method="post">
+                <div class="form-group row">
+                    <label for="periode" class="col-sm-2 col-form-label">Periode</label>
+                    <div class="col-sm-2">
+                        <input type="month" class="form-control" id="periode" name="periode">
+                    </div>
+                    <div class="col-sm-2">
+                       <button class="btn btn-primary" type="submit">Filter</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="x_panel">
         <div class="x_title">
             <h3 class="panel-title"><b>Buku Pembantu Kas</b></h3>
         </div>
@@ -9,25 +24,13 @@
         <div class="x_content">
             <div class="row">
                 <div class="col-sm-7">
-                    <!-- <form method="post" action="<?php echo site_url() . 'c_transaksi/buku_pinjaman' ?> " class="form-inline">
-                        <label>Pilih anggota</label>
-                        <select name="id_peternak" class="form-control">
-                            <option value="#">Pilih anggota</option>
-                            <?php foreach ($peternak as $data) { ?>
-                                <option value="<?= $data->no_peternak ?>"><?= $data->nama_peternak ?></option>
-                            <?php } ?>
-                        </select>&nbsp&nbsp
-                        <input type="submit" value="Filter" class="btn btn-info">
-                    </form> -->
+
                 </div>
             </div>
-            <hr>
             <center>
-            <h3>KPSBU</h3>
-            <h3>Buku Pembantu Kas</h3>
-            <!-- <?php if ($list != null) { ?>
-                <h3>Per <?= date('d-m-Y'); ?><br><?= $nama_anggota ?></h3>
-            <?php } ?> -->
+            <h3>KPSBU - Buku Pembantu Kas</h3>
+            <h4>Periode - <?= $periode ?></h4>
+
             <center>
             <hr>
             <table class="table table-striped table-bordered table-hover jambo_table">

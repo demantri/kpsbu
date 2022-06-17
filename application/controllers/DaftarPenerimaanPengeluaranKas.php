@@ -14,11 +14,28 @@
 
     public function index()
     {
-        $list = $this->db->get('penerimaan_pengeluaran_kas')->result();
-        $data = [
-            'list' => $list
-        ];
-        $this->template->load('template', 'daftar_penerimaan_pengeluaran/index', $data);
+        $bulan = $this->input->post('bulan');
+        $tahun = $this->input->post('tahun');
+
+        $periode = $tahun.$bulan;
+
+        if (isset($periode)) {
+            $list = $this->db->query("select * from penerimaan_pengeluaran_kas where periode = '$periode'")->result();
+            $data = [
+                'list' => $list, 
+                'periode' => $periode
+            ];
+            $this->template->load('template', 'daftar_penerimaan_pengeluaran/index', $data);
+        } else {
+            $list = $this->db->query("select * from penerimaan_pengeluaran_kas where periode = ''")->result();
+            $data = [
+                'list' => $list, 
+                'periode' => ''
+            ];
+            $this->template->load('template', 'daftar_penerimaan_pengeluaran/index', $data);
+        }
+        
+
     }
 
     public function tambah()

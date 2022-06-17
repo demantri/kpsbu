@@ -94,11 +94,11 @@
                 <hr>
                 <?php 
                 // rumus
-                $ppn = $total * 0.1;
+                $ppn = $total * 0.11;
                 $gtot = $ppn + $total;
                 ?>
                 <h5>Total : <?= $total = (empty($total)) ? '-' : format_rp($total) ?></h5>
-                <h5>PPN (10%) : <?= $ppn = (empty($ppn)) ? '-' : format_rp($ppn) ?></h5>
+                <h5>PPN (11%) : <?= $ppn = (empty($ppn)) ? '-' : format_rp($ppn) ?></h5>
                 <h5>Grand Total : <?= $gtot = (empty($gtot)) ? '-' : format_rp($gtot) ?></h5>
                 <hr>
                 <div class="text-left">

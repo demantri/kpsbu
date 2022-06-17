@@ -5038,7 +5038,8 @@ group by no_bbp";
             /** transaksi gaji */
 
             $pengajuan_jurnal = [
-               'status' => 'selesai'
+               'status' => 'selesai',
+               'tgl_approve' => date('Y-m-d H:i:s')
             ];
             $this->db->where('kode', $kode);
             $this->db->update('pengajuan_jurnal', $pengajuan_jurnal);
@@ -5081,7 +5082,8 @@ group by no_bbp";
             $this->db->update('waserda_pembayaran_kredit', $data);
    
             $pengajuan_jurnal = [
-               'status' => 'selesai'
+               'status' => 'selesai',
+               'tgl_approve' => date('Y-m-d H:i:s')
             ];
             $this->db->where('kode', $kode);
             $this->db->update('pengajuan_jurnal', $pengajuan_jurnal);
@@ -5119,7 +5121,8 @@ group by no_bbp";
             /** transaksi pembagian shu */
 
             $pengajuan_jurnal = [
-               'status' => 'selesai'
+               'status' => 'selesai',
+               'tgl_approve' => date('Y-m-d H:i:s')
             ];
             $this->db->where('kode', $kode);
             $this->db->update('pengajuan_jurnal', $pengajuan_jurnal);
@@ -5158,7 +5161,8 @@ group by no_bbp";
             /** transaksi pengeluaran beban */
 
             $pengajuan_jurnal = [
-               'status' => 'selesai'
+               'status' => 'selesai',
+               'tgl_approve' => date('Y-m-d H:i:s')
             ];
             $this->db->where('kode', $kode);
             $this->db->update('pengajuan_jurnal', $pengajuan_jurnal);
@@ -5198,7 +5202,8 @@ group by no_bbp";
 
             /** transaksi lembur */
             $pengajuan_jurnal = [
-               'status' => 'selesai'
+               'status' => 'selesai',
+               'tgl_approve' => date('Y-m-d H:i:s')
             ];
             $this->db->where('kode', $kode);
             $this->db->update('pengajuan_jurnal', $pengajuan_jurnal);
@@ -5236,7 +5241,8 @@ group by no_bbp";
             $hpp_persbrg = $harga_beli;
             /** penjualan tunai */
             $pengajuan_jurnal = [
-               'status' => 'selesai'
+               'status' => 'selesai',
+               'tgl_approve' => date('Y-m-d H:i:s')
             ];
             $this->db->where('kode', $kode);
             $this->db->update('pengajuan_jurnal', $pengajuan_jurnal);
@@ -5271,7 +5277,8 @@ group by no_bbp";
             $grandtotal = $pembelian->grandtotal;
             /** pembelian tunai */
             $pengajuan_jurnal = [
-               'status' => 'selesai'
+               'status' => 'selesai',
+               'tgl_approve' => date('Y-m-d H:i:s')
             ];
             $this->db->where('kode', $kode);
             $this->db->update('pengajuan_jurnal', $pengajuan_jurnal);

@@ -59,7 +59,7 @@
         $supplier = $this->db->get('waserda_supplier')->result();
         $detail = $this->produk->detail_pembelian($inv)->result();
         $total = $this->produk->total_pembelian($inv)->row()->total;
-        $ppn = $total * 0.1;
+        $ppn = $total * 0.11;
         $grand = $total + $ppn;
         $id_bb = $this->db->query("select id_produk from pos_detail_pembelian where invoice = '$inv'")->result();
         // print_r($total);exit;

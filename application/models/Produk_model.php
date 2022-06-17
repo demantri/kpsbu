@@ -90,7 +90,7 @@
 		// print_r($query);exit;
 		$output = '<option value="">-</option>';
 		foreach ($query->result() as $row) {
-			$output .= '<option value="' . $row->kode . '">' . $row->nama_produk . '</option>';
+			$output .= '<option value="' . $row->kode . '">' . $row->nama_produk .' - '. date('d/m/Y', strtotime($row->tgl_kadaluarsa)) . '</option>';
 		}
 		return $output;
     }

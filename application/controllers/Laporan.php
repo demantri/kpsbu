@@ -7,13 +7,46 @@ class Laporan extends CI_Controller
         $this->load->model('Produk_model', 'produk');
     }
 
+    /** laporan salma */
     public function buku_pembantu_kas()
     {
-        $list = $this->db->get('buku_pembantu_kas')->result();
-        $data = [
-            'list' => $list,
-        ];
-        $this->template->load('template', 'buku_pembantu_kas', $data);
+        $periode = $this->input->post('periode');
+        if (isset($periode)) {
+            $list = $this->db->query("select * from buku_pembantu_kas where left(tanggal, 7) = '$periode'")->result();
+            $data = [
+                'list' => $list,
+                'periode' => date('F Y', strtotime($periode)),
+            ];
+            $this->template->load('template', 'buku_pembantu_kas', $data);
+        } else {
+            $list = $this->db->query("select * from buku_pembantu_kas where left(tanggal, 7) = ''")->result();
+            $data = [
+                'list' => $list,
+                'periode' => '',
+            ];
+            $this->template->load('template', 'buku_pembantu_kas', $data);
+        }
+    }
+
+    public function buku_kas_kecil()
+    {
+        $periode = $this->input->post('periode');
+        if (isset($periode)) {
+            $list = $this->db->query("select * from buku_kas_kecil where left(tgl_transaksi, 7) = '$periode' order by tgl_transaksi desc")->result();
+            $data = [
+                'list' => $list,
+                'periode' => date('F Y', strtotime($periode))
+            ];
+            $this->template->load('template', 'laporan/buku_kas_kecil', $data);
+        } else {
+            $list = $this->db->query("select * from buku_kas_kecil where tgl_transaksi = sysdate() order by tgl_transaksi desc")->result();
+            $data = [
+                'list' => $list,
+                'periode' => '',
+            ];
+            $this->template->load('template', 'laporan/buku_kas_kecil', $data);
+        }
+        
     }
 
     public function laporan_arus_kas()
@@ -199,15 +232,6 @@ class Laporan extends CI_Controller
             $this->template->load('template', 'laporan/kartu_stok', $data);
         }
         
-    }
-
-    // salma 
-    public function buku_kas_kecil()
-    {
-        $this->db->order_by('tgl_transaksi', 'desc');
-        $list = $this->db->get('buku_kas_kecil')->result();
-        $data = ['list' => $list];
-        $this->template->load('template', 'laporan/buku_kas_kecil', $data);
     }
 }
 ?>

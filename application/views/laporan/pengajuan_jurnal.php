@@ -18,13 +18,14 @@
                     <?php echo $this->session->flashdata('notif_ubah'); ?>
                 </div>
                 <div class="table-responsive">
-                    <table class="table table-bordered" id="datatable">
+                    <table class="table table-bordered jambo_table" id="datatable">
                         <thead>
                             <tr>
                                 <th style="width: 5%;">#</th>
                                 <th>Kode</th>
                                 <th>Tanggal</th>
                                 <th>Nominal</th>
+                                <th>Tgl. Approve</th>
                                 <th>Status</th>
                             </tr>
                         </thead>
@@ -37,6 +38,7 @@
                                 <td><?= $value->kode ?></td>
                                 <td><?= $value->tanggal ?></td>
                                 <td><?= format_rp($value->nominal) ?></td>
+                                <td><?= ($value->tgl_approve == '') ? '-' : $value->tgl_approve  ?></td>
                                 <td>
                                     <?php if ($value->status == 'pending') { ?>
                                         <a href="<?= base_url('c_transaksi/status_pengajuan/'.$value->kode.'/'.$value->tanggal.'/'.$value->nominal)?>" onclick="return confirm('Anda yakin?')" class="btn btn-xs btn-warning"><?= $value->status?></a>

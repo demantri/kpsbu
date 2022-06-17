@@ -21,7 +21,7 @@
                         <div class="form-group row">
                             <label for="tanggal" class="col-sm-3 col-form-label">Tanggal</label>
                             <div class="col-sm-9">
-                            <input type="date" class="form-control" id="tanggal" value="<?= date('Y-m-d')?>" name="tanggal" required>
+                            <input type="date" class="form-control" id="tanggal" value="<?= date('Y-m-d')?>" name="tanggal" readonly>
                             </div>
                         </div>
 
@@ -106,11 +106,11 @@
                     </div>
                     <div class="row">
                         <div class="col-sm-2">
-                            <h5>PPN 10%</h5>
+                            <h5>PPN 11%</h5>
                         </div>
                         <div class="col-sm-5">
                             <h5>
-                                <?php $rumus = $total * 0.1 ?>
+                                <?php $rumus = $total * 0.11 ?>
                                 <b><?= format_rp($rumus)?></b>
                             </h5>
                         </div>

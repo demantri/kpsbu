@@ -7,8 +7,10 @@
 
     public function index()
     {
-        // $this->db->where('jml >', 0);
+        // $this->db->where('jml >', 50);
+        $this->db->where('status', 1);
         $barang = $this->db->get('waserda_produk')->result();
+
         $list = $this->db->get('waserda_pengajuan_barang')->result();
         $data = [
             'barang' => $barang,

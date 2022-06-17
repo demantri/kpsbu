@@ -3,9 +3,9 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
         <div class="modal-header">
-            <h4 class="modal-title" id="exampleModalLabel">Pengeluaran Kas</h4>
+            <h4 class="modal-title" id="exampleModalLabel">Pengajuan Barang</h4>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
+                <span aria-hidden="true">&times;</span>
             </button>
         </div>
         <form action="<?= base_url('Pengajuan/save')?>" method="post">
@@ -23,7 +23,7 @@
                         <select name="nama" id="nama" class="form-control" required>
                             <option value="">-</option>
                             <?php foreach ($barang as $item) { ?>
-                            <option value="<?= $item->nama_produk?>"><?= $item->nama_produk?></option>
+                            <option value="<?= $item->nama_produk?>"><?= $item->nama_produk .' - '. $item->jml .' '. $item->satuan_produk ?></option>
                             <?php } ?>
                         </select>
                     </div>

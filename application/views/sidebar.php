@@ -381,29 +381,53 @@
         <?php endif ?>
 
         <?php if (!empty($this->session->userdata('level'))) : ?>
-        <?php if ($this->session->userdata('level') == "pegawai") : ?>
-            <ul class="nav side-menu">
-                <li>
-                    <a>
-                    <i class="fa fa-bar-chart-o"></i>Profile <span class="fa fa-chevron-down"></span>
-                    </a>
-                    <ul class="nav child_menu">
-                        <li><a href="<?= base_url('Profile')?>">Informasi Pegawai</a></li>
-                    </ul>
-                </li>
-            </ul>
-            <ul class="nav side-menu">
-                <li>
-                    <a>
-                    <i class="fa fa-bar-chart-o"></i>Pengajuan <span class="fa fa-chevron-down"></span>
-                    </a>
-                    <ul class="nav child_menu">
-                        <li><a href="<?= base_url('Lembur')?>">Lembur</a></li>
-                        <li><a href="<?= base_url('Cuti')?>">Cuti</a></li>
-                    </ul>
-                </li>
-            </ul>
+            <?php if ($this->session->userdata('level') == "pegawai") : ?>
+                <ul class="nav side-menu">
+                    <li>
+                        <a><i class="fa fa-bar-chart-o"></i>Profile <span class="fa fa-chevron-down"></span>
+                        </a>
+                        <ul class="nav child_menu">
+                            <li><a href="<?= base_url('Profile')?>">Informasi Pegawai</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                <ul class="nav side-menu">
+                    <li>
+                        <a>
+                        <i class="fa fa-bar-chart-o"></i>Pengajuan <span class="fa fa-chevron-down"></span>
+                        </a>
+                        <ul class="nav child_menu">
+                            <li><a href="<?= base_url('Lembur')?>">Lembur</a></li>
+                            <li><a href="<?= base_url('Cuti')?>">Cuti</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            <?php endif ?>
         <?php endif ?>
+
+        <!-- hak akses login salma -->
+        <?php if (!empty($this->session->userdata('level'))) : ?>
+            <?php if ($this->session->userdata('level') == "bagian_keuangan") : ?>
+                <!--  -->
+                <ul class="nav side-menu">
+                    <li>
+                        <a><i class="fa fa-bar-chart-o"></i>Approval <span class="fa fa-chevron-down"></span></a>
+                        <ul class="nav child_menu">
+                            <li><a href="<?= base_url('c_transaksi/pengajuan_jurnal')?>">Pengajuan Jurnal</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                <ul class="nav side-menu">
+                    <li>
+                        <a><i class="fa fa-bar-chart-o"></i>Laporan <span class="fa fa-chevron-down"></span></a>
+                        <ul class="nav child_menu">
+                            <li><a href="<?= base_url('c_keuangan/view_jurnal')?>">Jurnal Umum</a></li>
+                            <li><a href="<?= base_url('Laporan/')?>">Buku Besar</a></li>
+                            <li><a href="<?= base_url('Laporan/')?>">Buku Kas Kecil</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            <?php endif ?>
         <?php endif ?>
             
     </div>

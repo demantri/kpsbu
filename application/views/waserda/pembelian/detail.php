@@ -49,7 +49,7 @@
                                 <td class="text-right" colspan="2"><?= format_rp($value->total)?></td>
                             </tr>
                             <tr> 
-                                <th colspan="4">PPN (10%)</th>
+                                <th colspan="4">PPN (11%)</th>
                                 <td class="text-right" colspan="2"><?= format_rp($value->ppn)?></td>
                             </tr>
                             <tr> 

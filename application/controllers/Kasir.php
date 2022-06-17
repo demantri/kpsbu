@@ -21,7 +21,7 @@
         where invoice = '$inv'
         and id_produk is NOT null")->result();
         $total = $this->produk->get_total_detail($inv)->row()->total;
-        $ppn = $total * 0.1;
+        $ppn = $total * 0.11;
         $gtot = $total + $ppn;
         $detail = $this->produk->detail_pos($inv)->result();
         // print_r($id_bb);exit;
@@ -274,7 +274,7 @@
             
             $harga_jual_produk = $produkByID->row()->harga_jual;
             $total_harga_jual_produk = $harga_jual_produk * $qty;
-            $ppn = $total_harga_jual_produk * 0.1;
+            $ppn = $total_harga_jual_produk * 0.11;
             $total = $ppn + $total_harga_jual_produk;
 
             $total_pengajuan_jurnal = $total_harga_jual_produk + $ppn + $total_harga_beli_produk;

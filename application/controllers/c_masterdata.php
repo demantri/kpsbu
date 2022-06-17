@@ -2557,6 +2557,24 @@ class c_masterdata extends CI_controller
       $this->template->load('template', 'pegawai/index', $data);
    }
 
+   public function form_edit($nip)
+   {
+      $this->db->where('nip', $nip);
+      $pegawai = $this->db->get('pegawai')->row();
+      $jabatan = $this->db->get('tb_jabatan')->result();
+      $ptkp = $this->db->get('tb_ptkp')->result();
+      $this->db->group_by('desc');
+      $jp = $this->db->get('tb_jenis_pegawai')->result();
+
+      $data = [
+         'pegawai' => $pegawai,
+         'jabatan' => $jabatan,
+         'ptkp' => $ptkp,
+         'jp' => $jp,
+      ];
+      $this->template->load('template', 'pegawai/form_edit', $data);
+   }
+
    public function save_pegawai()
    {
       $data = [
@@ -2800,6 +2818,14 @@ class c_masterdata extends CI_controller
       if ($value) {
          echo $this->M_masterdata->get_pendidikan($value);
       }
+   }
+
+   public function pendidikan_list()
+   {
+      $desc = $this->input->post('val');
+      $data = $this->db->query("SELECT * FROM tb_jenis_pegawai
+      WHERE `desc` = '$desc'")->result();
+      echo json_encode($data);
    }
 
    // sarah

@@ -57,7 +57,8 @@
                                 </td>
                                 <td class="text-center">
                                     <?php if ($value->status==1) { ?>
-                                        <a href="#edit_<?= $value->id?>" data-target="#edit_<?= $value->id?>" data-toggle="modal" class="btn btn-sm btn-default">Edit</a>
+                                        <!-- <a href="#edit_<?= $value->id?>" data-target="#edit_<?= $value->id?>" data-toggle="modal" class="btn btn-sm btn-default">Edit</a> -->
+                                        <a href="<?= base_url('c_masterdata/form_edit/'.$value->nip)?>" class="btn btn-sm btn-default">Edit</a>
                                         <a href="#detail_<?= $value->id?>" data-toggle="modal" class="btn btn-sm btn-default">Detail</a>
                                     <?php } ?>
                                 </td>
@@ -71,7 +72,6 @@
     </div>
 </div>
 <?php $this->load->view('pegawai/add');?>
-<?php $this->load->view('pegawai/edit');?>
 <?php $this->load->view('pegawai/detail');?>
 <script>
     $(document).ready(function() {

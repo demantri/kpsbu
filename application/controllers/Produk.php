@@ -32,6 +32,7 @@
             'harga_satuan' => $this->input->post('harga'),
             'harga_jual' => $this->input->post('harga_jual'),
             'satuan_produk' => $this->input->post('satuan'),
+            'tgl_kadaluarsa' => $this->input->post('tgl_kadaluarsa'),
         ];
         $this->crud->input_data($data, 'waserda_produk');
         $this->session->set_flashdata('notif', '<div class="alert alert-success">Data berhasil disimpan.</div>');
@@ -52,6 +53,7 @@
             'nama_produk' => $produk, 
             'harga_satuan' => $harga, 
             'harga_jual' => $harga_jual, 
+            'tgl_kadaluarsa' => $this->input->post('tgl_kadaluarsa'),
         ];
         $this->db->where('id', $id);
         $this->db->update('waserda_produk', $data);

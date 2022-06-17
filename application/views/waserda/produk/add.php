@@ -21,6 +21,12 @@
                     <input type="text" class="form-control" id="barcode" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" name="barcode" placeholder="No. Barcode" required>
                     </div>
                 </div>
+                <div class="form-group row">
+                    <label for="tgl_kadaluarsa" class="col-sm-3 col-form-label">Tgl. Kadaluarsa</label>
+                    <div class="col-sm-9">
+                        <input type="date" class="form-control" id="tgl_kadaluarsa" name="tgl_kadaluarsa" required>
+                    </div>
+                </div>
                 <hr>
                 <div class="form-group row">
                     <label for="supplier" class="col-sm-3 col-form-label">Supplier</label>

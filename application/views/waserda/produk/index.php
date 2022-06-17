@@ -27,6 +27,7 @@
                         <th>Stok Akhir</th>
                         <th>Harga Beli</th>
                         <th>Harga Jual</th>
+                        <th>Tgl. Kadaluarsa</th>
                         <th>Status</th>
                         <th></th>
                     </tr>
@@ -40,8 +41,9 @@
                             <td><?= $value->deskripsi?></td>
                             <td><?= $value->satuan_produk?></td>
                             <td><?= $value->jml?></td>
-                            <td><?= format_rp($value->harga_satuan)?></td>
-                            <td><?= format_rp($value->harga_jual)?></td>
+                            <td class="text-right"><?= format_rp($value->harga_satuan)?></td>
+                            <td class="text-right"><?= format_rp($value->harga_jual)?></td>
+                            <td class="text-center"><?= ($value->tgl_kadaluarsa == '') ? '-' : date('d-m-Y', strtotime($value->tgl_kadaluarsa)) ?></td>
                             <td>
                                 <?php if ($value->status == 1) { ?>
                                     <button style="width: 100%;" class="btn-sm btn btn-success status" data-id="<?= $value->id?>">Aktif</button>

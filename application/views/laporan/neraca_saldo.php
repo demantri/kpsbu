@@ -20,6 +20,19 @@
                             </tr>
                         </thead>
                         <tbody>
+                            <?php foreach ($list as $key => $value) { ?>
+                            <tr>
+                                <td><?= $value->no_coa?></td>
+                                <td><?= $value->nama_coa?></td>
+                                <?php if ($value->saldo_normal == 'd') { ?>
+                                <td><?= format_rp($value->total)?></td>
+                                <td></td>
+                                <?php } else { ?>
+                                <td></td>
+                                <td><?= format_rp($value->total)?></td>
+                                <?php } ?>
+                            </tr>
+                            <?php } ?>
                         </tbody>
                     </table>
                 </div>

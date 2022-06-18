@@ -98,7 +98,16 @@ class Laporan extends CI_Controller
 
     public function neraca_saldo()
     {
-        $this->template->load('template', 'laporan/neraca_saldo');
+        $list = $this->db->query("SELECT a.no_coa, a.nama_coa, sum(nominal) AS total, a.saldo_normal
+        FROM coa a 
+        LEFT JOIN jurnal b ON a.no_coa = b.no_coa
+        WHERE is_neraca = 1
+        AND YEAR(b.tgl_jurnal) = '2022'
+        GROUP BY no_coa")->result();
+        $data = [
+            'list' => $list
+        ];
+        $this->template->load('template', 'laporan/neraca_saldo', $data);
     }
 
     public function laporan_simpanan()

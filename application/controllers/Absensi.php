@@ -51,14 +51,28 @@
                     # code...
                     if ($this->jam_sekarang >= $peg->time_in || $this->jam_sekarang <= $peg->time_out) {
                         # code...
-                        if($this->db->insert('detail_absen_rfid',$data)){
-                            $absen = array(
-                                'status' => true,
-                                'info' => 'Berhasil Melakukan Presensi');
-                        }else{
-                            $absen = array(
-                                'status' => false,
-                                'info' => 'Gagal Melakukan Absensi.');
+                        if ($status == 'Presensi Masuk') {
+                            # code...
+                            if($this->db->insert('detail_absen_rfid',$data)){
+                                $absen = array(
+                                    'status' => true,
+                                    'info' =>  $peg->nama . ' - Berhasil Melakukan ' . $status);
+                            }else{
+                                $absen = array(
+                                    'status' => false,
+                                    'info' => 'Gagal Melakukan ' . $status);
+                            }
+                        } else {
+                            # code...
+                            if($this->db->insert('detail_absen_rfid',$data)){
+                                $absen = array(
+                                    'status' => true,
+                                    'info' =>  $peg->nama . ' - Berhasil Melakukan ' . $status);
+                            }else{
+                                $absen = array(
+                                    'status' => false,
+                                    'info' => 'Gagal Melakukan ' . $status);
+                            }
                         }
                     } else {
                         $absen = array(
@@ -70,16 +84,30 @@
                     # code...
                     if ($this->jam_sekarang <= $peg->time_out && $this->jam_sekarang >= $peg->time_in) {
                         # code...
-                        if($this->db->insert('detail_absen_rfid',$data)){
-                            $absen = array(
-                                'status' => true,
-                                // 'info' => 'Berhasil Melakukan Presensi Shift Pagi');
-                                'info' => 'Berhasil Melakukan Presensi');
-                        }else{
-                            $absen = array(
-                                'status' => false,
-                                'info' => 'Gagal Melakukan Absensi.');
+                        if ($status == 'Presensi Masuk') {
+                            # code...
+                            if($this->db->insert('detail_absen_rfid',$data)){
+                                $absen = array(
+                                    'status' => true,
+                                    'info' =>  $peg->nama . ' - Berhasil Melakukan ' . $status);
+                            }else{
+                                $absen = array(
+                                    'status' => false,
+                                    'info' => 'Gagal Melakukan ' . $status);
+                            }
+                        } else {
+                            # code...
+                            if($this->db->insert('detail_absen_rfid',$data)){
+                                $absen = array(
+                                    'status' => true,
+                                    'info' =>  $peg->nama . ' - Berhasil Melakukan ' . $status);
+                            }else{
+                                $absen = array(
+                                    'status' => false,
+                                    'info' => 'Gagal Melakukan ' . $status);
+                            }
                         }
+                        
                     } else {
                         $absen = array(
                             'status' => false,

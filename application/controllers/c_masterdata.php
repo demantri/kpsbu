@@ -2543,10 +2543,6 @@ class c_masterdata extends CI_controller
       $jp = $this->db->get('tb_jenis_pegawai')->result();
       $list = $this->db->get('pegawai')->result();
       $nip = $this->M_masterdata->nip_otomatis();
-      // print_r($nip);exit;
-
-      // $this->db->join('user as b', 'a.nama = b.nama_lengkap');
-      // $list2 = $this->db->get('pegawai as a')->result();
       $data = [
          'jabatan' => $jabatan,
          'ptkp' => $ptkp,
@@ -2573,6 +2569,13 @@ class c_masterdata extends CI_controller
          'jp' => $jp,
       ];
       $this->template->load('template', 'pegawai/form_edit', $data);
+   }
+
+   public function getList()
+   {
+      $nip = $this->input->post('nip');
+      $data = $this->db->query("select * from pegawai where nip ='$nip' and status = 1 ")->row();
+      echo json_encode($data);
    }
 
    public function save_pegawai()
@@ -2617,18 +2620,22 @@ class c_masterdata extends CI_controller
       $ttl = $this->input->post('ttl');
       $jabatan = $this->input->post('jabatan');
       $jp = $this->input->post('jp');
+      $pendidikan = $this->input->post('pendidikan');
       $ptkp = $this->input->post('ptkp');
+      $nama_bank = $this->input->post('nama_bank');
       $no_rek = $this->input->post('no_rek');
 
       $data = [
          'id_jabatan' => $jabatan, 
          'id_ptkp' => $ptkp, 
          'id_jenis_pegawai' => $jp, 
+         'pendidikan' => $pendidikan, 
          'nama' => $nama, 
          'alamat' => $alamat, 
          'no_telp' => $no_telp, 
          'tempat_lahir' => $tempat_lahir, 
          'tgl_lahir' => $ttl, 
+         'nama_bank' => $nama_bank, 
          'no_rek' => $no_rek, 
       ];
 

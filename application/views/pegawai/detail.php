@@ -11,13 +11,14 @@
                 <form action="<?= base_url('c_masterdata/edit_peg')?>" method="post">
                 <div class="modal-body">
                     <div class="row">
-                        <table class="table table-striped">
+                        <table class="table table-striped jambo_table">
                             <tr>
                                 <th>Tempat Lahir</th>
                                 <th>Tanggal Lahir</th>
                                 <th>Jabatan</th>
                                 <th>Status PTKP</th>
                                 <th>Jenis Pegawai</th>
+                                <th>Pendidikan Terakhir</th>
                             </tr>
                             <tr>
                                 <td><?= $item->tempat_lahir?></td>
@@ -25,6 +26,7 @@
                                 <td><?= $item->id_jabatan?></td>
                                 <td><?= $item->id_ptkp ? $item->id_ptkp : '-'?></td>
                                 <td><?= $item->id_jenis_pegawai?></td>
+                                <td><?= $item->pendidikan ? $item->pendidikan : '-'?></td>
                             </tr>
                         </table>
                     </div>

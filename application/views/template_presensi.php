@@ -2,11 +2,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<title>Login V15</title>
+	<title>Halaman Presensi</title>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 <!--===============================================================================================-->	
-	<link rel="icon" type="image/png" href="<?= base_url('assets/t_absen')?>/images/icons/favicon.ico"/>
+	<link rel="icon" type="image/png" href="<?= base_url('assets')?>/images/brandlogo.jpg"/>
 <!--===============================================================================================-->
 	<link rel="stylesheet" type="text/css" href="<?= base_url('assets/t_absen')?>/vendor/bootstrap/css/bootstrap.min.css">
 <!--===============================================================================================-->

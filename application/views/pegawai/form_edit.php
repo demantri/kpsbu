@@ -14,10 +14,11 @@
                 </div>
             </div>
             <div class="x_content">
-                <form action="" method="post">
+                <form action="<?= base_url('c_masterdata/edit_peg')?>" method="post">
                     <div class="body">
                         <div class="row">
                             <div class="col-sm-6">
+                                <input type="hidden" value="<?= $pegawai->id?>" name="id" id="id">
                                 <input type="hidden" value="<?= $pegawai->nip?>" name="nip" id="nip">
                                 <div class="form-group row">
                                     <label for="nama" class="col-sm-3 col-form-label">Nama Pegawai</label>
@@ -82,7 +83,7 @@
                             </div>
                             <div id="hide_ptkp">
                                 <div class="form-group row">
-                                    <label for="desc" class="col-sm-3 col-form-label">PTKP</label>
+                                    <label for="ptkp" class="col-sm-3 col-form-label">PTKP</label>
                                     <div class="col-sm-9">
                                         <select name="ptkp" id="ptkp" class="form-control">
                                             <?php foreach ($ptkp as $key => $value) { ?>
@@ -123,11 +124,25 @@
     </div>
 </div>
 <script>
+    function getPendidikan() {
+        var nip = $("#nip").val();
+        $.ajax({
+            url : "<?= base_url('c_masterdata/getList')?>",
+            method : "post",
+            data : {
+                nip : nip
+            },
+            success:function(response) {
+                var obj = JSON.parse(response);
+                console.log(obj.pendidikan)
+                $("#pendidikan").val(obj.pendidikan).attr("selected", "selected");
+            }
+        })
+    }
     $(document).ready(function() {
         
         $("#jp").on("change", function() {
             var value = $(this).val();
-            // console.log(value);
             if (value == 'Tetap') {
                 $("#hide_ptkp").show();
             } else if (value == 'Kontrak') {
@@ -145,9 +160,8 @@
                         // console.log(value)
                         let row = '';
                         obj.forEach(element => {
-                            row += `<option value="${element.pendidikan}" selected>${element.pendidikan}</option>`
+                            row += `<option value="${element.pendidikan}">${element.pendidikan}</option>`
                         });
-                        $("#pendidikan").val(row)
                         $("#pendidikan").html(row)
                     }
                 })
@@ -159,8 +173,42 @@
 
         if ($("#jp").val() == 'Kontrak') {
             $("#hide_ptkp").hide();
+            $.ajax({
+                url : "<?= base_url('c_masterdata/pendidikan_list')?>", 
+                method : "post",
+                data : {
+                    val : $("#jp").val()
+                },
+                success : function (e) {
+                    var obj = JSON.parse(e)
+                    // console.log(value)
+                    let row = '';
+                    obj.forEach(element => {
+                        row += `<option value="${element.pendidikan}" selected>${element.pendidikan}</option>`
+                    });
+                    $("#pendidikan").html(row);
+                    getPendidikan();
+                }
+            });
         } else {
             $("#hide_ptkp").show();
+            $.ajax({
+                url : "<?= base_url('c_masterdata/pendidikan_list')?>", 
+                method : "post",
+                data : {
+                    val : $("#jp").val()
+                },
+                success : function (e) {
+                    var obj = JSON.parse(e)
+                    // console.log(value)
+                    let row = '';
+                    obj.forEach(element => {
+                        row += `<option value="${element.pendidikan}" selected>${element.pendidikan}</option>`
+                    });
+                    $("#pendidikan").html(row);
+                    getPendidikan();
+                }
+            });
         }
     });
 </script>

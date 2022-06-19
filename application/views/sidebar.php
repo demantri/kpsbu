@@ -23,6 +23,7 @@
                             <li><a href="<?= base_url('Cuti')?>">Pengajuan Cuti </a></li>
                             <li><a href="<?= base_url('Lembur')?>">Pengajuan Lembur </a></li>
                             <li><a href="<?= base_url('Pengajuan/pengajuanBonus')?>">Pengajuan Bonus </a></li>
+                            <li><a href="<?= base_url('Penggajian/jurnal_penggajian')?>">Jurnal Penggajian </a></li>
                         <?php
                         endif
                         ?>

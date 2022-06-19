@@ -38,12 +38,8 @@ class Penggajian extends CI_Controller
                 $bonus = $tbBonus->nominal;
             }
             $lembur = 0;
-            // $tbLembur = $this->db->query("select sum(total_nominal_lembur) as total from tb_lembur where left(tgl_pengajuan, 7) = '2022-05' and id_pegawai = '111'")->row();
-            // if (is_null($tbLembur->total)) {
-            //     $lembur = 0;
-            // } else {
-            //     $lembur = $tbLembur->total;
-            // }
+
+            /** pph21 */
             $ptkp1 = $data->nominal;
             $tambah = $data->gaji_pokok + $data->tunjangan_jabatan + $data->tunjangan_kesehatan;
             $pengurang = (5/100 * $tambah);
@@ -152,13 +148,6 @@ class Penggajian extends CI_Controller
             'jenis' => 'penggajian',
         ];
         $this->db->insert("pengajuan_jurnal", $pengajuan);
-
-        // redirect('Penggajian');
-        // $response = [
-        //     'msg' => 'success', 
-        //     'url' => redirect('Penggajian')
-        // ];
-        // echo json_encode('Sukses');
         redirect('Penggajian');
     }
 
@@ -177,6 +166,28 @@ class Penggajian extends CI_Controller
             ];
             $this->template->load('template', 'penggajian/laporan_penggajian', $data);
         }
+    }
+
+    public function jurnal_penggajian()
+    {
+        $this->template->load('template', 'penggajian/jurnal_penggajian/index');
+    }
+
+    public function getTotalNominal()
+    {
+        $periode = $this->input->post('periode');
+        $month = date('m', strtotime($periode));
+        $data = $this->db->query("SELECT 
+        SUM(gaji_pokok) AS t_gaji_pokok,
+        SUM(tunjangan_jabatan) AS t_tunjangan_jabatan,
+        SUM(tunjangan_kesehatan) AS t_tunjangan_kesehatan,
+        SUM(bonus_kerja) AS t_bonus,
+        SUM(ptkp) AS t_ptkp,
+        SUM(total) AS t_kas
+        FROM tb_detail_penggajian a
+        JOIN tb_penggajian b ON a.id_penggajian = b.id_penggajian
+        WHERE MONTH(b.tanggal) = '$month'")->row();
+        echo json_encode($data);
     }
 }
 ?>

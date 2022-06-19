@@ -1,7 +1,6 @@
    <?php
    class c_transaksi extends CI_controller
    {
-
       function __construct()
       {
          parent::__construct();
@@ -5289,6 +5288,24 @@ group by no_bbp";
             $this->M_keuangan->GenerateJurnal('1111', $kode, 'k', $grandtotal);
             /** generate ke bpk */
             $this->M_keuangan->GenerateLaporanBPK($kode, $tanggal, $grandtotal, '1111', 'k', 'Pembelian Barang Waserda');
+         } else if (strpos($kode, 'JURNALGAJI') !== false) {
+            $query = $this->db->query("select * from tb_detail_jurnal_gaji where id_jurnal_gaji ='$kode'")->row();
+
+            /** update status kalau sudah di approve */
+            $pengajuan_jurnal = [
+               'status' => 'selesai',
+               'tgl_approve' => date('Y-m-d H:i:s')
+            ];
+            $this->db->where('kode', $kode);
+            $this->db->update('pengajuan_jurnal', $pengajuan_jurnal);
+
+            /** ngejurnal */
+            $this->M_keuangan->GenerateJurnal('5311', $kode, 'd', $query->t_gaji_pokok);
+            $this->M_keuangan->GenerateJurnal('5315', $kode, 'd', $query->t_tunjangan_kesehatan);
+            $this->M_keuangan->GenerateJurnal('5316', $kode, 'd', $query->t_tunjangan_jabatan);
+            $this->M_keuangan->GenerateJurnal('5317', $kode, 'd', $query->t_bonus);
+            $this->M_keuangan->GenerateJurnal('2113', $kode, 'k', $query->t_utang_pph);
+            $this->M_keuangan->GenerateJurnal('1111', $kode, 'k', $query->t_kas);
          }
          redirect('c_transaksi/pengajuan_jurnal');
       }

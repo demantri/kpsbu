@@ -144,31 +144,3 @@
         </div>
     </div>
 </div>
-<!-- <script>
-    $(document).ready(function() {
-
-        $(document).on("click", "#bayar", function() {
-            let params = {
-                nip : $(this).data("nip"),
-                gaji_pokok : $("#gaji_pokok").val() ,
-                tunjangan_jabatan : $("#tunjangan_jabatan").val() ,
-                tunjangan_kesehatan : $("#tunjangan_kesehatan").val() ,
-                bonus_kerja : $("#bonus_kerja").val() ,
-                ptkp : $("#ptkp").val() ,
-                tot_penghasilan : $("#tot_penghasilan").val() ,
-                tot_pengurang : $("#tot_pengurang").val() ,
-                total : $("#total").val() ,
-            };
-            $.ajax({
-                url : "<?= base_url('Penggajian/bayar_gaji')?>",
-                type : "post", 
-                data : params, 
-                dataType : "json",
-                success : function(e) {
-                    // window.location.href = "<?= base_url('Penggajian')?>";
-                    console.log(e)
-                }
-            });
-        });
-    });
-</script> -->

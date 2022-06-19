@@ -140,14 +140,14 @@ class Penggajian extends CI_Controller
         ];
         $this->db->insert('tb_detail_penggajian', $tb_detail_penggajian);
 
-        // kirim ke db pengajuan jurnal 
-        $pengajuan = [
-            'kode' => $id_gaji,
-            'tanggal' => $tanggal,
-            'nominal' => $total,
-            'jenis' => 'penggajian',
-        ];
-        $this->db->insert("pengajuan_jurnal", $pengajuan);
+        // // kirim ke db pengajuan jurnal 
+        // $pengajuan = [
+        //     'kode' => $id_gaji,
+        //     'tanggal' => $tanggal,
+        //     'nominal' => $total,
+        //     'jenis' => 'penggajian',
+        // ];
+        // $this->db->insert("pengajuan_jurnal", $pengajuan);
         redirect('Penggajian');
     }
 
@@ -170,7 +170,48 @@ class Penggajian extends CI_Controller
 
     public function jurnal_penggajian()
     {
-        $this->template->load('template', 'penggajian/jurnal_penggajian/index');
+        $kode = $this->Absensi_model->idJurnalGaji();
+        $cek = $this->db->query("select * from pengajuan_jurnal where kode like '%JURNALGAJI%'");
+        $data = [
+            'kode' => $kode,
+            'cek' => $cek
+        ];
+        $this->template->load('template', 'penggajian/jurnal_penggajian/index', $data);
+    }
+
+    public function saveJurnalGaji()
+    {
+        $kode = $this->input->post('kode');
+        $t_gaji_pokok = $this->input->post('t_gaji_pokok');
+        $t_tunjangan_kesehatan = $this->input->post('t_tunjangan_kesehatan');
+        $t_tunjangan_jabatan = $this->input->post('t_tunjangan_jabatan');
+        $t_bonus = $this->input->post('t_bonus');
+        $t_ptkp = $this->input->post('t_ptkp');
+        $t_kas = $this->input->post('t_kas');
+        $t_pendapatan = $this->input->post('t_pendapatan');
+        $tgl = $this->input->post('tgl');
+
+        $data = [
+            'id_jurnal_gaji' => $kode,
+            't_gaji_pokok' => $t_gaji_pokok,
+            't_tunjangan_kesehatan' => $t_tunjangan_kesehatan,
+            't_tunjangan_jabatan' => $t_tunjangan_jabatan,
+            't_bonus' => $t_bonus,
+            't_utang_pph' => $t_ptkp,
+            't_kas' => $t_kas,
+        ];
+        $this->db->insert('tb_detail_jurnal_gaji', $data);
+
+        // kirim ke db pengajuan jurnal 
+        $pengajuan = [
+            'kode' => $kode,
+            'tanggal' => $tgl . '-' . date('d'),
+            'nominal' => $t_pendapatan,
+            'jenis' => 'Jurnal Penggajian Periode ' .$tgl,
+        ];
+        $this->db->insert("pengajuan_jurnal", $pengajuan);
+
+        redirect('Penggajian');
     }
 
     public function getTotalNominal()
@@ -183,10 +224,18 @@ class Penggajian extends CI_Controller
         SUM(tunjangan_kesehatan) AS t_tunjangan_kesehatan,
         SUM(bonus_kerja) AS t_bonus,
         SUM(ptkp) AS t_ptkp,
-        SUM(total) AS t_kas
+        SUM(total) AS t_kas,
+        SUM(tot_penghasilan) as t_pendapatan
         FROM tb_detail_penggajian a
         JOIN tb_penggajian b ON a.id_penggajian = b.id_penggajian
         WHERE MONTH(b.tanggal) = '$month'")->row();
+        echo json_encode($data);
+    }
+
+    public function cekPengajuanJurnal()
+    {
+        $periode = $this->input->post('periode');
+        $data = $this->db->query("select * from pengajuan_jurnal where kode like '%JURNALGAJI%' and left(tanggal, 7) = '$periode'")->row();
         echo json_encode($data);
     }
 }

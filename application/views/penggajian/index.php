@@ -56,8 +56,8 @@
                                 <td class="text-center">
                                     <?php 
                                     $today = date('d'); 
-                                    $start = 01;
-                                    $end = 30;
+                                    $start = 25;
+                                    $end = 28;
                                     if (($today >= $start) && ($today <= $end)){ ?>
                                         <?php if ($value->total >= 0 AND is_null($value->tgl_gaji)) { ?>
                                             <a href="<?= base_url('Penggajian/slip_gaji/'.$value->nip)?>" class="btn btn-xs btn-primary">Pembayaran Gaji</a>

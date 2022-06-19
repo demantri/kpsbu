@@ -68,18 +68,26 @@
 
     public function detailPegawai()
     {
-        $month = date('m');
+        $month = date('Y-m');
         $q = "SELECT a.id, nip, npwp, a.rfid, nama, b.total, b.tgl_gaji
         FROM pegawai a
         LEFT JOIN (
-           SELECT COUNT(z.rfid) AS total, s.tanggal, z.rfid, v.tanggal as tgl_gaji
-           FROM detail_absen_rfid z
-           JOIN pegawai x ON z.rfid = x.rfid
-           LEFT JOIN absensi s ON s.id = z.id_absensi
-           LEFT JOIN tb_penggajian v ON v.nm_pegawai = x.nama
-           WHERE keterangan LIKE '%Masuk%'
-           AND MONTH(v.tanggal) = '$month'
-           GROUP BY x.nama
+            -- SELECT COUNT(z.rfid) AS total, s.tanggal, z.rfid, v.tanggal as tgl_gaji
+            -- FROM detail_absen_rfid z
+            -- JOIN pegawai x ON z.rfid = x.rfid
+            -- LEFT JOIN absensi s ON s.id = z.id_absensi
+            -- LEFT JOIN tb_penggajian v ON v.nm_pegawai = x.nama
+            -- WHERE keterangan LIKE '%Masuk%'
+            -- AND MONTH(v.tanggal) = '$month'
+            -- GROUP BY x.nama
+            SELECT COUNT(z.rfid) AS total, s.tanggal, z.rfid, v.tanggal as tgl_gaji
+            FROM detail_absen_rfid z
+            LEFT JOIN pegawai x ON z.rfid = x.rfid
+            LEFT JOIN absensi s ON s.id = z.id_absensi
+            LEFT JOIN tb_penggajian v ON v.nm_pegawai = x.nama
+            WHERE keterangan LIKE '%Masuk%'
+            AND LEFT(v.tanggal, 7) = '$month'
+            GROUP BY z.rfid
       	) as b ON b.rfid = a.rfid
         WHERE a.status = 1
         ORDER BY nama ASC";
@@ -105,6 +113,23 @@
             $kd = "001";
         }
         $kode   = "GAJI-".$kd;
+        return $kode;
+    }
+
+    public function idJurnalGaji()
+    {
+        $query1   = "SELECT MAX(RIGHT(id_jurnal_gaji,3)) as kode FROM tb_detail_jurnal_gaji";
+        $abc      = $this->db->query($query1);
+        $kode = "";
+        if ($abc->num_rows() > 0) {
+            foreach ($abc->result() as $k) {
+                $tmp = ((int) $k->kode) + 1;
+                $kd  = sprintf("%03s", $tmp);
+            }
+        } else {
+            $kd = "001";
+        }
+        $kode   = "JURNALGAJI".$kd;
         return $kode;
     }
 }

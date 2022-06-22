@@ -10,7 +10,7 @@
                         </div>
                         <div class="col-sm-2">
                         <?php 
-                        $filterdate = '2022-06-19';
+                        $filterdate = '2022-06-21';
                         $date = date('Y-m-d');
                         if ($date == $filterdate) { ?>
                             <button class="btn btn-primary filter" type="button">Filter</button>
@@ -110,11 +110,15 @@
                             Note : <br>
                         </strong>
                         <i>
-                            Pengajuan jurnal penggajian dengan periode yang dipilih masih dalam proses. Silahkan pilih periode yang lainnya.
+                            Pengajuan jurnal penggajian dengan periode yang dipilih masih dalam proses/sudah selesai diproses. Silahkan pilih periode yang lainnya.
                         </i>
                     </p>
                 </div>
             </div>
+        </div>
+
+        <div id="myDiv3">
+
         </div>
     </div>
 </div>

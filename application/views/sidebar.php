@@ -21,7 +21,10 @@
                             <li><a href="<?= base_url('Penggajian')?>">Penggajian </a></li>
                             <li><a href="<?= base_url('Shift')?>">Jadwal Shift </a></li>
                             <li><a href="<?= base_url('Cuti')?>">Pengajuan Cuti </a></li>
+                            <li><a href="<?= base_url('Laporan/lap_cuti')?>">Laporan Cuti </a></li>
                             <li><a href="<?= base_url('Lembur')?>">Pengajuan Lembur </a></li>
+                            <li><a href="<?= base_url('Laporan/lap_lembur')?>">Laporan Lembur </a></li>
+                            <li><a href="<?= base_url('Laporan/lap_absensi')?>">Laporan Absensi </a></li>
                             <li><a href="<?= base_url('Pengajuan/pengajuanBonus')?>">Pengajuan Bonus </a></li>
                             <li><a href="<?= base_url('Penggajian/jurnal_penggajian')?>">Jurnal Penggajian </a></li>
                         <?php

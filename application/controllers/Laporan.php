@@ -266,7 +266,66 @@ class Laporan extends CI_Controller
             ];
             $this->template->load('template', 'laporan/kartu_stok', $data);
         }
-        
+    }
+
+    public function lap_cuti()
+    {
+        $bulan = $this->input->post('bulan');
+        $tahun = $this->input->post('tahun');
+        $periode = $tahun .'-'. $bulan;
+        if (isset($periode)) {
+            // $ct = $this->db->query("SELECT * FROM tb_cuti where left(tgl_pengajuan, 7) = '$periode'")->result();
+            $ct = $this->db->query("SELECT a.*, b.nama FROM tb_cuti a JOIN pegawai b ON a.nip = b.nip where left(tgl_pengajuan, 7) = '$periode'")->result();
+            $data = [
+                'cuti' => $ct
+            ];
+            $this->template->load('template', 'laporan/cuti', $data);
+        }
+    }
+
+    public function lap_lembur()
+    {
+        $bulan = $this->input->post('bulan');
+        $tahun = $this->input->post('tahun');
+        $periode = $tahun .'-'. $bulan;
+        // print_r($periode);exit;
+        if (isset($periode)) {
+            $lmbr = $this->db->query("SELECT a.* , b.nama
+            FROM tb_lembur a
+            JOIN pegawai b ON a.id_pegawai = b.rfid
+            WHERE LEFT(tgl_pengajuan, 7) = '$periode'
+            ORDER BY id ASC  ")->result();
+            $data = [
+                'lembur' => $lmbr
+            ];
+            $this->template->load('template', 'laporan/lembur', $data);
+        }
+    }
+
+    public function lap_absensi()
+    {
+        $bulan = $this->input->post('bulan');
+        $tahun = $this->input->post('tahun');
+        $periode = $tahun .'-'. $bulan;
+        $dt = '';
+        if (isset($periode)) {
+            $dt = $this->db->query("SELECT a.*, b.nama, c.tanggal
+            FROM detail_absen_rfid a
+            JOIN absensi c ON a.id_absensi = c.id 
+            JOIN pegawai b ON a.rfid = b.rfid
+            WHERE left(tanggal,7) = '$periode'
+            ORDER BY tanggal DESC ")->result();
+        } else {
+            $dt = $this->db->query("SELECT a.*, b.nama, c.tanggal
+            FROM detail_absen_rfid a
+            JOIN absensi c ON a.id_absensi = c.id 
+            JOIN pegawai b ON a.rfid = b.rfid
+            ORDER BY tanggal DESC ")->result();
+        }
+        $data = [
+            'data' => $dt
+        ];
+        $this->template->load('template', 'laporan/absensi', $data);
     }
 }
 ?>
